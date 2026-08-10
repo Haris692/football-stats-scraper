@@ -71,6 +71,7 @@ match déjà en cache.
 | `build_json.py` | assemble `output/` |
 | `serve.py` | sert la console en local et lui donne un vrai bouton « Rafraîchir » |
 | `shoot.py` | captures d'écran d'une page web vers un dossier (outil autonome) |
+| `test_reject_labels.py` | garde-fou : quels libellés de bandeau sont cliquables |
 
 Chacun s'exécute seul et accepte `--help`. `parse_match.py` et `fetch_stats.py`
 ont un `--summary` qui affiche un résumé lisible en console : c'est le moyen de
@@ -257,29 +258,55 @@ Libération : bandeaux et voiles retirés, en-têtes et contenus intacts.
 
 `--brut` capture la page telle quelle, sans rien nettoyer.
 
-#### Répondre au bandeau plutôt que le cacher
+#### Les cookies sont refusés automatiquement
 
-Le nettoyage **retire** le bandeau de l'image, il n'y **répond** pas — le choix
-n'appartient qu'à toi. Conséquence : il réapparaît à chaque visite, et certains
-sites (Le Monde par exemple) gardent leur contenu fermé tant que rien n'est
-choisi.
+Tu n'as rien à cliquer. Avant de photographier, l'outil **refuse les cookies non
+essentiels** — d'abord par l'API de la plateforme (OneTrust, Cookiebot, Didomi,
+Usercentrics, Osano, Complianz, tarteaucitron), sinon en cliquant le bouton de
+refus, y compris dans les iframes où ces fenêtres vivent souvent.
 
-Pour en finir avec un site, réponds-lui **une fois** :
+```
+python shoot.py bbc.com
+  cookies refusés : clic « I do not agree »
+```
+
+**On refuse, on n'accepte jamais.** Refuser est l'option la plus protectrice et
+peut se prendre par défaut sans trahir ton intention ; accepter à ta place, non.
+
+⚠️ **Le garde-fou compte plus que la fonction.** Une première version comparait
+un préfixe : sur The Guardian, « Reject all **and subscribe** » — une offre à
+5 €/mois — correspondait à « reject all » et a été cliqué. La page d'abonnement
+s'est ouverte à la place de l'article. Depuis, deux verrous :
+
+1. on retire les mots de remplissage (`all`, `cookies`, `uniquement`…) et le
+   reste doit être **exactement** un libellé de refus connu — pas commencer par ;
+2. tout libellé portant un mot d'argent, d'abonnement ou d'acceptation est
+   écarté d'office, même s'il passait le premier verrou.
+
+Les formes niées sont reconnues (`I do not agree`, `Continuer sans accepter`,
+`Je n'accepte pas`) : c'est le libellé de Sourcepoint, le bandeau le plus
+répandu. `python test_reject_labels.py` vérifie 29 refus et 34 pièges — dont
+celui du Guardian.
+
+**Ne pas cliquer est sans danger** : la fenêtre est alors simplement retirée de
+l'image. Cliquer au mauvais endroit ne l'est pas. En cas de doute, on s'abstient.
+
+#### Quand le refus n'est pas proposé
+
+Certains sites n'offrent pas le choix : Le Monde, Libération et The Guardian
+pratiquent le « payer ou accepter ». Il n'y a pas de bouton de refus, donc rien
+à cliquer — le bandeau est retiré de l'image, et le contenu peut rester fermé
+derrière.
+
+Là, si tu veux trancher toi-même :
 
 ```
 python shoot.py lemonde.fr --pause
 ```
 
-Chrome s'ouvre sur la page, **tu cliques toi-même** « Accepter » ou « Refuser »,
-tu reviens au terminal et tu appuies sur Entrée. Le profil de l'outil garde ton
-choix : ce site ne te reposera plus la question, et le contenu est débloqué.
-
-```
-python shoot.py lemonde.fr        # plus de bandeau, plus de nettoyage à faire
-```
-
-C'est le même drapeau que `--login` — se connecter, répondre à un bandeau,
-fermer une pop-up : tout ce qui demande *ta* main.
+Chrome s'ouvre, **tu choisis** ce que tu veux, tu reviens au terminal et tu
+appuies sur Entrée. Le profil garde ton choix. C'est le même drapeau que
+`--login` : tout ce qui demande *ta* main.
 
 Pour repartir de zéro (oublier tous les choix et toutes les sessions), supprime
 le dossier `.chrome-profile/` à la racine du projet.

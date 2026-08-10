@@ -117,6 +117,101 @@ def capture(session, page, args, path: Path) -> bool:
     return True
 
 
+# Refus automatique des cookies non essentiels.
+#
+# On REFUSE, on n'accepte jamais. Refuser est l'option la plus protectrice, et
+# c'est un choix qu'on peut prendre par défaut sans trahir l'utilisateur —
+# accepter à sa place, non. Qui veut accepter (certains sites déverrouillent
+# du contenu à ce prix) le fait à la main avec --pause.
+#
+# Deux voies, dans cet ordre : l'API de la plateforme quand elle en expose une,
+# puis le bouton de refus. Ce qui résiste finit retiré de l'image par DECLUTTER,
+# ce qui ne répond à rien mais rend la capture lisible.
+REFUSE_API = r"""() => {
+    const faits = [];
+    const essayer = (nom, fn) => {
+        try { if (fn()) faits.push(nom); } catch (e) { /* CMP absente */ }
+    };
+    essayer("OneTrust", () => window.OneTrust && (OneTrust.RejectAll(), true));
+    essayer("Cookiebot", () => window.Cookiebot && Cookiebot.decline
+                            && (Cookiebot.decline(), true));
+    essayer("Didomi", () => window.Didomi && (Didomi.setUserDisagreeToAll(), true));
+    essayer("Usercentrics", () => window.UC_UI && UC_UI.denyAllConsents
+                               && (UC_UI.denyAllConsents(), true));
+    essayer("Osano", () => window.Osano && Osano.cm
+                        && (Osano.cm.denyAll(), true));
+    essayer("Complianz", () => typeof window.cmplz_deny_all === "function"
+                            && (window.cmplz_deny_all(), true));
+    essayer("tarteaucitron", () => window.tarteaucitron
+                                && window.tarteaucitron.userInterface
+                                && (tarteaucitron.userInterface.respondAll(false), true));
+    essayer("Cookie Script", () => window.CookieScript && CookieScript.instance
+                                && (CookieScript.instance.reject(), true));
+    return faits;
+}"""
+
+# Reconnaissance d'un bouton de REFUS, et de rien d'autre.
+#
+# ⚠️ Une première version comparait un préfixe : sur The Guardian, « Reject all
+# and subscribe » — une offre payante — correspondait à « reject all » et a été
+# cliqué. La page d'abonnement s'est ouverte à la place de l'article.
+#
+# Deux verrous depuis :
+#   1. on retire les mots de remplissage, puis le reste doit être EXACTEMENT un
+#      libellé de refus connu — pas commencer par, être ;
+#   2. tout libellé portant un mot d'argent, d'abonnement ou d'acceptation est
+#      écarté d'office, même s'il passait le premier verrou.
+#
+# Ne pas cliquer est sans danger : DECLUTTER retirera la fenêtre de l'image.
+# Cliquer au mauvais endroit ne l'est pas. En cas de doute, on s'abstient.
+REJECT_FILLER = {
+    "all", "tout", "tous", "toutes", "les", "le", "la", "the", "de", "des",
+    "additional", "optional", "optionnels", "optionnelles", "supplementaires",
+    "supplémentaires", "cookies", "cookie", "and", "et", "only", "uniquement",
+    "seulement", "strictement", "trackers", "traceurs",
+}
+REJECT_CORES = {
+    "refuser", "jerefuse", "refuseretfermer", "reject", "decline", "deny",
+    "disagree", "continuersansaccepter", "poursuivresansaccepter",
+    "continuewithoutaccepting", "nonmerci", "nothanks",
+    "necessary", "necessaires", "nécessaires", "essential", "essentiel",
+    "essentiels", "essentielles", "nonessential", "nonessentiels",
+    # Formes niées : Sourcepoint, le plus répandu des bandeaux, intitule son
+    # bouton de refus « I do not agree ».
+    "idonotagree", "idontagree", "donotagree", "dontagree", "idisagree",
+    "donotaccept", "dontaccept", "nepasaccepter", "jenacceptepas",
+    "jenesuispasdaccord", "pasdaccord", "nonjenacceptepas",
+}
+# Argent et engagement : bloquants en toutes circonstances.
+# ⚠️ Bornes de mot indispensables : sans elles, « essai » se trouve à
+# l'intérieur de « néc-essai-res » et bloquait « Cookies nécessaires uniquement ».
+FORBIDDEN_MONEY = re.compile(
+    r"(subscribe|abonn|s'inscrire|sign\s?in|sign\s?up|\bpurchase|\bbuy\b|"
+    r"\bpay\b|\bpremium\b|\boffre|\bessai\b|\btrial\b|€|\$|£|/mo\b|/month|/mois)",
+    re.I)
+# Acceptation : bloquante aussi, SAUF quand elle est niée — « continuer sans
+# accepter » est un refus, pas une acceptation. Les bornes de mot évitent que
+# « disagree » soit rejeté à cause du « agree » qu'il contient.
+FORBIDDEN_ACCEPT = re.compile(
+    r"(\baccept|\bagree\b|\ballow\b|\bautoris|\bj'accepte)", re.I)
+NEGATED_ACCEPT = re.compile(
+    r"(sans\s+accepter|without\s+accepting|"
+    r"do(es)?\s*n[o’'`]?t\s+(agree|accept)|"
+    r"ne\s+pas\s+accepter|n[’'`]accepte\s+pas|pas\s+d[’'`]accord)", re.I)
+
+
+def is_reject_label(label: str) -> bool:
+    """Ce libellé est-il, sans ambiguïté, un refus ?"""
+    if not label or len(label) > 60:
+        return False
+    if FORBIDDEN_MONEY.search(label):
+        return False
+    if FORBIDDEN_ACCEPT.search(label) and not NEGATED_ACCEPT.search(label):
+        return False
+    mots = re.findall(r"[^\W\d_]+", label.lower(), re.UNICODE)
+    reste = "".join(m for m in mots if m not in REJECT_FILLER)
+    return reste in REJECT_CORES
+
 # Nettoyage automatique de ce qui se pose entre le lecteur et la page.
 #
 # Principe de prudence : on **retire du DOM**, on ne clique jamais. Cliquer
@@ -314,6 +409,44 @@ LIST_OVERLAYS = r"""() => {
 }"""
 
 
+def refuse_cookies(page) -> list[str]:
+    """Refuse les cookies non essentiels, par l'API puis par le bouton.
+
+    Balaie aussi les iframes : Sourcepoint, Quantcast et consorts affichent
+    leur fenêtre dans un cadre isolé, où un script de la page ne peut rien.
+    """
+    faits = []
+    try:
+        faits += [f"API {n}" for n in page.evaluate(REFUSE_API)]
+    except Exception:
+        pass
+
+    for frame in page.frames:
+        try:
+            controls = frame.query_selector_all(
+                "button, [role=button], a[href='#'], input[type=button], "
+                "input[type=submit]")
+        except Exception:
+            continue                      # cadre détaché entre-temps
+        for control in controls:
+            try:
+                if not control.is_visible():
+                    continue
+                label = (control.inner_text() or control.get_attribute("value")
+                         or control.get_attribute("aria-label") or "").strip()
+            except Exception:
+                continue
+            if not is_reject_label(label):
+                continue
+            try:
+                control.click(timeout=3000)
+                faits.append(f"clic « {label} »")
+            except Exception:
+                continue
+            break                          # un refus par cadre suffit
+    return faits
+
+
 def prepare(page, args) -> None:
     """Attentes et nettoyages avant le déclenchement."""
     if args.wait:
@@ -326,6 +459,13 @@ def prepare(page, args) -> None:
         except Exception:
             pass
     if not args.brut:
+        # D'abord répondre — le refus s'enregistre dans le profil, donc le site
+        # ne reposera plus la question. Ensuite seulement, retirer ce qui reste.
+        refus = refuse_cookies(page)
+        if refus:
+            print(f"  cookies refusés : {', '.join(refus)}")
+            time.sleep(0.6)               # la fenêtre disparaît d'elle-même
+
         gone = []
         # Deux passes : certaines plateformes réinjectent leur fenêtre juste
         # après le chargement, et un voile n'apparaît parfois qu'une fois la
