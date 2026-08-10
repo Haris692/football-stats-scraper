@@ -204,6 +204,20 @@ class CdpBrowser:
             self._proc = subprocess.Popen(args, stdout=subprocess.DEVNULL,
                                           stderr=subprocess.DEVNULL)
             if not self._try_connect(attempts=30):
+                # Cas le plus fréquent sous Windows : un Chrome subsistait en
+                # arrière-plan (zone de notification, « applications en arrière-
+                # plan »). Relancer l'exécutable lui rend la main et le drapeau
+                # est ignoré — une fenêtre s'ouvre, mais aucun port.
+                if chrome_is_running():
+                    raise RuntimeError(
+                        "Chrome s'est ouvert mais sans port de débogage : un "
+                        "processus Chrome subsistait et a repris la main.\n"
+                        "  → ferme TOUT Chrome, y compris l'icône de la zone de "
+                        "notification (au besoin `Stop-Process -Name chrome "
+                        "-Force`), puis relance.\n"
+                        f"  → contrôle : curl.exe http://127.0.0.1:{DEBUG_PORT}"
+                        "/json/version doit répondre du JSON."
+                    )
                 raise RuntimeError(
                     f"Impossible de s'attacher à Chrome en CDP : {self._last_err}")
 

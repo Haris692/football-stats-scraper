@@ -180,6 +180,18 @@ chrome.exe --remote-debugging-port=9333
 Il s'utilise ensuite normalement, et toutes les captures suivantes s'y
 raccrocheront.
 
+⚠️ **Si Chrome s'ouvre mais que rien ne se passe**, c'est que le drapeau a été
+ignoré : un processus Chrome subsistait en arrière-plan (icône de la zone de
+notification, ou l'option « Continuer à exécuter les applications en arrière-plan »)
+et a repris la main. Le contrôle qui tranche :
+
+```powershell
+curl.exe http://127.0.0.1:9333/json/version   # doit répondre du JSON
+```
+
+S'il ne répond pas : `Stop-Process -Name chrome -Force`, puis relance Chrome
+avec le drapeau.
+
 Deux garde-fous, parce que ce Chrome-là est le tien :
 
 - **on ouvre notre propre onglet** au lieu de réutiliser le premier — sinon ta
