@@ -156,7 +156,7 @@ python shoot.py monsite.fr --hide "#cookie-banner" --dark
 | `--dark` | forcer le thème sombre de la page |
 | `--format` / `--quality` | `png` (défaut) ou `jpeg` |
 | `--name` | nom de fichier imposé (une seule URL, une seule taille) |
-| `--login` | attendre que tu te connectes à la main avant de photographier |
+| `--login` (`--pause`) | attendre que tu agisses à la main avant de photographier |
 | `--user-data-dir D` | piloter une copie de profil (voir plus bas) |
 
 ### Photographier une page derrière une connexion
@@ -256,6 +256,33 @@ Vérifié après correction sur Le Monde, Le Figaro, BBC, The Guardian et
 Libération : bandeaux et voiles retirés, en-têtes et contenus intacts.
 
 `--brut` capture la page telle quelle, sans rien nettoyer.
+
+#### Répondre au bandeau plutôt que le cacher
+
+Le nettoyage **retire** le bandeau de l'image, il n'y **répond** pas — le choix
+n'appartient qu'à toi. Conséquence : il réapparaît à chaque visite, et certains
+sites (Le Monde par exemple) gardent leur contenu fermé tant que rien n'est
+choisi.
+
+Pour en finir avec un site, réponds-lui **une fois** :
+
+```
+python shoot.py lemonde.fr --pause
+```
+
+Chrome s'ouvre sur la page, **tu cliques toi-même** « Accepter » ou « Refuser »,
+tu reviens au terminal et tu appuies sur Entrée. Le profil de l'outil garde ton
+choix : ce site ne te reposera plus la question, et le contenu est débloqué.
+
+```
+python shoot.py lemonde.fr        # plus de bandeau, plus de nettoyage à faire
+```
+
+C'est le même drapeau que `--login` — se connecter, répondre à un bandeau,
+fermer une pop-up : tout ce qui demande *ta* main.
+
+Pour repartir de zéro (oublier tous les choix et toutes les sessions), supprime
+le dossier `.chrome-profile/` à la racine du projet.
 
 ### Enlever ce qui reste
 

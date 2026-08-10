@@ -391,14 +391,22 @@ def shoot(browser: CdpBrowser, url: str, args) -> list[Path]:
         page.goto(url, wait_until="domcontentloaded", timeout=args.timeout * 1000)
 
         if args.login:
-            # Le profil dédié est persistant : une fois connecté ici, la session
-            # vaut pour toutes les captures suivantes, sans --login.
+            # Le profil dédié est persistant : ce qui est fait ici — connexion,
+            # réponse au bandeau cookies — vaut pour toutes les captures
+            # suivantes, sans --login.
             #
-            # On rend la fenêtre à sa taille normale le temps de la connexion :
-            # se connecter dans une fenêtre bridée à 390 px est pénible.
+            # C'est aussi la seule façon de RÉPONDRE à un bandeau de
+            # consentement. Le nettoyage automatique ne fait que le retirer de
+            # l'image : le choix, lui, n'appartient qu'à l'utilisateur, et
+            # certains sites gardent leur contenu fermé tant qu'il n'est pas
+            # fait.
+            #
+            # On rend la fenêtre à sa taille normale le temps de la
+            # manipulation : cliquer dans une fenêtre bridée à 390 px est pénible.
             session.send("Emulation.clearDeviceMetricsOverride")
-            print("\n  Chrome est ouvert sur la page. Connecte-toi dans la "
-                  "fenêtre,\n  puis reviens ici et appuie sur Entrée.")
+            print("\n  Chrome est ouvert sur la page. Fais ce que tu as à faire "
+                  "dans la fenêtre\n  — te connecter, répondre au bandeau "
+                  "cookies — puis reviens ici\n  et appuie sur Entrée.")
             try:
                 input("  > ")
             except EOFError:
@@ -463,10 +471,11 @@ def main() -> int:
     parser.add_argument("--name", help="nom de fichier imposé (sans extension)")
     parser.add_argument("--timeout", type=int, default=45,
                         help="délai maximum par page, en secondes")
-    parser.add_argument("--login", action="store_true",
-                        help="ouvrir la page et attendre que tu te connectes à "
-                             "la main avant de photographier ; le profil dédié "
-                             "garde la session pour les fois suivantes")
+    parser.add_argument("--login", "--pause", action="store_true", dest="login",
+                        help="ouvrir la page et attendre que tu agisses à la "
+                             "main — te connecter, répondre au bandeau cookies "
+                             "— avant de photographier ; le profil dédié garde "
+                             "le choix pour les fois suivantes")
     parser.add_argument("--profile", nargs="?", const="Default", metavar="NOM",
                         help="utiliser TON profil Chrome (sessions et cookies) "
                              "au lieu du profil dédié ; « Default » par défaut, "
