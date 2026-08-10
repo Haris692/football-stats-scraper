@@ -542,11 +542,12 @@ de buteurs sont vides sur cette division.
 | source | verdict |
 |---|---|
 | **soccer365.net** | **A les données**, mais `robots.txt` interdit ClaudeBot |
-| Transfermarkt | injoignable — 504 sur `.com`, `.us` et `.de` |
+| Transfermarkt | injoignable — 504 sur `.com`, `.us` et `.de` ⚠️ **révisé le 10/08, voir plus bas** |
 | playmakerstats.com | connaît clubs et « 2ª Divisão Kuwait », mais **0 joueur** |
 | Wikipedia | pas de section effectif à jour sur ces clubs |
 | Forebet | `lineup`/`bench` vides sur les matchs terminés testés |
 | **Flashscore** | autorisé, mais **« FINAL RESULT ONLY »** sur cette division |
+| **Sofascore** | ⚠️ **la meilleure source — 22 à 33 joueurs par club, voir plus bas** |
 
 **soccer365 est la seule source complète trouvée** : effectif groupé par poste,
 âges, entraîneur, et les 8 clubs présents. Identifiants relevés — Khaitan 9142,
@@ -562,6 +563,129 @@ Piste encore ouverte : les compositions Forebet paraissent en général ~1 h ava
 le coup d'envoi. À retester sur un match koweïtien à l'approche de 19 h 45 —
 le sondage du 06/08 s'est arrêté sur un **403** (trop de requêtes dans la
 journée), il faut laisser retomber avant de réessayer.
+
+### Transfermarkt : joignable, autorisé, mais partiel (re-sondé le 10/08/2026)
+
+**Le 504 du 06/08 était passager.** `www.transfermarkt.com` et `.fr` répondent
+200 en 0,45 s. (`.de` renvoie 403, ne pas s'en servir.) La conclusion
+« injoignable » ne tenait plus : elle est corrigée dans le tableau ci-dessus.
+
+**`robots.txt` autorise tout le monde** : `User-agent: * / Allow: /`. Le seul
+interdit est `wget`, et il n'y a **aucune règle visant ClaudeBot** — c'est la
+différence de fond avec soccer365, qui nous nomme et nous refuse.
+
+**Les 8 clubs y sont**, avec des effectifs réels (nom, poste, âge, fin de
+contrat, valeur marchande) — mais **très incomplets** :
+
+| club | id Transfermarkt | joueurs listés |
+|---|---|---|
+| Al-Yarmouk SC (Kuwait) | 29285 | 13 |
+| Khaitan SC | 38189 | 13 |
+| Al-Sahel SC | 32611 | 13 |
+| Burgan SC | 56225 | 9 |
+| Al-Jazeera FC | 129700 | 8 |
+| Al-Sulaibikhat SC | 50944 | 6 |
+| Al-Shamiya FC | 135029 | 2 |
+| Al-Shamiya SC | 135039 | 0 |
+| Sporty FC (Kuwait) | 144497 | 0 |
+
+Soit **~64 joueurs pour 8 clubs**, là où un effectif réel en compte 25 environ.
+Ce qui est listé penche nettement vers les étrangers et les joueurs valorisés.
+**Transfermarkt ne remplace donc pas soccer365** ; il pré-remplit une partie de
+`data/squads.json`, à compléter à la main.
+
+⚠️ **Al-Shamiya existe en double** (`FC` 135029 et `SC` 135039). Lequel est notre
+club n'est pas tranché — à vérifier avant d'en dépendre.
+
+Trois pièges relevés :
+
+- ⚠️ **Ne pas passer `saison_id`.** `/kader/verein/29285/saison_id/2025` renvoie
+  une page valide **sans aucun joueur** — pas une erreur, une table vide. Sans le
+  paramètre, la même URL en donne 13. Le titre indique « Detailed squad 26/27 » :
+  la page par défaut est la saison en cours côté Transfermarkt, et l'effectif
+  25/26 n'est pas conservé. Les joueurs listés ne sont donc pas nécessairement
+  ceux qui disputent les rencontres qu'on affiche — à garder en tête avant de
+  publier un nom.
+- ⚠️ **Ne pas compter les `<tr>` naïvement.** Chaque ligne de joueur contient une
+  `table.inline-table` (photo, nom, poste) avec ses propres `<tr>` : une regex
+  sur `<tr class="odd|even">` ramène 1 joueur au lieu de 13. Passer par
+  `tbody.find_all("tr", recursive=False)`.
+- **Le site limite le débit.** Une poignée de `curl` rapprochés finit en
+  `ERR_TIMED_OUT`. Le throttling de `browser.py` (2-5 s) passe sans problème.
+
+### Sofascore : accessible depuis un vrai navigateur (re-sondé le 10/08/2026)
+
+⚠️ **La conclusion « Sofascore est inutilisable, 403 » était liée à la méthode,
+pas au site.** Elle valait pour `urllib` et `curl`. Depuis, `browser.py` sait
+piloter un vrai Chrome : un `fetch()` exécuté **dans** une page sofascore.com
+part en même origine, avec ses cookies — exactement l'astuce qui débloque
+`get_evs_n.php` chez Forebet. **L'API répond 200.**
+
+`robots.txt` (lisible seulement depuis le navigateur, `curl` reçoit un 403) :
+seul **Bytespider** est banni. Pour `*`, sont interdits les **classements**
+(`/standings/` et ses traductions) et les URL de **saisons archivées**
+(`/*/2017-` … `/*/2025-`). Aucune règle visant Claude, et `/api/` n'est pas
+listé. Les classements, on les a déjà par Forebet.
+
+**Points d'entrée vérifiés** (préfixe `https://www.sofascore.com`) :
+
+    /api/v1/search/all?q=<nom>&page=0     -> id d'équipe, pays, couleurs
+    /api/v1/team/<id>/players             -> effectif complet
+    /api/v1/team/<id>/events/last/0       -> 30 derniers matchs
+    /api/v1/event/<id>                    -> date, tour, saison, stade
+    /api/v1/event/<id>/statistics         -> stats du match
+    /api/v1/event/<id>/lineups            -> **404 sur cette division**
+
+Tournoi : « Zain First Division », `uniqueTournament` **20044**, saison 25/26.
+
+**C'est LA source pour les effectifs** — de loin la meilleure trouvée, et
+autorisée, contrairement à soccer365 :
+
+| club | id Sofascore | joueurs | dont numérotés |
+|---|---|---|---|
+| Yarmouk SC | 55163 | 33 | 26 |
+| Al Sulaibikhat FC | 55165 | 31 | 27 |
+| Burgan SC | 192706 | 31 | 9 |
+| Khaitan SC | 55157 | 25 | 16 |
+| Al-Shamiya FC | 1084291 | 22 | 21 |
+
+Avec poste, numéro de maillot et nationalité. À comparer aux 13 de Transfermarkt
+pour Yarmouk. **Restent à identifier : Al Sahel** (l'id 251405 trouvé par
+recherche renvoie 0 joueur, ce n'est pas le bon club) **et Sporty**.
+
+**Les statistiques de match sont complémentaires de Forebet, pas supérieures.**
+Sur Khaitan - Yarmouk : possession, corners, coups francs, cartons, hors-jeu,
+touches, six mètres — **mais aucun tir**, là où Forebet donne total / cadrés /
+non cadrés. À l'inverse Forebet n'a ni hors-jeu ni touches. Même piège du zéro
+qui veut dire « non couvert » (coups francs 0, six mètres 0). **Forebet reste la
+source des stats ; Sofascore apporte les effectifs.**
+
+#### ⚠️ Forebet et Sofascore inversent domicile et extérieur — systématiquement
+
+Sur les **4 rencontres communes**, les deux sources désignent l'hôte à
+l'opposé l'une de l'autre. Ce n'est pas un accident isolé :
+
+| date | Sofascore | Forebet |
+|---|---|---|
+| 02/08 18:00 | Yarmouk **3-0** Al-Shamiya | Al-Shamiya **0-3** Yarmouk |
+| 02/08 19:45 | Sulaibikhat **1-0** Khaitan | Khaitan **0-1** Sulaibikhat |
+| 07/08 19:45 | Khaitan **0-0** Yarmouk | Yarmouk **0-0** Khaitan |
+| 07/08 19:45 | Sulaibikhat **0-0** Burgan | Burgan **0-0** Sulaibikhat |
+
+Les deux s'accordent sur le **résultat** et sur les **chiffres par équipe**
+(Yarmouk 66 % / 9 corners / 1 jaune des deux côtés) : le désaccord porte
+uniquement sur l'étiquette. Ils divergent aussi sur le **stade** du même match
+(« Jaber Al-Mubarak Stadium » contre « Al Shabab Mubarak Alaiar Stadium »).
+
+**Non tranché — il faudrait un arbitre extérieur** (fédération koweïtienne). Ne
+pas choisir au hasard : la console écrit « reçoit », calcule des bilans « à
+domicile » et « à l'extérieur », et le brief Instagram titre « LES HÔTES » et
+« LES VISITEURS ». Si Forebet a tort, ces quatre éléments sont faux.
+
+À noter, et ça relativise l'enjeu : **les clubs partagent les terrains.**
+Burgan - Sulaibikhat se joue au « Khaitan Stadium », où Khaitan ne joue pas ;
+trois rencontres différentes ont lieu au même « Al Shabab Mubarak Alaiar
+Stadium ». Le « domicile » de cette division est largement nominal.
 
 ### Flashscore (évalué le 06/08/2026)
 
@@ -669,6 +793,47 @@ La charge utile reste **embarquée dans la page** en plus d'être servie à part
 la console doit continuer de s'ouvrir seule, en `file://` et hors ligne. C'est
 la raison d'être du fichier unique, on ne la sacrifie pas au bouton.
 
+## Console bilingue (10/08/2026)
+
+L'interface bascule **français / anglais**, détectée d'après le navigateur et
+forçable par un bouton (retenu en `localStorage`).
+
+**La langue du brief Instagram est un réglage séparé**, avec son propre bouton
+dans la barre du haut. Raison : le carrousel est du contenu éditorial destiné au
+compte de Haris ; sa langue est un choix de publication, pas une conséquence du
+navigateur d'un visiteur de passage. Par défaut : interface selon le navigateur,
+brief en français.
+
+**Détection : la PREMIÈRE langue déclarée décide.** Une première version
+regardait si « fr » figurait *quelque part* dans `navigator.languages` — un
+visiteur en `en-GB, fr` recevait alors du français alors qu'il demande
+l'anglais. Vérifié : `en-US` → en, `de-DE` → en, `ar-KW` → en, `fr-CA` → fr,
+`en-GB, fr` → **en**.
+
+**Le dictionnaire `EN` est indexé par la chaîne française elle-même**, pas par
+une clé abstraite : le code reste lisible (`t("Comparatif")`) et une entrée
+oubliée retombe sur le français plutôt que d'afficher une clé nue. Les phrases à
+trous vivent dans `PH`, écrites en entier dans les deux langues.
+
+Trois pièges rencontrés, tous à retenir :
+
+- ⚠️ **`t` était déjà pris quatre fois** comme nom de variable locale (`const t =
+  el("table")` dans `matchTable` et `renderStandings`, `tile()`, le paramètre de
+  `group` et de `forEach`). Chacun masquait la fonction de traduction dans son
+  bloc. Tous renommés — c'est le genre de collision que `node --check` ne voit
+  pas et qui explose à l'exécution.
+- ⚠️ **Les libellés de rubriques sont de la donnée, pas de l'interface.** Les
+  clés de `stats.others` (`Corners`, `Hors-jeu`, `Six mètres`, `Arrêts du
+  gardien`, `Penaltys`, `Tacles`, `Touches`, `Fautes`, `Cartons jaunes`,
+  `Cartons rouges`, `Aucun but encaissé`) arrivent en français depuis Forebet.
+  On traduit à l'affichage ; traduire la clé casserait les recherches. Les onze
+  ont été relevées dans les données, pas devinées.
+- **Les libellés d'événements** (`but`, `carton jaune`) sont composés en
+  français par `fetch_stats.py`. La console repart de `type`, qui est neutre.
+
+Les lettres de forme deviennent **W/D/L** en anglais, mais la **classe CSS reste
+V/N/D** : c'est elle qui porte les couleurs.
+
 ## Reste à faire
 
 Les trois points de la session du 06/08 sont soldés : `build_json.py`,
@@ -683,6 +848,12 @@ Ce qui reste ouvert, par ordre d'intérêt :
 2. **Le direct par Server-Sent Events** (`/glvs/`) n'est pas branché : score et
    minute poussés en temps réel, sans polling. N'a de sens que dans une page qui
    reste ouverte — la console est un fichier statique, donc à décider.
-3. **Effectifs** : `data/squads.json` reste à créer, saisie manuelle de Haris
-   (soccer365 interdit ClaudeBot, cf. plus haut).
+3. **Effectifs : le problème est résolu par Sofascore** (22 à 33 joueurs par
+   club, avec poste, numéro et nationalité). Reste à écrire `fetch_squads.py`,
+   et à identifier les ids d'Al Sahel et de Sporty. La saisie manuelle n'est
+   plus nécessaire.
+5. ⚠️ **Trancher qui reçoit.** Forebet et Sofascore s'opposent sur les
+   4 rencontres communes. Tant que ce n'est pas arbitré, « reçoit », les bilans
+   domicile/extérieur et les slides « LES HÔTES / LES VISITEURS » reposent sur
+   une donnée contestée.
 4. **Diffuseurs** : `data/broadcasts.json` a quatre cases vides.

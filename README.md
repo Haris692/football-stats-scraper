@@ -114,6 +114,33 @@ d'un hash court. Rien n'est retéléchargé tant que l'entrée n'a pas dépassé
 Le vider est sans risque : tout se retélécharge. `.chrome-profile/` est le profil
 Chrome dédié au scraper ; le supprimer oblige à repasser le challenge Cloudflare.
 
+## Langue
+
+La console s'affiche en **français ou en anglais**. La langue est choisie à
+l'ouverture d'après le navigateur : sa **première** langue déclarée décide — un
+visiteur en `en-GB, fr` lit le français mais préfère l'anglais, on lui sert donc
+l'anglais. Tout ce qui n'est pas francophone bascule en anglais.
+
+Le bouton **FR / EN** de la barre du haut force la langue, et le choix est
+retenu (`localStorage`). Il affiche la langue vers laquelle il bascule.
+
+Le bouton **Brief : FR / EN** est **séparé**, et c'est voulu : le carrousel
+Instagram est du contenu éditorial destiné à un compte donné, sa langue est un
+choix de publication. Elle n'a pas à changer parce qu'un visiteur de passage a
+un navigateur anglais. Par défaut, l'interface suit le navigateur et le brief
+reste en français.
+
+Côté code, le dictionnaire `EN` est indexé **par la chaîne française elle-même**
+plutôt que par une clé abstraite : `t("Comparatif")` se lit sans aller consulter
+la table, et une entrée oubliée retombe sur le français au lieu d'afficher une
+clé nue. Les phrases à trous vivent dans `PH`, écrites en entier dans les deux
+langues — une traduction ne se fabrique pas en recollant des fragments traduits
+séparément.
+
+⚠️ Les libellés de rubriques (`Corners`, `Hors-jeu`, `Six mètres`…) viennent des
+pages **françaises** de Forebet : ce sont des **clés de données**, pas de
+l'interface. On les traduit à l'affichage, jamais dans la clé.
+
 ## Le bouton « Rafraîchir »
 
 La console a un bouton **Rafraîchir**. Il ne fait pas la même chose partout, et

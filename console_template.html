@@ -274,15 +274,20 @@ button.fx:hover { background: color-mix(in srgb, var(--text-primary) 4%, transpa
   <div class="topbar">
     <div class="brand">Console Forebet · Division 1 Koweït</div>
     <div class="controls">
-      <select id="team" aria-label="Filtrer par équipe"></select>
-      <select id="scope" aria-label="Filtrer par période">
-        <option value="upcoming">À venir</option>
-        <option value="today">Aujourd'hui</option>
-        <option value="played">Joués</option>
-        <option value="all">Toutes</option>
+      <select id="team"></select>
+      <select id="scope">
+        <option value="upcoming"></option>
+        <option value="today"></option>
+        <option value="played"></option>
+        <option value="all"></option>
       </select>
-      <button class="btn" id="refresh" type="button">Rafraîchir</button>
-      <button class="btn" id="theme" type="button">Thème</button>
+      <button class="btn" id="refresh" type="button"></button>
+      <!-- Langue de l'interface, et langue du brief Instagram : deux réglages
+           distincts. Le carrousel est du contenu éditorial — sa langue ne doit
+           pas suivre le navigateur d'un visiteur de passage. -->
+      <button class="btn" id="lang" type="button"></button>
+      <button class="btn" id="promptlang" type="button"></button>
+      <button class="btn" id="theme" type="button"></button>
     </div>
   </div>
   <div class="refnote" id="refnote"></div>
@@ -296,6 +301,252 @@ button.fx:hover { background: color-mix(in srgb, var(--text-primary) 4%, transpa
    place. Elle reste embarquée dans la page pour que celle-ci s'ouvre seule, en
    file:// et hors ligne — c'est la raison d'être de ce fichier unique. */
 let DATA = /*__CONSOLE_DATA__*/null;
+
+/* ---------- langue ---------- */
+/* Le dictionnaire est indexé par la chaîne française elle-même, pas par une
+   clé abstraite. Deux raisons : le code reste lisible tel quel (`t("Comparatif")`
+   se comprend sans aller voir la table), et une entrée oubliée retombe sur le
+   français plutôt que d'afficher une clé nue à l'écran.
+
+   Les phrases à trous vivent dans `PH`, en deux versions : une traduction ne se
+   fabrique pas en recollant des morceaux traduits séparément. */
+const EN = {
+  // barre d'outils
+  "Toutes les équipes": "All teams",
+  "À venir": "Upcoming", "Aujourd'hui": "Today", "Joués": "Played", "Toutes": "All",
+  "Rafraîchir": "Refresh", "Thème": "Theme",
+  "Filtrer par équipe": "Filter by team", "Filtrer par période": "Filter by period",
+  "Console Forebet · Division 1 Koweït": "Forebet console · Kuwait Division 1",
+  "Console Forebet": "Forebet console",
+  // titres de cartes
+  "Rencontres": "Fixtures", "Carte d'identité": "Profile", "Comparatif": "Comparison",
+  "Statistiques du match": "Match statistics", "Parcours": "Season run",
+  "Contexte de la rencontre": "Match context", "Classement": "Table",
+  "Contenu Instagram": "Instagram content", "Face à face": "Head to head",
+  // en-tête de rencontre
+  "reçoit": "hosts", "date inconnue": "date unknown",
+  "Diffusion : ": "Broadcast: ",
+  "position au classement indisponible": "league position unavailable",
+  // carte d'identité
+  "Victoires": "Wins", "Nuls": "Draws", "Défaites": "Losses",
+  "Buts pour": "Goals for", "Buts contre": "Goals against", "Différence": "Difference",
+  "Tirs": "Shots", "Att. dangereuses": "Dangerous attacks", "Clean sheets": "Clean sheets",
+  // comparatif
+  "Attaque": "Attack", "Défense": "Defence", "Jeu": "Play", "Discipline": "Discipline",
+  "Divers": "Other",
+  "Buts marqués": "Goals scored", "Buts marqués / match": "Goals scored / match",
+  "Tirs / match": "Shots / match", "Attaques": "Attacks",
+  "Attaques dangereuses": "Dangerous attacks",
+  "Buts encaissés": "Goals conceded", "Buts encaissés / match": "Goals conceded / match",
+  // Libellés servis par la source, en français, qu'il faut afficher traduits.
+  // Liste complète relevée dans les données : Forebet expose ces onze rubriques
+  // sur cette division, même celles qu'il ne renseigne jamais.
+  "Aucun but encaissé": "Clean sheets", "Corners": "Corners", "Hors-jeu": "Offsides",
+  "Fautes": "Fouls", "Cartons jaunes": "Yellow cards", "Cartons rouges": "Red cards",
+  "Arrêts du gardien": "Goalkeeper saves", "Penaltys": "Penalties",
+  "Six mètres": "Goal kicks", "Tacles": "Tackles", "Touches": "Throw-ins",
+  // statistiques de match
+  "Buts": "Goals", "Tirs cadrés": "Shots on target",
+  "Tirs non cadrés": "Shots off target", "Tirs contrés": "Blocked shots",
+  "Tirs dans la surface": "Shots inside box", "Tirs hors surface": "Shots outside box",
+  "Passes": "Passes", "Passes réussies (%)": "Pass accuracy (%)", "Arrêts": "Saves",
+  "Tacles": "Tackles", "Remplacements": "Substitutions",
+  "Possession": "Possession", "Chronologie": "Timeline",
+  // parcours et tableaux
+  "plus ancien": "oldest", "plus récent": "newest",
+  "buts marqués (au-dessus)": "goals scored (above)",
+  "buts encaissés (en dessous)": "goals conceded (below)",
+  "Date": "Date", "Domicile": "Home", "Score": "Score", "Extérieur": "Away",
+  "Compét.": "Comp.", "Équipe": "Team",
+  "détail V/N/D et buts": "W/D/L and goals in detail",
+  // listes et états
+  "Aucune rencontre pour ce filtre.": "No fixture matches this filter.",
+  "voir les stats ›": "view stats ›", "au calendrier": "scheduled",
+  "fiche non récupérée": "details not fetched", "aujourd'hui": "today",
+  "Choisis une rencontre ci-dessus pour afficher les statistiques des deux équipes.":
+    "Pick a fixture above to see both teams' statistics.",
+  // brief Instagram
+  "Générer le prompt": "Generate the brief", "Copier": "Copy", "copié": "copied",
+  // longs paragraphes
+  "Chiffres de la saison en cours, tirés du classement et des relevés de la source. Les moyennes sont par match joué.":
+    "Figures from the current season, taken from the table and the source's own records. Averages are per match played.",
+  "Chaque ligne est mise à l'échelle indépendamment : la longueur compare les deux équipes entre elles, pas une ligne à l'autre. Les valeurs sont écrites de part et d'autre, donc rien ne dépend de la couleur ni du survol.":
+    "Each row is scaled on its own: bar length compares the two teams with each other, not one row with another. Values are printed on both sides, so nothing depends on colour or hover.",
+  "Relevé de cette rencontre, pas de la saison — c'est la seule carte de la page qui décrit ce match. ":
+    "Recorded for this fixture, not the season — this is the only card on the page that describes this match. ",
+  "Un trait par match, du plus ancien au plus récent : au-dessus de la ligne les buts marqués, en dessous les buts encaissés. Les deux équipes partagent la même échelle, donc les hauteurs sont comparables d'un graphique à l'autre. Bilans recalculés depuis les résultats — Forebet rend ses pourcentages en JavaScript et les laisse vides dans le HTML.":
+    "One bar per match, oldest to newest: goals scored above the line, goals conceded below. Both teams share one scale, so heights can be compared across charts. Records are recomputed from the results — Forebet renders its percentages in JavaScript and leaves them empty in the HTML.",
+  "Les deux bilans qui concernent directement cette affiche — l'équipe qui reçoit à domicile, celle qui se déplace à l'extérieur — puis leurs confrontations passées.":
+    "The two records that bear directly on this fixture — the host at home, the visitor away — then their past meetings.",
+  "Les deux équipes de la rencontre sont surlignées. Le championnat koweïtien départage à la confrontation directe, pas à la différence de buts.":
+    "Both teams in this fixture are highlighted. The Kuwaiti league separates equal teams on head-to-head record, not goal difference.",
+  "Génère un brief prêt à coller dans Claude pour produire le carrousel de 4 slides. Toutes les valeurs sont tirées de cette fiche — le brief interdit explicitement d'en inventer et exclut tout pronostic.":
+    "Generates a brief ready to paste into Claude to produce the 4-slide carousel. Every value comes from this page — the brief explicitly forbids inventing any, and rules out predictions.",
+  "Les attaques et attaques dangereuses sont écartées : la source en donne plus de dangereuses que de totales, le compte est faux.":
+    "Attacks and dangerous attacks are set aside: the source reports more dangerous attacks than total ones, so the count is wrong.",
+  // rafraîchissement
+  "collecte en cours — une minute environ…": "collecting — about a minute…",
+  "recherche d'une version plus récente…": "looking for a newer version…",
+  "rien à rafraîchir ici : cette page est un instantané, et Forebet n'autorise pas le navigateur à l'interroger (pas de CORS). Lance « python serve.py » en local pour un vrai rafraîchissement.":
+    "nothing to refresh here: this page is a snapshot, and Forebet does not let the browser query it (no CORS). Run “python serve.py” locally for a real refresh.",
+};
+
+/* Phrases à trous. Chaque entrée est écrite en entier dans les deux langues. */
+const PH = {
+  kickoffLine: {
+    fr: m => `${m.kickoff || "date inconnue"}  ·  ${m.competition_tag || ""}  ·  #${m.match_id}`,
+    en: m => `${m.kickoff || "date unknown"}  ·  ${m.competition_tag || ""}  ·  #${m.match_id}`,
+  },
+  broadcastUsual: {
+    fr: list => `Diffusion non renseignée — habituellement ${list}.`,
+    en: list => `Broadcaster not recorded — usually ${list}.`,
+  },
+  rankLine: {
+    fr: st => `${st.rank}ᵉ au classement · ${st.points} pts en ${st.played} matchs`,
+    en: st => `${ordinalEn(st.rank)} in the table · ${st.points} pts from ${st.played} matches`,
+  },
+  perMatch: { fr: v => `${v} / match`, en: v => `${v} / match` },
+  outOf: { fr: n => `sur ${n}`, en: n => `of ${n}` },
+  scopeNote: {
+    fr: (played, runs, extra, names) =>
+      `Victoires, nuls et défaites viennent du championnat (${played} matchs). ` +
+      `Buts, tirs et attaques couvrent ${runs} matchs, soit ${extra} de plus ` +
+      `hors championnat (${names}).`,
+    en: (played, runs, extra, names) =>
+      `Wins, draws and losses come from the league (${played} matches). ` +
+      `Goals, shots and attacks cover ${runs} matches, that is ${extra} more ` +
+      `outside the league (${names}).`,
+  },
+  missingHere: {
+    fr: list => `Non renseigné par la source pour ce championnat : ${list}.`,
+    en: list => `Not recorded by the source for this league: ${list}.`,
+  },
+  notRecorded: {
+    fr: list => `Non relevé par la source sur ce match : ${list}.`,
+    en: list => `Not recorded by the source for this match: ${list}.`,
+  },
+  attacksLine: {
+    fr: s => `Attaques : ${s.home.total} contre ${s.away.total}, dont ` +
+             `${s.home.dangerous} et ${s.away.dangerous} dangereuses.`,
+    en: s => `Attacks: ${s.home.total} to ${s.away.total}, of which ` +
+             `${s.home.dangerous} and ${s.away.dangerous} dangerous.`,
+  },
+  matchMeta: {
+    fr: (venue, cap, ht, ft) => [
+      venue && (venue + (cap ? ` (${cap} places)` : "")),
+      ht && `mi-temps ${ht}`, ft && `score final ${ft}`,
+    ].filter(Boolean).join(" · "),
+    en: (venue, cap, ht, ft) => [
+      venue && (venue + (cap ? ` (${cap} seats)` : "")),
+      ht && `half-time ${ht}`, ft && `full-time ${ft}`,
+    ].filter(Boolean).join(" · "),
+  },
+  chartScale: { fr: n => `échelle 0–${n} buts`, en: n => `scale 0–${n} goals` },
+  record: {
+    fr: r => `${r.played} matchs · ${r.wins}V ${r.draws}N ${r.losses}D · ${r.goals_for}:${r.goals_against}`,
+    en: r => `${r.played} matches · ${r.wins}W ${r.draws}D ${r.losses}L · ${r.goals_for}:${r.goals_against}`,
+  },
+  seeMatches: {
+    fr: n => `voir les ${n} rencontres`,
+    en: n => `show the ${n} matches`,
+  },
+  h2hSeenBy: {
+    fr: (who, r) => `vu par ${who} : ${PH.record.fr(r)}`,
+    en: (who, r) => `as seen by ${who}: ${PH.record.en(r)}`,
+  },
+  playedOnly: { fr: r => `${r.played} matchs`, en: r => `${r.played} matches` },
+  venueTitle: {
+    fr: (name, side) => side === "home" ? `${name} à domicile` : `${name} à l'extérieur`,
+    en: (name, side) => side === "home" ? `${name} at home` : `${name} away`,
+  },
+  fixturesNote: {
+    fr: (far, today) =>
+      `Journée et résultats récents relevés sur Forebet` +
+      (far ? `, complétés par ${far} rencontre${far > 1 ? "s" : ""} du calendrier ` +
+             `Flashscore — celles-là n'ont pas encore de fiche statistique` : "") +
+      `. « Aujourd'hui » se rapporte au ${today}, jour de génération de cette page.`,
+    en: (far, today) =>
+      `Current round and recent results taken from Forebet` +
+      (far ? `, plus ${far} fixture${far > 1 ? "s" : ""} from the Flashscore ` +
+             `calendar — those have no statistics page yet` : "") +
+      `. “Today” means ${today}, the day this page was generated.`,
+  },
+  dayToday: {
+    fr: d => `${d} · aujourd'hui`,
+    en: d => `${d} · today`,
+  },
+  foot: {
+    fr: gen => `Généré le ${gen} depuis le cache local — aucune donnée n'est ` +
+      `chargée à l'ouverture, la page fonctionne hors ligne. Source : Forebet. ` +
+      `Les pronostics de la source sont volontairement écartés : cette console ` +
+      `présente les relevés des deux équipes, pas une prédiction.`,
+    en: gen => `Generated on ${gen} from the local cache — nothing is fetched ` +
+      `when the page opens, it works offline. Source: Forebet. The source's own ` +
+      `predictions are deliberately left out: this console shows what both teams ` +
+      `recorded, not a forecast.`,
+  },
+  refreshDone: {
+    fr: g => `collecte terminée : données du ${g}.`,
+    en: g => `collection finished: data from ${g}.`,
+  },
+  refreshFailed: {
+    fr: e => `la collecte a échoué : ${e}`,
+    en: e => `collection failed: ${e}`,
+  },
+  refreshUpdated: {
+    fr: g => `mis à jour : données du ${g}.`,
+    en: g => `updated: data from ${g}.`,
+  },
+  refreshCurrent: {
+    fr: g => `déjà à jour : rien de plus récent que le ${g}. Cette page est un ` +
+      `instantané ; pour aller rechercher les données, lance « python serve.py » en local.`,
+    en: g => `already current: nothing newer than ${g}. This page is a snapshot; ` +
+      `run “python serve.py” locally to actually go and fetch the data.`,
+  },
+};
+
+/* Les faits de jeu arrivent étiquetés en français par `fetch_stats.py` ; on
+   retraduit depuis leur `type`, qui lui est neutre. */
+const EVENT_EN = {
+  goal: "goal", owngoal: "own goal", penalty: "penalty",
+  missed_penalty: "missed penalty", yellowcard: "yellow card",
+  redcard: "red card", yellowredcard: "second yellow",
+  substitution: "substitution", var: "VAR",
+};
+
+const ordinalEn = n => {
+  const s = ["th", "st", "nd", "rd"], v = n % 100;
+  return n + (s[(v - 20) % 10] || s[v] || s[0]);
+};
+
+function detectLang() {
+  const saved = (() => { try { return localStorage.getItem("console-lang"); } catch (e) { return null; } })();
+  if (saved === "fr" || saved === "en") return saved;
+  // « Connexion non FR » : on lit les langues du navigateur. L'anglais est le
+  // repli pour tout ce qui n'est pas francophone.
+  //
+  // On respecte l'ORDRE de préférence : la première langue déclarée décide. Un
+  // visiteur en `en-GB, fr` lit le français, mais préfère l'anglais — lui servir
+  // du français parce que « fr » figure quelque part dans sa liste serait ignorer
+  // ce qu'il a demandé.
+  const prefs = navigator.languages && navigator.languages.length
+    ? navigator.languages : [navigator.language || "fr"];
+  const first = String(prefs[0] || "").toLowerCase();
+  return first.startsWith("fr") ? "fr" : "en";
+}
+
+let lang = detectLang();
+let promptLang = (() => {
+  try { return localStorage.getItem("console-prompt-lang") || "fr"; } catch (e) { return "fr"; }
+})();
+
+const t = s => lang === "en" ? (EN[s] ?? s) : s;
+const ph = (key, ...args) => PH[key][lang](...args);
+// Le brief a sa propre langue : il produit du contenu éditorial, pas de l'interface.
+const phP = (key, ...args) => PH[key][promptLang](...args);
+// Lettres de forme : V/N/D en français, W/D/L en anglais. La classe CSS reste
+// la lettre d'origine, sinon les couleurs sauteraient.
+const formLetter = ch => lang === "en" ? ({ V: "W", N: "D", D: "L" }[ch] || ch) : ch;
 
 /* ---------- utilitaires ---------- */
 const el = (t, cls, txt) => {
@@ -356,12 +607,11 @@ function renderHead(m) {
   const vs = el("div", "vs");
   vs.appendChild(el("span", "dot home"));
   vs.appendChild(teamLabel(m.home, "lg"));
-  vs.appendChild(el("span", "sep", "reçoit"));
+  vs.appendChild(el("span", "sep", t("reçoit")));
   vs.appendChild(el("span", "dot away"));
   vs.appendChild(teamLabel(m.away, "lg"));
   box.appendChild(vs);
-  box.appendChild(el("div", "kickoff",
-    `${m.kickoff || "date inconnue"}  ·  ${m.competition_tag || ""}  ·  #${m.match_id}`));
+  box.appendChild(el("div", "kickoff", ph("kickoffLine", m)));
   const tv = broadcastLine(m);
   if (tv) box.appendChild(tv);
   card.appendChild(box);
@@ -374,12 +624,11 @@ function broadcastLine(m) {
   if (!b) return null;
   const line = el("div", "kickoff");
   if (b.confirmed) {
-    line.appendChild(el("strong", null, "Diffusion : "));
+    line.appendChild(el("strong", null, t("Diffusion : ")));
     line.appendChild(document.createTextNode(b.channel));
   } else if (b.usual && b.usual.length) {
     line.style.color = "var(--text-muted)";
-    line.textContent = "Diffusion non renseignée — habituellement " +
-      b.usual.join(", ") + ".";
+    line.textContent = ph("broadcastUsual", b.usual.join(", "));
   } else {
     return null;
   }
@@ -388,19 +637,20 @@ function broadcastLine(m) {
 
 /* ---------- carte d'identité ---------- */
 function tile(label, value, note) {
-  const t = el("div", "tile");
-  t.appendChild(el("div", "tl", label));
-  t.appendChild(el("div", "tv", value));
-  if (note) t.appendChild(el("div", "tn", note));
-  return t;
+  // Nommée `box` et non `t` : `t` est la fonction de traduction.
+  const box = el("div", "tile");
+  box.appendChild(el("div", "tl", label));
+  box.appendChild(el("div", "tv", value));
+  if (note) box.appendChild(el("div", "tn", note));
+  return box;
 }
 
 function renderIdentity(m) {
   const card = el("div", "card");
-  card.appendChild(el("h2", null, "Carte d'identité"));
-  card.appendChild(el("p", "sub",
+  card.appendChild(el("h2", null, t("Carte d'identité")));
+  card.appendChild(el("p", "sub", t(
     "Chiffres de la saison en cours, tirés du classement et des relevés de la " +
-    "source. Les moyennes sont par match joué."));
+    "source. Les moyennes sont par match joué.")));
 
   const grid = el("div", "idgrid");
   [["home", m.home], ["away", m.away]].forEach(([side, name]) => {
@@ -415,27 +665,28 @@ function renderIdentity(m) {
     const st = rowOf(m, name);
     const stats = (m.stats || {})[side] || {};
     col.appendChild(el("div", "idrank", st
-      ? `${st.rank}ᵉ au classement · ${st.points} pts en ${st.played} matchs`
-      : "position au classement indisponible"));
+      ? ph("rankLine", st)
+      : t("position au classement indisponible")));
 
     const tiles = el("div", "tiles");
+    const avg = v => v != null ? ph("perMatch", r2(v)) : "";
     if (st) {
-      tiles.appendChild(tile("Victoires", st.wins, `sur ${st.played}`));
-      tiles.appendChild(tile("Nuls", st.draws, ""));
-      tiles.appendChild(tile("Défaites", st.losses, ""));
+      tiles.appendChild(tile(t("Victoires"), st.wins, ph("outOf", st.played)));
+      tiles.appendChild(tile(t("Nuls"), st.draws, ""));
+      tiles.appendChild(tile(t("Défaites"), st.losses, ""));
     }
-    tiles.appendChild(tile("Buts pour", stats.goals?.scored ?? "—",
-      stats.goals?.scored_avg != null ? r2(stats.goals.scored_avg) + " / match" : ""));
-    tiles.appendChild(tile("Buts contre", stats.goals?.conceded ?? "—",
-      stats.goals?.conceded_avg != null ? r2(stats.goals.conceded_avg) + " / match" : ""));
-    tiles.appendChild(tile("Différence",
+    tiles.appendChild(tile(t("Buts pour"), stats.goals?.scored ?? "—",
+      avg(stats.goals?.scored_avg)));
+    tiles.appendChild(tile(t("Buts contre"), stats.goals?.conceded ?? "—",
+      avg(stats.goals?.conceded_avg)));
+    tiles.appendChild(tile(t("Différence"),
       st ? (st.goal_diff > 0 ? "+" + st.goal_diff : st.goal_diff) : "—", ""));
-    tiles.appendChild(tile("Tirs", stats.shots?.total ?? "—",
-      stats.shots?.total_avg != null ? r2(stats.shots.total_avg) + " / match" : ""));
-    tiles.appendChild(tile("Att. dangereuses", stats.attacks?.dangerous ?? "—",
-      stats.attacks?.dangerous_avg != null ? r2(stats.attacks.dangerous_avg) + " / match" : ""));
+    tiles.appendChild(tile(t("Tirs"), stats.shots?.total ?? "—",
+      avg(stats.shots?.total_avg)));
+    tiles.appendChild(tile(t("Att. dangereuses"), stats.attacks?.dangerous ?? "—",
+      avg(stats.attacks?.dangerous_avg)));
     const cs = (m.stats?.others || {})["Aucun but encaissé"];
-    tiles.appendChild(tile("Clean sheets", cs ? (cs[side]?.total ?? "—") : "—", ""));
+    tiles.appendChild(tile(t("Clean sheets"), cs ? (cs[side]?.total ?? "—") : "—", ""));
     col.appendChild(tiles);
 
     // Les deux moitiés de cette carte ne couvrent pas le même périmètre : le
@@ -449,9 +700,7 @@ function renderIdentity(m) {
       if (extra.length) {
         const names = [...new Set(extra.map(r => r.competition))].join(", ");
         const note = el("div", "idrank",
-          `Victoires, nuls et défaites viennent du championnat (${st.played} matchs). ` +
-          `Buts, tirs et attaques couvrent ${runs.record.played} matchs, ` +
-          `soit ${extra.length} de plus hors championnat (${names}).`);
+          ph("scopeNote", st.played, runs.record.played, extra.length, names));
         note.style.margin = "14px 0 0";
         col.appendChild(note);
       }
@@ -490,11 +739,11 @@ function h2hRow(grid, label, hv, av) {
 
 function renderCompare(m) {
   const card = el("div", "card");
-  card.appendChild(el("h2", null, "Comparatif"));
-  card.appendChild(el("p", "sub",
+  card.appendChild(el("h2", null, t("Comparatif")));
+  card.appendChild(el("p", "sub", t(
     "Chaque ligne est mise à l'échelle indépendamment : la longueur compare les " +
     "deux équipes entre elles, pas une ligne à l'autre. Les valeurs sont écrites " +
-    "de part et d'autre, donc rien ne dépend de la couleur ni du survol."));
+    "de part et d'autre, donc rien ne dépend de la couleur ni du survol.")));
 
   const legend = el("div", "keys");
   legend.style.marginBottom = "18px";
@@ -513,20 +762,24 @@ function renderCompare(m) {
   grid.dataset.away = m.away;
   const H = m.stats?.home || {}, A = m.stats?.away || {};
   const others = m.stats?.others || {};
-  const group = t => grid.appendChild(el("div", "grp", t));
-  const pick = (label, key) => [label, others[key]?.home?.total, others[key]?.away?.total];
+  // `group` prenait `t` en paramètre : renommé, sinon il masquerait la fonction
+  // de traduction du même nom à l'intérieur de son corps.
+  const group = label => grid.appendChild(el("div", "grp", t(label)));
+  // Les clés de `others` viennent des pages françaises de Forebet : c'est de la
+  // donnée, pas de l'interface. On traduit à l'affichage, jamais la clé.
+  const pick = (label, key) => [t(label), others[key]?.home?.total, others[key]?.away?.total];
 
   group("Attaque");
-  h2hRow(grid, "Buts marqués", H.goals?.scored, A.goals?.scored);
-  h2hRow(grid, "Buts marqués / match", H.goals?.scored_avg, A.goals?.scored_avg);
-  h2hRow(grid, "Tirs", H.shots?.total, A.shots?.total);
-  h2hRow(grid, "Tirs / match", H.shots?.total_avg, A.shots?.total_avg);
-  h2hRow(grid, "Attaques", H.attacks?.total, A.attacks?.total);
-  h2hRow(grid, "Attaques dangereuses", H.attacks?.dangerous, A.attacks?.dangerous);
+  h2hRow(grid, t("Buts marqués"), H.goals?.scored, A.goals?.scored);
+  h2hRow(grid, t("Buts marqués / match"), H.goals?.scored_avg, A.goals?.scored_avg);
+  h2hRow(grid, t("Tirs"), H.shots?.total, A.shots?.total);
+  h2hRow(grid, t("Tirs / match"), H.shots?.total_avg, A.shots?.total_avg);
+  h2hRow(grid, t("Attaques"), H.attacks?.total, A.attacks?.total);
+  h2hRow(grid, t("Attaques dangereuses"), H.attacks?.dangerous, A.attacks?.dangerous);
 
   group("Défense");
-  h2hRow(grid, "Buts encaissés", H.goals?.conceded, A.goals?.conceded);
-  h2hRow(grid, "Buts encaissés / match", H.goals?.conceded_avg, A.goals?.conceded_avg);
+  h2hRow(grid, t("Buts encaissés"), H.goals?.conceded, A.goals?.conceded);
+  h2hRow(grid, t("Buts encaissés / match"), H.goals?.conceded_avg, A.goals?.conceded_avg);
   if (others["Aucun but encaissé"]) h2hRow(grid, ...pick("Clean sheets", "Aucun but encaissé"));
 
   const jeu = ["Corners", "Hors-jeu"].filter(k => others[k]);
@@ -550,9 +803,9 @@ function renderCompare(m) {
       const h = num(v.home?.total), a = num(v.away?.total);
       return (h === null || h === 0) && (a === null || a === 0);
     })
-    .map(([k]) => k.toLowerCase());
+    .map(([k]) => t(k).toLowerCase());
   if (missing.length) {
-    const note = el("p", "sub", "Non renseigné par la source pour ce championnat : " + missing.join(", ") + ".");
+    const note = el("p", "sub", ph("missingHere", missing.join(", ")));
     note.style.margin = "18px 0 0";
     card.appendChild(note);
   }
@@ -586,7 +839,7 @@ function possessionBar(s) {
   const box = el("div");
   const values = el("div", "possv");
   values.appendChild(el("span", null, `${h} %`));
-  values.appendChild(el("span", null, "Possession"));
+  values.appendChild(el("span", null, t("Possession")));
   values.appendChild(el("span", null, `${a} %`));
   const bar = el("div", "poss");
   const left = el("i", "ph"), right = el("i", "pa");
@@ -603,16 +856,18 @@ function renderTimeline(s, m) {
   if (!s.timeline || !s.timeline.length) return null;
   const box = el("div");
   box.style.marginTop = "22px";
-  box.appendChild(el("div", "grp2", "Chronologie"));
+  box.appendChild(el("div", "grp2", t("Chronologie")));
   const line = el("div", "tline");
   s.timeline.forEach(e => {
     const chip = el("div", "ev");
     if (e.side) chip.appendChild(el("span", "side " + e.side));
     chip.appendChild(el("b", null, e.minute + (e.extra ? "+" + e.extra : "") + "'"));
     // Les noms de joueurs sont toujours absents sur cette division : le libellé
-    // et le camp sont tout ce qu'on peut honnêtement afficher.
-    chip.appendChild(el("span", null, e.label));
-    chip.title = e.side ? `${e.label} — ${e.side === "home" ? m.home : m.away}` : e.label;
+    // et le camp sont tout ce qu'on peut honnêtement afficher. Le libellé arrive
+    // en français ; on repart de `type`, qui est neutre.
+    const label = lang === "en" ? (EVENT_EN[e.type] || e.type.replace(/_/g, " ")) : e.label;
+    chip.appendChild(el("span", null, label));
+    chip.title = e.side ? `${label} — ${e.side === "home" ? m.home : m.away}` : label;
     line.appendChild(chip);
   });
   box.appendChild(line);
@@ -623,15 +878,12 @@ function renderMatchStats(m) {
   const s = m.match_stats;
   if (!s) return null;
   const card = el("div", "card");
-  card.appendChild(el("h2", null, "Statistiques du match"));
+  card.appendChild(el("h2", null, t("Statistiques du match")));
 
-  const bits = [];
-  if (s.venue) bits.push(s.venue + (s.venue_capacity ? ` (${s.venue_capacity} places)` : ""));
-  if (s.half_time) bits.push(`mi-temps ${s.half_time}`);
-  if (s.full_time) bits.push(`score final ${s.full_time}`);
-  card.appendChild(el("p", "sub",
+  const meta = ph("matchMeta", s.venue, s.venue_capacity, s.half_time, s.full_time);
+  card.appendChild(el("p", "sub", t(
     "Relevé de cette rencontre, pas de la saison — c'est la seule carte de la " +
-    "page qui décrit ce match. " + (bits.length ? bits.join(" · ") + "." : "")));
+    "page qui décrit ce match. ") + (meta ? meta + "." : "")));
 
   const bar = possessionBar(s);
   if (bar) card.appendChild(bar);
@@ -645,9 +897,9 @@ function renderMatchStats(m) {
     const present = keys.filter(k => s.fields.includes(k) &&
       (s.home[k] !== null || s.away[k] !== null));
     if (!present.length) return;
-    grid.appendChild(el("div", "grp", title));
+    grid.appendChild(el("div", "grp", t(title)));
     present.forEach(k => {
-      h2hRow(grid, STAT_LABELS[k] || k, s.home[k], s.away[k]);
+      h2hRow(grid, t(STAT_LABELS[k] || k), s.home[k], s.away[k]);
       drawn++;
     });
   });
@@ -660,15 +912,14 @@ function renderMatchStats(m) {
   // vaut mieux que d'afficher « 0 faute », mais il faut dire qu'on les tait.
   const absent = Object.keys(STAT_LABELS)
     .filter(k => !s.fields.includes(k))
-    .map(k => STAT_LABELS[k].toLowerCase());
+    .map(k => t(STAT_LABELS[k]).toLowerCase());
   const notes = [];
-  if (absent.length) notes.push("Non relevé par la source sur ce match : " + absent.join(", ") + ".");
+  if (absent.length) notes.push(ph("notRecorded", absent.join(", ")));
   if (s.attacks && s.attacks.suspect) {
-    notes.push("Les attaques et attaques dangereuses sont écartées : la source " +
-      "en donne plus de dangereuses que de totales, le compte est faux.");
+    notes.push(t("Les attaques et attaques dangereuses sont écartées : la source " +
+      "en donne plus de dangereuses que de totales, le compte est faux."));
   } else if (s.attacks) {
-    notes.push(`Attaques : ${s.attacks.home.total} contre ${s.attacks.away.total}, ` +
-      `dont ${s.attacks.home.dangerous} et ${s.attacks.away.dangerous} dangereuses.`);
+    notes.push(ph("attacksLine", s.attacks));
   }
   notes.forEach(text => {
     const p = el("p", "sub", text);
@@ -710,18 +961,24 @@ function goalChart(rows, side, scale) {
   wrap.appendChild(chart);
   wrap.appendChild(el("div", "baseline"));
   const axis = el("div", "gaxis");
-  axis.appendChild(el("span", null, "plus ancien"));
-  axis.appendChild(el("span", null, `échelle 0–${scale} buts`));
-  axis.appendChild(el("span", null, "plus récent"));
+  axis.appendChild(el("span", null, t("plus ancien")));
+  axis.appendChild(el("span", null, ph("chartScale", scale)));
+  axis.appendChild(el("span", null, t("plus récent")));
   wrap.appendChild(axis);
   return wrap;
 }
 
 function matchTable(rows) {
   const scroll = el("div", "scroll");
-  const t = el("table");
-  t.innerHTML = "<thead><tr><th class='l'>Date</th><th class='l'>Domicile</th>" +
-    "<th>Score</th><th class='l'>Extérieur</th><th class='l'>Compét.</th></tr></thead>";
+  // La table s'appelait `t` : renommée, sinon elle masque la fonction de
+  // traduction dans tout le corps de la fonction.
+  const table = el("table");
+  const head = el("thead");
+  const hr = el("tr");
+  [["l", "Date"], ["l", "Domicile"], [null, "Score"], ["l", "Extérieur"], ["l", "Compét."]]
+    .forEach(([cls, label]) => hr.appendChild(el("th", cls, t(label))));
+  head.appendChild(hr);
+  table.appendChild(head);
   const tb = el("tbody");
   rows.forEach(mt => {
     const tr = el("tr");
@@ -732,26 +989,28 @@ function matchTable(rows) {
     tr.appendChild(el("td", "l", mt.competition || "—"));
     tb.appendChild(tr);
   });
-  t.appendChild(tb);
-  scroll.appendChild(t);
+  table.appendChild(tb);
+  scroll.appendChild(table);
   return scroll;
 }
 
 function formChips(form) {
   const box = el("div", "form");
-  [...(form || "")].forEach(ch => box.appendChild(el("span", ch, ch)));
+  // La classe reste la lettre d'origine (V/N/D) : c'est elle qui porte la
+  // couleur. Seul l'affichage bascule en W/D/L.
+  [...(form || "")].forEach(ch => box.appendChild(el("span", ch, formLetter(ch))));
   return box;
 }
 
 function renderRuns(m) {
   const card = el("div", "card");
-  card.appendChild(el("h2", null, "Parcours"));
-  card.appendChild(el("p", "sub",
+  card.appendChild(el("h2", null, t("Parcours")));
+  card.appendChild(el("p", "sub", t(
     "Un trait par match, du plus ancien au plus récent : au-dessus de la ligne " +
     "les buts marqués, en dessous les buts encaissés. Les deux équipes partagent " +
     "la même échelle, donc les hauteurs sont comparables d'un graphique à l'autre. " +
     "Bilans recalculés depuis les résultats — Forebet rend ses pourcentages en " +
-    "JavaScript et les laisse vides dans le HTML."));
+    "JavaScript et les laisse vides dans le HTML.")));
 
   const blocks = [[1, "home", m.home], [2, "away", m.away]]
     .map(([i, side, name]) => ({ b: block(m, i), side, name }))
@@ -776,12 +1035,12 @@ function renderRuns(m) {
     s.style.marginRight = "-3px";
     k1.appendChild(s);
   });
-  k1.appendChild(el("span", null, "buts marqués (au-dessus)"));
+  k1.appendChild(el("span", null, t("buts marqués (au-dessus)")));
   const k2 = el("div", "key");
   const s2 = el("span", "swatch");
   s2.style.background = "var(--muted-bar)";
   k2.appendChild(s2);
-  k2.appendChild(el("span", null, "buts encaissés (en dessous)"));
+  k2.appendChild(el("span", null, t("buts encaissés (en dessous)")));
   legend.appendChild(k1);
   legend.appendChild(k2);
   card.appendChild(legend);
@@ -800,14 +1059,13 @@ function renderRuns(m) {
     const right = el("div", "teamhead");
     right.style.gap = "12px";
     const r = b.record;
-    right.appendChild(el("div", "tr2",
-      `${r.played} matchs · ${r.wins}V ${r.draws}N ${r.losses}D · ${r.goals_for}:${r.goals_against}`));
+    right.appendChild(el("div", "tr2", ph("record", r)));
     right.appendChild(formChips(b.form));
     head.appendChild(right);
     sec.appendChild(head);
     sec.appendChild(goalChart(b.matches, side, scale));
     const det = el("details");
-    det.appendChild(el("summary", null, `voir les ${b.matches.length} rencontres`));
+    det.appendChild(el("summary", null, ph("seeMatches", b.matches.length)));
     det.appendChild(matchTable(b.matches));
     sec.appendChild(det);
     card.appendChild(sec);
@@ -818,11 +1076,11 @@ function renderRuns(m) {
 /* ---------- contexte : domicile / extérieur / face à face ---------- */
 function renderContext(m) {
   const card = el("div", "card");
-  card.appendChild(el("h2", null, "Contexte de la rencontre"));
-  card.appendChild(el("p", "sub",
+  card.appendChild(el("h2", null, t("Contexte de la rencontre")));
+  card.appendChild(el("p", "sub", t(
     "Les deux bilans qui concernent directement cette affiche — l'équipe qui " +
     "reçoit à domicile, celle qui se déplace à l'extérieur — puis leurs " +
-    "confrontations passées."));
+    "confrontations passées.")));
 
   const split = el("div", "split");
   [[3, "home"], [4, "away"]].forEach(([i, side]) => {
@@ -832,18 +1090,20 @@ function renderContext(m) {
     const head = el("div", "teamhead");
     const tt = el("div", "tt");
     tt.appendChild(el("span", "dot " + side));
-    tt.appendChild(document.createTextNode(" " + (b.display_title || b.title)));
+    // `display_title` est composé en français par build_console.py. On le
+    // recompose ici à partir du nom de l'équipe, pour qu'il suive la langue.
+    tt.appendChild(document.createTextNode(
+      " " + ph("venueTitle", side === "home" ? m.home : m.away, side)));
     head.appendChild(tt);
     col.appendChild(head);
     const r = b.record;
-    col.appendChild(el("div", "tr2",
-      `${r.played} matchs · ${r.wins}V ${r.draws}N ${r.losses}D · ${r.goals_for}:${r.goals_against}`));
+    col.appendChild(el("div", "tr2", ph("record", r)));
     const f = el("div");
     f.style.marginTop = "8px";
     f.appendChild(formChips(b.form));
     col.appendChild(f);
     const det = el("details");
-    det.appendChild(el("summary", null, `voir les ${b.matches.length} rencontres`));
+    det.appendChild(el("summary", null, ph("seeMatches", b.matches.length)));
     det.appendChild(matchTable(b.matches));
     col.appendChild(det);
     split.appendChild(col);
@@ -857,14 +1117,14 @@ function renderContext(m) {
     sec.style.borderTop = "1px solid var(--grid)";
     sec.style.paddingTop = "16px";
     const head = el("div", "teamhead");
-    head.appendChild(el("div", "tt", "Face à face"));
+    head.appendChild(el("div", "tt", t("Face à face")));
     const r = h2h.record;
     // Le bilan du face à face est celui d'UNE des deux équipes (celle que la
     // source marque `active-team`). Sans le nom, on l'attribue spontanément à
     // l'équipe qui reçoit — l'inverse de la vérité dans notre match de test.
     head.appendChild(el("div", "tr2", h2h.subject
-      ? `vu par ${h2h.subject} : ${r.played} matchs · ${r.wins}V ${r.draws}N ${r.losses}D · ${r.goals_for}:${r.goals_against}`
-      : `${r.played} matchs`));
+      ? ph("h2hSeenBy", h2h.subject, r)
+      : ph("playedOnly", r)));
     sec.appendChild(head);
     sec.appendChild(matchTable(h2h.matches));
     card.appendChild(sec);
@@ -875,19 +1135,20 @@ function renderContext(m) {
 /* ---------- classement (panneau latéral) ---------- */
 function renderStandings(m) {
   const card = el("div", "card");
-  card.appendChild(el("h2", null, "Classement"));
-  card.appendChild(el("p", "sub",
+  card.appendChild(el("h2", null, t("Classement")));
+  card.appendChild(el("p", "sub", t(
     "Les deux équipes de la rencontre sont surlignées. Le championnat koweïtien " +
-    "départage à la confrontation directe, pas à la différence de buts."));
+    "départage à la confrontation directe, pas à la différence de buts.")));
 
   const rows = m.standings || [];
-  const t = el("table", "mini");
+  // Renommée : `t` était la table, et masquait la fonction de traduction.
+  const table = el("table", "mini");
   const head = el("thead");
   const hr = el("tr");
-  [["r", ""], ["t", "Équipe"], ["", "J"], ["p", "Pts"], ["d", "+/-"]]
+  [["r", ""], ["t", t("Équipe")], ["", lang === "en" ? "P" : "J"], ["p", "Pts"], ["d", "+/-"]]
     .forEach(([cls, label]) => hr.appendChild(el("td", cls, label)));
   head.appendChild(hr);
-  t.appendChild(head);
+  table.appendChild(head);
 
   const tb = el("tbody");
   rows.forEach(row => {
@@ -912,16 +1173,22 @@ function renderStandings(m) {
     tr.appendChild(el("td", "d", row.goal_diff > 0 ? "+" + row.goal_diff : row.goal_diff));
     tb.appendChild(tr);
   });
-  t.appendChild(tb);
-  card.appendChild(t);
+  table.appendChild(tb);
+  card.appendChild(table);
 
   // Le panneau est étroit : le détail complet reste accessible, replié.
   const det = el("details");
-  det.appendChild(el("summary", null, "détail V/N/D et buts"));
+  det.appendChild(el("summary", null, t("détail V/N/D et buts")));
   const scroll = el("div", "scroll");
   const full = el("table");
-  full.innerHTML = "<thead><tr><th>#</th><th class='l'>Équipe</th><th>V</th><th>N</th>" +
-    "<th>D</th><th>BP</th><th>BC</th></tr></thead>";
+  const fhead = el("thead");
+  const fhr = el("tr");
+  const cols = lang === "en"
+    ? ["#", "Team", "W", "D", "L", "GF", "GA"]
+    : ["#", "Équipe", "V", "N", "D", "BP", "BC"];
+  cols.forEach((label, i) => fhr.appendChild(el("th", i === 1 ? "l" : null, label)));
+  fhead.appendChild(fhr);
+  full.appendChild(fhead);
   const ftb = el("tbody");
   rows.forEach(row => {
     const tr = el("tr");
@@ -940,7 +1207,22 @@ function renderStandings(m) {
 }
 
 /* ---------- générateur de prompt Instagram ---------- */
-const ordinal = n => n === 1 ? "1re" : n + "e";
+/* Ce bloc suit `promptLang`, pas `lang` : le carrousel est du contenu éditorial
+   destiné au compte de Haris. Sa langue est un choix de publication, elle n'a
+   pas à basculer parce qu'un visiteur arrive avec un navigateur anglais. D'où
+   le bouton séparé dans la barre du haut. */
+const ordinal = n => promptLang === "en" ? ordinalEn(n) : (n === 1 ? "1re" : n + "e");
+const PR = {
+  attackBest: { fr: "meilleure attaque de la division", en: "best attack in the division" },
+  attackWorst: { fr: "pire attaque de la division", en: "worst attack in the division" },
+  attackNth: { fr: "attaque", en: "attack" },
+  defenceBest: { fr: "meilleure défense de la division", en: "best defence in the division" },
+  defenceWorst: { fr: "pire défense de la division", en: "worst defence in the division" },
+  defenceNth: { fr: "défense", en: "defence" },
+  atHome: { fr: "à domicile", en: "at home" },
+  away: { fr: "à l'extérieur", en: "away" },
+};
+const pr = key => PR[key][promptLang];
 
 function rankMap(standings, key, bestIsHigh) {
   // Rang de chaque équipe sur une métrique, pour pouvoir écrire « pire défense
@@ -965,10 +1247,10 @@ function teamFacts(m, side) {
   const def = rankMap(table, "goals_against", false)[name];
   const cs = (m.stats?.others || {})["Aucun but encaissé"];
 
-  const attackNote = atk === 1 ? "meilleure attaque de la division"
-    : atk === n ? "pire attaque de la division" : ordinal(atk) + " attaque";
-  const defenseNote = def === 1 ? "meilleure défense de la division"
-    : def === n ? "pire défense de la division" : ordinal(def) + " défense";
+  const attackNote = atk === 1 ? pr("attackBest")
+    : atk === n ? pr("attackWorst") : `${ordinal(atk)} ${pr("attackNth")}`;
+  const defenseNote = def === 1 ? pr("defenceBest")
+    : def === n ? pr("defenceWorst") : `${ordinal(def)} ${pr("defenceNth")}`;
 
   const rec = runs?.record_recent;
   const winRate6 = rec && rec.played ? Math.round(rec.wins / rec.played * 100) : null;
@@ -984,55 +1266,83 @@ function teamFacts(m, side) {
     dangerous: stats.attacks?.dangerous, dangerousAvg: stats.attacks?.dangerous_avg,
     cleanSheets: cs ? cs[side]?.total : null,
     form: runs?.form || "", winRate6,
-    venueLabel: side === "home" ? "à domicile" : "à l'extérieur",
+    venueLabel: side === "home" ? pr("atHome") : pr("away"),
     venueRecord: venue?.record || null,
   };
 }
 
 function suggestedLines(m, H, A) {
+  const en = promptLang === "en";
   const lines = [];
   const gap = (A.points ?? 0) - (H.points ?? 0);
   if (Number.isFinite(gap) && gap !== 0) {
     const lead = gap > 0 ? A : H;
-    lines.push(`${Math.abs(gap)} PTS D'ÉCART — avantage ${lead.name.toUpperCase()}`);
+    lines.push(en
+      ? `${Math.abs(gap)} PTS APART — ${lead.name.toUpperCase()} AHEAD`
+      : `${Math.abs(gap)} PTS D'ÉCART — avantage ${lead.name.toUpperCase()}`);
   }
-  [H, A].forEach(t => {
-    if (t.venueRecord && t.venueRecord.played) {
-      const v = t.venueRecord;
-      lines.push(`${v.wins}/${v.played} VICTOIRES ${t.venueLabel.toUpperCase()} — ${t.name.toUpperCase()}`);
+  // Le paramètre s'appelait `t` : il masquait la fonction de traduction.
+  [H, A].forEach(team => {
+    if (team.venueRecord && team.venueRecord.played) {
+      const v = team.venueRecord;
+      lines.push(en
+        ? `${v.wins}/${v.played} WINS ${team.venueLabel.toUpperCase()} — ${team.name.toUpperCase()}`
+        : `${v.wins}/${v.played} VICTOIRES ${team.venueLabel.toUpperCase()} — ${team.name.toUpperCase()}`);
     }
   });
+  const pair = `${H.name.toUpperCase()} / ${A.name.toUpperCase()}`;
   if (H.shotsAvg != null && A.shotsAvg != null) {
-    lines.push(`${H.shotsAvg} / ${A.shotsAvg} TIRS PAR MATCH — ${H.name.toUpperCase()} / ${A.name.toUpperCase()}`);
+    lines.push(`${H.shotsAvg} / ${A.shotsAvg} ` +
+      (en ? `SHOTS PER MATCH — ${pair}` : `TIRS PAR MATCH — ${pair}`));
   }
   if (H.concededAvg != null && A.concededAvg != null) {
-    lines.push(`${H.concededAvg} / ${A.concededAvg} BUTS ENCAISSÉS PAR MATCH — ${H.name.toUpperCase()} / ${A.name.toUpperCase()}`);
+    lines.push(`${H.concededAvg} / ${A.concededAvg} ` +
+      (en ? `GOALS CONCEDED PER MATCH — ${pair}` : `BUTS ENCAISSÉS PAR MATCH — ${pair}`));
   }
   if (H.winRate6 != null && A.winRate6 != null) {
-    lines.push(`${H.winRate6}% / ${A.winRate6}% DE VICTOIRES SUR 6 MATCHS — ${H.name.toUpperCase()} / ${A.name.toUpperCase()}`);
+    lines.push(`${H.winRate6}% / ${A.winRate6}% ` +
+      (en ? `WIN RATE OVER 6 MATCHES — ${pair}` : `DE VICTOIRES SUR 6 MATCHS — ${pair}`));
   }
   const h2h = block(m, 0);
   if (h2h && h2h.record.played && h2h.subject) {
     const r = h2h.record;
-    lines.push(`${r.wins}/${r.played} CONFRONTATIONS GAGNÉES — ${h2h.subject.toUpperCase()}`);
+    lines.push(en
+      ? `${r.wins}/${r.played} MEETINGS WON — ${h2h.subject.toUpperCase()}`
+      : `${r.wins}/${r.played} CONFRONTATIONS GAGNÉES — ${h2h.subject.toUpperCase()}`);
   }
   return lines;
 }
 
-function teamBlockText(t) {
-  const v = t.venueRecord;
+function teamBlockText(f) {
+  const v = f.venueRecord;
+  const dash = "—";
+  if (promptLang === "en") {
+    return [
+      `${f.name} — ${f.side === "home" ? "hosts" : "travels"}`,
+      `  Table           ${ordinalEn(f.rank)} in the division, ${f.points} pts from ${f.played} matches`,
+      `  Record          ${f.wins}W ${f.draws}D ${f.losses}L`,
+      `  Goals           ${f.scored} scored (${f.attackNote}), ${f.conceded} conceded (${f.defenseNote})`,
+      `  Difference      ${f.diff > 0 ? "+" + f.diff : f.diff}`,
+      `  Averages        ${f.scoredAvg ?? dash} scored / ${f.concededAvg ?? dash} conceded per match`,
+      `  Shots           ${f.shots ?? dash} in total, ${f.shotsAvg ?? dash} per match`,
+      `  Dangerous att.  ${f.dangerous ?? dash} in total, ${f.dangerousAvg ?? dash} per match`,
+      `  Clean sheets    ${f.cleanSheets ?? dash}`,
+      `  Form (last 6)   ${f.form || dash}  (newest to oldest)`,
+      v ? `  ${f.venueLabel.padEnd(15)} ${v.wins}W ${v.draws}D ${v.losses}L from ${v.played} matches, ${v.goals_for}:${v.goals_against}` : "",
+    ].filter(Boolean).join("\n");
+  }
   return [
-    `${t.name} — ${t.side === "home" ? "reçoit" : "se déplace"}`,
-    `  Classement      ${t.rank}e de la division, ${t.points} pts en ${t.played} matchs`,
-    `  Bilan           ${t.wins}V ${t.draws}N ${t.losses}D`,
-    `  Buts            ${t.scored} marqués (${t.attackNote}), ${t.conceded} encaissés (${t.defenseNote})`,
-    `  Différence      ${t.diff > 0 ? "+" + t.diff : t.diff}`,
-    `  Moyennes        ${t.scoredAvg ?? "—"} marqués / ${t.concededAvg ?? "—"} encaissés par match`,
-    `  Tirs            ${t.shots ?? "—"} au total, ${t.shotsAvg ?? "—"} par match`,
-    `  Attaques dang.  ${t.dangerous ?? "—"} au total, ${t.dangerousAvg ?? "—"} par match`,
-    `  Clean sheets    ${t.cleanSheets ?? "—"}`,
-    `  Forme (6 der.)  ${t.form || "—"}  (du plus récent au plus ancien)`,
-    v ? `  ${t.venueLabel.padEnd(15)} ${v.wins}V ${v.draws}N ${v.losses}D sur ${v.played} matchs, ${v.goals_for}:${v.goals_against}` : "",
+    `${f.name} — ${f.side === "home" ? "reçoit" : "se déplace"}`,
+    `  Classement      ${f.rank}e de la division, ${f.points} pts en ${f.played} matchs`,
+    `  Bilan           ${f.wins}V ${f.draws}N ${f.losses}D`,
+    `  Buts            ${f.scored} marqués (${f.attackNote}), ${f.conceded} encaissés (${f.defenseNote})`,
+    `  Différence      ${f.diff > 0 ? "+" + f.diff : f.diff}`,
+    `  Moyennes        ${f.scoredAvg ?? dash} marqués / ${f.concededAvg ?? dash} encaissés par match`,
+    `  Tirs            ${f.shots ?? dash} au total, ${f.shotsAvg ?? dash} par match`,
+    `  Attaques dang.  ${f.dangerous ?? dash} au total, ${f.dangerousAvg ?? dash} par match`,
+    `  Clean sheets    ${f.cleanSheets ?? dash}`,
+    `  Forme (6 der.)  ${f.form || dash}  (du plus récent au plus ancien)`,
+    v ? `  ${f.venueLabel.padEnd(15)} ${v.wins}V ${v.draws}N ${v.losses}D sur ${v.played} matchs, ${v.goals_for}:${v.goals_against}` : "",
   ].filter(Boolean).join("\n");
 }
 
@@ -1041,22 +1351,38 @@ function teamBlockText(t) {
 function matchStatsText(m) {
   const s = m.match_stats;
   if (!s) return "";
+  const en = promptLang === "en";
+  // Les libellés du brief suivent la langue du brief, pas celle de l'interface.
+  const label = k => (en ? (EN[STAT_LABELS[k]] ?? STAT_LABELS[k]) : STAT_LABELS[k]) || k;
   const rows = [];
   if (s.home.possession !== null && s.home.possession !== undefined) {
-    rows.push(`  Possession      ${s.home.possession} % / ${s.away.possession} %`);
+    rows.push(`  ${(en ? "Possession" : "Possession").padEnd(15)} ${s.home.possession} % / ${s.away.possession} %`);
   }
   STAT_GROUPS.forEach(([, keys]) => keys.forEach(k => {
     if (k === "goals" || !s.fields.includes(k)) return;
     if (s.home[k] === null && s.away[k] === null) return;
-    rows.push(`  ${(STAT_LABELS[k] || k).padEnd(15)} ${s.home[k]} / ${s.away[k]}`);
+    rows.push(`  ${label(k).padEnd(15)} ${s.home[k]} / ${s.away[k]}`);
   }));
   const goals = (s.timeline || []).filter(e => e.type === "goal" || e.type === "owngoal");
+  const scorers = goals.map(g => g.minute + "'" + (g.side === "home" ? " " + m.home : " " + m.away)).join(", ");
+  if (en) {
+    return [
+      `Statistics recorded for THIS fixture (${m.home} / ${m.away})`,
+      s.full_time ? `  Full-time       ${s.full_time}${s.half_time ? ` (half-time ${s.half_time})` : ""}` : "",
+      s.venue ? `  Venue           ${s.venue}` : "",
+      ...rows,
+      goals.length ? `  Goals           ${scorers}` : "",
+      s.attacks && !s.attacks.suspect
+        ? `  Attacks         ${s.attacks.home.total} / ${s.attacks.away.total} (dangerous ${s.attacks.home.dangerous} / ${s.attacks.away.dangerous})`
+        : "",
+    ].filter(Boolean).join("\n");
+  }
   return [
     `Statistiques relevées de CETTE rencontre (${m.home} / ${m.away})`,
     s.full_time ? `  Score final     ${s.full_time}${s.half_time ? ` (mi-temps ${s.half_time})` : ""}` : "",
     s.venue ? `  Stade           ${s.venue}` : "",
     ...rows,
-    goals.length ? `  Buts            ${goals.map(g => g.minute + "'" + (g.side === "home" ? " " + m.home : " " + m.away)).join(", ")}` : "",
+    goals.length ? `  Buts            ${scorers}` : "",
     s.attacks && !s.attacks.suspect
       ? `  Attaques        ${s.attacks.home.total} / ${s.attacks.away.total} (dangereuses ${s.attacks.home.dangerous} / ${s.attacks.away.dangerous})`
       : "",
@@ -1072,7 +1398,118 @@ function buildPrompt(m) {
   const played = [...new Set(table.map(r => r.played))];
   const matchday = played.length === 1 ? played[0] + 1 : null;
   const date = (m.kickoff || "").split(" ")[0];
+  return promptLang === "en"
+    ? promptEn(m, H, A, pal, table, matchday, date)
+    : promptFr(m, H, A, pal, table, matchday, date);
+}
 
+/* Les deux briefs sont écrits en entier, pas assemblés à partir de fragments
+   traduits : c'est un texte de direction artistique, il doit se lire comme tel
+   dans les deux langues. Les valeurs, elles, sont les mêmes des deux côtés. */
+function promptEn(m, H, A, pal, table, matchday, date) {
+  const comp = (m.competition_tag === "KW2" ? "KUWAIT DIVISION 1" : m.competition_tag || "").toUpperCase();
+  const homeInk = pal.home_ink === "sombre" ? "dark ink #14161a" : "white";
+  const awayInk = pal.away_ink === "sombre" ? "dark ink #14161a" : "white";
+  const homeCol = pal.home || "#1d5285", awayCol = pal.away || "#9c8552";
+
+  return `You are an art director. Build a 4-slide Instagram carousel for the fixture
+below. Every figure is supplied: invent none, compute no prediction, forecast no
+score. The subject is what both teams have recorded.
+
+DELIVERABLE
+One self-contained HTML page (no external asset, no external font), 4 stacked
+sections. Each slide is exactly 1080 x 1350 px, 4:5 ratio, designed for a 2x
+export (2160 x 2700). No internal scrolling, nothing overflowing.
+
+TYPOGRAPHY
+- Figures and team names: a very heavy condensed grotesque, in capitals.
+- Labels: a monospace in capitals, wide tracking (~0.2em), small.
+- No serif face, no decorative script.
+
+PALETTE — both clubs' colours, taken from their crests
+- ${H.name}: ${homeCol}${pal.home_alt ? "  (secondary " + pal.home_alt + ")" : ""}
+  Text to lay over it: ${homeInk}.
+- ${A.name}: ${awayCol}${pal.away_alt ? "  (secondary " + pal.away_alt + ")" : ""}
+  Text to lay over it: ${awayInk}.
+${pal.clash ? `WARNING: both clubs play in the same hue (${A.name} is really
+${pal.away_true}). So that the two sides stay tellable apart, the value given
+above for ${A.name} is its darkened colour: same hue, shifted lightness. Use it
+as given, and carry the distinction on the crests and the layout rather than on
+colour alone.
+` : ""}- Night         #0d1626   (background of the cover and of slide 4)
+- Alert orange  #f2703f   (only for a negative figure or a record suffered)
+
+Absolute rule: ${H.name} always wears ${homeCol} and ${A.name} always
+${awayCol}, across all 4 slides. Colour follows the club, never its position nor
+the fact that it is hosting. Invent no other team colour: if a gradient is
+needed, derive it from the club's own colour, lighter and darker.
+
+SLIDE 01 — COVER
+Background split on the diagonal: ${homeCol} on the left (${H.name}),
+${awayCol} on the right (${A.name}), black edge down the middle.
+Header: "${comp}" on the left, "01 / 04" on the right, rule under the header.${matchday ? `
+White pill: "MATCHDAY ${matchday}".` : ""}
+Date aligned right: ${date || "—"}.${m.broadcast && m.broadcast.confirmed ? `
+Under the date, in discreet monospace: "LIVE ON ${m.broadcast.channel.toUpperCase()}".` : ""}
+${H.name} in very large type, aligned left, in ${pal.home_ink === "sombre" ? "dark ink" : "white"}.
+Round "VS" pill with a horizontal rule.
+${A.name} in very large type, aligned right, in ${pal.away_ink === "sombre" ? "dark ink" : "white"}.
+Slide footer: on the left "HOME · ${ordinalEn(H.rank).toUpperCase()}" then ${H.points} PTS;
+on the right "AWAY · ${ordinalEn(A.rank).toUpperCase()}" then ${A.points} PTS.
+
+SLIDE 02 — ${A.name.toUpperCase()} (the visitors)
+Background ${awayCol} as a gradient (that same colour, lighter and darker),
+text in ${pal.away_ink === "sombre" ? "dark ink" : "white"}, very faint circular
+arcs as hairlines. Header "THE VISITORS" / "02 / 04".
+Team name in very large type over two lines.
+Main block: ${A.points} huge + "PTS", beside it "${ordinalEn(A.rank).toUpperCase()}" / "IN THE TABLE",
+then three square pills ${A.wins}W (filled) ${A.draws}D ${A.losses}L (outlined).
+A band of three figures separated by vertical rules:
+  ${A.scored} SCORED (${A.attackNote}) | ${A.conceded} CONCEDED | ${A.diff > 0 ? "+" + A.diff : A.diff} DIFFERENCE
+
+SLIDE 03 — ${H.name.toUpperCase()} (the hosts)
+Same composition as slide 02, background ${homeCol} as a gradient,
+text in ${pal.home_ink === "sombre" ? "dark ink" : "white"}.
+Header "THE HOSTS" / "03 / 04".
+  ${H.points} PTS · ${ordinalEn(H.rank).toUpperCase()} · ${H.wins}W ${H.draws}D ${H.losses}L
+  ${H.scored} SCORED | ${H.conceded} CONCEDED (${H.defenseNote}) | ${H.diff > 0 ? "+" + H.diff : H.diff} DIFFERENCE
+Set in alert orange #f2703f any figure that is a record suffered (losses, goals
+conceded, negative difference) and add the wording under the figure.
+
+SLIDE 04 — THE NUMBERS
+Night background #0d1626, vertical ${awayCol} rule on the right edge.
+Header "${comp}" / "04 / 04".
+Title over two lines: "THE NUMBERS THAT COUNT", underlined by two short strokes,
+one ${homeCol} and one ${awayCol}.
+Then a list of rows: the figure on the left in very large type, coloured after
+the club it speaks of — ${homeCol} for ${H.name}, ${awayCol} for ${A.name},
+white when the row speaks of both. On this dark background, lighten the club
+colour just enough to keep it legible, without changing its hue. Label on the
+right in monospace, hairline rule between rows.
+Rows to compose:
+${suggestedLines(m, H, A).map(l => "  - " + l).join("\n")}
+
+FULL DATA
+
+${teamBlockText(H)}
+
+${teamBlockText(A)}
+
+Division table:
+${table.map(r => `  ${String(r.rank).padStart(2)}. ${r.team.padEnd(16)} ${String(r.points).padStart(3)} pts  ${r.played}p  ${r.wins}W ${r.draws}D ${r.losses}L  ${r.goals_for}:${r.goals_against}`).join("\n")}
+${m.match_stats ? `
+${matchStatsText(m)}
+
+Those figures describe the fixture itself, not the season: do not mix them with
+the season totals above, and label them plainly ("in this match"). Categories
+absent from that list are not zero, they are simply not recorded: do not mention
+them.
+` : ""}
+Final constraint: every figure shown must come from this brief. If a slide feels
+empty, drop a row rather than invent a statistic.`;
+}
+
+function promptFr(m, H, A, pal, table, matchday, date) {
   return `Tu es directeur artistique. Fabrique un carrousel Instagram de 4 slides pour la
 rencontre ci-dessous. Toutes les données sont fournies : n'en invente aucune, ne
 calcule pas de pronostic, ne prédis pas de score. Le sujet, ce sont les chiffres
@@ -1174,16 +1611,16 @@ te semble vide, enlève une ligne plutôt que d'inventer une statistique.`;
 
 function renderPromptCard(m) {
   const card = el("div", "card");
-  card.appendChild(el("h2", null, "Contenu Instagram"));
-  card.appendChild(el("p", "sub",
+  card.appendChild(el("h2", null, t("Contenu Instagram")));
+  card.appendChild(el("p", "sub", t(
     "Génère un brief prêt à coller dans Claude pour produire le carrousel de " +
     "4 slides. Toutes les valeurs sont tirées de cette fiche — le brief interdit " +
-    "explicitement d'en inventer et exclut tout pronostic."));
+    "explicitement d'en inventer et exclut tout pronostic.")));
 
   const row = el("div", "btnrow");
-  const gen = el("button", "btn primary", "Générer le prompt");
+  const gen = el("button", "btn primary", t("Générer le prompt"));
   gen.type = "button";
-  const copy = el("button", "btn", "Copier");
+  const copy = el("button", "btn", t("Copier"));
   copy.type = "button";
   copy.style.display = "none";
   const said = el("span", "copied");
@@ -1219,7 +1656,7 @@ function renderPromptCard(m) {
       document.execCommand("copy");
       area.readOnly = true;
     }
-    said.textContent = "copié";
+    said.textContent = t("copié");
     setTimeout(() => { said.textContent = ""; }, 2000);
   });
 
@@ -1262,7 +1699,7 @@ function fixtureRow(f) {
   who.appendChild(teamLabel(f.home, "sm"));
   who.appendChild(el("span", "sep", "—"));
   who.appendChild(teamLabel(f.away, "sm"));
-  if (dayOf(f) === DATA.today && !f.played) who.appendChild(el("span", "badge", "aujourd'hui"));
+  if (dayOf(f) === DATA.today && !f.played) who.appendChild(el("span", "badge", t("aujourd'hui")));
   // La chaîne n'apparaît dans la liste que si elle a été renseignée : afficher
   // « habituellement… » sur chaque ligne serait du bruit.
   if (f.broadcast && f.broadcast.confirmed) {
@@ -1273,10 +1710,10 @@ function fixtureRow(f) {
   // Trois états distincts : fiche disponible, rencontre simplement inscrite au
   // calendrier (Flashscore, trop lointaine pour que Forebet la détaille), ou
   // fiche que la collecte n'a pas ramenée.
-  row.appendChild(el("div", "go",
+  row.appendChild(el("div", "go", t(
     has ? "voir les stats ›"
         : f.source === "flashscore" ? "au calendrier"
-        : "fiche non récupérée"));
+        : "fiche non récupérée")));
   return row;
 }
 
@@ -1284,24 +1721,20 @@ function renderFixtures() {
   const host = document.getElementById("fixtures");
   host.textContent = "";
   const card = el("div", "card");
-  card.appendChild(el("h2", null, "Rencontres"));
+  card.appendChild(el("h2", null, t("Rencontres")));
   const loin = (DATA.fixtures || []).filter(f => f.source === "flashscore").length;
-  card.appendChild(el("p", "sub",
-    `Journée et résultats récents relevés sur Forebet` +
-    (loin ? `, complétés par ${loin} rencontre${loin > 1 ? "s" : ""} du calendrier ` +
-            `Flashscore — celles-là n'ont pas encore de fiche statistique` : "") +
-    `. « Aujourd'hui » se rapporte au ${DATA.today}, jour de génération de cette page.`));
+  card.appendChild(el("p", "sub", ph("fixturesNote", loin, DATA.today)));
 
   const list = visibleFixtures();
   if (!list.length) {
-    card.appendChild(el("div", "empty", "Aucune rencontre pour ce filtre."));
+    card.appendChild(el("div", "empty", t("Aucune rencontre pour ce filtre.")));
   } else {
     let day = null;
     list.forEach(f => {
       const d = dayOf(f);
       if (d !== day) {
         day = d;
-        card.appendChild(el("div", "daylabel", d === DATA.today ? `${d} · aujourd'hui` : d));
+        card.appendChild(el("div", "daylabel", d === DATA.today ? ph("dayToday", d) : d));
       }
       card.appendChild(fixtureRow(f));
     });
@@ -1316,9 +1749,9 @@ function renderDetail() {
   if (!m) {
     const card = el("div", "card");
     card.appendChild(el("div", "empty",
-      "Choisis une rencontre ci-dessus pour afficher les statistiques des deux équipes."));
+      t("Choisis une rencontre ci-dessus pour afficher les statistiques des deux équipes.")));
     app.appendChild(card);
-    document.title = "Console Forebet";
+    document.title = t("Console Forebet");
     return;
   }
   // Le classement part dans une colonne collante à droite : c'est la référence
@@ -1342,7 +1775,7 @@ function renderDetail() {
   layout.appendChild(main);
   layout.appendChild(side);
   app.appendChild(layout);
-  document.title = `${m.home} - ${m.away} · Console Forebet`;
+  document.title = `${m.home} - ${m.away} · ${t("Console Forebet")}`;
 }
 
 function renderAll() {
@@ -1362,11 +1795,11 @@ function fillTeamSelect() {
     .filter(Boolean).sort((a, b) => a.localeCompare(b, "fr"));
   const sel = document.getElementById("team");
   sel.textContent = "";
-  sel.appendChild(el("option", null, "Toutes les équipes"));
+  sel.appendChild(el("option", null, t("Toutes les équipes")));
   sel.lastChild.value = "";
-  teams.forEach(t => {
-    const o = el("option", null, t);
-    o.value = t;
+  teams.forEach(name => {
+    const o = el("option", null, name);
+    o.value = name;
     sel.appendChild(o);
   });
   // Après un rafraîchissement, on garde le filtre en cours — sauf si l'équipe
@@ -1376,11 +1809,41 @@ function fillTeamSelect() {
 }
 
 function renderFoot() {
-  document.getElementById("foot").textContent =
-    `Généré le ${DATA.generated} depuis le cache local — aucune donnée n'est ` +
-    `chargée à l'ouverture, la page fonctionne hors ligne. Source : Forebet. ` +
-    `Les pronostics de la source sont volontairement écartés : cette console ` +
-    `présente les relevés des deux équipes, pas une prédiction.`;
+  document.getElementById("foot").textContent = ph("foot", DATA.generated);
+}
+
+/* Tout ce que la barre du haut affiche en dur. Rappelé à chaque bascule de
+   langue, sinon les boutons resteraient dans l'ancienne. */
+function renderChrome() {
+  document.documentElement.lang = lang;
+  document.querySelector(".brand").textContent = t("Console Forebet · Division 1 Koweït");
+  const scope = document.getElementById("scope");
+  ["À venir", "Aujourd'hui", "Joués", "Toutes"].forEach((label, i) => {
+    scope.options[i].textContent = t(label);
+  });
+  scope.setAttribute("aria-label", t("Filtrer par période"));
+  document.getElementById("team").setAttribute("aria-label", t("Filtrer par équipe"));
+  document.getElementById("refresh").textContent = t("Rafraîchir");
+  document.getElementById("theme").textContent = t("Thème");
+  // Les deux boutons de langue affichent la langue vers laquelle ils basculent :
+  // « EN » veut dire « passer en anglais », pas « tu es en anglais ».
+  const langBtn = document.getElementById("lang");
+  langBtn.textContent = lang === "fr" ? "EN" : "FR";
+  langBtn.title = lang === "fr" ? "Switch to English" : "Passer en français";
+  const pBtn = document.getElementById("promptlang");
+  pBtn.textContent = (lang === "en" ? "Brief: " : "Brief : ") + promptLang.toUpperCase();
+  pBtn.title = lang === "en"
+    ? "Language of the generated Instagram brief"
+    : "Langue du brief Instagram généré";
+}
+
+function setLang(next) {
+  lang = next;
+  try { localStorage.setItem("console-lang", next); } catch (e) { /* mode privé */ }
+  renderChrome();
+  fillTeamSelect();
+  renderFoot();
+  renderAll();
 }
 
 /* ---------- rafraîchissement ---------- */
@@ -1455,7 +1918,7 @@ async function askDataFile() {
 async function refresh(btn) {
   btn.disabled = true;
   btn.setAttribute("aria-busy", "true");
-  note("collecte en cours — une minute environ…");
+  note(t("collecte en cours — une minute environ…"));
   try {
     let fresh = null;
     try {
@@ -1464,34 +1927,32 @@ async function refresh(btn) {
       // Le serveur a répondu et a échoué : c'est une vraie panne de collecte,
       // pas l'absence de serveur. On s'arrête là plutôt que de resservir un
       // data.json qui masquerait l'erreur.
-      note("la collecte a échoué : " + e.message, "err");
+      note(ph("refreshFailed", e.message), "err");
       return;
     }
     if (fresh) {
       applyData(fresh);
-      note(`collecte terminée : données du ${fresh.generated}.`, "ok");
+      note(ph("refreshDone", fresh.generated), "ok");
       return;
     }
 
     // Pas de serveur de collecte : reste le data.json déposé à côté.
-    note("recherche d'une version plus récente…");
+    note(t("recherche d'une version plus récente…"));
     let data;
     try {
       data = await askDataFile();
     } catch (e) {
-      note("rien à rafraîchir ici : cette page est un instantané, et Forebet " +
-           "n'autorise pas le navigateur à l'interroger (pas de CORS). " +
-           "Lance « python serve.py » en local pour un vrai rafraîchissement.");
+      note(t("rien à rafraîchir ici : cette page est un instantané, et Forebet " +
+             "n'autorise pas le navigateur à l'interroger (pas de CORS). " +
+             "Lance « python serve.py » en local pour un vrai rafraîchissement."));
       return;
     }
     if (data.now_iso && DATA.now_iso && data.now_iso <= DATA.now_iso) {
-      note(`déjà à jour : rien de plus récent que le ${DATA.generated}. ` +
-           `Cette page est un instantané ; pour aller rechercher les données, ` +
-           `lance « python serve.py » en local.`);
+      note(ph("refreshCurrent", DATA.generated));
       return;
     }
     applyData(data);
-    note(`mis à jour : données du ${data.generated}.`, "ok");
+    note(ph("refreshUpdated", data.generated), "ok");
   } finally {
     btn.disabled = false;
     btn.removeAttribute("aria-busy");
@@ -1499,6 +1960,7 @@ async function refresh(btn) {
 }
 
 function boot() {
+  renderChrome();
   fillTeamSelect();
   document.getElementById("team")
     .addEventListener("change", e => { state.team = e.target.value; renderAll(); });
@@ -1506,6 +1968,19 @@ function boot() {
   const scope = document.getElementById("scope");
   scope.value = state.scope;
   scope.addEventListener("change", e => { state.scope = e.target.value; renderAll(); });
+
+  document.getElementById("lang").addEventListener("click", () => {
+    setLang(lang === "fr" ? "en" : "fr");
+  });
+
+  document.getElementById("promptlang").addEventListener("click", () => {
+    promptLang = promptLang === "fr" ? "en" : "fr";
+    try { localStorage.setItem("console-prompt-lang", promptLang); } catch (e) { /* mode privé */ }
+    renderChrome();
+    // Le brief déjà affiché doit suivre : le laisser dans l'ancienne langue
+    // ferait croire que le bouton n'a rien fait.
+    renderDetail();
+  });
 
   document.getElementById("theme").addEventListener("click", () => {
     const cur = document.documentElement.getAttribute("data-theme");
