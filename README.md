@@ -150,6 +150,7 @@ python shoot.py monsite.fr --hide "#cookie-banner" --dark
 | `--wait SEL` | attendre ce sélecteur avant de déclencher |
 | `--delay S` | attendre S secondes de plus |
 | `--hide SEL` | retirer des éléments avant la photo, **répétable** |
+| `--keep-banners` | garder les bandeaux de consentement (retirés par défaut) |
 | `--dark` | forcer le thème sombre de la page |
 | `--format` / `--quality` | `png` (défaut) ou `jpeg` |
 | `--name` | nom de fichier imposé (une seule URL, une seule taille) |
@@ -204,9 +205,37 @@ informations personnelles (nom de compte, notifications, contenu privé). Regard
 l'image avant de la partager.
 
 Sans `--wait`, l'outil attend que le réseau se calme — sinon on photographie une
-page à moitié peinte. `--hide` **retire** les éléments du DOM plutôt que de
-cliquer dessus : cliquer sur un bandeau de cookies, ce serait accepter quelque
-chose à ta place.
+page à moitié peinte.
+
+### Les bandeaux de consentement
+
+Ils sont **retirés par défaut** : sinon ils gâchent une capture sur deux, et
+c'est le premier reproche qu'on fait à ce genre d'outil.
+
+**On les supprime du DOM, on ne clique jamais dessus.** Cliquer « Accepter »
+reviendrait à consentir à ta place ; cliquer « Refuser » serait aussi un choix
+qui ne nous appartient pas. Retirer l'élément ne consent à rien : aucun cookie
+optionnel n'est déposé.
+
+Deux passes :
+
+1. **les plateformes connues** par leur conteneur — OneTrust, Cookiebot, Didomi,
+   Usercentrics, Quantcast, Axeptio, Sourcepoint, Osano, tarteaucitron,
+   Complianz, HubSpot… ;
+2. **une heuristique** pour le reste, volontairement stricte : l'élément doit
+   être *à la fois* posé par-dessus la page (`fixed`/`sticky`, `z-index` élevé),
+   couvrir une surface notable, et employer un vocabulaire de consentement. Les
+   trois ensemble — sinon on finirait par supprimer un en-tête collant ou une
+   vraie fenêtre modale.
+
+Le défilement du document est rétabli au passage : ces bandeaux le bloquent
+souvent, et sans ça `--full` ne photographierait que le premier écran.
+
+Vérifié : Le Monde et BBC nettoyés, **rien retiré** sur une page qui n'a pas de
+bandeau. Les bandeaux purement promotionnels (« abonnez-vous ») sont conservés,
+ce ne sont pas des demandes de consentement — `--hide` s'en charge si besoin.
+
+`--keep-banners` désactive tout ça.
 
 Il **ne suit aucun lien** : il capture exactement les adresses demandées. C'est
 un appareil photo, pas un robot d'exploration.

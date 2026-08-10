@@ -111,6 +111,73 @@ def capture(session, page, args, path: Path) -> bool:
     return True
 
 
+# Bandeaux de consentement : on les **retire du DOM**, on ne clique jamais
+# dessus. Cliquer « Accepter », ce serait consentir à la place de l'utilisateur ;
+# cliquer « Refuser » serait aussi un choix qu'on n'a pas à faire. Supprimer
+# l'élément ne consent à rien : aucun cookie optionnel n'est déposé.
+DISMISS_BANNERS = r"""() => {
+    const removed = [];
+
+    // 1. Les plateformes de consentement connues, par leurs conteneurs.
+    const KNOWN = [
+      "#onetrust-consent-sdk", "#onetrust-banner-sdk", ".onetrust-pc-dark-filter",
+      "#CybotCookiebotDialog", "#CybotCookiebotDialogBodyUnderlay",
+      "#didomi-host", "#didomi-popup", ".didomi-popup-backdrop",
+      "#usercentrics-root", "#uc-banner-container",
+      ".qc-cmp2-container", ".qc-cmp-cleanslate", "#qc-cmp2-main",
+      "#axeptio_overlay", "#axeptio_main_button",
+      ".osano-cm-window", ".osano-cm-dialog",
+      "#cmpbox", "#cmpbox2", "#cmpwrapper",
+      "#sp_message_container_", "div[id^='sp_message_container']",
+      ".cc-window", ".cookie-notice-container", "#cookie-law-info-bar",
+      "#cmplz-cookiebanner-container", ".cmplz-cookiebanner",
+      "#tarteaucitronRoot", "#tarteaucitronAlertBig",
+      "#hs-eu-cookie-confirmation", "#gdpr-consent-tool-wrapper",
+      "[id*='cookie-consent']", "[class*='cookie-consent']",
+      "[aria-label*='cookie' i][role='dialog']",
+    ];
+    for (const sel of KNOWN) {
+      let nodes = [];
+      try { nodes = document.querySelectorAll(sel); } catch (e) { continue; }
+      nodes.forEach(n => { removed.push(sel); n.remove(); });
+    }
+
+    // 2. Heuristique, pour tout ce qui n'est pas dans la liste. Trois
+    //    conditions réunies : posé par-dessus la page, un vocabulaire de
+    //    consentement, et une surface notable. Les trois ensemble, sinon on
+    //    finirait par supprimer un en-tête collant ou une vraie modale.
+    const MOTS = /(cookie|consent|rgpd|gdpr|vie priv|privacy|tra(c|ç)age|tracker|donn(e|é)es personnelles)/i;
+    const vw = innerWidth, vh = innerHeight;
+    for (const n of document.querySelectorAll("body *")) {
+      if (!n.isConnected) continue;
+      const st = getComputedStyle(n);
+      if (st.position !== "fixed" && st.position !== "sticky") continue;
+      if (parseInt(st.zIndex || "0", 10) < 100) continue;
+      const r = n.getBoundingClientRect();
+      const surface = (r.width * r.height) / (vw * vh);
+      if (surface < 0.04 || r.width < vw * 0.3) continue;
+      const txt = (n.innerText || "").slice(0, 900);
+      if (!MOTS.test(txt)) continue;
+      // Un conteneur qui enveloppe la page entière n'est pas un bandeau.
+      if (n.contains(document.querySelector("main, article, #root, #app"))) continue;
+      removed.push(n.tagName.toLowerCase() + (n.id ? "#" + n.id : ""));
+      n.remove();
+    }
+
+    // 3. Ces bandeaux bloquent souvent le défilement du document. Une fois le
+    //    bandeau parti, la page doit redevenir normale — sinon `--full` ne
+    //    photographierait que le premier écran.
+    for (const el of [document.documentElement, document.body]) {
+      el.style.overflow = "";
+      el.style.position = "";
+      el.style.height = "";
+      el.classList.remove("no-scroll", "noscroll", "modal-open",
+                          "overflow-hidden", "cmplz-blocked");
+    }
+    return removed;
+}"""
+
+
 def prepare(page, args) -> None:
     """Attentes et nettoyages avant le déclenchement."""
     if args.wait:
@@ -122,10 +189,27 @@ def prepare(page, args) -> None:
             page.wait_for_load_state("networkidle", timeout=args.timeout * 1000)
         except Exception:
             pass
+    if not args.keep_banners:
+        try:
+            gone = page.evaluate(DISMISS_BANNERS)
+        except Exception as exc:
+            print(f"  bandeaux : non traités ({str(exc).splitlines()[0][:60]})",
+                  file=sys.stderr)
+        else:
+            if gone:
+                print(f"  bandeaux retirés : {len(gone)} "
+                      f"({', '.join(dict.fromkeys(gone))[:70]})")
+            # Certaines plateformes réinjectent leur bandeau après coup : on
+            # laisse passer un instant, puis on repasse une fois.
+            time.sleep(0.4)
+            try:
+                page.evaluate(DISMISS_BANNERS)
+            except Exception:
+                pass
+
     for selector in args.hide:
-        # Les bandeaux de cookies et autres surcouches gâchent une capture. On
-        # les retire du DOM plutôt que de cliquer dessus : cliquer, ce serait
-        # accepter quelque chose à la place de l'utilisateur.
+        # Retirés du DOM, jamais cliqués — cliquer reviendrait à choisir à la
+        # place de l'utilisateur.
         page.evaluate(
             """sel => document.querySelectorAll(sel).forEach(n => n.remove())""",
             selector)
@@ -197,6 +281,9 @@ def main() -> int:
                         help="secondes d'attente supplémentaires")
     parser.add_argument("--hide", action="append", default=[], metavar="SELECTEUR",
                         help="retirer des éléments avant la capture (répétable)")
+    parser.add_argument("--keep-banners", action="store_true",
+                        help="garder les bandeaux de consentement, retirés par "
+                             "défaut")
     parser.add_argument("--dark", action="store_true",
                         help="forcer le thème sombre de la page")
     parser.add_argument("--format", choices=["png", "jpeg"], default="png")
