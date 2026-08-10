@@ -178,6 +178,64 @@ DISMISS_BANNERS = r"""() => {
 }"""
 
 
+# Retirer par le TEXTE plutôt que par le sélecteur : « enlève le truc où c'est
+# écrit Offre spéciale » se formule sans ouvrir les outils de développement.
+HIDE_BY_TEXT = r"""(needle) => {
+    const n = needle.toLowerCase();
+    const hits = [];
+    for (const el of document.querySelectorAll("body *")) {
+        const txt = (el.innerText || "").toLowerCase();
+        if (!txt.includes(n)) continue;
+        // On ne garde que le plus profond : sinon <body> correspondrait aussi.
+        if ([...el.children].some(c => (c.innerText || "").toLowerCase().includes(n)))
+            continue;
+        hits.push(el);
+    }
+    const removed = [];
+    for (let el of hits) {
+        // On remonte tant que le parent n'apporte presque rien d'autre : c'est
+        // ainsi qu'on attrape le bandeau entier et pas seulement sa phrase,
+        // sans jamais avaler la page.
+        let box = el;
+        for (let i = 0; i < 6 && box.parentElement; i++) {
+            const p = box.parentElement;
+            if (p === document.body) break;
+            const own = (box.innerText || "").length;
+            const up = (p.innerText || "").length;
+            if (up > own * 1.6 + 40) break;
+            box = p;
+        }
+        removed.push(box.tagName.toLowerCase() + (box.id ? "#" + box.id : ""));
+        box.remove();
+    }
+    return removed;
+}"""
+
+# Ce qui flotte au-dessus de la page, avec de quoi le désigner ensuite.
+LIST_OVERLAYS = r"""() => {
+    const out = [];
+    const vw = innerWidth, vh = innerHeight;
+    for (const el of document.querySelectorAll("body *")) {
+        const st = getComputedStyle(el);
+        if (st.position !== "fixed" && st.position !== "sticky") continue;
+        const r = el.getBoundingClientRect();
+        if (r.width < 60 || r.height < 20) continue;
+        if (el.parentElement && getComputedStyle(el.parentElement).position === "fixed")
+            continue;                       // on ne liste que le conteneur
+        let sel = el.tagName.toLowerCase();
+        if (el.id) sel = "#" + CSS.escape(el.id);
+        else if (el.classList.length)
+            sel += "." + [...el.classList].slice(0, 2).map(c => CSS.escape(c)).join(".");
+        out.push({
+            selector: sel,
+            surface: Math.round((r.width * r.height) / (vw * vh) * 100),
+            texte: (el.innerText || "").replace(/\s+/g, " ").trim().slice(0, 60),
+        });
+    }
+    return out;
+}"""
+
+
 def prepare(page, args) -> None:
     """Attentes et nettoyages avant le déclenchement."""
     if args.wait:
@@ -210,9 +268,33 @@ def prepare(page, args) -> None:
     for selector in args.hide:
         # Retirés du DOM, jamais cliqués — cliquer reviendrait à choisir à la
         # place de l'utilisateur.
-        page.evaluate(
-            """sel => document.querySelectorAll(sel).forEach(n => n.remove())""",
-            selector)
+        try:
+            n = page.evaluate(
+                """sel => { const l = document.querySelectorAll(sel);
+                            l.forEach(n => n.remove()); return l.length; }""",
+                selector)
+        except Exception:
+            print(f"  --hide {selector!r} : sélecteur invalide", file=sys.stderr)
+            continue
+        print(f"  --hide {selector} : {n} élément(s) retiré(s)"
+              if n else f"  --hide {selector} : rien ne correspond",
+              file=sys.stderr if not n else sys.stdout)
+
+    for needle in args.hide_text:
+        gone = page.evaluate(HIDE_BY_TEXT, needle)
+        print(f"  --hide-text {needle!r} : {len(gone)} bloc(s) retiré(s)"
+              + (f" ({', '.join(gone)})" if gone else ""),
+              file=sys.stderr if not gone else sys.stdout)
+
+    if args.list_overlays:
+        found = page.evaluate(LIST_OVERLAYS)
+        print("  ce qui flotte au-dessus de la page :")
+        for o in sorted(found, key=lambda x: -x["surface"]):
+            print(f"    {o['selector']:38} {o['surface']:3}% de l'écran"
+                  + (f"  « {o['texte']} »" if o["texte"] else ""))
+        if not found:
+            print("    (rien)")
+
     if args.delay:
         time.sleep(args.delay)
 
@@ -281,6 +363,12 @@ def main() -> int:
                         help="secondes d'attente supplémentaires")
     parser.add_argument("--hide", action="append", default=[], metavar="SELECTEUR",
                         help="retirer des éléments avant la capture (répétable)")
+    parser.add_argument("--hide-text", action="append", default=[], metavar="TEXTE",
+                        help="retirer le bloc où figure ce texte, sans avoir à "
+                             "connaître de sélecteur (répétable)")
+    parser.add_argument("--list-overlays", action="store_true",
+                        help="lister ce qui flotte au-dessus de la page, avec "
+                             "le sélecteur à donner à --hide")
     parser.add_argument("--keep-banners", action="store_true",
                         help="garder les bandeaux de consentement, retirés par "
                              "défaut")

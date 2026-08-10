@@ -149,7 +149,9 @@ python shoot.py monsite.fr --hide "#cookie-banner" --dark
 | `--scale N` | densité de pixels ; `2` pour du retina |
 | `--wait SEL` | attendre ce sélecteur avant de déclencher |
 | `--delay S` | attendre S secondes de plus |
-| `--hide SEL` | retirer des éléments avant la photo, **répétable** |
+| `--hide SEL` | retirer des éléments par sélecteur CSS, **répétable** |
+| `--hide-text "…"` | retirer le bloc où figure ce texte, **répétable** |
+| `--list-overlays` | lister ce qui flotte au-dessus, avec le sélecteur à réutiliser |
 | `--keep-banners` | garder les bandeaux de consentement (retirés par défaut) |
 | `--dark` | forcer le thème sombre de la page |
 | `--format` / `--quality` | `png` (défaut) ou `jpeg` |
@@ -236,6 +238,45 @@ bandeau. Les bandeaux purement promotionnels (« abonnez-vous ») sont conservé
 ce ne sont pas des demandes de consentement — `--hide` s'en charge si besoin.
 
 `--keep-banners` désactive tout ça.
+
+### Enlever autre chose : bandeau promo, pavé publicitaire, encart abonnement
+
+Trois façons, de la plus simple à la plus précise.
+
+**1. Par le texte** — aucune connaissance du HTML requise. Tu cites un bout de
+ce qui est écrit dedans, l'outil retire le bloc entier :
+
+```
+python shoot.py lemonde.fr --hide-text "Offre spéciale"
+```
+
+Il part du texte, puis remonte tant que le parent n'ajoute presque rien
+d'autre : c'est ainsi qu'il attrape le bandeau complet et pas seulement sa
+phrase, sans jamais avaler la page.
+
+**2. Voir ce qui gêne, puis le désigner.** `--list-overlays` liste ce qui flotte
+au-dessus de la page avec, pour chacun, le sélecteur tout prêt :
+
+```
+python shoot.py lemonde.fr --list-overlays
+    div.ds-ad-slot-ctn.ds-ad-slot-ctn--pave_haut     7% de l'écran  « LA SUITE APRÈS CETTE PUBLICITÉ »
+    nav.ds-header__nav                               6% de l'écran  « Menu Recherche … »
+```
+
+Tu recopies celui qui te gêne :
+
+```
+python shoot.py lemonde.fr --hide "div.ds-ad-slot-ctn--pave_haut"
+```
+
+**3. Par sélecteur CSS**, si tu le connais déjà. Répétable :
+
+```
+python shoot.py monsite.fr --hide "#promo" --hide ".newsletter-popup"
+```
+
+Dans les trois cas l'outil te dit ce qu'il a retiré, ou signale que rien ne
+correspondait — pour que tu ne croies pas avoir agi quand rien n'a bougé.
 
 Il **ne suit aucun lien** : il capture exactement les adresses demandées. C'est
 un appareil photo, pas un robot d'exploration.
