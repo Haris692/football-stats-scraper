@@ -152,7 +152,7 @@ python shoot.py monsite.fr --hide "#cookie-banner" --dark
 | `--hide SEL` | retirer des éléments par sélecteur CSS, **répétable** |
 | `--hide-text "…"` | retirer le bloc où figure ce texte, **répétable** |
 | `--list-overlays` | lister ce qui flotte au-dessus, avec le sélecteur à réutiliser |
-| `--keep-banners` | garder les bandeaux de consentement (retirés par défaut) |
+| `--brut` | capturer la page telle quelle, sans le nettoyage automatique |
 | `--dark` | forcer le thème sombre de la page |
 | `--format` / `--quality` | `png` (défaut) ou `jpeg` |
 | `--name` | nom de fichier imposé (une seule URL, une seule taille) |
@@ -209,39 +209,60 @@ l'image avant de la partager.
 Sans `--wait`, l'outil attend que le réseau se calme — sinon on photographie une
 page à moitié peinte.
 
-### Les bandeaux de consentement
+### Le nettoyage automatique
 
-Ils sont **retirés par défaut** : sinon ils gâchent une capture sur deux, et
-c'est le premier reproche qu'on fait à ce genre d'outil.
+**Tu n'as rien à faire.** À chaque capture, l'outil détecte et retire ce qui
+s'est posé entre le lecteur et la page, et il te dit quoi :
 
-**On les supprime du DOM, on ne clique jamais dessus.** Cliquer « Accepter »
-reviendrait à consentir à ta place ; cliquer « Refuser » serait aussi un choix
-qui ne nous appartient pas. Retirer l'élément ne consent à rien : aucun cookie
-optionnel n'est déposé.
+```
+python shoot.py bbc.com
+  nettoyé : 3 élément(s)
+    consentement     div#sp_message_container_1489022, div#cookiePrompt
+    voile            div.Backdrop-styles__BackdropStyled
+```
 
-Deux passes :
+Cinq familles reconnues : **consentement** (cookies, RGPD), **infolettre**,
+**notification**, **application** (« ouvrir dans l'appli »), **publicité
+flottante**, plus les **voiles** sombres laissés par une fenêtre disparue. Les
+messageries de support (Intercom, Crisp, Drift, Zendesk, Tawk, HubSpot) partent
+aussi : elles n'apportent rien à une capture.
 
-1. **les plateformes connues** par leur conteneur — OneTrust, Cookiebot, Didomi,
-   Usercentrics, Quantcast, Axeptio, Sourcepoint, Osano, tarteaucitron,
-   Complianz, HubSpot… ;
-2. **une heuristique** pour le reste, volontairement stricte : l'élément doit
-   être *à la fois* posé par-dessus la page (`fixed`/`sticky`, `z-index` élevé),
-   couvrir une surface notable, et employer un vocabulaire de consentement. Les
-   trois ensemble — sinon on finirait par supprimer un en-tête collant ou une
-   vraie fenêtre modale.
-
-Le défilement du document est rétabli au passage : ces bandeaux le bloquent
+Deux passes, parce que certaines plateformes réinjectent leur fenêtre juste
+après le chargement, et qu'un voile n'apparaît parfois qu'une fois la fenêtre
+partie. Le défilement du document est rétabli ensuite — ces fenêtres le bloquent
 souvent, et sans ça `--full` ne photographierait que le premier écran.
 
-Vérifié : Le Monde et BBC nettoyés, **rien retiré** sur une page qui n'a pas de
-bandeau. Les bandeaux purement promotionnels (« abonnez-vous ») sont conservés,
-ce ne sont pas des demandes de consentement — `--hide` s'en charge si besoin.
+**On supprime, on ne clique jamais.** Cliquer « Accepter » reviendrait à
+consentir à ta place ; cliquer « Refuser » serait aussi un choix qui ne nous
+appartient pas. Retirer l'élément ne consent à rien : aucun cookie optionnel
+n'est déposé.
 
-`--keep-banners` désactive tout ça.
+#### Ce que le nettoyage ne touchera pas
 
-### Enlever autre chose : bandeau promo, pavé publicitaire, encart abonnement
+Le contenu et la navigation du site. Sont protégés : `main`, `article`,
+`[role=main]`, `#root`, `#app`, tout ce qui contient un `nav`, et les en-têtes.
 
-Trois façons, de la plus simple à la plus précise.
+⚠️ **Le piège, rencontré sur Le Figaro** : son en-tête contient un bouton
+« S'abonner », et l'heuristique « infolettre » l'a d'abord pris pour une
+sollicitation — supprimant l'en-tête entier du journal. Deux corrections :
+
+- un élément **collé en haut, pleine largeur et dense en liens** (≥ 6) est
+  reconnu comme un en-tête de site et laissé tranquille ;
+- le vocabulaire « infolettre » n'accepte plus `abonnez` ni `subscribe` seuls,
+  trop courants dans les en-têtes de presse. Il exige un mot qui ne se trouve
+  que dans une vraie sollicitation (`newsletter`, `inscrivez-vous`…).
+
+Vérifié après correction sur Le Monde, Le Figaro, BBC, The Guardian et
+Libération : bandeaux et voiles retirés, en-têtes et contenus intacts.
+
+`--brut` capture la page telle quelle, sans rien nettoyer.
+
+### Enlever ce qui reste
+
+Le nettoyage automatique ne s'occupe que de ce qui **recouvre** la page. Un
+pavé publicitaire posé dans la mise en page, un encart promotionnel, un bloc
+dont tu ne veux pas : trois façons de les retirer, de la plus simple à la plus
+précise.
 
 **1. Par le texte** — aucune connaissance du HTML requise. Tu cites un bout de
 ce qui est écrit dedans, l'outil retire le bloc entier :

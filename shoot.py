@@ -18,6 +18,12 @@ de plus. C'est un appareil photo, pas un robot d'exploration.
 Les images vont dans `captures/` par défaut, nommées
 `<slug de l'URL>-<largeur>x<hauteur>-<horodatage>.png`.
 
+Le nettoyage est automatique : bandeaux de consentement, infolettres, demandes
+de notification, encarts « ouvrir dans l'appli », publicités flottantes, voiles
+sombres et messageries de support sont retirés, et l'outil dit ce qu'il a
+retiré. Le contenu et la navigation du site sont protégés. `--brut` pour ne rien
+nettoyer.
+
 Pour une page qui demande d'être connecté : `--login` ouvre Chrome, attend que
 tu te connectes à la main, puis photographie. Le profil dédié étant persistant,
 la session vaut pour toutes les captures suivantes.
@@ -111,68 +117,140 @@ def capture(session, page, args, path: Path) -> bool:
     return True
 
 
-# Bandeaux de consentement : on les **retire du DOM**, on ne clique jamais
-# dessus. Cliquer « Accepter », ce serait consentir à la place de l'utilisateur ;
-# cliquer « Refuser » serait aussi un choix qu'on n'a pas à faire. Supprimer
-# l'élément ne consent à rien : aucun cookie optionnel n'est déposé.
-DISMISS_BANNERS = r"""() => {
+# Nettoyage automatique de ce qui se pose entre le lecteur et la page.
+#
+# Principe de prudence : on **retire du DOM**, on ne clique jamais. Cliquer
+# « Accepter » reviendrait à consentir à la place de l'utilisateur, cliquer
+# « Refuser » serait aussi un choix qu'on n'a pas à faire. Supprimer l'élément
+# ne consent à rien — aucun cookie optionnel n'est déposé.
+#
+# Deuxième principe : ne jamais toucher au contenu ni à la navigation du site.
+# Un en-tête collant fait partie de la page ; une fenêtre qui la recouvre, non.
+# Chaque suppression est rendue à l'appelant avec son motif, pour être vérifiable.
+DECLUTTER = r"""() => {
     const removed = [];
+    const vw = innerWidth, vh = innerHeight;
+    const nom = n => n.tagName.toLowerCase() + (n.id ? "#" + n.id
+                 : (n.classList.length ? "." + n.classList[0] : ""));
+    const kill = (n, motif) => {
+        if (!n || !n.isConnected || n === document.body) return;
+        removed.push({ quoi: nom(n), motif });
+        n.remove();
+    };
 
-    // 1. Les plateformes de consentement connues, par leurs conteneurs.
-    const KNOWN = [
-      "#onetrust-consent-sdk", "#onetrust-banner-sdk", ".onetrust-pc-dark-filter",
-      "#CybotCookiebotDialog", "#CybotCookiebotDialogBodyUnderlay",
-      "#didomi-host", "#didomi-popup", ".didomi-popup-backdrop",
-      "#usercentrics-root", "#uc-banner-container",
-      ".qc-cmp2-container", ".qc-cmp-cleanslate", "#qc-cmp2-main",
-      "#axeptio_overlay", "#axeptio_main_button",
-      ".osano-cm-window", ".osano-cm-dialog",
-      "#cmpbox", "#cmpbox2", "#cmpwrapper",
-      "#sp_message_container_", "div[id^='sp_message_container']",
-      ".cc-window", ".cookie-notice-container", "#cookie-law-info-bar",
-      "#cmplz-cookiebanner-container", ".cmplz-cookiebanner",
-      "#tarteaucitronRoot", "#tarteaucitronAlertBig",
-      "#hs-eu-cookie-confirmation", "#gdpr-consent-tool-wrapper",
-      "[id*='cookie-consent']", "[class*='cookie-consent']",
-      "[aria-label*='cookie' i][role='dialog']",
-    ];
-    for (const sel of KNOWN) {
-      let nodes = [];
-      try { nodes = document.querySelectorAll(sel); } catch (e) { continue; }
-      nodes.forEach(n => { removed.push(sel); n.remove(); });
+    // Ce qu'on ne supprime jamais : le contenu et la navigation du site.
+    const CONTENU = "main, article, [role=main], #root, #app, #__next";
+    const protege = n =>
+        n.matches("header, nav, [role=banner], [role=navigation]") ||
+        n.querySelector(CONTENU) !== null ||
+        n.querySelector("nav") !== null;
+
+    // Un en-tête de site : collé en haut, pleine largeur, dense en liens.
+    // Réservé à l'heuristique — les sélecteurs connus, eux, sont sûrs.
+    //
+    // ⚠️ C'est le garde-fou qui manquait : `div.fh-wrapper` du Figaro a été
+    // pris pour une infolettre parce que son en-tête contient « S'abonner ».
+    // Supprimer l'en-tête d'un site, c'est le rendre méconnaissable.
+    const estEnTete = n => {
+        const r = n.getBoundingClientRect();
+        return r.top <= 4 && r.width >= vw * 0.9
+               && n.querySelectorAll("a").length >= 6;
+    };
+
+    // --- 1. plateformes et widgets connus, par leur conteneur ---------------
+    const CONNUS = {
+      "consentement": [
+        "#onetrust-consent-sdk", "#onetrust-banner-sdk", ".onetrust-pc-dark-filter",
+        "#CybotCookiebotDialog", "#CybotCookiebotDialogBodyUnderlay",
+        "#didomi-host", "#didomi-popup", ".didomi-popup-backdrop",
+        "#usercentrics-root", "#uc-banner-container",
+        ".qc-cmp2-container", ".qc-cmp-cleanslate", "#qc-cmp2-main",
+        "#axeptio_overlay", "#axeptio_main_button",
+        ".osano-cm-window", ".osano-cm-dialog",
+        "#cmpbox", "#cmpbox2", "#cmpwrapper",
+        "div[id^='sp_message_container']",
+        ".cc-window", ".cookie-notice-container", "#cookie-law-info-bar",
+        "#cmplz-cookiebanner-container", ".cmplz-cookiebanner",
+        "#tarteaucitronRoot", "#tarteaucitronAlertBig",
+        "#hs-eu-cookie-confirmation", "#gdpr-consent-tool-wrapper",
+        "[id*='cookie-consent']", "[class*='cookie-consent']",
+        "[aria-label*='cookie' i][role='dialog']",
+      ],
+      "messagerie": [
+        "#intercom-container", ".intercom-lightweight-app", "#intercom-frame",
+        "#crisp-chatbox", "#drift-widget-container", "#drift-frame-controller",
+        ".zEWidget-launcher", "#launcher[data-testid]", "#tawkchat-container",
+        "#hubspot-messages-iframe-container", "#tidio-chat", "#chat-widget-container",
+        "#live-chat-loader-app", ".fb_dialog",
+      ],
+      "application": [
+        ".smartbanner", "#smartbanner", ".branch-banner-iframe", "#branch-banner",
+        ".app-download-banner", "[class*='open-in-app']",
+      ],
+      "publicité flottante": [
+        "[id^='google_ads_iframe'][style*='fixed']", ".ad-slot--sticky",
+        "[class*='sticky-ad']", "[class*='ad-sticky']", "[id*='taboola-below']",
+      ],
+    };
+    for (const [motif, liste] of Object.entries(CONNUS)) {
+      for (const sel of liste) {
+        let nodes = [];
+        try { nodes = document.querySelectorAll(sel); } catch (e) { continue; }
+        nodes.forEach(n => { if (!protege(n)) kill(n, motif); });
+      }
     }
 
-    // 2. Heuristique, pour tout ce qui n'est pas dans la liste. Trois
-    //    conditions réunies : posé par-dessus la page, un vocabulaire de
-    //    consentement, et une surface notable. Les trois ensemble, sinon on
-    //    finirait par supprimer un en-tête collant ou une vraie modale.
-    const MOTS = /(cookie|consent|rgpd|gdpr|vie priv|privacy|tra(c|ç)age|tracker|donn(e|é)es personnelles)/i;
-    const vw = innerWidth, vh = innerHeight;
+    // --- 2. heuristique, pour tout ce que la liste ne connaît pas -----------
+    // Trois conditions cumulées : posé par-dessus la page, une surface qui
+    // compte, et un vocabulaire d'interruption. Les trois ensemble — sinon on
+    // supprimerait un en-tête collant ou une vraie fenêtre de l'application.
+    const FAMILLES = [
+      ["consentement", /(cookie|consent|rgpd|gdpr|vie priv|privacy|tra(c|ç)age|tracker|donn(e|é)es personnelles)/i],
+      // « abonnez » et « subscribe » seuls sont trop faibles : tous les
+      // en-têtes de presse portent un bouton d'abonnement. On exige un mot qui
+      // ne se trouve que dans une vraie sollicitation.
+      ["infolettre",   /(newsletter|infolettre|inscrivez-vous|ne ratez (aucune|rien)|restez inform(é|e))/i],
+      ["notification", /(notification|autoriser les alertes|recevoir les alertes|allow notifications)/i],
+      ["application",  /(t(é|e)l(é|e)charge[rz] l'appli|ouvrir dans l'appli|open in app|get the app)/i],
+      ["publicité",    /^(publicit(é|e)|advertisement|sponsoris)/i],
+    ];
     for (const n of document.querySelectorAll("body *")) {
-      if (!n.isConnected) continue;
+      if (!n.isConnected || protege(n) || estEnTete(n)) continue;
       const st = getComputedStyle(n);
       if (st.position !== "fixed" && st.position !== "sticky") continue;
       if (parseInt(st.zIndex || "0", 10) < 100) continue;
       const r = n.getBoundingClientRect();
-      const surface = (r.width * r.height) / (vw * vh);
-      if (surface < 0.04 || r.width < vw * 0.3) continue;
-      const txt = (n.innerText || "").slice(0, 900);
-      if (!MOTS.test(txt)) continue;
-      // Un conteneur qui enveloppe la page entière n'est pas un bandeau.
-      if (n.contains(document.querySelector("main, article, #root, #app"))) continue;
-      removed.push(n.tagName.toLowerCase() + (n.id ? "#" + n.id : ""));
-      n.remove();
+      if (r.width * r.height < vw * vh * 0.03) continue;
+      const txt = (n.innerText || "").trim().slice(0, 900);
+      const trouve = FAMILLES.find(([, re]) => re.test(txt));
+      if (trouve) kill(n, trouve[0]);
     }
 
-    // 3. Ces bandeaux bloquent souvent le défilement du document. Une fois le
-    //    bandeau parti, la page doit redevenir normale — sinon `--full` ne
-    //    photographierait que le premier écran.
+    // --- 3. les voiles sombres laissés par une fenêtre disparue ------------
+    for (const n of document.querySelectorAll("body *")) {
+      if (!n.isConnected || protege(n)) continue;
+      const st = getComputedStyle(n);
+      if (st.position !== "fixed") continue;
+      const r = n.getBoundingClientRect();
+      if (r.width < vw * 0.9 || r.height < vh * 0.9) continue;
+      if ((n.innerText || "").trim().length > 8) continue;   // il a du contenu
+      const fond = st.backgroundColor || "";
+      const alpha = (fond.match(/rgba?\([^)]*?([\d.]+)\)/) || [])[1];
+      const opaque = fond.startsWith("rgba") ? parseFloat(alpha) > 0.05
+                   : fond !== "rgba(0, 0, 0, 0)" && fond !== "transparent";
+      if (opaque || parseFloat(st.backdropFilter && st.backdropFilter !== "none" ? 1 : 0))
+        kill(n, "voile");
+    }
+
+    // --- 4. rendre le défilement -------------------------------------------
+    // Ces fenêtres bloquent souvent le document. Une fois parties, la page doit
+    // redevenir normale, sinon `--full` ne prendrait que le premier écran.
     for (const el of [document.documentElement, document.body]) {
       el.style.overflow = "";
       el.style.position = "";
       el.style.height = "";
-      el.classList.remove("no-scroll", "noscroll", "modal-open",
-                          "overflow-hidden", "cmplz-blocked");
+      el.classList.remove("no-scroll", "noscroll", "modal-open", "no_scroll",
+                          "overflow-hidden", "cmplz-blocked", "fixed");
     }
     return removed;
 }"""
@@ -247,23 +325,27 @@ def prepare(page, args) -> None:
             page.wait_for_load_state("networkidle", timeout=args.timeout * 1000)
         except Exception:
             pass
-    if not args.keep_banners:
-        try:
-            gone = page.evaluate(DISMISS_BANNERS)
-        except Exception as exc:
-            print(f"  bandeaux : non traités ({str(exc).splitlines()[0][:60]})",
-                  file=sys.stderr)
-        else:
-            if gone:
-                print(f"  bandeaux retirés : {len(gone)} "
-                      f"({', '.join(dict.fromkeys(gone))[:70]})")
-            # Certaines plateformes réinjectent leur bandeau après coup : on
-            # laisse passer un instant, puis on repasse une fois.
-            time.sleep(0.4)
+    if not args.brut:
+        gone = []
+        # Deux passes : certaines plateformes réinjectent leur fenêtre juste
+        # après le chargement, et un voile n'apparaît parfois qu'une fois la
+        # fenêtre partie.
+        for i in range(2):
+            if i:
+                time.sleep(0.5)
             try:
-                page.evaluate(DISMISS_BANNERS)
-            except Exception:
-                pass
+                gone += page.evaluate(DECLUTTER)
+            except Exception as exc:
+                print(f"  nettoyage impossible ({str(exc).splitlines()[0][:60]})",
+                      file=sys.stderr)
+                break
+        if gone:
+            par_motif = {}
+            for item in gone:
+                par_motif.setdefault(item["motif"], []).append(item["quoi"])
+            print(f"  nettoyé : {len(gone)} élément(s)")
+            for motif, quoi in par_motif.items():
+                print(f"    {motif:16} {', '.join(dict.fromkeys(quoi))[:64]}")
 
     for selector in args.hide:
         # Retirés du DOM, jamais cliqués — cliquer reviendrait à choisir à la
@@ -369,9 +451,10 @@ def main() -> int:
     parser.add_argument("--list-overlays", action="store_true",
                         help="lister ce qui flotte au-dessus de la page, avec "
                              "le sélecteur à donner à --hide")
-    parser.add_argument("--keep-banners", action="store_true",
-                        help="garder les bandeaux de consentement, retirés par "
-                             "défaut")
+    parser.add_argument("--brut", "--keep-banners", action="store_true",
+                        dest="brut",
+                        help="capturer la page telle quelle, sans le nettoyage "
+                             "automatique")
     parser.add_argument("--dark", action="store_true",
                         help="forcer le thème sombre de la page")
     parser.add_argument("--format", choices=["png", "jpeg"], default="png")
