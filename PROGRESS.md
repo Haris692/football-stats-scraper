@@ -660,6 +660,46 @@ non cadrés. À l'inverse Forebet n'a ni hors-jeu ni touches. Même piège du z�
 qui veut dire « non couvert » (coups francs 0, six mètres 0). **Forebet reste la
 source des stats ; Sofascore apporte les effectifs.**
 
+#### Inventaire complet des points d'entrée (sondés un par un le 10/08/2026)
+
+Tournoi `uniqueTournament` **20044**, saisons **25/26 = 75693**, 24/25 = 60750,
+23/24 = 51541, 22/23 = 49166 — quatre saisons d'historique. 21 journées,
+journée en cours 18.
+
+| point d'entrée | ce qu'on en tire |
+|---|---|
+| `/api/v1/search/all?q=` | id d'équipe, pays, **couleurs officielles** |
+| `/api/v1/team/<id>` | **stade déclaré, ville, entraîneur**, forme, position |
+| `/api/v1/team/<id>/players` | **effectif complet** : poste, n° de maillot, nationalité |
+| `/api/v1/team/<id>/events/last/0` | 30 derniers matchs, avec tournoi et score |
+| `/api/v1/team/<id>/performance` | 10 derniers résultats + indice de forme |
+| `/api/v1/team/<id>/unique-tournament/20044/season/75693/statistics/overall` | buts pour/contre, penaltys, clean sheets, rouges, matchs |
+| `/api/v1/unique-tournament/20044/seasons` | les saisons et leurs id |
+| `/api/v1/unique-tournament/20044/season/<s>/rounds` | journées, journée en cours |
+| `/api/v1/unique-tournament/20044/season/<s>/top-players/overall` | **classement des buteurs — 50 joueurs** |
+| `/api/v1/unique-tournament/20044/season/<s>/top-teams/overall` | buts pour/contre, rouges, clean sheets des 8 clubs |
+| `/api/v1/unique-tournament/20044/season/<s>/team-events/total` | tous les matchs de la saison |
+| `/api/v1/event/<id>` | date, tour, saison, **stade et capacité** |
+| `/api/v1/event/<id>/statistics` | possession, corners, coups francs, cartons, hors-jeu, touches, six mètres |
+| `/api/v1/event/<id>/incidents` | faits de jeu + couleurs des maillots |
+| `/api/v1/event/<id>/h2h` | bilan des confrontations (V/N/D) |
+| `/api/v1/player/<id>` | taille, pied fort, date de naissance, fin de contrat, nationalité |
+| `/api/v1/player/<id>/unique-tournament/20044/season/<s>/statistics/overall` | **buts et penaltys seulement** |
+
+**Répondent 404 sur cette division** — ne pas re-sonder : `/lineups`,
+`/best-players` (notes de joueurs), `/graph` (momentum), `/shotmap`, `/odds`.
+
+⛔ **Les classements sont hors limites** : le `robots.txt` interdit `/standings/`
+et `/*/standings/` à tous les robots, ce qui couvre aussi la route d'API. Sans
+importance ici, Forebet nous les donne déjà.
+
+**Les statistiques individuelles se réduisent aux buts.** Sur le meilleur buteur
+du championnat, les seuls champs non nuls de la saison sont `goals` et
+`penaltyGoals` : ni minutes, ni passes décisives, ni notes. Le radar chart par
+joueur reste donc impossible, comme conclu dans `kuwait-football` — mais **le
+classement des buteurs, lui, existe** (50 joueurs, de 12 buts à 1), et aucune
+autre source testée ne l'avait.
+
 #### ⚠️ Forebet et Sofascore inversent domicile et extérieur — systématiquement
 
 Sur les **4 rencontres communes**, les deux sources désignent l'hôte à
@@ -686,6 +726,12 @@ domicile » et « à l'extérieur », et le brief Instagram titre « LES HÔTES 
 Burgan - Sulaibikhat se joue au « Khaitan Stadium », où Khaitan ne joue pas ;
 trois rencontres différentes ont lieu au même « Al Shabab Mubarak Alaiar
 Stadium ». Le « domicile » de cette division est largement nominal.
+
+**Le stade déclaré par Sofascore ne tranche pas non plus** : il donne « Mishref
+Stadium » pour Yarmouk et « Khaitan Stadium » pour Khaitan, alors que leur
+rencontre du 07/08 s'est jouée au **« Jaber Al-Mubarak Stadium »** — le terrain
+d'aucun des deux. Les équipes ne jouent tout simplement pas chez elles. Il
+faudra une source officielle (fédération koweïtienne) ou rien.
 
 ### Flashscore (évalué le 06/08/2026)
 
@@ -834,6 +880,54 @@ Trois pièges rencontrés, tous à retenir :
 Les lettres de forme deviennent **W/D/L** en anglais, mais la **classe CSS reste
 V/N/D** : c'est elle qui porte les couleurs.
 
+## Effectifs livrés (10/08/2026) — 230 joueurs, 8 clubs
+
+`fetch_squads.py` collecte les effectifs chez Sofascore et écrit
+`data/squads.json`. `build_console.py` les accroche à chaque fiche, et la
+console affiche une carte **« Effectifs »** en deux colonnes, groupée par poste,
+avec numéro de maillot, code pays et **buts marqués**.
+
+    python fetch_squads.py --summary
+
+| club | id Sofascore | joueurs | entraîneur |
+|---|---|---|---|
+| Yarmouk SC | 55163 | 33 | João Mota |
+| Al Jazeera FC Kuwait | (via le tournoi) | 32 | — |
+| Al Sulaibikhat FC | 55165 | 31 | António Miranda |
+| Burgan SC | 192706 | 31 | — |
+| Al Sahel SC | (via le tournoi) | 30 | Yousef Mudhaf |
+| Sporty FC | 1093203 | 26 | Ibrahim Shehab |
+| Khaitan SC | 55157 | 25 | Cenk Ozcan |
+| Al-Shamiya FC | 1084291 | 22 | Falah Anwar Al Sahli |
+
+**Les clubs sont découverts par le tournoi, pas par recherche de nom.** La
+recherche ramène des homonymes (« Al-Yarmouk » existe aussi en Libye et en
+Jordanie) et **ne trouvait pas Sporty ni Al Sahel** — les deux ids relevés à la
+main le 10/08 étaient d'ailleurs faux. `top-teams/overall` rend exactement les
+8 équipes rattachées à la compétition ; c'est cette liste qui fait foi.
+
+**Rapprochement des noms** : `normalise()` de `fetch_flashscore` règle sept cas
+sur huit. Le huitième est une divergence de translittération, pas de préfixe —
+« Al Jazeera FC Kuwait » contre « Al Jazira » — d'où un unique alias
+`jazeerakuwait -> jazira`. **8/8 rapprochés**, vérifié.
+
+**Les buts sont joints à chaque joueur** depuis le classement des buteurs : sans
+eux la carte ne serait qu'un annuaire. C'est la seule statistique individuelle
+que la source renseigne — ni minutes, ni passes décisives, ni notes.
+
+⚠️ **Ce ne sont pas des compositions.** Aucune source ne publie de feuille de
+match sur cette division. La carte le dit explicitement, pour qu'on ne lise pas
+« 33 joueurs » comme un onze de départ.
+
+ℹ️ **Un doublon dans la source** : « Metab Fahad Al Salamah » apparaît deux fois
+chez Sporty, sous **deux identifiants distincts** (1647399 avec le n° 7, et
+1629417 sans numéro). Volontairement **non fusionné** : à deux ids différents on
+ne peut pas distinguer un doublon d'un homonyme, et fusionner supprimerait un
+vrai joueur dans le second cas. Un joueur sur 230.
+
+ℹ️ **Le stade déclaré par club est conservé (`declared_venue`) mais n'est pas
+affiché** : ce n'est pas là que le club joue, les terrains étant partagés.
+
 ## Reste à faire
 
 Les trois points de la session du 06/08 sont soldés : `build_json.py`,
@@ -848,10 +942,7 @@ Ce qui reste ouvert, par ordre d'intérêt :
 2. **Le direct par Server-Sent Events** (`/glvs/`) n'est pas branché : score et
    minute poussés en temps réel, sans polling. N'a de sens que dans une page qui
    reste ouverte — la console est un fichier statique, donc à décider.
-3. **Effectifs : le problème est résolu par Sofascore** (22 à 33 joueurs par
-   club, avec poste, numéro et nationalité). Reste à écrire `fetch_squads.py`,
-   et à identifier les ids d'Al Sahel et de Sporty. La saisie manuelle n'est
-   plus nécessaire.
+3. ~~Effectifs~~ — **fait le 10/08**, voir plus haut. 230 joueurs, 8 clubs.
 5. ⚠️ **Trancher qui reçoit.** Forebet et Sofascore s'opposent sur les
    4 rencontres communes. Tant que ce n'est pas arbitré, « reçoit », les bilans
    domicile/extérieur et les slides « LES HÔTES / LES VISITEURS » reposent sur

@@ -135,6 +135,31 @@ select, .btn {
 .ev .side.home { background: var(--home); }
 .ev .side.away { background: var(--away); }
 
+/* --- effectifs --- */
+.squad { display: grid; grid-template-columns: 1fr 1fr; gap: 22px; }
+@media (max-width: 720px) { .squad { grid-template-columns: 1fr; } }
+.sqhead { display: flex; align-items: center; gap: 8px; margin-bottom: 4px; }
+.sqmeta { font-size: 12px; color: var(--text-muted); margin-bottom: 10px; }
+.sqgrp {
+  font-size: 11px; letter-spacing: .08em; text-transform: uppercase;
+  color: var(--text-muted); margin: 14px 0 5px; border-top: 1px solid var(--grid);
+  padding-top: 9px;
+}
+.sqgrp:first-of-type { border-top: 0; margin-top: 6px; padding-top: 0; }
+.pl { display: flex; align-items: baseline; gap: 8px; font-size: 13px; padding: 3px 0; }
+/* Largeur fixe pour le numéro : sans ça les noms ne s'alignent pas, et une
+   liste d'effectif se lit d'abord en colonne. */
+.pl .no {
+  min-width: 22px; text-align: right; font-variant-numeric: tabular-nums;
+  color: var(--text-muted); font-size: 12px;
+}
+.pl .nom { flex: 1; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.pl .nat { font-size: 11px; color: var(--text-muted); }
+.pl .bu {
+  font-size: 11px; font-weight: 600; padding: 1px 6px; border-radius: 999px;
+  background: color-mix(in srgb, var(--good) 16%, transparent); color: var(--good);
+}
+
 /* --- graphique buts marqués / encaissés --- */
 /* Les colonnes sont plafonnées à 26 px : le bloc prend donc la largeur de ses
    données, et la ligne de base comme l'axe s'alignent dessus plutôt que de
@@ -323,6 +348,9 @@ const EN = {
   "Statistiques du match": "Match statistics", "Parcours": "Season run",
   "Contexte de la rencontre": "Match context", "Classement": "Table",
   "Contenu Instagram": "Instagram content", "Face à face": "Head to head",
+  "Effectifs": "Squads", "effectif non récupéré": "squad not fetched",
+  "Effectifs de la saison, pas les compositions du jour : aucune source ne publie de feuille de match pour ce championnat. Les buts sont la seule statistique individuelle disponible. Source : Sofascore.":
+    "Season squads, not today's line-ups: no source publishes a team sheet for this league. Goals are the only individual statistic available. Source: Sofascore.",
   // en-tête de rencontre
   "reçoit": "hosts", "date inconnue": "date unknown",
   "Diffusion : ": "Broadcast: ",
@@ -474,6 +502,15 @@ const PH = {
   dayToday: {
     fr: d => `${d} · aujourd'hui`,
     en: d => `${d} · today`,
+  },
+  squadCount: {
+    fr: n => `${n} joueur${n > 1 ? "s" : ""}`,
+    en: n => `${n} player${n > 1 ? "s" : ""}`,
+  },
+  coach: { fr: n => `entraîneur ${n}`, en: n => `coach ${n}` },
+  goalCount: {
+    fr: n => `${n} but${n > 1 ? "s" : ""}`,
+    en: n => `${n} goal${n > 1 ? "s" : ""}`,
   },
   foot: {
     fr: gen => `Généré le ${gen} depuis le cache local — aucune donnée n'est ` +
@@ -926,6 +963,81 @@ function renderMatchStats(m) {
     p.style.margin = "16px 0 0";
     card.appendChild(p);
   });
+  return card;
+}
+
+/* ---------- effectifs ---------- */
+/* Seule carte alimentée par Sofascore : Forebet laisse `lineup` et `bench`
+   vides sur cette division. Ce ne sont PAS des compositions — personne n'en
+   publie pour ce championnat — mais les effectifs de la saison. La carte le
+   dit, pour qu'on ne lise pas « 33 joueurs » comme un onze de départ. */
+const POS_ORDER = ["G", "D", "M", "F"];
+const POS_LABEL = {
+  fr: { G: "Gardiens", D: "Défenseurs", M: "Milieux", F: "Attaquants", "?": "Poste inconnu" },
+  en: { G: "Goalkeepers", D: "Defenders", M: "Midfielders", F: "Forwards", "?": "Position unknown" },
+};
+
+function squadColumn(side, name, squad) {
+  const col = el("div");
+  const head = el("div", "sqhead");
+  head.appendChild(el("span", "dot " + side));
+  head.appendChild(teamLabel(name));
+  col.appendChild(head);
+
+  const bits = [ph("squadCount", squad.players.length)];
+  if (squad.manager) bits.push(ph("coach", squad.manager));
+  col.appendChild(el("div", "sqmeta", bits.join(" · ")));
+
+  const groups = {};
+  squad.players.forEach(p => {
+    const k = POS_ORDER.includes(p.position) ? p.position : "?";
+    (groups[k] = groups[k] || []).push(p);
+  });
+  [...POS_ORDER, "?"].forEach(k => {
+    const list = groups[k];
+    if (!list) return;
+    col.appendChild(el("div", "sqgrp", POS_LABEL[lang][k]));
+    list.forEach(p => {
+      const row = el("div", "pl");
+      row.appendChild(el("span", "no", p.number || "—"));
+      const nom = el("span", "nom", p.name || "?");
+      if (p.country) nom.title = p.country;
+      row.appendChild(nom);
+      if (p.country_code) row.appendChild(el("span", "nat", p.country_code));
+      // Les buts sont la SEULE statistique individuelle que la source
+      // renseigne ici : ni minutes, ni passes décisives, ni notes.
+      if (p.goals) row.appendChild(el("span", "bu", ph("goalCount", p.goals)));
+      col.appendChild(row);
+    });
+  });
+  return col;
+}
+
+function renderSquads(m) {
+  const s = m.squads || {};
+  if (!s.home && !s.away) return null;
+  const card = el("div", "card");
+  card.appendChild(el("h2", null, t("Effectifs")));
+  card.appendChild(el("p", "sub", t(
+    "Effectifs de la saison, pas les compositions du jour : aucune source ne " +
+    "publie de feuille de match pour ce championnat. Les buts sont la seule " +
+    "statistique individuelle disponible. Source : Sofascore.")));
+
+  const grid = el("div", "squad");
+  [["home", m.home, s.home], ["away", m.away, s.away]].forEach(([side, name, sq]) => {
+    if (sq && sq.players && sq.players.length) {
+      grid.appendChild(squadColumn(side, name, sq));
+    } else {
+      const col = el("div");
+      const head = el("div", "sqhead");
+      head.appendChild(el("span", "dot " + side));
+      head.appendChild(teamLabel(name));
+      col.appendChild(head);
+      col.appendChild(el("div", "sqmeta", t("effectif non récupéré")));
+      grid.appendChild(col);
+    }
+  });
+  card.appendChild(grid);
   return card;
 }
 
@@ -1770,6 +1882,8 @@ function renderDetail() {
   main.appendChild(renderCompare(m));
   main.appendChild(renderRuns(m));
   main.appendChild(renderContext(m));
+  const squads = renderSquads(m);
+  if (squads) main.appendChild(squads);
   side.appendChild(renderStandings(m));
 
   layout.appendChild(main);

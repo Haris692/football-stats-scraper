@@ -1,0 +1,2383 @@
+{
+  "generated": "2026-08-10T14:26:21",
+  "source": "sofascore",
+  "tournament": {
+    "id": 20044,
+    "season_id": 75693,
+    "season": "25/26"
+  },
+  "teams": {
+    "jazira": {
+      "sofascore_id": 1077021,
+      "sofascore_name": "Al Jazeera FC Kuwait",
+      "manager": "Ibrahim Obaid",
+      "declared_venue": "Kuwait Oil Company Stadium",
+      "city": "Al Ahmadi",
+      "players": [
+        {
+          "id": 2259303,
+          "name": "Bader Al Ajmi",
+          "position": "G",
+          "number": "1",
+          "country": "Kuwait",
+          "country_code": "KW",
+          "goals": null,
+          "penalties": null
+        },
+        {
+          "id": 1461345,
+          "name": "Bader Al Saanoun",
+          "position": "G",
+          "number": "17",
+          "country": "Kuwait",
+          "country_code": "KW",
+          "goals": null,
+          "penalties": null
+        },
+        {
+          "id": 2112521,
+          "name": "Fahad Al Duajj",
+          "position": "G",
+          "number": null,
+          "country": "Kuwait",
+          "country_code": "KW",
+          "goals": null,
+          "penalties": null
+        },
+        {
+          "id": 1103545,
+          "name": "Edrissa Ceesay",
+          "position": "D",
+          "number": "25",
+          "country": "Gambia",
+          "country_code": "GM",
+          "goals": 1,
+          "penalties": null
+        },
+        {
+          "id": 2222525,
+          "name": "Abdulmajeed Al Enezi",
+          "position": "D",
+          "number": "12",
+          "country": "Kuwait",
+          "country_code": "KW",
+          "goals": null,
+          "penalties": null
+        },
+        {
+          "id": 2112515,
+          "name": "Ahmad Abdullah Al Enezi",
+          "position": "D",
+          "number": "4",
+          "country": "Kuwait",
+          "country_code": "KW",
+          "goals": null,
+          "penalties": null
+        },
+        {
+          "id": 2424215,
+          "name": "Hadi Al-Ajmi",
+          "position": "D",
+          "number": "2",
+          "country": "Kuwait",
+          "country_code": "KW",
+          "goals": null,
+          "penalties": null
+        },
+        {
+          "id": 2112516,
+          "name": "Khaled Abdullah Al Mutairi",
+          "position": "D",
+          "number": null,
+          "country": "Kuwait",
+          "country_code": "KW",
+          "goals": null,
+          "penalties": null
+        },
+        {
+          "id": 2221670,
+          "name": "Meshal Al Enezi",
+          "position": "D",
+          "number": "5",
+          "country": "Kuwait",
+          "country_code": "KW",
+          "goals": null,
+          "penalties": null
+        },
+        {
+          "id": 1629418,
+          "name": "Mohammad Al Rabie",
+          "position": "D",
+          "number": "50",
+          "country": "Kuwait",
+          "country_code": "KW",
+          "goals": null,
+          "penalties": null
+        },
+        {
+          "id": 2219540,
+          "name": "Mohammed Al Fadhli",
+          "position": "D",
+          "number": "13",
+          "country": "Kuwait",
+          "country_code": "KW",
+          "goals": null,
+          "penalties": null
+        },
+        {
+          "id": 934868,
+          "name": "Donovan Ewolo",
+          "position": "M",
+          "number": "7",
+          "country": "Cameroon",
+          "country_code": "CM",
+          "goals": 8,
+          "penalties": null
+        },
+        {
+          "id": 1396246,
+          "name": "Hedy Chaabi",
+          "position": "M",
+          "number": null,
+          "country": "Algeria",
+          "country_code": "DZ",
+          "goals": 3,
+          "penalties": null
+        },
+        {
+          "id": 2112511,
+          "name": "Mobarak Saeed",
+          "position": "M",
+          "number": "8",
+          "country": "Kuwait",
+          "country_code": "KW",
+          "goals": 3,
+          "penalties": null
+        },
+        {
+          "id": 368122,
+          "name": "Malick Mbaye",
+          "position": "M",
+          "number": "24",
+          "country": "Senegal",
+          "country_code": "SN",
+          "goals": 2,
+          "penalties": null
+        },
+        {
+          "id": 1140881,
+          "name": "Marouane Zila",
+          "position": "M",
+          "number": null,
+          "country": "Morocco",
+          "country_code": "MA",
+          "goals": 2,
+          "penalties": null
+        },
+        {
+          "id": 2112519,
+          "name": "Bader Mohammed Mutab",
+          "position": "M",
+          "number": null,
+          "country": "Kuwait",
+          "country_code": "KW",
+          "goals": null,
+          "penalties": null
+        },
+        {
+          "id": 2075985,
+          "name": "Menwer Al Mutairi",
+          "position": "M",
+          "number": "19",
+          "country": "Kuwait",
+          "country_code": "KW",
+          "goals": null,
+          "penalties": null
+        },
+        {
+          "id": 2222423,
+          "name": "Yousef Al Fajji",
+          "position": "M",
+          "number": null,
+          "country": "Kuwait",
+          "country_code": "KW",
+          "goals": null,
+          "penalties": null
+        },
+        {
+          "id": 1610379,
+          "name": "Isaac James Ogiri",
+          "position": "F",
+          "number": null,
+          "country": "Nigeria",
+          "country_code": "NG",
+          "goals": 5,
+          "penalties": null
+        },
+        {
+          "id": 1404710,
+          "name": "Yao Jean Charles Olivier",
+          "position": "F",
+          "number": null,
+          "country": "Côte d'Ivoire",
+          "country_code": "CI",
+          "goals": 3,
+          "penalties": null
+        },
+        {
+          "id": 1629762,
+          "name": "Fahad Al Rajhi",
+          "position": "F",
+          "number": "15",
+          "country": "Kuwait",
+          "country_code": "KW",
+          "goals": 2,
+          "penalties": null
+        },
+        {
+          "id": 1143185,
+          "name": "Matheus Vieira",
+          "position": "F",
+          "number": "11",
+          "country": "Brazil",
+          "country_code": "BR",
+          "goals": 1,
+          "penalties": null
+        },
+        {
+          "id": 2112520,
+          "name": "Abdulmohsen Fahad Al Ajmi",
+          "position": "F",
+          "number": "21",
+          "country": "Kuwait",
+          "country_code": "KW",
+          "goals": null,
+          "penalties": null
+        },
+        {
+          "id": 2063297,
+          "name": "Ali Ashkanani",
+          "position": "F",
+          "number": null,
+          "country": "Kuwait",
+          "country_code": "KW",
+          "goals": null,
+          "penalties": null
+        },
+        {
+          "id": 2424214,
+          "name": "Barak Jowar",
+          "position": "F",
+          "number": "16",
+          "country": "Kuwait",
+          "country_code": "KW",
+          "goals": null,
+          "penalties": null
+        },
+        {
+          "id": 2048471,
+          "name": "Fahad Al Azmi",
+          "position": "F",
+          "number": null,
+          "country": "Kuwait",
+          "country_code": "KW",
+          "goals": null,
+          "penalties": null
+        },
+        {
+          "id": 2219539,
+          "name": "Fahad Zayid Al Fadhil",
+          "position": "F",
+          "number": "6",
+          "country": "Kuwait",
+          "country_code": "KW",
+          "goals": null,
+          "penalties": null
+        },
+        {
+          "id": 2112512,
+          "name": "Jarrah Al Butti",
+          "position": "F",
+          "number": "18",
+          "country": "Kuwait",
+          "country_code": "KW",
+          "goals": null,
+          "penalties": null
+        },
+        {
+          "id": 2221716,
+          "name": "Khaled Al Awadhi",
+          "position": "F",
+          "number": "27",
+          "country": "Kuwait",
+          "country_code": "KW",
+          "goals": null,
+          "penalties": null
+        },
+        {
+          "id": 2112509,
+          "name": "Mohammed Ammash",
+          "position": "F",
+          "number": "20",
+          "country": "Saudi Arabia",
+          "country_code": "SA",
+          "goals": null,
+          "penalties": null
+        },
+        {
+          "id": 2112506,
+          "name": "Yousef Abdullah Al Rashidi",
+          "position": "F",
+          "number": "9",
+          "country": "Kuwait",
+          "country_code": "KW",
+          "goals": null,
+          "penalties": null
+        }
+      ]
+    },
+    "sahel": {
+      "sofascore_id": 55167,
+      "sofascore_name": "Al Sahel SC",
+      "manager": "Yousef Mudhaf",
+      "declared_venue": "Abu Halifa City Stadium",
+      "city": "Kuwait City",
+      "players": [
+        {
+          "id": 2064189,
+          "name": "Dhari Al Masri",
+          "position": "G",
+          "number": null,
+          "country": "Kuwait",
+          "country_code": "KW",
+          "goals": null,
+          "penalties": null
+        },
+        {
+          "id": 1637112,
+          "name": "Fawaz Al Dosari",
+          "position": "G",
+          "number": null,
+          "country": "Kuwait",
+          "country_code": "KW",
+          "goals": null,
+          "penalties": null
+        },
+        {
+          "id": 2042317,
+          "name": "Meshal Al Rashidi",
+          "position": "G",
+          "number": "1",
+          "country": "Kuwait",
+          "country_code": "KW",
+          "goals": null,
+          "penalties": null
+        },
+        {
+          "id": 975185,
+          "name": "Abdulaziz Mahran",
+          "position": "D",
+          "number": null,
+          "country": "Kuwait",
+          "country_code": "KW",
+          "goals": 1,
+          "penalties": null
+        },
+        {
+          "id": 1526764,
+          "name": "Abdulaziz Murad",
+          "position": "D",
+          "number": "6",
+          "country": "Kuwait",
+          "country_code": "KW",
+          "goals": null,
+          "penalties": null
+        },
+        {
+          "id": 2125592,
+          "name": "Ali Ford",
+          "position": "D",
+          "number": "2",
+          "country": "Kuwait",
+          "country_code": "KW",
+          "goals": null,
+          "penalties": null
+        },
+        {
+          "id": 1472624,
+          "name": "João Moura",
+          "position": "D",
+          "number": "33",
+          "country": "Brazil",
+          "country_code": "BR",
+          "goals": null,
+          "penalties": null
+        },
+        {
+          "id": 2048221,
+          "name": "Khaled Al Qahtani",
+          "position": "D",
+          "number": null,
+          "country": "Kuwait",
+          "country_code": "KW",
+          "goals": null,
+          "penalties": null
+        },
+        {
+          "id": 1612382,
+          "name": "Lucas Marreta",
+          "position": "D",
+          "number": "4",
+          "country": "Brazil",
+          "country_code": "BR",
+          "goals": null,
+          "penalties": null
+        },
+        {
+          "id": 368906,
+          "name": "Mauricio",
+          "position": "D",
+          "number": null,
+          "country": "Brazil",
+          "country_code": "BR",
+          "goals": null,
+          "penalties": null
+        },
+        {
+          "id": 2042316,
+          "name": "Meshari Al Kandari",
+          "position": "D",
+          "number": null,
+          "country": "Kuwait",
+          "country_code": "KW",
+          "goals": null,
+          "penalties": null
+        },
+        {
+          "id": 2139482,
+          "name": "Saad Al Azmi",
+          "position": "D",
+          "number": null,
+          "country": "Kuwait",
+          "country_code": "KW",
+          "goals": null,
+          "penalties": null
+        },
+        {
+          "id": 974440,
+          "name": "Victor Lisboa",
+          "position": "D",
+          "number": "30",
+          "country": "Brazil",
+          "country_code": "BR",
+          "goals": null,
+          "penalties": null
+        },
+        {
+          "id": 1618276,
+          "name": "Christian Alex",
+          "position": "M",
+          "number": "33",
+          "country": "Nigeria",
+          "country_code": "NG",
+          "goals": 2,
+          "penalties": null
+        },
+        {
+          "id": 985082,
+          "name": "Lucas Lucena",
+          "position": "M",
+          "number": "8",
+          "country": "Brazil",
+          "country_code": "BR",
+          "goals": 1,
+          "penalties": null
+        },
+        {
+          "id": 1650820,
+          "name": "Aiman Al Hagri",
+          "position": "M",
+          "number": null,
+          "country": "Kuwait",
+          "country_code": "KW",
+          "goals": null,
+          "penalties": null
+        },
+        {
+          "id": 2442947,
+          "name": "Ali Jawhar",
+          "position": "M",
+          "number": "21",
+          "country": "Kuwait",
+          "country_code": "KW",
+          "goals": null,
+          "penalties": null
+        },
+        {
+          "id": 2042323,
+          "name": "Leonardo Silva",
+          "position": "M",
+          "number": "16",
+          "country": "Brazil",
+          "country_code": "BR",
+          "goals": null,
+          "penalties": null
+        },
+        {
+          "id": 2139483,
+          "name": "Meshari Fayad",
+          "position": "M",
+          "number": "21",
+          "country": "Kuwait",
+          "country_code": "KW",
+          "goals": null,
+          "penalties": null
+        },
+        {
+          "id": 1862954,
+          "name": "Mohammed Zenefer Al Dawsari",
+          "position": "M",
+          "number": "7",
+          "country": "Kuwait",
+          "country_code": "KW",
+          "goals": null,
+          "penalties": null
+        },
+        {
+          "id": 2015155,
+          "name": "Nasser Al Qahtani",
+          "position": "M",
+          "number": "5",
+          "country": "Kuwait",
+          "country_code": "KW",
+          "goals": null,
+          "penalties": null
+        },
+        {
+          "id": 809496,
+          "name": "Shaheen Alkhamees",
+          "position": "M",
+          "number": "72",
+          "country": "Kuwait",
+          "country_code": "KW",
+          "goals": null,
+          "penalties": null
+        },
+        {
+          "id": 1609808,
+          "name": "Allan Paulista",
+          "position": "F",
+          "number": "29",
+          "country": "Brazil",
+          "country_code": "BR",
+          "goals": 11,
+          "penalties": null
+        },
+        {
+          "id": 1119953,
+          "name": "Birahim Gaye",
+          "position": "F",
+          "number": "99",
+          "country": "Senegal",
+          "country_code": "SN",
+          "goals": 10,
+          "penalties": null
+        },
+        {
+          "id": 1539316,
+          "name": "Cleiton Padilha",
+          "position": "F",
+          "number": "27",
+          "country": "Brazil",
+          "country_code": "BR",
+          "goals": 2,
+          "penalties": null
+        },
+        {
+          "id": 1006323,
+          "name": "Faisal Ajab Al Azemi",
+          "position": "F",
+          "number": null,
+          "country": "Kuwait",
+          "country_code": "KW",
+          "goals": 1,
+          "penalties": null
+        },
+        {
+          "id": 1629528,
+          "name": "Abdullah Bather",
+          "position": "F",
+          "number": null,
+          "country": "Kuwait",
+          "country_code": "KW",
+          "goals": null,
+          "penalties": null
+        },
+        {
+          "id": 2042318,
+          "name": "Farhan Saad",
+          "position": "F",
+          "number": "20",
+          "country": "Kuwait",
+          "country_code": "KW",
+          "goals": null,
+          "penalties": null
+        },
+        {
+          "id": 1004419,
+          "name": "Malick Cisse",
+          "position": "F",
+          "number": null,
+          "country": "Senegal",
+          "country_code": "SN",
+          "goals": null,
+          "penalties": null
+        },
+        {
+          "id": 2011095,
+          "name": "Mohammed Al Aladhi",
+          "position": "F",
+          "number": "17",
+          "country": "Kuwait",
+          "country_code": "KW",
+          "goals": null,
+          "penalties": null
+        }
+      ]
+    },
+    "sulaibikhat": {
+      "sofascore_id": 55165,
+      "sofascore_name": "Al Sulaibikhat FC",
+      "manager": "António Miranda",
+      "declared_venue": "Al Sulaibikhat Stadium",
+      "city": "Kuwait City",
+      "players": [
+        {
+          "id": 2057428,
+          "name": "Abdullah Abbas",
+          "position": "G",
+          "number": "1",
+          "country": "Syria",
+          "country_code": "SY",
+          "goals": null,
+          "penalties": null
+        },
+        {
+          "id": 2447227,
+          "name": "Abdullah Eissa",
+          "position": "G",
+          "number": "36",
+          "country": "Kuwait",
+          "country_code": "KW",
+          "goals": null,
+          "penalties": null
+        },
+        {
+          "id": 1629413,
+          "name": "Abdulrahman Al Sharifi",
+          "position": "G",
+          "number": "22",
+          "country": "Kuwait",
+          "country_code": "KW",
+          "goals": null,
+          "penalties": null
+        },
+        {
+          "id": 2441845,
+          "name": "Saleh Khamees Al Enezi",
+          "position": "D",
+          "number": "2",
+          "country": "Kuwait",
+          "country_code": "KW",
+          "goals": 2,
+          "penalties": null
+        },
+        {
+          "id": 2473328,
+          "name": "Elielson Cardoso Bebê",
+          "position": "D",
+          "number": "44",
+          "country": "Brazil",
+          "country_code": "BR",
+          "goals": 1,
+          "penalties": null
+        },
+        {
+          "id": 2057429,
+          "name": "Abdulaziz Al Qattan",
+          "position": "D",
+          "number": "77",
+          "country": "Kuwait",
+          "country_code": "KW",
+          "goals": null,
+          "penalties": null
+        },
+        {
+          "id": 2057427,
+          "name": "Ahmad Al Fahad",
+          "position": "D",
+          "number": "13",
+          "country": "Kuwait",
+          "country_code": "KW",
+          "goals": null,
+          "penalties": null
+        },
+        {
+          "id": 2057430,
+          "name": "Ali Al Mousawy",
+          "position": "D",
+          "number": "4",
+          "country": "Kuwait",
+          "country_code": "KW",
+          "goals": null,
+          "penalties": null
+        },
+        {
+          "id": 2221679,
+          "name": "Khaled Al Rashidi",
+          "position": "D",
+          "number": "7",
+          "country": "Kuwait",
+          "country_code": "KW",
+          "goals": null,
+          "penalties": null
+        },
+        {
+          "id": 1629793,
+          "name": "Mohammed Safar",
+          "position": "D",
+          "number": "28",
+          "country": "Kuwait",
+          "country_code": "KW",
+          "goals": null,
+          "penalties": null
+        },
+        {
+          "id": 809504,
+          "name": "Musaed Al Enezi",
+          "position": "D",
+          "number": "5",
+          "country": "Kuwait",
+          "country_code": "KW",
+          "goals": null,
+          "penalties": null
+        },
+        {
+          "id": 1397226,
+          "name": "Wilker Santos",
+          "position": "D",
+          "number": null,
+          "country": "Brazil",
+          "country_code": "BR",
+          "goals": null,
+          "penalties": null
+        },
+        {
+          "id": 1629209,
+          "name": "Yousef Matar",
+          "position": "D",
+          "number": null,
+          "country": "Kuwait",
+          "country_code": "KW",
+          "goals": null,
+          "penalties": null
+        },
+        {
+          "id": 975189,
+          "name": "Othman Al Failakawi",
+          "position": "M",
+          "number": "11",
+          "country": "Kuwait",
+          "country_code": "KW",
+          "goals": 4,
+          "penalties": null
+        },
+        {
+          "id": 1952629,
+          "name": "Bruno Domingues",
+          "position": "M",
+          "number": "55",
+          "country": "Brazil",
+          "country_code": "BR",
+          "goals": 3,
+          "penalties": null
+        },
+        {
+          "id": 2072656,
+          "name": "Nasser Al Faylakawi",
+          "position": "M",
+          "number": "25",
+          "country": "Kuwait",
+          "country_code": "KW",
+          "goals": 1,
+          "penalties": null
+        },
+        {
+          "id": 2421888,
+          "name": "Ahmed Daham",
+          "position": "M",
+          "number": "78",
+          "country": "Syria",
+          "country_code": "SY",
+          "goals": null,
+          "penalties": null
+        },
+        {
+          "id": 2447674,
+          "name": "Bandar Al Dheferi",
+          "position": "M",
+          "number": "25",
+          "country": "Kuwait",
+          "country_code": "KW",
+          "goals": null,
+          "penalties": null
+        },
+        {
+          "id": 1647394,
+          "name": "Fahad Al Houli",
+          "position": "M",
+          "number": "6",
+          "country": "Kuwait",
+          "country_code": "KW",
+          "goals": null,
+          "penalties": null
+        },
+        {
+          "id": 2439550,
+          "name": "Mohammed Hamdan",
+          "position": "M",
+          "number": "15",
+          "country": "Kuwait",
+          "country_code": "KW",
+          "goals": null,
+          "penalties": null
+        },
+        {
+          "id": 2476918,
+          "name": "Nawaf Al Shaibani",
+          "position": "M",
+          "number": "8",
+          "country": "Kuwait",
+          "country_code": "KW",
+          "goals": null,
+          "penalties": null
+        },
+        {
+          "id": 2333131,
+          "name": "Yaser Dashti",
+          "position": "M",
+          "number": "14",
+          "country": "Kuwait",
+          "country_code": "KW",
+          "goals": null,
+          "penalties": null
+        },
+        {
+          "id": 1090606,
+          "name": "Emmanuel Evaristus",
+          "position": "F",
+          "number": null,
+          "country": "Nigeria",
+          "country_code": "NG",
+          "goals": 5,
+          "penalties": null
+        },
+        {
+          "id": 2130188,
+          "name": "Abdulaziz Al Beshar",
+          "position": "F",
+          "number": "9",
+          "country": "Kuwait",
+          "country_code": "KW",
+          "goals": 1,
+          "penalties": null
+        },
+        {
+          "id": 1118330,
+          "name": "Daniel Silva Santos",
+          "position": "F",
+          "number": "21",
+          "country": "Brazil",
+          "country_code": "BR",
+          "goals": 1,
+          "penalties": null
+        },
+        {
+          "id": 1843675,
+          "name": "Abdulaziz Assad",
+          "position": "F",
+          "number": null,
+          "country": "Kuwait",
+          "country_code": "KW",
+          "goals": null,
+          "penalties": null
+        },
+        {
+          "id": 2442720,
+          "name": "Abdulmohsen Al-Salili",
+          "position": "F",
+          "number": "10",
+          "country": "Kuwait",
+          "country_code": "KW",
+          "goals": null,
+          "penalties": null
+        },
+        {
+          "id": 2062607,
+          "name": "Ali Salman Alaaeddine",
+          "position": "F",
+          "number": "93",
+          "country": "Lebanon",
+          "country_code": "LB",
+          "goals": null,
+          "penalties": null
+        },
+        {
+          "id": 2215109,
+          "name": "Dheryke Cristiano Madeira Rodrigues",
+          "position": "F",
+          "number": "97",
+          "country": "Brazil",
+          "country_code": "BR",
+          "goals": null,
+          "penalties": null
+        },
+        {
+          "id": 2040639,
+          "name": "Fahad Zuwaid",
+          "position": "F",
+          "number": "19",
+          "country": "Kuwait",
+          "country_code": "KW",
+          "goals": null,
+          "penalties": null
+        },
+        {
+          "id": 2443037,
+          "name": "Welves Santos Damacena",
+          "position": "F",
+          "number": "20",
+          "country": "Brazil",
+          "country_code": "BR",
+          "goals": null,
+          "penalties": null
+        }
+      ]
+    },
+    "shamiya": {
+      "sofascore_id": 1084291,
+      "sofascore_name": "Al-Shamiya FC",
+      "manager": "Falah Anwar Al Sahli",
+      "declared_venue": "Jaber Training Stadium 1",
+      "city": "Ardiya",
+      "players": [
+        {
+          "id": 2277148,
+          "name": "Abdullah Al Fadhli",
+          "position": "G",
+          "number": "39",
+          "country": "Kuwait",
+          "country_code": "KW",
+          "goals": null,
+          "penalties": null
+        },
+        {
+          "id": 2277146,
+          "name": "Abdulrahman Baron",
+          "position": "G",
+          "number": "22",
+          "country": "Kuwait",
+          "country_code": "KW",
+          "goals": null,
+          "penalties": null
+        },
+        {
+          "id": 2112507,
+          "name": "Jamal Mahmoud Jamal",
+          "position": "G",
+          "number": "1",
+          "country": "Kuwait",
+          "country_code": "KW",
+          "goals": null,
+          "penalties": null
+        },
+        {
+          "id": 919610,
+          "name": "Abdelhakim Bassaine",
+          "position": "D",
+          "number": "23",
+          "country": "Morocco",
+          "country_code": "MA",
+          "goals": null,
+          "penalties": null
+        },
+        {
+          "id": 2278916,
+          "name": "Abdulhazeem Yaseen",
+          "position": "D",
+          "number": "23",
+          "country": "Kuwait",
+          "country_code": "KW",
+          "goals": null,
+          "penalties": null
+        },
+        {
+          "id": 2277145,
+          "name": "Dhari Al Marzouq",
+          "position": "D",
+          "number": "17",
+          "country": "Kuwait",
+          "country_code": "KW",
+          "goals": null,
+          "penalties": null
+        },
+        {
+          "id": 2269789,
+          "name": "Khaled Al Dousari",
+          "position": "D",
+          "number": "2",
+          "country": "Kuwait",
+          "country_code": "KW",
+          "goals": null,
+          "penalties": null
+        },
+        {
+          "id": 2277151,
+          "name": "Mishal Edilem",
+          "position": "D",
+          "number": "3",
+          "country": "Kuwait",
+          "country_code": "KW",
+          "goals": null,
+          "penalties": null
+        },
+        {
+          "id": 2277144,
+          "name": "Mohammad Al Ali",
+          "position": "D",
+          "number": "31",
+          "country": "Kuwait",
+          "country_code": "KW",
+          "goals": null,
+          "penalties": null
+        },
+        {
+          "id": 2269958,
+          "name": "Mohammed Al Kandari",
+          "position": "D",
+          "number": "20",
+          "country": "Kuwait",
+          "country_code": "KW",
+          "goals": null,
+          "penalties": null
+        },
+        {
+          "id": 2295484,
+          "name": "Abdulaziz Al Sabri",
+          "position": "M",
+          "number": "27",
+          "country": "Kuwait",
+          "country_code": "KW",
+          "goals": null,
+          "penalties": null
+        },
+        {
+          "id": 2278920,
+          "name": "Adnan Al Saleh",
+          "position": "M",
+          "number": "15",
+          "country": "Kuwait",
+          "country_code": "KW",
+          "goals": null,
+          "penalties": null
+        },
+        {
+          "id": 2269786,
+          "name": "Fawaz Al Shammari",
+          "position": "M",
+          "number": "21",
+          "country": "Kuwait",
+          "country_code": "KW",
+          "goals": null,
+          "penalties": null
+        },
+        {
+          "id": 2277149,
+          "name": "Jamel Belkhir",
+          "position": "M",
+          "number": null,
+          "country": "Kuwait",
+          "country_code": "KW",
+          "goals": null,
+          "penalties": null
+        },
+        {
+          "id": 2048466,
+          "name": "Khaled Al Hajji",
+          "position": "M",
+          "number": "44",
+          "country": "Kuwait",
+          "country_code": "KW",
+          "goals": null,
+          "penalties": null
+        },
+        {
+          "id": 2278940,
+          "name": "Meshari Ahmad",
+          "position": "M",
+          "number": "16",
+          "country": "Syria",
+          "country_code": "SY",
+          "goals": null,
+          "penalties": null
+        },
+        {
+          "id": 1004525,
+          "name": "Mohamed Rouhi",
+          "position": "M",
+          "number": "99",
+          "country": "Morocco",
+          "country_code": "MA",
+          "goals": null,
+          "penalties": null
+        },
+        {
+          "id": 2476532,
+          "name": "Munawwar Al-Mutairi",
+          "position": "M",
+          "number": "93",
+          "country": "Kuwait",
+          "country_code": "KW",
+          "goals": null,
+          "penalties": null
+        },
+        {
+          "id": 2277147,
+          "name": "Yahya Mustafa Al Agha",
+          "position": "M",
+          "number": "8",
+          "country": "Kuwait",
+          "country_code": "KW",
+          "goals": null,
+          "penalties": null
+        },
+        {
+          "id": 2269788,
+          "name": "Ali Wali",
+          "position": "F",
+          "number": "9",
+          "country": "Kuwait",
+          "country_code": "KW",
+          "goals": 5,
+          "penalties": null
+        },
+        {
+          "id": 2112514,
+          "name": "Ahmed Al Shammari",
+          "position": "F",
+          "number": "14",
+          "country": "Kuwait",
+          "country_code": "KW",
+          "goals": 1,
+          "penalties": null
+        },
+        {
+          "id": 2277150,
+          "name": "Omar Al Maimouni",
+          "position": "F",
+          "number": "7",
+          "country": "Kuwait",
+          "country_code": "KW",
+          "goals": null,
+          "penalties": null
+        }
+      ]
+    },
+    "burgan": {
+      "sofascore_id": 192706,
+      "sofascore_name": "Burgan SC",
+      "manager": null,
+      "declared_venue": "Ali Sabah Al-Salem Stadium",
+      "city": "Al Farwaniyah",
+      "players": [
+        {
+          "id": 2040609,
+          "name": "Haider Theyab",
+          "position": "G",
+          "number": null,
+          "country": "Kuwait",
+          "country_code": "KW",
+          "goals": null,
+          "penalties": null
+        },
+        {
+          "id": 1219002,
+          "name": "Mohammad Alhusainan",
+          "position": "G",
+          "number": "22",
+          "country": "Kuwait",
+          "country_code": "KW",
+          "goals": null,
+          "penalties": null
+        },
+        {
+          "id": 1629703,
+          "name": "Abdulaziz Al-Haqqan",
+          "position": "D",
+          "number": null,
+          "country": "Kuwait",
+          "country_code": "KW",
+          "goals": null,
+          "penalties": null
+        },
+        {
+          "id": 1629709,
+          "name": "Ahmad Al-Mansour",
+          "position": "D",
+          "number": null,
+          "country": "Kuwait",
+          "country_code": "KW",
+          "goals": null,
+          "penalties": null
+        },
+        {
+          "id": 1629705,
+          "name": "Ali Al-Haddad",
+          "position": "D",
+          "number": null,
+          "country": "Kuwait",
+          "country_code": "KW",
+          "goals": null,
+          "penalties": null
+        },
+        {
+          "id": 1629699,
+          "name": "Bader Al-Khazeim",
+          "position": "D",
+          "number": null,
+          "country": "Kuwait",
+          "country_code": "KW",
+          "goals": null,
+          "penalties": null
+        },
+        {
+          "id": 818070,
+          "name": "Cléber Prado",
+          "position": "D",
+          "number": null,
+          "country": "Brazil",
+          "country_code": "BR",
+          "goals": null,
+          "penalties": null
+        },
+        {
+          "id": 2294531,
+          "name": "Khaled Al Otaibi",
+          "position": "D",
+          "number": "12",
+          "country": "Kuwait",
+          "country_code": "KW",
+          "goals": null,
+          "penalties": null
+        },
+        {
+          "id": 1629713,
+          "name": "Macarrão",
+          "position": "D",
+          "number": null,
+          "country": "Brazil",
+          "country_code": "BR",
+          "goals": null,
+          "penalties": null
+        },
+        {
+          "id": 1647361,
+          "name": "Nasser Al Bloushi",
+          "position": "D",
+          "number": "2",
+          "country": "Kuwait",
+          "country_code": "KW",
+          "goals": null,
+          "penalties": null
+        },
+        {
+          "id": 1629697,
+          "name": "Omar Al-Enezi",
+          "position": "D",
+          "number": null,
+          "country": "Kuwait",
+          "country_code": "KW",
+          "goals": null,
+          "penalties": null
+        },
+        {
+          "id": 799165,
+          "name": "Otavio Silva",
+          "position": "D",
+          "number": null,
+          "country": "Brazil",
+          "country_code": "BR",
+          "goals": null,
+          "penalties": null
+        },
+        {
+          "id": 919274,
+          "name": "Rami Bouchniba",
+          "position": "D",
+          "number": "32",
+          "country": "Tunisia",
+          "country_code": "TN",
+          "goals": null,
+          "penalties": null
+        },
+        {
+          "id": 947185,
+          "name": "Vlad Christian Motroc",
+          "position": "D",
+          "number": null,
+          "country": "Romania",
+          "country_code": "RO",
+          "goals": null,
+          "penalties": null
+        },
+        {
+          "id": 1629701,
+          "name": "Abdulrahman Suroor",
+          "position": "M",
+          "number": null,
+          "country": "Kuwait",
+          "country_code": "KW",
+          "goals": null,
+          "penalties": null
+        },
+        {
+          "id": 2476533,
+          "name": "Cheikh Mohammed Traoré",
+          "position": "M",
+          "number": null,
+          "country": "Côte d'Ivoire",
+          "country_code": "CI",
+          "goals": null,
+          "penalties": null
+        },
+        {
+          "id": 2139481,
+          "name": "Ibrahim Firas",
+          "position": "M",
+          "number": "8",
+          "country": "Kuwait",
+          "country_code": "KW",
+          "goals": null,
+          "penalties": null
+        },
+        {
+          "id": 2294534,
+          "name": "Ibrahim Zahwa",
+          "position": "M",
+          "number": "21",
+          "country": "Syria",
+          "country_code": "SY",
+          "goals": null,
+          "penalties": null
+        },
+        {
+          "id": 2331810,
+          "name": "Jaber Al-Fadhli",
+          "position": "M",
+          "number": null,
+          "country": "Kuwait",
+          "country_code": "KW",
+          "goals": null,
+          "penalties": null
+        },
+        {
+          "id": 1629708,
+          "name": "Jassim Al-Mosawi",
+          "position": "M",
+          "number": null,
+          "country": "Kuwait",
+          "country_code": "KW",
+          "goals": null,
+          "penalties": null
+        },
+        {
+          "id": 1629698,
+          "name": "Mahmoud Jumaa",
+          "position": "M",
+          "number": null,
+          "country": "Kuwait",
+          "country_code": "KW",
+          "goals": null,
+          "penalties": null
+        },
+        {
+          "id": 919173,
+          "name": "Oussama Amdouni",
+          "position": "M",
+          "number": null,
+          "country": "Tunisia",
+          "country_code": "TN",
+          "goals": null,
+          "penalties": null
+        },
+        {
+          "id": 1019072,
+          "name": "Solomon Mensah",
+          "position": "M",
+          "number": null,
+          "country": "Ghana",
+          "country_code": "GH",
+          "goals": null,
+          "penalties": null
+        },
+        {
+          "id": 1629714,
+          "name": "Udoh Etop David",
+          "position": "M",
+          "number": "18",
+          "country": "Nigeria",
+          "country_code": "NG",
+          "goals": null,
+          "penalties": null
+        },
+        {
+          "id": 2289921,
+          "name": "Hamoud Al-Hazmi",
+          "position": "F",
+          "number": "7",
+          "country": "Kuwait",
+          "country_code": "KW",
+          "goals": 6,
+          "penalties": null
+        },
+        {
+          "id": 1090606,
+          "name": "Emmanuel Evaristus",
+          "position": "F",
+          "number": null,
+          "country": "Nigeria",
+          "country_code": "NG",
+          "goals": 5,
+          "penalties": null
+        },
+        {
+          "id": 1629707,
+          "name": "Fahad Jalawi",
+          "position": "F",
+          "number": null,
+          "country": "Kuwait",
+          "country_code": "KW",
+          "goals": null,
+          "penalties": null
+        },
+        {
+          "id": 1629706,
+          "name": "Harbi Al-Hadi",
+          "position": "F",
+          "number": null,
+          "country": "Kuwait",
+          "country_code": "KW",
+          "goals": null,
+          "penalties": null
+        },
+        {
+          "id": 872726,
+          "name": "Nicolas Cofi",
+          "position": "F",
+          "number": "16",
+          "country": "Ghana",
+          "country_code": "GH",
+          "goals": null,
+          "penalties": null
+        },
+        {
+          "id": 872251,
+          "name": "Reza Chaab",
+          "position": "F",
+          "number": null,
+          "country": "Iran",
+          "country_code": "IR",
+          "goals": null,
+          "penalties": null
+        },
+        {
+          "id": 1629702,
+          "name": "Saleh Al-Harbi",
+          "position": "F",
+          "number": null,
+          "country": "Kuwait",
+          "country_code": "KW",
+          "goals": null,
+          "penalties": null
+        }
+      ]
+    },
+    "khaitan": {
+      "sofascore_id": 55157,
+      "sofascore_name": "Khaitan SC",
+      "manager": "Cenk Ozcan",
+      "declared_venue": "Khaitan Stadium",
+      "city": "Kuwait City",
+      "players": [
+        {
+          "id": 2072639,
+          "name": "Ahmad Al Dousari",
+          "position": "G",
+          "number": "40",
+          "country": "Kuwait",
+          "country_code": "KW",
+          "goals": null,
+          "penalties": null
+        },
+        {
+          "id": 2011088,
+          "name": "Ossama Al Enezi",
+          "position": "G",
+          "number": null,
+          "country": "Kuwait",
+          "country_code": "KW",
+          "goals": null,
+          "penalties": null
+        },
+        {
+          "id": 808080,
+          "name": "Abdulrahman Al Enezi",
+          "position": "D",
+          "number": null,
+          "country": "Kuwait",
+          "country_code": "KW",
+          "goals": null,
+          "penalties": null
+        },
+        {
+          "id": 2222523,
+          "name": "Ali Al Mohamed",
+          "position": "D",
+          "number": null,
+          "country": "Kuwait",
+          "country_code": "KW",
+          "goals": null,
+          "penalties": null
+        },
+        {
+          "id": 922494,
+          "name": "Chima Akas",
+          "position": "D",
+          "number": "37",
+          "country": "Nigeria",
+          "country_code": "NG",
+          "goals": null,
+          "penalties": null
+        },
+        {
+          "id": 2268507,
+          "name": "Fahad Jaml Al Fraij",
+          "position": "D",
+          "number": "2",
+          "country": "Kuwait",
+          "country_code": "KW",
+          "goals": null,
+          "penalties": null
+        },
+        {
+          "id": 1839123,
+          "name": "Hussein Ismail Mataqi",
+          "position": "D",
+          "number": null,
+          "country": "Kuwait",
+          "country_code": "KW",
+          "goals": null,
+          "penalties": null
+        },
+        {
+          "id": 2057234,
+          "name": "Marcus Martinelli",
+          "position": "D",
+          "number": "73",
+          "country": "Brazil",
+          "country_code": "BR",
+          "goals": null,
+          "penalties": null
+        },
+        {
+          "id": 1013846,
+          "name": "Mohamed Saghraoui",
+          "position": "D",
+          "number": "4",
+          "country": "Tunisia",
+          "country_code": "TN",
+          "goals": null,
+          "penalties": null
+        },
+        {
+          "id": 2011092,
+          "name": "Mohammed Al Mosawi",
+          "position": "D",
+          "number": "12",
+          "country": "Kuwait",
+          "country_code": "KW",
+          "goals": null,
+          "penalties": null
+        },
+        {
+          "id": 1542558,
+          "name": "Nasser Saeed",
+          "position": "D",
+          "number": "33",
+          "country": "Kuwait",
+          "country_code": "KW",
+          "goals": null,
+          "penalties": null
+        },
+        {
+          "id": 1013885,
+          "name": "Oussema Ben Ayed",
+          "position": "M",
+          "number": "25",
+          "country": "Tunisia",
+          "country_code": "TN",
+          "goals": 2,
+          "penalties": null
+        },
+        {
+          "id": 794892,
+          "name": "Luiz Fernando",
+          "position": "M",
+          "number": "30",
+          "country": "Brazil",
+          "country_code": "BR",
+          "goals": null,
+          "penalties": null
+        },
+        {
+          "id": 1839124,
+          "name": "Mohammad Al Enezi",
+          "position": "M",
+          "number": null,
+          "country": "Kuwait",
+          "country_code": "KW",
+          "goals": null,
+          "penalties": null
+        },
+        {
+          "id": 2277733,
+          "name": "Nawaf Al Mutairi",
+          "position": "M",
+          "number": "88",
+          "country": "Kuwait",
+          "country_code": "KW",
+          "goals": null,
+          "penalties": null
+        },
+        {
+          "id": 2011084,
+          "name": "Saad Al Mutairi",
+          "position": "M",
+          "number": "8",
+          "country": "Kuwait",
+          "country_code": "KW",
+          "goals": null,
+          "penalties": null
+        },
+        {
+          "id": 543266,
+          "name": "Saif Al Hashan",
+          "position": "M",
+          "number": "90",
+          "country": "Kuwait",
+          "country_code": "KW",
+          "goals": null,
+          "penalties": null
+        },
+        {
+          "id": 1539098,
+          "name": "Hamad Al Taweel",
+          "position": "F",
+          "number": "7",
+          "country": "Kuwait",
+          "country_code": "KW",
+          "goals": 4,
+          "penalties": null
+        },
+        {
+          "id": 904049,
+          "name": "Pablo Vinicius de Moraes Ferreira",
+          "position": "F",
+          "number": null,
+          "country": "Brazil",
+          "country_code": "BR",
+          "goals": 4,
+          "penalties": null
+        },
+        {
+          "id": 2278147,
+          "name": "Hameed Al-Hussain",
+          "position": "F",
+          "number": "9",
+          "country": "Kuwait",
+          "country_code": "KW",
+          "goals": 3,
+          "penalties": null
+        },
+        {
+          "id": 1839122,
+          "name": "Abdalaziz Marawi",
+          "position": "F",
+          "number": null,
+          "country": "Kuwait",
+          "country_code": "KW",
+          "goals": null,
+          "penalties": null
+        },
+        {
+          "id": 2277727,
+          "name": "Fayez Al Dhufairi",
+          "position": "F",
+          "number": "77",
+          "country": "Kuwait",
+          "country_code": "KW",
+          "goals": null,
+          "penalties": null
+        },
+        {
+          "id": 884135,
+          "name": "Mardik Mardikian",
+          "position": "F",
+          "number": null,
+          "country": "Syria",
+          "country_code": "SY",
+          "goals": null,
+          "penalties": null
+        },
+        {
+          "id": 1170857,
+          "name": "Prince Obus",
+          "position": "F",
+          "number": null,
+          "country": "Bahrain",
+          "country_code": "BH",
+          "goals": null,
+          "penalties": null
+        },
+        {
+          "id": 1107535,
+          "name": "Stephen Sey",
+          "position": "F",
+          "number": "20",
+          "country": "Ghana",
+          "country_code": "GH",
+          "goals": null,
+          "penalties": null
+        }
+      ]
+    },
+    "sporty": {
+      "sofascore_id": 1093203,
+      "sofascore_name": "Sporty FC",
+      "manager": "Ibrahim Shehab",
+      "declared_venue": null,
+      "city": null,
+      "players": [
+        {
+          "id": 2664713,
+          "name": "Abdullah Bahman",
+          "position": "G",
+          "number": null,
+          "country": "Kuwait",
+          "country_code": "KW",
+          "goals": null,
+          "penalties": null
+        },
+        {
+          "id": 2288821,
+          "name": "Abdulrahman Al Tuhaili",
+          "position": "G",
+          "number": null,
+          "country": "Kuwait",
+          "country_code": "KW",
+          "goals": null,
+          "penalties": null
+        },
+        {
+          "id": 2260810,
+          "name": "Makki Al Qalaf",
+          "position": "G",
+          "number": "33",
+          "country": "Kuwait",
+          "country_code": "KW",
+          "goals": null,
+          "penalties": null
+        },
+        {
+          "id": 809490,
+          "name": "Musab Al Kandari",
+          "position": "G",
+          "number": null,
+          "country": "Kuwait",
+          "country_code": "KW",
+          "goals": null,
+          "penalties": null
+        },
+        {
+          "id": 2270054,
+          "name": "Abdulaziz Al Huthail",
+          "position": "D",
+          "number": "12",
+          "country": "Kuwait",
+          "country_code": "KW",
+          "goals": null,
+          "penalties": null
+        },
+        {
+          "id": 2112510,
+          "name": "Abdulwahab Al Shammari",
+          "position": "D",
+          "number": null,
+          "country": "Kuwait",
+          "country_code": "KW",
+          "goals": null,
+          "penalties": null
+        },
+        {
+          "id": 2260721,
+          "name": "Bader Hashem Al Zayed",
+          "position": "D",
+          "number": "44",
+          "country": "Kuwait",
+          "country_code": "KW",
+          "goals": null,
+          "penalties": null
+        },
+        {
+          "id": 2260803,
+          "name": "Ibrahim Al Tamimi",
+          "position": "D",
+          "number": "22",
+          "country": "Kuwait",
+          "country_code": "KW",
+          "goals": null,
+          "penalties": null
+        },
+        {
+          "id": 2086310,
+          "name": "Isaa Zakaria",
+          "position": "D",
+          "number": null,
+          "country": "Kuwait",
+          "country_code": "KW",
+          "goals": null,
+          "penalties": null
+        },
+        {
+          "id": 2259242,
+          "name": "Omar Al Enezi",
+          "position": "D",
+          "number": "25",
+          "country": "Kuwait",
+          "country_code": "KW",
+          "goals": null,
+          "penalties": null
+        },
+        {
+          "id": 2259353,
+          "name": "Talal Al Hasan",
+          "position": "D",
+          "number": null,
+          "country": "Kuwait",
+          "country_code": "KW",
+          "goals": null,
+          "penalties": null
+        },
+        {
+          "id": 1862916,
+          "name": "Abdullah Al Najdi",
+          "position": "M",
+          "number": "16",
+          "country": "Kuwait",
+          "country_code": "KW",
+          "goals": null,
+          "penalties": null
+        },
+        {
+          "id": 1637103,
+          "name": "Bader Jamal",
+          "position": "M",
+          "number": null,
+          "country": "Kuwait",
+          "country_code": "KW",
+          "goals": null,
+          "penalties": null
+        },
+        {
+          "id": 1647399,
+          "name": "Metab Fahad Al Salamah",
+          "position": "M",
+          "number": "7",
+          "country": "Kuwait",
+          "country_code": "KW",
+          "goals": null,
+          "penalties": null
+        },
+        {
+          "id": 1629417,
+          "name": "Metab Fahad Al Salamah",
+          "position": "M",
+          "number": null,
+          "country": "Kuwait",
+          "country_code": "KW",
+          "goals": null,
+          "penalties": null
+        },
+        {
+          "id": 2072649,
+          "name": "Salem Al Houli",
+          "position": "M",
+          "number": "4",
+          "country": "Kuwait",
+          "country_code": "KW",
+          "goals": null,
+          "penalties": null
+        },
+        {
+          "id": 2079871,
+          "name": "Salem Al Khatlan",
+          "position": "M",
+          "number": null,
+          "country": "Kuwait",
+          "country_code": "KW",
+          "goals": null,
+          "penalties": null
+        },
+        {
+          "id": 2278447,
+          "name": "Thamer Al Hubaidi",
+          "position": "M",
+          "number": "28",
+          "country": "Kuwait",
+          "country_code": "KW",
+          "goals": null,
+          "penalties": null
+        },
+        {
+          "id": 2290248,
+          "name": "Mahmoud Oklah",
+          "position": "F",
+          "number": null,
+          "country": "Syria",
+          "country_code": "SY",
+          "goals": 2,
+          "penalties": null
+        },
+        {
+          "id": 1948368,
+          "name": "Miracle Nwoagu",
+          "position": "F",
+          "number": null,
+          "country": "Nigeria",
+          "country_code": "NG",
+          "goals": 2,
+          "penalties": null
+        },
+        {
+          "id": 2259235,
+          "name": "Abdulrahman Al Enezi",
+          "position": "F",
+          "number": null,
+          "country": "Kuwait",
+          "country_code": "KW",
+          "goals": 1,
+          "penalties": null
+        },
+        {
+          "id": 2270072,
+          "name": "Abdulaziz Jamal Yaser",
+          "position": "F",
+          "number": "15",
+          "country": "Kuwait",
+          "country_code": "KW",
+          "goals": null,
+          "penalties": null
+        },
+        {
+          "id": 2259500,
+          "name": "Abdullah Bomjdad",
+          "position": "F",
+          "number": null,
+          "country": "Kuwait",
+          "country_code": "KW",
+          "goals": null,
+          "penalties": null
+        },
+        {
+          "id": 2259306,
+          "name": "Hussain Hajiah",
+          "position": "F",
+          "number": "10",
+          "country": "Kuwait",
+          "country_code": "KW",
+          "goals": null,
+          "penalties": null
+        },
+        {
+          "id": 2259310,
+          "name": "Yousef Al Mweil",
+          "position": "F",
+          "number": null,
+          "country": "Kuwait",
+          "country_code": "KW",
+          "goals": null,
+          "penalties": null
+        },
+        {
+          "id": 2259236,
+          "name": "Yousef Tarek Al Madi",
+          "position": "F",
+          "number": "98",
+          "country": "Kuwait",
+          "country_code": "KW",
+          "goals": null,
+          "penalties": null
+        }
+      ]
+    },
+    "yarmouk": {
+      "sofascore_id": 55163,
+      "sofascore_name": "Yarmouk SC",
+      "manager": "João Mota",
+      "declared_venue": "Mishref Stadium",
+      "city": "Kuwait City",
+      "players": [
+        {
+          "id": 809501,
+          "name": "Abdulrahman Al Hesainan",
+          "position": "G",
+          "number": "34",
+          "country": "Kuwait",
+          "country_code": "KW",
+          "goals": null,
+          "penalties": null
+        },
+        {
+          "id": 2072650,
+          "name": "Abdulrahman Al Husainan",
+          "position": "G",
+          "number": "34",
+          "country": "Kuwait",
+          "country_code": "KW",
+          "goals": null,
+          "penalties": null
+        },
+        {
+          "id": 2072651,
+          "name": "Faisal Al Makimi",
+          "position": "G",
+          "number": "1",
+          "country": "Kuwait",
+          "country_code": "KW",
+          "goals": null,
+          "penalties": null
+        },
+        {
+          "id": 2222484,
+          "name": "Muhammed Ajaj",
+          "position": "G",
+          "number": null,
+          "country": "Kuwait",
+          "country_code": "KW",
+          "goals": null,
+          "penalties": null
+        },
+        {
+          "id": 828510,
+          "name": "Abdullah Al Shami",
+          "position": "D",
+          "number": "5",
+          "country": "Syria",
+          "country_code": "SY",
+          "goals": 3,
+          "penalties": null
+        },
+        {
+          "id": 2072645,
+          "name": "Mohammad Hassan Ahmad Pour",
+          "position": "D",
+          "number": "26",
+          "country": "Iran",
+          "country_code": "IR",
+          "goals": 2,
+          "penalties": null
+        },
+        {
+          "id": 2072653,
+          "name": "Abdulla Majiki",
+          "position": "D",
+          "number": "3",
+          "country": "Kuwait",
+          "country_code": "KW",
+          "goals": null,
+          "penalties": null
+        },
+        {
+          "id": 2270082,
+          "name": "Abdullah Sabah",
+          "position": "D",
+          "number": "27",
+          "country": "Kuwait",
+          "country_code": "KW",
+          "goals": null,
+          "penalties": null
+        },
+        {
+          "id": 2072643,
+          "name": "Bader Saleem",
+          "position": "D",
+          "number": "28",
+          "country": "Kuwait",
+          "country_code": "KW",
+          "goals": null,
+          "penalties": null
+        },
+        {
+          "id": 809497,
+          "name": "Mohammad Al Azmi",
+          "position": "D",
+          "number": "29",
+          "country": "Kuwait",
+          "country_code": "KW",
+          "goals": null,
+          "penalties": null
+        },
+        {
+          "id": 1539111,
+          "name": "Mohsen Falah",
+          "position": "D",
+          "number": "12",
+          "country": "Kuwait",
+          "country_code": "KW",
+          "goals": null,
+          "penalties": null
+        },
+        {
+          "id": 932285,
+          "name": "Reza Yazdandoost",
+          "position": "D",
+          "number": "17",
+          "country": "Iran",
+          "country_code": "IR",
+          "goals": null,
+          "penalties": null
+        },
+        {
+          "id": 880237,
+          "name": "Joao Vitor",
+          "position": "M",
+          "number": null,
+          "country": "Brazil",
+          "country_code": "BR",
+          "goals": 3,
+          "penalties": null
+        },
+        {
+          "id": 959716,
+          "name": "Meshari Al Azmi",
+          "position": "M",
+          "number": "8",
+          "country": "Kuwait",
+          "country_code": "KW",
+          "goals": 2,
+          "penalties": null
+        },
+        {
+          "id": 1842601,
+          "name": "Othman Al Dousari",
+          "position": "M",
+          "number": null,
+          "country": "Kuwait",
+          "country_code": "KW",
+          "goals": 2,
+          "penalties": null
+        },
+        {
+          "id": 1636485,
+          "name": "Mohammed Abdul Hadi",
+          "position": "M",
+          "number": "7",
+          "country": "Kuwait",
+          "country_code": "KW",
+          "goals": 1,
+          "penalties": null
+        },
+        {
+          "id": 1140919,
+          "name": "Ayoub Lakhdar",
+          "position": "M",
+          "number": "11",
+          "country": "Morocco",
+          "country_code": "MA",
+          "goals": null,
+          "penalties": null
+        },
+        {
+          "id": 1168080,
+          "name": "Franck Ellé",
+          "position": "M",
+          "number": null,
+          "country": "Cameroon",
+          "country_code": "CM",
+          "goals": null,
+          "penalties": null
+        },
+        {
+          "id": 970633,
+          "name": "Habib Allah Dahmani",
+          "position": "M",
+          "number": null,
+          "country": "Morocco",
+          "country_code": "MA",
+          "goals": null,
+          "penalties": null
+        },
+        {
+          "id": 2072647,
+          "name": "Hashim Najeeb",
+          "position": "M",
+          "number": "19",
+          "country": "Lebanon",
+          "country_code": "LB",
+          "goals": null,
+          "penalties": null
+        },
+        {
+          "id": 2222509,
+          "name": "Ibrahim Al Dhufairi",
+          "position": "M",
+          "number": "39",
+          "country": "Kuwait",
+          "country_code": "KW",
+          "goals": null,
+          "penalties": null
+        },
+        {
+          "id": 1822823,
+          "name": "João Vitor Góes Monteiro",
+          "position": "M",
+          "number": null,
+          "country": "Brazil",
+          "country_code": "BR",
+          "goals": null,
+          "penalties": null
+        },
+        {
+          "id": 155661,
+          "name": "Junior Ngola Losoco",
+          "position": "M",
+          "number": "17",
+          "country": "Congo Republic",
+          "country_code": "CG",
+          "goals": null,
+          "penalties": null
+        },
+        {
+          "id": 2277704,
+          "name": "Khazam Al Khazam",
+          "position": "M",
+          "number": "23",
+          "country": "Kuwait",
+          "country_code": "KW",
+          "goals": null,
+          "penalties": null
+        },
+        {
+          "id": 2270086,
+          "name": "Mohammed Al Adwani",
+          "position": "M",
+          "number": "78",
+          "country": "Kuwait",
+          "country_code": "KW",
+          "goals": null,
+          "penalties": null
+        },
+        {
+          "id": 1013854,
+          "name": "Presnel Arnaud Banga",
+          "position": "M",
+          "number": "6",
+          "country": "Côte d'Ivoire",
+          "country_code": "CI",
+          "goals": null,
+          "penalties": null
+        },
+        {
+          "id": 830873,
+          "name": "Reuben Acquah",
+          "position": "M",
+          "number": "45",
+          "country": "Ghana",
+          "country_code": "GH",
+          "goals": null,
+          "penalties": null
+        },
+        {
+          "id": 1218986,
+          "name": "Aqeel Al Hazeem",
+          "position": "F",
+          "number": "11",
+          "country": "Kuwait",
+          "country_code": "KW",
+          "goals": 5,
+          "penalties": null
+        },
+        {
+          "id": 789000,
+          "name": "Isaac Mbenza",
+          "position": "F",
+          "number": "7",
+          "country": "Belgium",
+          "country_code": "BE",
+          "goals": 2,
+          "penalties": null
+        },
+        {
+          "id": 1215394,
+          "name": "Abdulrahman Sherhan",
+          "position": "F",
+          "number": "19",
+          "country": "Kuwait",
+          "country_code": "KW",
+          "goals": null,
+          "penalties": null
+        },
+        {
+          "id": 2048429,
+          "name": "Ahmed Alaa Rasheed",
+          "position": "F",
+          "number": null,
+          "country": "Egypt",
+          "country_code": "EG",
+          "goals": null,
+          "penalties": null
+        },
+        {
+          "id": 2072655,
+          "name": "Hussain Al Mataqi",
+          "position": "F",
+          "number": "30",
+          "country": "Kuwait",
+          "country_code": "KW",
+          "goals": null,
+          "penalties": null
+        },
+        {
+          "id": 2072657,
+          "name": "Yousef Najaf",
+          "position": "F",
+          "number": "9",
+          "country": "Kuwait",
+          "country_code": "KW",
+          "goals": null,
+          "penalties": null
+        }
+      ]
+    }
+  }
+}

@@ -65,6 +65,7 @@ match déjà en cache.
 | `fetch_flashscore.py` | calendrier plus lointain (Forebet ne montre que 2 jours) |
 | `parse_match.py` | parseur d'une fiche match : classement, forme, face à face |
 | `fetch_stats.py` | statistiques relevées d'un match (possession, tirs, corners) |
+| `fetch_squads.py` | effectifs des 8 clubs, via Sofascore (230 joueurs) |
 | `crests.py` | écussons des clubs et couleurs dominantes qu'on en extrait |
 | `build_console.py` | assemble `console.html` |
 | `build_json.py` | assemble `output/` |
@@ -85,6 +86,11 @@ cadrés), corners, cartons, remplacements**, et parfois la chronologie des buts.
 Restent vides : passes, fautes, tacles, arrêts, hors-jeu, compositions, noms des
 buteurs.
 
+**Sofascore complète Forebet, il ne le remplace pas** : il apporte les
+effectifs, les entraîneurs et le classement des buteurs — mais **aucun tir**.
+Le partage est donc : Forebet pour les statistiques de match, Sofascore pour les
+gens. Les compositions n'existent nulle part pour ce championnat.
+
 Un zéro servi par la source ne veut donc pas dire zéro — il veut souvent dire
 « non couvert ». `fetch_stats.py` supprime les rubriques nulles des deux côtés
 plutôt que d'afficher « 0 faute », et la console nomme explicitement ce qu'elle
@@ -100,9 +106,14 @@ correspondants sont donc à remplir à la main :
   est vide, la console affiche les chaînes habituelles comme une possibilité non
   confirmée, et le brief Instagram n'imprime rien : on ne publie pas une
   diffusion incertaine.
-- **`data/squads.json`** (à créer) — les effectifs. La seule source complète
-  trouvée est soccer365, dont le `robots.txt` interdit nommément ClaudeBot : ce
-  fichier ne peut être qu'une collecte manuelle.
+`data/squads.json` **n'est plus une saisie manuelle** : `fetch_squads.py` le
+remplit depuis Sofascore (230 joueurs sur 8 clubs, avec poste, numéro, pays et
+buts). Le relancer après un mercato :
+
+```
+python fetch_squads.py --summary
+python build_console.py --fixtures --scope all
+```
 
 ## Cache
 

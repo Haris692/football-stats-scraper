@@ -22,6 +22,7 @@ from browser import CACHE_DIR, CdpBrowser, ForebetBrowser, cache_path
 from crests import load_store, pair_note
 from fetch_fixtures import load_league_html, parse_fixtures, to_iso
 from fetch_flashscore import load as load_calendar, normalise
+from fetch_squads import for_team as squad_for, load as load_squads
 from fetch_stats import fetch as fetch_stats
 from parse_match import parse_match
 
@@ -276,12 +277,23 @@ def make_payload(matches: list[dict], fixtures: list[dict]) -> dict:
     for m in matches:
         m["palette"] = pair_note(teams, m.get("home"), m.get("away"))
 
+    # Les effectifs sont attachés à la fiche du match, pas envoyés en bloc : la
+    # console n'affiche jamais que les deux équipes qui s'affrontent, et le
+    # catalogue complet pèserait pour rien dans la page.
+    squads = load_squads()
+    for m in matches:
+        m["squads"] = {
+            "home": squad_for(squads, m.get("home")),
+            "away": squad_for(squads, m.get("away")),
+        }
+
     # « Aujourd'hui » est figé à la génération : la page est un fichier statique,
     # elle ne doit pas prétendre savoir quel jour on l'ouvre.
     return {
         "generated": now.strftime("%d/%m/%Y à %H:%M"),
         "today": now.strftime("%d/%m/%Y"),
         "now_iso": now.isoformat(timespec="minutes"),
+        "squads_generated": squads.get("generated"),
         "teams": teams,
         "fixtures": fixtures,
         "matches": matches,
@@ -295,6 +307,7 @@ def build(matches: list[dict], fixtures: list[dict], output: Path,
         raise RuntimeError(f"jeton {TOKEN!r} absent de {TEMPLATE.name}")
 
     payload = make_payload(matches, fixtures)
+
     # `</script>` dans une valeur fermerait la balise : on neutralise la séquence.
     blob = json.dumps(payload, ensure_ascii=False).replace("</", "<\\/")
     output.write_text(template.replace(TOKEN, blob), encoding="utf-8")
