@@ -1,0 +1,15 @@
+# Profil Chrome dédié au scraper : 179 Mo, et il se reconstruit tout seul (au
+# prix d'un nouveau challenge Cloudflare à passer).
+.chrome-profile/
+
+# Cache disque des pages et des réponses JSON : tout se retélécharge.
+cache/
+
+# Sorties générées par build_console.py et build_json.py.
+# `index.html` fait exception : c'est la copie publiée sur GitHub Pages, la
+# seule sortie que le dépôt garde (voir la section « Publication » du README).
+console.html
+output/
+
+__pycache__/
+*.pyc

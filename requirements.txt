@@ -1,0 +1,13 @@
+# Récupération : Playwright ne sert qu'à s'attacher en CDP à un Chrome déjà
+# lancé (voir browser.py). Le navigateur qu'il télécharge n'est pas utilisé —
+# `playwright install` n'est donc pas nécessaire.
+playwright>=1.40
+
+# Parsing HTML. lxml est le backend passé à BeautifulSoup dans parse_match.py et
+# fetch_flashscore.py : sans lui, l'appel échoue.
+beautifulsoup4>=4.12
+lxml>=5.0
+
+# Écussons : crests.py lit les PNG des logos pour en extraire les couleurs
+# dominantes des clubs.
+Pillow>=10.0

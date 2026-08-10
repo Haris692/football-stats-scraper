@@ -1,0 +1,27 @@
+{
+  "_lisez_moi": [
+    "Diffuseur par match. Aucune source automatique n'existe pour cette division :",
+    "Forebet n'expose rien, et Live Soccer TV ne couvre que la 1re division",
+    "koweïtienne (voir PROGRESS.md). C'est donc une saisie manuelle.",
+    "",
+    "'channels' : les chaînes qui diffusent habituellement la D1 koweïtienne.",
+    "Tant qu'un match n'a pas d'entrée dans 'matches', la console affiche ces",
+    "chaînes comme une possibilité NON CONFIRMÉE, et le prompt Instagram",
+    "n'imprime rien — on ne publie pas une info de diffusion incertaine.",
+    "",
+    "'matches' : identifiant du match (celui de l'URL Forebet) -> chaîne exacte.",
+    "Dès qu'une entrée existe, elle est traitée comme confirmée et apparaît",
+    "partout, prompt Instagram compris."
+  ],
+  "channels": [
+    "Kuwait TV 2",
+    "Kuwait TV Sport",
+    "Kuwait TV Sport 2"
+  ],
+  "matches": {
+    "2487393": "",
+    "2487392": "",
+    "2487390": "",
+    "2487391": ""
+  }
+}

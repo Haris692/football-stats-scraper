@@ -1,0 +1,1382 @@
+<!doctype html>
+<html lang="fr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Console Forebet — Division 1 Koweït</title>
+<style>
+/* ---------------------------------------------------------------------------
+   Palette validée avec scripts/validate_palette.js (skill dataviz) :
+   entités #2a78d6 / #eb6834 (clair), #3987e5 / #d95926 (sombre) — tous les
+   contrôles PASS, séparation CVD ΔE 24.7 clair / 26.8 sombre.
+
+   Le domicile est TOUJOURS bleu et l'extérieur TOUJOURS orange, partout : la
+   couleur suit l'équipe, jamais son rang ni son résultat. Le gris `--muted-bar`
+   n'est jamais une équipe : il porte les buts encaissés, que la position sous
+   la ligne de base distingue déjà.
+--------------------------------------------------------------------------- */
+:root {
+  color-scheme: light;
+  --surface-1: #fcfcfb;
+  --plane: #f9f9f7;
+  --text-primary: #0b0b0b;
+  --text-secondary: #52514e;
+  --text-muted: #898781;
+  --grid: #e1e0d9;
+  --axis: #c3c2b7;
+  --border: rgba(11, 11, 11, 0.10);
+  --home: #2a78d6;
+  --away: #eb6834;
+  --muted-bar: #898781;
+  --good: #0ca30c;
+  --critical: #d03b3b;
+  --shadow: 0 1px 2px rgba(11, 11, 11, 0.05);
+}
+@media (prefers-color-scheme: dark) {
+  :root:where(:not([data-theme="light"])) {
+    color-scheme: dark;
+    --surface-1: #1a1a19; --plane: #0d0d0d;
+    --text-primary: #ffffff; --text-secondary: #c3c2b7; --text-muted: #898781;
+    --grid: #2c2c2a; --axis: #383835; --border: rgba(255, 255, 255, 0.10);
+    --home: #3987e5; --away: #d95926; --muted-bar: #898781;
+    --shadow: none;
+  }
+}
+:root[data-theme="dark"] {
+  color-scheme: dark;
+  --surface-1: #1a1a19; --plane: #0d0d0d;
+  --text-primary: #ffffff; --text-secondary: #c3c2b7; --text-muted: #898781;
+  --grid: #2c2c2a; --axis: #383835; --border: rgba(255, 255, 255, 0.10);
+  --home: #3987e5; --away: #d95926; --muted-bar: #898781;
+  --shadow: none;
+}
+
+* { box-sizing: border-box; }
+body {
+  margin: 0; background: var(--plane); color: var(--text-primary);
+  font: 15px/1.5 system-ui, -apple-system, "Segoe UI", sans-serif;
+  -webkit-font-smoothing: antialiased;
+}
+.wrap { max-width: 1080px; margin: 0 auto; padding: 24px 20px 72px; }
+
+.topbar { display: flex; flex-wrap: wrap; gap: 12px; align-items: center; justify-content: space-between; margin-bottom: 20px; }
+.brand { font-size: 13px; letter-spacing: .08em; text-transform: uppercase; color: var(--text-muted); }
+.controls { display: flex; gap: 8px; align-items: center; }
+select, .btn {
+  font: inherit; font-size: 13px; color: var(--text-primary);
+  background: var(--surface-1); border: 1px solid var(--border);
+  border-radius: 8px; padding: 7px 10px; cursor: pointer;
+}
+.btn:hover, select:hover { border-color: var(--axis); }
+
+.card {
+  background: var(--surface-1); border: 1px solid var(--border);
+  border-radius: 12px; padding: 20px; margin-bottom: 16px; box-shadow: var(--shadow);
+}
+.card > h2 { margin: 0 0 4px; font-size: 13px; font-weight: 600; letter-spacing: .06em; text-transform: uppercase; color: var(--text-muted); }
+.card > .sub { margin: 0 0 18px; font-size: 13px; color: var(--text-secondary); max-width: 68ch; }
+
+/* --- bandeau --- */
+.matchhead { display: flex; flex-wrap: wrap; gap: 6px 20px; align-items: baseline; }
+.vs { font-size: 22px; font-weight: 600; display: flex; flex-wrap: wrap; align-items: center; gap: 10px; }
+.vs .sep { color: var(--text-muted); font-weight: 400; }
+.dot { width: 10px; height: 10px; border-radius: 50%; flex: none; display: inline-block; }
+.dot.home { background: var(--home); }
+.dot.away { background: var(--away); }
+.kickoff { font-size: 13px; color: var(--text-secondary); width: 100%; }
+
+/* --- carte d'identité : deux colonnes de tuiles --- */
+.idgrid { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
+@media (max-width: 700px) { .idgrid { grid-template-columns: 1fr; } }
+.idcol { border: 1px solid var(--border); border-radius: 10px; padding: 14px 16px; }
+.idname { display: flex; align-items: center; gap: 8px; font-weight: 600; margin-bottom: 2px; }
+.idrank { font-size: 13px; color: var(--text-secondary); margin-bottom: 12px; }
+.tiles { display: grid; grid-template-columns: repeat(3, 1fr); gap: 12px 10px; }
+.tile .tl { font-size: 11px; color: var(--text-muted); letter-spacing: .03em; }
+/* Chiffres proportionnels : tabular-nums fait « respirer » un grand nombre. */
+.tile .tv { font-size: 21px; font-weight: 600; line-height: 1.2; }
+.tile .tn { font-size: 11px; color: var(--text-muted); }
+
+/* --- comparatif tête à tête --- */
+.h2h { display: grid; grid-template-columns: 62px 1fr 178px 1fr 62px; align-items: center; gap: 6px 10px; }
+.h2h .lbl { text-align: center; font-size: 13px; color: var(--text-secondary); }
+.h2h .vh, .h2h .va { font-size: 13px; font-variant-numeric: tabular-nums; }
+.h2h .vh { text-align: right; }
+.h2h .grp {
+  grid-column: 1 / -1; font-size: 11px; letter-spacing: .08em; text-transform: uppercase;
+  color: var(--text-muted); margin: 14px 0 2px; border-top: 1px solid var(--grid); padding-top: 12px;
+}
+.h2h .grp:first-child { margin-top: 0; border-top: 0; padding-top: 0; }
+.barL, .barR { height: 14px; display: flex; }
+.barL { justify-content: flex-end; }
+.barL i { background: var(--home); border-radius: 4px 0 0 4px; height: 100%; display: block; }
+.barR i { background: var(--away); border-radius: 0 4px 4px 0; height: 100%; display: block; }
+
+/* --- statistiques relevées du match --- */
+/* Une seule barre coupée en deux, parce que la possession est un partage :
+   deux barres indépendantes laisseraient croire à deux mesures séparées. */
+.poss { display: flex; height: 26px; border-radius: 6px; overflow: hidden; margin: 4px 0 6px; }
+.poss i { display: block; height: 100%; }
+.poss .ph { background: var(--home); }
+.poss .pa { background: var(--away); }
+.possv { display: flex; justify-content: space-between; font-size: 13px; font-variant-numeric: tabular-nums; }
+
+.grp2 {
+  font-size: 11px; letter-spacing: .08em; text-transform: uppercase;
+  color: var(--text-muted); border-top: 1px solid var(--grid); padding-top: 12px;
+}
+.tline { display: flex; flex-wrap: wrap; gap: 6px; margin-top: 6px; }
+.ev {
+  display: inline-flex; align-items: center; gap: 6px; font-size: 12px;
+  border: 1px solid var(--grid); border-radius: 999px; padding: 3px 10px 3px 4px;
+}
+.ev b { font-variant-numeric: tabular-nums; font-weight: 600; }
+.ev .side { width: 8px; height: 8px; border-radius: 50%; flex: none; }
+.ev .side.home { background: var(--home); }
+.ev .side.away { background: var(--away); }
+
+/* --- graphique buts marqués / encaissés --- */
+/* Les colonnes sont plafonnées à 26 px : le bloc prend donc la largeur de ses
+   données, et la ligne de base comme l'axe s'alignent dessus plutôt que de
+   traverser une zone vide qui se lirait comme des matchs manquants. */
+.gwrap { margin-top: 6px; width: fit-content; max-width: 100%; min-width: min(100%, 380px); }
+.gchart { display: flex; align-items: stretch; gap: 3px; height: 96px; }
+.gcol { flex: 1 1 0; max-width: 24px; min-width: 6px; display: flex; flex-direction: column; cursor: default; }
+.gcol .up { flex: 1; display: flex; align-items: flex-end; }
+.gcol .dn { flex: 1; display: flex; align-items: flex-start; }
+.gcol i { width: 100%; display: block; min-height: 2px; }
+.gcol .up i { border-radius: 4px 4px 0 0; }
+.gcol .dn i { border-radius: 0 0 4px 4px; background: var(--muted-bar); }
+.baseline { height: 1px; background: var(--axis); margin: 0; }
+.gaxis { display: flex; justify-content: space-between; font-size: 11px; color: var(--text-muted); margin-top: 6px; }
+
+/* --- pastilles de forme : lettre + couleur, jamais la couleur seule --- */
+.form { display: inline-flex; gap: 3px; flex-wrap: wrap; }
+.form span { width: 19px; height: 19px; border-radius: 4px; font-size: 11px; font-weight: 700; color: #fff; display: grid; place-items: center; }
+.form .V { background: var(--good); }
+.form .N { background: var(--text-muted); }
+.form .D { background: var(--critical); }
+
+.keys { display: flex; flex-wrap: wrap; gap: 4px 18px; font-size: 13px; color: var(--text-secondary); }
+.key { display: flex; align-items: center; gap: 7px; }
+.swatch { width: 10px; height: 10px; border-radius: 3px; flex: none; }
+
+table { width: 100%; border-collapse: collapse; font-size: 13px; }
+th, td { padding: 7px 9px; text-align: right; border-bottom: 1px solid var(--grid); }
+th { color: var(--text-muted); font-weight: 600; font-size: 12px; }
+th:first-child, td:first-child, th.l, td.l { text-align: left; }
+td { font-variant-numeric: tabular-nums; }
+tbody tr:last-child td { border-bottom: 0; }
+tr.mark-home td { background: color-mix(in srgb, var(--home) 9%, transparent); }
+tr.mark-away td { background: color-mix(in srgb, var(--away) 9%, transparent); }
+
+details { margin-top: 12px; }
+summary { cursor: pointer; font-size: 13px; color: var(--text-secondary); padding: 6px 0; list-style: none; }
+summary::-webkit-details-marker { display: none; }
+summary::before { content: "▸ "; color: var(--text-muted); }
+details[open] summary::before { content: "▾ "; }
+
+.split { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; }
+@media (max-width: 700px) { .split { grid-template-columns: 1fr; } }
+.teamhead { display: flex; flex-wrap: wrap; gap: 8px 14px; align-items: center; justify-content: space-between; margin-bottom: 10px; }
+.teamhead .tt { font-weight: 600; }
+.teamhead .tr2 { font-size: 13px; color: var(--text-secondary); font-variant-numeric: tabular-nums; }
+
+/* --- liste des rencontres --- */
+.daylabel {
+  font-size: 12px; letter-spacing: .06em; text-transform: uppercase;
+  color: var(--text-muted); margin: 18px 0 6px;
+}
+.daylabel:first-of-type { margin-top: 0; }
+.fx {
+  display: grid; grid-template-columns: 92px 1fr auto; align-items: center;
+  gap: 12px; width: 100%; text-align: left;
+  padding: 11px 12px; border: 1px solid transparent; border-radius: 9px;
+  background: none; color: inherit; font: inherit;
+}
+button.fx { cursor: pointer; }
+button.fx:hover { background: color-mix(in srgb, var(--text-primary) 4%, transparent); }
+.fx[aria-current="true"] { border-color: var(--axis); background: color-mix(in srgb, var(--text-primary) 5%, transparent); }
+.fx .when { font-size: 13px; color: var(--text-secondary); font-variant-numeric: tabular-nums; }
+.fx .who { display: flex; flex-wrap: wrap; align-items: center; gap: 8px; font-size: 15px; }
+.fx .who .sep { color: var(--text-muted); }
+.fx .go { font-size: 12px; color: var(--text-muted); }
+.fx .sc { font-weight: 600; font-variant-numeric: tabular-nums; }
+.badge {
+  font-size: 11px; letter-spacing: .04em; text-transform: uppercase;
+  border: 1px solid var(--border); border-radius: 999px; padding: 2px 8px;
+  color: var(--text-secondary);
+}
+.empty { font-size: 13px; color: var(--text-secondary); padding: 8px 0; }
+
+/* --- écussons --- */
+.crest { width: 26px; height: 26px; object-fit: contain; flex: none; }
+.crest.sm { width: 20px; height: 20px; }
+.crest.lg { width: 42px; height: 42px; }
+/* Beaucoup d'écussons sont sur fond transparent avec des traits sombres :
+   sur le thème sombre ils disparaîtraient sans ce halo. */
+:root[data-theme="dark"] .crest,
+:root:where(:not([data-theme="light"])) .crest {
+  background: rgba(255, 255, 255, 0.92); border-radius: 5px; padding: 1px;
+}
+@media (prefers-color-scheme: light) {
+  :root:where(:not([data-theme="dark"])) .crest { background: none; padding: 0; }
+}
+.clubchip { width: 10px; height: 10px; border-radius: 3px; flex: none; border: 1px solid var(--border); }
+
+/* --- générateur de prompt --- */
+.btnrow { display: flex; flex-wrap: wrap; gap: 8px; align-items: center; margin-top: 14px; }
+.btn.primary { border-color: var(--axis); font-weight: 600; }
+.promptbox {
+  margin-top: 14px; border: 1px solid var(--border); border-radius: 10px;
+  padding: 14px; background: var(--plane);
+}
+.promptbox textarea {
+  width: 100%; min-height: 320px; resize: vertical;
+  font: 12px/1.55 ui-monospace, SFMono-Regular, Consolas, monospace;
+  color: var(--text-primary); background: var(--surface-1);
+  border: 1px solid var(--border); border-radius: 8px; padding: 12px;
+}
+.copied { font-size: 13px; color: var(--good); }
+
+/* --- deux colonnes : stats à gauche, classement collant à droite --- */
+.layout { display: grid; grid-template-columns: minmax(0, 1fr) 296px; gap: 16px; align-items: start; }
+@media (max-width: 940px) { .layout { grid-template-columns: minmax(0, 1fr); } }
+.side { position: sticky; top: 16px; }
+/* Le classement ne doit jamais dépasser l'écran : au-delà il défile seul. */
+.side .card { max-height: calc(100vh - 32px); overflow-y: auto; }
+.mini { width: 100%; border-collapse: collapse; font-size: 13px; }
+.mini td { padding: 5px 4px; border-bottom: 1px solid var(--grid); text-align: right; }
+.mini tr:last-child td { border-bottom: 0; }
+.mini .r { width: 20px; color: var(--text-muted); font-variant-numeric: tabular-nums; }
+.mini .t { text-align: left; width: 100%; }
+.mini .t span { display: inline-flex; align-items: center; gap: 6px; }
+.mini .p { font-weight: 600; font-variant-numeric: tabular-nums; }
+.mini .d { color: var(--text-secondary); font-variant-numeric: tabular-nums; width: 34px; }
+.mini .nm { overflow: hidden; text-overflow: ellipsis; white-space: nowrap; max-width: 132px; display: inline-block; vertical-align: middle; }
+.mini tr.mark-home td { background: color-mix(in srgb, var(--home) 11%, transparent); }
+.mini tr.mark-away td { background: color-mix(in srgb, var(--away) 11%, transparent); }
+.mini thead td { color: var(--text-muted); font-size: 11px; border-bottom: 1px solid var(--axis); }
+
+.scroll { overflow-x: auto; }
+.foot { margin-top: 26px; font-size: 12px; color: var(--text-muted); }
+</style>
+</head>
+<body>
+<div class="wrap">
+  <div class="topbar">
+    <div class="brand">Console Forebet · Division 1 Koweït</div>
+    <div class="controls">
+      <select id="team" aria-label="Filtrer par équipe"></select>
+      <select id="scope" aria-label="Filtrer par période">
+        <option value="upcoming">À venir</option>
+        <option value="today">Aujourd'hui</option>
+        <option value="played">Joués</option>
+        <option value="all">Toutes</option>
+      </select>
+      <button class="btn" id="theme" type="button">Thème</button>
+    </div>
+  </div>
+  <div id="fixtures"></div>
+  <div id="app"></div>
+  <div class="foot" id="foot"></div>
+</div>
+
+<script>
+const DATA = /*__CONSOLE_DATA__*/null;
+
+/* ---------- utilitaires ---------- */
+const el = (t, cls, txt) => {
+  const n = document.createElement(t);
+  if (cls) n.className = cls;
+  if (txt !== undefined && txt !== null) n.textContent = txt;
+  return n;
+};
+// Les totaux de la section « autres » sont parfois du texte (« 0 / 0 » pour les
+// penaltys) : on ne trace une barre que si les deux côtés sont numériques.
+const num = v => {
+  if (typeof v === "number") return v;
+  if (typeof v !== "string") return null;
+  return /^-?\d+(?:[.,]\d+)?$/.test(v) ? parseFloat(v.replace(",", ".")) : null;
+};
+const r2 = d => (d === null || d === undefined) ? "—" : Math.round(d * 100) / 100;
+const rowOf = (m, name) => (m.standings || []).find(r => r.team === name) || null;
+
+/* Écusson du club, embarqué en data: URI — la page reste un fichier unique. */
+function crestOf(name, size) {
+  const entry = (DATA.teams || {})[name];
+  if (!entry || !entry.badge) return null;
+  const img = el("img", "crest" + (size ? " " + size : ""));
+  img.src = entry.badge;
+  img.alt = "";           // décoratif : le nom du club est déjà écrit à côté
+  img.loading = "lazy";
+  return img;
+}
+
+/* Pastille de la couleur réelle du club, à côté de son nom. */
+function clubChip(name) {
+  const colors = ((DATA.teams || {})[name] || {}).colors || [];
+  if (!colors.length) return null;
+  const chip = el("span", "clubchip");
+  chip.style.background = colors[0];
+  chip.title = `${name} — ${colors[0]}`;
+  return chip;
+}
+
+function teamLabel(name, size) {
+  const box = el("span");
+  box.style.display = "inline-flex";
+  box.style.alignItems = "center";
+  box.style.gap = "8px";
+  const crest = crestOf(name, size);
+  if (crest) box.appendChild(crest);
+  box.appendChild(el("span", null, name));
+  return box;
+}
+// Blocs : 0 face à face, 1 et 2 le parcours complet de chaque équipe,
+// 3 le domicile de l'équipe qui reçoit, 4 l'extérieur de l'équipe qui se déplace.
+const block = (m, i) => (m.result_blocks || [])[i] || null;
+
+/* ---------- bandeau ---------- */
+function renderHead(m) {
+  const card = el("div", "card");
+  const box = el("div", "matchhead");
+  const vs = el("div", "vs");
+  vs.appendChild(el("span", "dot home"));
+  vs.appendChild(teamLabel(m.home, "lg"));
+  vs.appendChild(el("span", "sep", "reçoit"));
+  vs.appendChild(el("span", "dot away"));
+  vs.appendChild(teamLabel(m.away, "lg"));
+  box.appendChild(vs);
+  box.appendChild(el("div", "kickoff",
+    `${m.kickoff || "date inconnue"}  ·  ${m.competition_tag || ""}  ·  #${m.match_id}`));
+  const tv = broadcastLine(m);
+  if (tv) box.appendChild(tv);
+  card.appendChild(box);
+  return card;
+}
+
+/* Diffuseur : confirmé (saisi) ou simple rappel des chaînes habituelles. */
+function broadcastLine(m) {
+  const b = m.broadcast;
+  if (!b) return null;
+  const line = el("div", "kickoff");
+  if (b.confirmed) {
+    line.appendChild(el("strong", null, "Diffusion : "));
+    line.appendChild(document.createTextNode(b.channel));
+  } else if (b.usual && b.usual.length) {
+    line.style.color = "var(--text-muted)";
+    line.textContent = "Diffusion non renseignée — habituellement " +
+      b.usual.join(", ") + ".";
+  } else {
+    return null;
+  }
+  return line;
+}
+
+/* ---------- carte d'identité ---------- */
+function tile(label, value, note) {
+  const t = el("div", "tile");
+  t.appendChild(el("div", "tl", label));
+  t.appendChild(el("div", "tv", value));
+  if (note) t.appendChild(el("div", "tn", note));
+  return t;
+}
+
+function renderIdentity(m) {
+  const card = el("div", "card");
+  card.appendChild(el("h2", null, "Carte d'identité"));
+  card.appendChild(el("p", "sub",
+    "Chiffres de la saison en cours, tirés du classement et des relevés de la " +
+    "source. Les moyennes sont par match joué."));
+
+  const grid = el("div", "idgrid");
+  [["home", m.home], ["away", m.away]].forEach(([side, name]) => {
+    const col = el("div", "idcol");
+    const head = el("div", "idname");
+    head.appendChild(el("span", "dot " + side));
+    head.appendChild(teamLabel(name));
+    const chip = clubChip(name);
+    if (chip) head.appendChild(chip);
+    col.appendChild(head);
+
+    const st = rowOf(m, name);
+    const stats = (m.stats || {})[side] || {};
+    col.appendChild(el("div", "idrank", st
+      ? `${st.rank}ᵉ au classement · ${st.points} pts en ${st.played} matchs`
+      : "position au classement indisponible"));
+
+    const tiles = el("div", "tiles");
+    if (st) {
+      tiles.appendChild(tile("Victoires", st.wins, `sur ${st.played}`));
+      tiles.appendChild(tile("Nuls", st.draws, ""));
+      tiles.appendChild(tile("Défaites", st.losses, ""));
+    }
+    tiles.appendChild(tile("Buts pour", stats.goals?.scored ?? "—",
+      stats.goals?.scored_avg != null ? r2(stats.goals.scored_avg) + " / match" : ""));
+    tiles.appendChild(tile("Buts contre", stats.goals?.conceded ?? "—",
+      stats.goals?.conceded_avg != null ? r2(stats.goals.conceded_avg) + " / match" : ""));
+    tiles.appendChild(tile("Différence",
+      st ? (st.goal_diff > 0 ? "+" + st.goal_diff : st.goal_diff) : "—", ""));
+    tiles.appendChild(tile("Tirs", stats.shots?.total ?? "—",
+      stats.shots?.total_avg != null ? r2(stats.shots.total_avg) + " / match" : ""));
+    tiles.appendChild(tile("Att. dangereuses", stats.attacks?.dangerous ?? "—",
+      stats.attacks?.dangerous_avg != null ? r2(stats.attacks.dangerous_avg) + " / match" : ""));
+    const cs = (m.stats?.others || {})["Aucun but encaissé"];
+    tiles.appendChild(tile("Clean sheets", cs ? (cs[side]?.total ?? "—") : "—", ""));
+    col.appendChild(tiles);
+
+    // Les deux moitiés de cette carte ne couvrent pas le même périmètre : le
+    // classement ne compte que le championnat, tandis que les relevés de
+    // Forebet agrègent toutes les compétitions. Quand les deux divergent, on le
+    // dit — sinon « 9V sur 16 » à côté de « 20 buts contre » (sur 17 matchs)
+    // passe pour une contradiction.
+    const runs = block(m, side === "home" ? 1 : 2);
+    if (st && runs) {
+      const extra = runs.matches.filter(r => r.competition && r.competition !== m.competition_tag);
+      if (extra.length) {
+        const names = [...new Set(extra.map(r => r.competition))].join(", ");
+        const note = el("div", "idrank",
+          `Victoires, nuls et défaites viennent du championnat (${st.played} matchs). ` +
+          `Buts, tirs et attaques couvrent ${runs.record.played} matchs, ` +
+          `soit ${extra.length} de plus hors championnat (${names}).`);
+        note.style.margin = "14px 0 0";
+        col.appendChild(note);
+      }
+    }
+    grid.appendChild(col);
+  });
+  card.appendChild(grid);
+  return card;
+}
+
+/* ---------- comparatif tête à tête ---------- */
+function h2hRow(grid, label, hv, av) {
+  const h = num(hv), a = num(av);
+  const max = Math.max(Math.abs(h ?? 0), Math.abs(a ?? 0)) || 1;
+
+  grid.appendChild(el("div", "vh", h === null ? String(hv ?? "—") : String(r2(h))));
+  const left = el("div", "barL");
+  if (h !== null) {
+    const i = el("i");
+    i.style.width = (Math.abs(h) / max * 100) + "%";
+    i.title = `${label} — ${grid.dataset.home} : ${r2(h)}`;
+    left.appendChild(i);
+  }
+  grid.appendChild(left);
+  grid.appendChild(el("div", "lbl", label));
+  const right = el("div", "barR");
+  if (a !== null) {
+    const i = el("i");
+    i.style.width = (Math.abs(a) / max * 100) + "%";
+    i.title = `${label} — ${grid.dataset.away} : ${r2(a)}`;
+    right.appendChild(i);
+  }
+  grid.appendChild(right);
+  grid.appendChild(el("div", "va", a === null ? String(av ?? "—") : String(r2(a))));
+}
+
+function renderCompare(m) {
+  const card = el("div", "card");
+  card.appendChild(el("h2", null, "Comparatif"));
+  card.appendChild(el("p", "sub",
+    "Chaque ligne est mise à l'échelle indépendamment : la longueur compare les " +
+    "deux équipes entre elles, pas une ligne à l'autre. Les valeurs sont écrites " +
+    "de part et d'autre, donc rien ne dépend de la couleur ni du survol."));
+
+  const legend = el("div", "keys");
+  legend.style.marginBottom = "18px";
+  [["home", m.home], ["away", m.away]].forEach(([side, name]) => {
+    const k = el("div", "key");
+    const sw = el("span", "swatch");
+    sw.style.background = `var(--${side})`;
+    k.appendChild(sw);
+    k.appendChild(teamLabel(name, "sm"));
+    legend.appendChild(k);
+  });
+  card.appendChild(legend);
+
+  const grid = el("div", "h2h");
+  grid.dataset.home = m.home;
+  grid.dataset.away = m.away;
+  const H = m.stats?.home || {}, A = m.stats?.away || {};
+  const others = m.stats?.others || {};
+  const group = t => grid.appendChild(el("div", "grp", t));
+  const pick = (label, key) => [label, others[key]?.home?.total, others[key]?.away?.total];
+
+  group("Attaque");
+  h2hRow(grid, "Buts marqués", H.goals?.scored, A.goals?.scored);
+  h2hRow(grid, "Buts marqués / match", H.goals?.scored_avg, A.goals?.scored_avg);
+  h2hRow(grid, "Tirs", H.shots?.total, A.shots?.total);
+  h2hRow(grid, "Tirs / match", H.shots?.total_avg, A.shots?.total_avg);
+  h2hRow(grid, "Attaques", H.attacks?.total, A.attacks?.total);
+  h2hRow(grid, "Attaques dangereuses", H.attacks?.dangerous, A.attacks?.dangerous);
+
+  group("Défense");
+  h2hRow(grid, "Buts encaissés", H.goals?.conceded, A.goals?.conceded);
+  h2hRow(grid, "Buts encaissés / match", H.goals?.conceded_avg, A.goals?.conceded_avg);
+  if (others["Aucun but encaissé"]) h2hRow(grid, ...pick("Clean sheets", "Aucun but encaissé"));
+
+  const jeu = ["Corners", "Hors-jeu"].filter(k => others[k]);
+  if (jeu.length) {
+    group("Jeu");
+    jeu.forEach(k => h2hRow(grid, ...pick(k, k)));
+  }
+
+  const disc = ["Fautes", "Cartons jaunes", "Cartons rouges"].filter(k => others[k]);
+  if (disc.length) {
+    group("Discipline");
+    disc.forEach(k => h2hRow(grid, ...pick(k, k)));
+  }
+  card.appendChild(grid);
+
+  // Forebet expose des rubriques qu'il ne renseigne pas pour ce championnat
+  // (touches, six mètres, tacles… à 0 ou « - » des deux côtés). Une barre à zéro
+  // se lirait comme une mesure réelle : on les nomme au lieu de les tracer.
+  const missing = Object.entries(others)
+    .filter(([, v]) => {
+      const h = num(v.home?.total), a = num(v.away?.total);
+      return (h === null || h === 0) && (a === null || a === 0);
+    })
+    .map(([k]) => k.toLowerCase());
+  if (missing.length) {
+    const note = el("p", "sub", "Non renseigné par la source pour ce championnat : " + missing.join(", ") + ".");
+    note.style.margin = "18px 0 0";
+    card.appendChild(note);
+  }
+  return card;
+}
+
+/* ---------- statistiques relevées du match ---------- */
+/* Tout le reste de la console agrège une saison. Cette carte-là, et elle seule,
+   décrit ce qui s'est passé sur le terrain ce soir-là. D'où une carte à part :
+   mélangée au comparatif, on confondrait « 33 tirs cette saison » et « 33 tirs
+   dans ce match ». */
+const STAT_LABELS = {
+  goals: "Buts", shots: "Tirs", shots_on: "Tirs cadrés", shots_off: "Tirs non cadrés",
+  shots_blocked: "Tirs contrés", shots_inside: "Tirs dans la surface",
+  shots_outside: "Tirs hors surface", corners: "Corners", offsides: "Hors-jeu",
+  passes: "Passes", passes_accuracy: "Passes réussies (%)", saves: "Arrêts",
+  tackles: "Tacles", fouls: "Fautes", yellow: "Cartons jaunes", red: "Cartons rouges",
+  substitutions: "Remplacements",
+};
+const STAT_GROUPS = [
+  ["Attaque", ["goals", "shots", "shots_on", "shots_off", "shots_blocked",
+               "shots_inside", "shots_outside"]],
+  ["Jeu", ["corners", "offsides", "passes", "passes_accuracy", "saves", "tackles"]],
+  ["Discipline", ["fouls", "yellow", "red"]],
+  ["Divers", ["substitutions"]],
+];
+
+function possessionBar(s) {
+  const h = num(s.home.possession), a = num(s.away.possession);
+  if (h === null || a === null || h + a === 0) return null;
+  const box = el("div");
+  const values = el("div", "possv");
+  values.appendChild(el("span", null, `${h} %`));
+  values.appendChild(el("span", null, "Possession"));
+  values.appendChild(el("span", null, `${a} %`));
+  const bar = el("div", "poss");
+  const left = el("i", "ph"), right = el("i", "pa");
+  left.style.width = (h / (h + a) * 100) + "%";
+  right.style.width = (a / (h + a) * 100) + "%";
+  bar.appendChild(left);
+  bar.appendChild(right);
+  box.appendChild(values);
+  box.appendChild(bar);
+  return box;
+}
+
+function renderTimeline(s, m) {
+  if (!s.timeline || !s.timeline.length) return null;
+  const box = el("div");
+  box.style.marginTop = "22px";
+  box.appendChild(el("div", "grp2", "Chronologie"));
+  const line = el("div", "tline");
+  s.timeline.forEach(e => {
+    const chip = el("div", "ev");
+    if (e.side) chip.appendChild(el("span", "side " + e.side));
+    chip.appendChild(el("b", null, e.minute + (e.extra ? "+" + e.extra : "") + "'"));
+    // Les noms de joueurs sont toujours absents sur cette division : le libellé
+    // et le camp sont tout ce qu'on peut honnêtement afficher.
+    chip.appendChild(el("span", null, e.label));
+    chip.title = e.side ? `${e.label} — ${e.side === "home" ? m.home : m.away}` : e.label;
+    line.appendChild(chip);
+  });
+  box.appendChild(line);
+  return box;
+}
+
+function renderMatchStats(m) {
+  const s = m.match_stats;
+  if (!s) return null;
+  const card = el("div", "card");
+  card.appendChild(el("h2", null, "Statistiques du match"));
+
+  const bits = [];
+  if (s.venue) bits.push(s.venue + (s.venue_capacity ? ` (${s.venue_capacity} places)` : ""));
+  if (s.half_time) bits.push(`mi-temps ${s.half_time}`);
+  if (s.full_time) bits.push(`score final ${s.full_time}`);
+  card.appendChild(el("p", "sub",
+    "Relevé de cette rencontre, pas de la saison — c'est la seule carte de la " +
+    "page qui décrit ce match. " + (bits.length ? bits.join(" · ") + "." : "")));
+
+  const bar = possessionBar(s);
+  if (bar) card.appendChild(bar);
+
+  const grid = el("div", "h2h");
+  grid.style.marginTop = "18px";
+  grid.dataset.home = m.home;
+  grid.dataset.away = m.away;
+  let drawn = 0;
+  STAT_GROUPS.forEach(([title, keys]) => {
+    const present = keys.filter(k => s.fields.includes(k) &&
+      (s.home[k] !== null || s.away[k] !== null));
+    if (!present.length) return;
+    grid.appendChild(el("div", "grp", title));
+    present.forEach(k => {
+      h2hRow(grid, STAT_LABELS[k] || k, s.home[k], s.away[k]);
+      drawn++;
+    });
+  });
+  if (drawn) card.appendChild(grid);
+
+  const tl = renderTimeline(s, m);
+  if (tl) card.appendChild(tl);
+
+  // La source sert un zéro pour les rubriques qu'elle ne couvre pas : les taire
+  // vaut mieux que d'afficher « 0 faute », mais il faut dire qu'on les tait.
+  const absent = Object.keys(STAT_LABELS)
+    .filter(k => !s.fields.includes(k))
+    .map(k => STAT_LABELS[k].toLowerCase());
+  const notes = [];
+  if (absent.length) notes.push("Non relevé par la source sur ce match : " + absent.join(", ") + ".");
+  if (s.attacks && s.attacks.suspect) {
+    notes.push("Les attaques et attaques dangereuses sont écartées : la source " +
+      "en donne plus de dangereuses que de totales, le compte est faux.");
+  } else if (s.attacks) {
+    notes.push(`Attaques : ${s.attacks.home.total} contre ${s.attacks.away.total}, ` +
+      `dont ${s.attacks.home.dangerous} et ${s.attacks.away.dangerous} dangereuses.`);
+  }
+  notes.forEach(text => {
+    const p = el("p", "sub", text);
+    p.style.margin = "16px 0 0";
+    card.appendChild(p);
+  });
+  return card;
+}
+
+/* ---------- parcours : buts marqués / encaissés par match ---------- */
+function ownGoals(row) {
+  if (row.home_goals === null || row.subject_side === null) return null;
+  return row.subject_side === "home"
+    ? { own: row.home_goals, opp: row.away_goals, versus: row.away, at: "domicile" }
+    : { own: row.away_goals, opp: row.home_goals, versus: row.home, at: "extérieur" };
+}
+
+function goalChart(rows, side, scale) {
+  // Ordre chronologique : la source liste du plus récent au plus ancien.
+  const seq = rows.slice().reverse().map(r => ({ r, g: ownGoals(r) })).filter(x => x.g);
+  const wrap = el("div", "gwrap");
+  const chart = el("div", "gchart");
+  seq.forEach(({ r, g }) => {
+    const col = el("div", "gcol");
+    col.title = `${r.date} · ${r.home} ${r.score} ${r.away} (${r.competition})`;
+    const up = el("div", "up");
+    const a = el("i");
+    a.style.height = (g.own / scale * 100) + "%";
+    a.style.background = `var(--${side})`;
+    up.appendChild(a);
+    const dn = el("div", "dn");
+    const b = el("i");
+    b.style.height = (g.opp / scale * 100) + "%";
+    dn.appendChild(b);
+    col.appendChild(up);
+    col.appendChild(dn);
+    chart.appendChild(col);
+  });
+  wrap.appendChild(chart);
+  wrap.appendChild(el("div", "baseline"));
+  const axis = el("div", "gaxis");
+  axis.appendChild(el("span", null, "plus ancien"));
+  axis.appendChild(el("span", null, `échelle 0–${scale} buts`));
+  axis.appendChild(el("span", null, "plus récent"));
+  wrap.appendChild(axis);
+  return wrap;
+}
+
+function matchTable(rows) {
+  const scroll = el("div", "scroll");
+  const t = el("table");
+  t.innerHTML = "<thead><tr><th class='l'>Date</th><th class='l'>Domicile</th>" +
+    "<th>Score</th><th class='l'>Extérieur</th><th class='l'>Compét.</th></tr></thead>";
+  const tb = el("tbody");
+  rows.forEach(mt => {
+    const tr = el("tr");
+    tr.appendChild(el("td", "l", mt.date || "—"));
+    tr.appendChild(el("td", "l", mt.home));
+    tr.appendChild(el("td", null, mt.score || "—"));
+    tr.appendChild(el("td", "l", mt.away));
+    tr.appendChild(el("td", "l", mt.competition || "—"));
+    tb.appendChild(tr);
+  });
+  t.appendChild(tb);
+  scroll.appendChild(t);
+  return scroll;
+}
+
+function formChips(form) {
+  const box = el("div", "form");
+  [...(form || "")].forEach(ch => box.appendChild(el("span", ch, ch)));
+  return box;
+}
+
+function renderRuns(m) {
+  const card = el("div", "card");
+  card.appendChild(el("h2", null, "Parcours"));
+  card.appendChild(el("p", "sub",
+    "Un trait par match, du plus ancien au plus récent : au-dessus de la ligne " +
+    "les buts marqués, en dessous les buts encaissés. Les deux équipes partagent " +
+    "la même échelle, donc les hauteurs sont comparables d'un graphique à l'autre. " +
+    "Bilans recalculés depuis les résultats — Forebet rend ses pourcentages en " +
+    "JavaScript et les laisse vides dans le HTML."));
+
+  const blocks = [[1, "home", m.home], [2, "away", m.away]]
+    .map(([i, side, name]) => ({ b: block(m, i), side, name }))
+    .filter(x => x.b);
+
+  // Échelle commune : deux graphiques mis à l'échelle séparément se
+  // compareraient à tort.
+  let scale = 1;
+  blocks.forEach(({ b }) => b.matches.forEach(r => {
+    const g = ownGoals(r);
+    if (g) scale = Math.max(scale, g.own, g.opp);
+  }));
+
+  const legend = el("div", "keys");
+  legend.style.marginBottom = "18px";
+  // Deux pastilles pour « marqués » : la barre porte la couleur de son équipe,
+  // un seul échantillon en désignerait une et pas l'autre.
+  const k1 = el("div", "key");
+  ["home", "away"].forEach(side => {
+    const s = el("span", "swatch");
+    s.style.background = `var(--${side})`;
+    s.style.marginRight = "-3px";
+    k1.appendChild(s);
+  });
+  k1.appendChild(el("span", null, "buts marqués (au-dessus)"));
+  const k2 = el("div", "key");
+  const s2 = el("span", "swatch");
+  s2.style.background = "var(--muted-bar)";
+  k2.appendChild(s2);
+  k2.appendChild(el("span", null, "buts encaissés (en dessous)"));
+  legend.appendChild(k1);
+  legend.appendChild(k2);
+  card.appendChild(legend);
+
+  blocks.forEach(({ b, side, name }) => {
+    const sec = el("div");
+    sec.style.marginBottom = "24px";
+    const head = el("div", "teamhead");
+    const tt = el("div", "tt");
+    tt.style.display = "flex";
+    tt.style.alignItems = "center";
+    tt.style.gap = "8px";
+    tt.appendChild(el("span", "dot " + side));
+    tt.appendChild(teamLabel(name));
+    head.appendChild(tt);
+    const right = el("div", "teamhead");
+    right.style.gap = "12px";
+    const r = b.record;
+    right.appendChild(el("div", "tr2",
+      `${r.played} matchs · ${r.wins}V ${r.draws}N ${r.losses}D · ${r.goals_for}:${r.goals_against}`));
+    right.appendChild(formChips(b.form));
+    head.appendChild(right);
+    sec.appendChild(head);
+    sec.appendChild(goalChart(b.matches, side, scale));
+    const det = el("details");
+    det.appendChild(el("summary", null, `voir les ${b.matches.length} rencontres`));
+    det.appendChild(matchTable(b.matches));
+    sec.appendChild(det);
+    card.appendChild(sec);
+  });
+  return card;
+}
+
+/* ---------- contexte : domicile / extérieur / face à face ---------- */
+function renderContext(m) {
+  const card = el("div", "card");
+  card.appendChild(el("h2", null, "Contexte de la rencontre"));
+  card.appendChild(el("p", "sub",
+    "Les deux bilans qui concernent directement cette affiche — l'équipe qui " +
+    "reçoit à domicile, celle qui se déplace à l'extérieur — puis leurs " +
+    "confrontations passées."));
+
+  const split = el("div", "split");
+  [[3, "home"], [4, "away"]].forEach(([i, side]) => {
+    const b = block(m, i);
+    if (!b) return;
+    const col = el("div");
+    const head = el("div", "teamhead");
+    const tt = el("div", "tt");
+    tt.appendChild(el("span", "dot " + side));
+    tt.appendChild(document.createTextNode(" " + (b.display_title || b.title)));
+    head.appendChild(tt);
+    col.appendChild(head);
+    const r = b.record;
+    col.appendChild(el("div", "tr2",
+      `${r.played} matchs · ${r.wins}V ${r.draws}N ${r.losses}D · ${r.goals_for}:${r.goals_against}`));
+    const f = el("div");
+    f.style.marginTop = "8px";
+    f.appendChild(formChips(b.form));
+    col.appendChild(f);
+    const det = el("details");
+    det.appendChild(el("summary", null, `voir les ${b.matches.length} rencontres`));
+    det.appendChild(matchTable(b.matches));
+    col.appendChild(det);
+    split.appendChild(col);
+  });
+  card.appendChild(split);
+
+  const h2h = block(m, 0);
+  if (h2h && h2h.matches.length) {
+    const sec = el("div");
+    sec.style.marginTop = "24px";
+    sec.style.borderTop = "1px solid var(--grid)";
+    sec.style.paddingTop = "16px";
+    const head = el("div", "teamhead");
+    head.appendChild(el("div", "tt", "Face à face"));
+    const r = h2h.record;
+    // Le bilan du face à face est celui d'UNE des deux équipes (celle que la
+    // source marque `active-team`). Sans le nom, on l'attribue spontanément à
+    // l'équipe qui reçoit — l'inverse de la vérité dans notre match de test.
+    head.appendChild(el("div", "tr2", h2h.subject
+      ? `vu par ${h2h.subject} : ${r.played} matchs · ${r.wins}V ${r.draws}N ${r.losses}D · ${r.goals_for}:${r.goals_against}`
+      : `${r.played} matchs`));
+    sec.appendChild(head);
+    sec.appendChild(matchTable(h2h.matches));
+    card.appendChild(sec);
+  }
+  return card;
+}
+
+/* ---------- classement (panneau latéral) ---------- */
+function renderStandings(m) {
+  const card = el("div", "card");
+  card.appendChild(el("h2", null, "Classement"));
+  card.appendChild(el("p", "sub",
+    "Les deux équipes de la rencontre sont surlignées. Le championnat koweïtien " +
+    "départage à la confrontation directe, pas à la différence de buts."));
+
+  const rows = m.standings || [];
+  const t = el("table", "mini");
+  const head = el("thead");
+  const hr = el("tr");
+  [["r", ""], ["t", "Équipe"], ["", "J"], ["p", "Pts"], ["d", "+/-"]]
+    .forEach(([cls, label]) => hr.appendChild(el("td", cls, label)));
+  head.appendChild(hr);
+  t.appendChild(head);
+
+  const tb = el("tbody");
+  rows.forEach(row => {
+    const tr = el("tr");
+    if (row.team === m.home) tr.className = "mark-home";
+    if (row.team === m.away) tr.className = "mark-away";
+
+    tr.appendChild(el("td", "r", row.rank));
+
+    const td = el("td", "t");
+    const wrap = el("span");
+    const crest = crestOf(row.team, "sm");
+    if (crest) wrap.appendChild(crest);
+    const nm = el("span", "nm", row.team);
+    nm.title = row.team;
+    wrap.appendChild(nm);
+    td.appendChild(wrap);
+    tr.appendChild(td);
+
+    tr.appendChild(el("td", null, row.played));
+    tr.appendChild(el("td", "p", row.points));
+    tr.appendChild(el("td", "d", row.goal_diff > 0 ? "+" + row.goal_diff : row.goal_diff));
+    tb.appendChild(tr);
+  });
+  t.appendChild(tb);
+  card.appendChild(t);
+
+  // Le panneau est étroit : le détail complet reste accessible, replié.
+  const det = el("details");
+  det.appendChild(el("summary", null, "détail V/N/D et buts"));
+  const scroll = el("div", "scroll");
+  const full = el("table");
+  full.innerHTML = "<thead><tr><th>#</th><th class='l'>Équipe</th><th>V</th><th>N</th>" +
+    "<th>D</th><th>BP</th><th>BC</th></tr></thead>";
+  const ftb = el("tbody");
+  rows.forEach(row => {
+    const tr = el("tr");
+    if (row.team === m.home) tr.className = "mark-home";
+    if (row.team === m.away) tr.className = "mark-away";
+    ["rank", "team", "wins", "draws", "losses", "goals_for", "goals_against"]
+      .forEach(k => tr.appendChild(el("td", k === "team" ? "l" : null, row[k])));
+    ftb.appendChild(tr);
+  });
+  full.appendChild(ftb);
+  scroll.appendChild(full);
+  det.appendChild(scroll);
+  card.appendChild(det);
+
+  return card;
+}
+
+/* ---------- générateur de prompt Instagram ---------- */
+const ordinal = n => n === 1 ? "1re" : n + "e";
+
+function rankMap(standings, key, bestIsHigh) {
+  // Rang de chaque équipe sur une métrique, pour pouvoir écrire « pire défense
+  // de D1 » ou « 2e meilleure attaque » plutôt qu'un nombre nu.
+  const sorted = [...standings].sort((a, b) =>
+    bestIsHigh ? b[key] - a[key] : a[key] - b[key]);
+  const map = {};
+  sorted.forEach((row, i) => { map[row.team] = i + 1; });
+  return map;
+}
+
+function teamFacts(m, side) {
+  const name = side === "home" ? m.home : m.away;
+  const st = rowOf(m, name) || {};
+  const stats = (m.stats || {})[side] || {};
+  const runs = block(m, side === "home" ? 1 : 2);
+  const venue = block(m, side === "home" ? 3 : 4);
+  const table = m.standings || [];
+  const n = table.length;
+
+  const atk = rankMap(table, "goals_for", true)[name];
+  const def = rankMap(table, "goals_against", false)[name];
+  const cs = (m.stats?.others || {})["Aucun but encaissé"];
+
+  const attackNote = atk === 1 ? "meilleure attaque de la division"
+    : atk === n ? "pire attaque de la division" : ordinal(atk) + " attaque";
+  const defenseNote = def === 1 ? "meilleure défense de la division"
+    : def === n ? "pire défense de la division" : ordinal(def) + " défense";
+
+  const rec = runs?.record_recent;
+  const winRate6 = rec && rec.played ? Math.round(rec.wins / rec.played * 100) : null;
+
+  return {
+    name, side, st, stats, runs, venue,
+    rank: st.rank, points: st.points, played: st.played,
+    wins: st.wins, draws: st.draws, losses: st.losses,
+    scored: st.goals_for, conceded: st.goals_against, diff: st.goal_diff,
+    attackNote, defenseNote,
+    scoredAvg: stats.goals?.scored_avg, concededAvg: stats.goals?.conceded_avg,
+    shots: stats.shots?.total, shotsAvg: stats.shots?.total_avg,
+    dangerous: stats.attacks?.dangerous, dangerousAvg: stats.attacks?.dangerous_avg,
+    cleanSheets: cs ? cs[side]?.total : null,
+    form: runs?.form || "", winRate6,
+    venueLabel: side === "home" ? "à domicile" : "à l'extérieur",
+    venueRecord: venue?.record || null,
+  };
+}
+
+function suggestedLines(m, H, A) {
+  const lines = [];
+  const gap = (A.points ?? 0) - (H.points ?? 0);
+  if (Number.isFinite(gap) && gap !== 0) {
+    const lead = gap > 0 ? A : H;
+    lines.push(`${Math.abs(gap)} PTS D'ÉCART — avantage ${lead.name.toUpperCase()}`);
+  }
+  [H, A].forEach(t => {
+    if (t.venueRecord && t.venueRecord.played) {
+      const v = t.venueRecord;
+      lines.push(`${v.wins}/${v.played} VICTOIRES ${t.venueLabel.toUpperCase()} — ${t.name.toUpperCase()}`);
+    }
+  });
+  if (H.shotsAvg != null && A.shotsAvg != null) {
+    lines.push(`${H.shotsAvg} / ${A.shotsAvg} TIRS PAR MATCH — ${H.name.toUpperCase()} / ${A.name.toUpperCase()}`);
+  }
+  if (H.concededAvg != null && A.concededAvg != null) {
+    lines.push(`${H.concededAvg} / ${A.concededAvg} BUTS ENCAISSÉS PAR MATCH — ${H.name.toUpperCase()} / ${A.name.toUpperCase()}`);
+  }
+  if (H.winRate6 != null && A.winRate6 != null) {
+    lines.push(`${H.winRate6}% / ${A.winRate6}% DE VICTOIRES SUR 6 MATCHS — ${H.name.toUpperCase()} / ${A.name.toUpperCase()}`);
+  }
+  const h2h = block(m, 0);
+  if (h2h && h2h.record.played && h2h.subject) {
+    const r = h2h.record;
+    lines.push(`${r.wins}/${r.played} CONFRONTATIONS GAGNÉES — ${h2h.subject.toUpperCase()}`);
+  }
+  return lines;
+}
+
+function teamBlockText(t) {
+  const v = t.venueRecord;
+  return [
+    `${t.name} — ${t.side === "home" ? "reçoit" : "se déplace"}`,
+    `  Classement      ${t.rank}e de la division, ${t.points} pts en ${t.played} matchs`,
+    `  Bilan           ${t.wins}V ${t.draws}N ${t.losses}D`,
+    `  Buts            ${t.scored} marqués (${t.attackNote}), ${t.conceded} encaissés (${t.defenseNote})`,
+    `  Différence      ${t.diff > 0 ? "+" + t.diff : t.diff}`,
+    `  Moyennes        ${t.scoredAvg ?? "—"} marqués / ${t.concededAvg ?? "—"} encaissés par match`,
+    `  Tirs            ${t.shots ?? "—"} au total, ${t.shotsAvg ?? "—"} par match`,
+    `  Attaques dang.  ${t.dangerous ?? "—"} au total, ${t.dangerousAvg ?? "—"} par match`,
+    `  Clean sheets    ${t.cleanSheets ?? "—"}`,
+    `  Forme (6 der.)  ${t.form || "—"}  (du plus récent au plus ancien)`,
+    v ? `  ${t.venueLabel.padEnd(15)} ${v.wins}V ${v.draws}N ${v.losses}D sur ${v.played} matchs, ${v.goals_for}:${v.goals_against}` : "",
+  ].filter(Boolean).join("\n");
+}
+
+/* Relevé du match pour le brief. Les rubriques non couvertes sont omises et non
+   mises à zéro : un « 0 faute » dans un brief finirait imprimé sur une slide. */
+function matchStatsText(m) {
+  const s = m.match_stats;
+  if (!s) return "";
+  const rows = [];
+  if (s.home.possession !== null && s.home.possession !== undefined) {
+    rows.push(`  Possession      ${s.home.possession} % / ${s.away.possession} %`);
+  }
+  STAT_GROUPS.forEach(([, keys]) => keys.forEach(k => {
+    if (k === "goals" || !s.fields.includes(k)) return;
+    if (s.home[k] === null && s.away[k] === null) return;
+    rows.push(`  ${(STAT_LABELS[k] || k).padEnd(15)} ${s.home[k]} / ${s.away[k]}`);
+  }));
+  const goals = (s.timeline || []).filter(e => e.type === "goal" || e.type === "owngoal");
+  return [
+    `Statistiques relevées de CETTE rencontre (${m.home} / ${m.away})`,
+    s.full_time ? `  Score final     ${s.full_time}${s.half_time ? ` (mi-temps ${s.half_time})` : ""}` : "",
+    s.venue ? `  Stade           ${s.venue}` : "",
+    ...rows,
+    goals.length ? `  Buts            ${goals.map(g => g.minute + "'" + (g.side === "home" ? " " + m.home : " " + m.away)).join(", ")}` : "",
+    s.attacks && !s.attacks.suspect
+      ? `  Attaques        ${s.attacks.home.total} / ${s.attacks.away.total} (dangereuses ${s.attacks.home.dangerous} / ${s.attacks.away.dangerous})`
+      : "",
+  ].filter(Boolean).join("\n");
+}
+
+function buildPrompt(m) {
+  const H = teamFacts(m, "home"), A = teamFacts(m, "away");
+  const pal = m.palette || {};
+  const table = m.standings || [];
+  // Journée déduite du nombre de matchs joués — seulement si toutes les équipes
+  // en ont disputé autant, sinon le chiffre serait faux.
+  const played = [...new Set(table.map(r => r.played))];
+  const matchday = played.length === 1 ? played[0] + 1 : null;
+  const date = (m.kickoff || "").split(" ")[0];
+
+  return `Tu es directeur artistique. Fabrique un carrousel Instagram de 4 slides pour la
+rencontre ci-dessous. Toutes les données sont fournies : n'en invente aucune, ne
+calcule pas de pronostic, ne prédis pas de score. Le sujet, ce sont les chiffres
+des deux équipes.
+
+LIVRABLE
+Une page HTML autonome (aucun asset ni police externe), 4 sections empilées.
+Chaque slide fait exactement 1080 x 1350 px, ratio 4:5, pensée pour un export 2x
+(2160 x 2700). Pas de scroll interne, rien qui déborde.
+
+TYPOGRAPHIE
+- Chiffres et noms d'équipe : une grotesque très grasse, condensée, en capitales.
+- Étiquettes : une monospace en capitales, interlettrage large (~0.2em), petite.
+- Aucune police à empattements, aucun script décoratif.
+
+PALETTE — les couleurs des deux clubs, relevées sur leurs écussons
+- ${H.name} : ${pal.home || "#1d5285"}${pal.home_alt ? "  (secondaire " + pal.home_alt + ")" : ""}
+  Texte à poser dessus : ${pal.home_ink === "sombre" ? "encre sombre #14161a" : "blanc"}.
+- ${A.name} : ${pal.away || "#9c8552"}${pal.away_alt ? "  (secondaire " + pal.away_alt + ")" : ""}
+  Texte à poser dessus : ${pal.away_ink === "sombre" ? "encre sombre #14161a" : "blanc"}.
+${pal.clash ? `ATTENTION : les deux clubs jouent dans la même teinte (${A.name} est en
+réalité ${pal.away_true}). Pour que les deux camps restent distinguables, la
+valeur donnée ci-dessus pour ${A.name} est sa couleur assombrie : même teinte,
+clarté décalée. Utilise-la telle quelle, et appuie la distinction sur les
+écussons et la mise en page plutôt que sur la seule couleur.
+` : ""}- Nuit          #0d1626   (fond de la couverture et de la slide 4)
+- Orange alerte #f2703f   (uniquement pour un chiffre négatif ou un record subi)
+
+Règle absolue : ${H.name} porte TOUJOURS ${pal.home || "#1d5285"} et ${A.name}
+TOUJOURS ${pal.away || "#9c8552"}, sur les 4 slides. La couleur suit le club,
+jamais son classement ni le fait qu'il reçoive. N'invente aucune autre couleur
+d'équipe : si un dégradé est nécessaire, décline la couleur du club elle-même en
+plus clair et plus foncé.
+
+SLIDE 01 — COUVERTURE
+Fond partagé en diagonale : ${pal.home || "#1d5285"} à gauche (${H.name}),
+${pal.away || "#9c8552"} à droite (${A.name}), arête noire au milieu.
+En-tête : "${(m.competition_tag === "KW2" ? "KUWAIT DIVISION 1" : m.competition_tag || "").toUpperCase()}" à gauche, "01 / 04" à droite, filet sous l'en-tête.${matchday ? `
+Pastille blanche : "JOURNÉE ${matchday}".` : ""}
+Date alignée à droite : ${date || "—"}.${m.broadcast && m.broadcast.confirmed ? `
+Sous la date, en monospace discret : "EN DIRECT SUR ${m.broadcast.channel.toUpperCase()}".` : ""}
+Nom de ${H.name} en très gros, aligné à gauche, en ${pal.home_ink === "sombre" ? "encre sombre" : "blanc"}.
+Pastille ronde "VS" avec un filet horizontal.
+Nom de ${A.name} en très gros, aligné à droite, en ${pal.away_ink === "sombre" ? "encre sombre" : "blanc"}.
+Pied de slide : à gauche "DOMICILE · ${H.rank}E" puis ${H.points} PTS ;
+à droite "EXTÉRIEUR · ${A.rank}E" puis ${A.points} PTS.
+
+SLIDE 02 — ${A.name.toUpperCase()} (les visiteurs)
+Fond ${pal.away || "#9c8552"} en dégradé (la même couleur déclinée clair/foncé),
+texte en ${pal.away_ink === "sombre" ? "encre sombre" : "blanc"}, arcs de cercle
+très discrets en filet. En-tête "LES VISITEURS" / "02 / 04".
+Nom de l'équipe en très gros sur deux lignes.
+Bloc principal : ${A.points} en énorme + "PTS", à côté "${A.rank}E" / "AU CLASSEMENT",
+puis trois pastilles carrées ${A.wins}V (pleine) ${A.draws}N ${A.losses}D (contour).
+Bande de trois chiffres séparés par des filets verticaux :
+  ${A.scored} MARQUÉS (${A.attackNote}) | ${A.conceded} ENCAISSÉS | ${A.diff > 0 ? "+" + A.diff : A.diff} DIFFÉRENCE
+
+SLIDE 03 — ${H.name.toUpperCase()} (les hôtes)
+Même composition que la slide 02, fond ${pal.home || "#1d5285"} en dégradé,
+texte en ${pal.home_ink === "sombre" ? "encre sombre" : "blanc"}.
+En-tête "LES HÔTES" / "03 / 04".
+  ${H.points} PTS · ${H.rank}E · ${H.wins}V ${H.draws}N ${H.losses}D
+  ${H.scored} MARQUÉS | ${H.conceded} ENCAISSÉS (${H.defenseNote}) | ${H.diff > 0 ? "+" + H.diff : H.diff} DIFFÉRENCE
+Passe en orange #f2703f les chiffres qui sont un record subi (défaites, buts
+encaissés, différence négative) et ajoute la mention sous le chiffre.
+
+SLIDE 04 — LES CHIFFRES
+Fond nuit #0d1626, filet vertical ${pal.away || "#9c8552"} sur le bord droit.
+En-tête "${(m.competition_tag === "KW2" ? "KUWAIT DIVISION 1" : m.competition_tag || "").toUpperCase()}" / "04 / 04".
+Titre sur deux lignes : "LES CHIFFRES QUI COMPTENT", souligné de deux petits
+traits, un ${pal.home || "#1d5285"} et un ${pal.away || "#9c8552"}.
+Puis une liste de lignes : le chiffre à gauche en très gros, coloré selon le club
+dont il parle — ${pal.home || "#1d5285"} pour ${H.name}, ${pal.away || "#9c8552"}
+pour ${A.name}, blanc quand la ligne parle des deux. Sur ce fond sombre, éclaircis
+la couleur du club juste ce qu'il faut pour qu'elle reste lisible, sans changer sa
+teinte. L'étiquette à droite en monospace, filet fin entre chaque ligne.
+Lignes à composer :
+${suggestedLines(m, H, A).map(l => "  - " + l).join("\n")}
+
+DONNÉES COMPLÈTES
+
+${teamBlockText(H)}
+
+${teamBlockText(A)}
+
+Classement de la division :
+${table.map(r => `  ${String(r.rank).padStart(2)}. ${r.team.padEnd(16)} ${String(r.points).padStart(3)} pts  ${r.played}j  ${r.wins}V ${r.draws}N ${r.losses}D  ${r.goals_for}:${r.goals_against}`).join("\n")}
+${m.match_stats ? `
+${matchStatsText(m)}
+
+Ces chiffres-là décrivent la rencontre elle-même, pas la saison : ne les mélange
+pas aux totaux de saison ci-dessus, et étiquette-les clairement (« dans ce
+match »). Les rubriques absentes de cette liste ne sont pas à zéro, elles ne sont
+pas relevées : ne les mentionne pas.
+` : ""}
+Contrainte finale : chaque chiffre affiché doit venir de ce brief. Si une slide
+te semble vide, enlève une ligne plutôt que d'inventer une statistique.`;
+}
+
+function renderPromptCard(m) {
+  const card = el("div", "card");
+  card.appendChild(el("h2", null, "Contenu Instagram"));
+  card.appendChild(el("p", "sub",
+    "Génère un brief prêt à coller dans Claude pour produire le carrousel de " +
+    "4 slides. Toutes les valeurs sont tirées de cette fiche — le brief interdit " +
+    "explicitement d'en inventer et exclut tout pronostic."));
+
+  const row = el("div", "btnrow");
+  const gen = el("button", "btn primary", "Générer le prompt");
+  gen.type = "button";
+  const copy = el("button", "btn", "Copier");
+  copy.type = "button";
+  copy.style.display = "none";
+  const said = el("span", "copied");
+  row.appendChild(gen);
+  row.appendChild(copy);
+  row.appendChild(said);
+  card.appendChild(row);
+
+  const box = el("div", "promptbox");
+  box.style.display = "none";
+  const area = el("textarea");
+  area.readOnly = true;
+  area.spellcheck = false;
+  box.appendChild(area);
+  card.appendChild(box);
+
+  gen.addEventListener("click", () => {
+    area.value = buildPrompt(m);
+    box.style.display = "";
+    copy.style.display = "";
+    said.textContent = "";
+    area.scrollTop = 0;
+  });
+
+  copy.addEventListener("click", async () => {
+    // navigator.clipboard n'existe pas toujours en file:// : on garde la
+    // sélection + execCommand en secours pour que le bouton marche partout.
+    try {
+      await navigator.clipboard.writeText(area.value);
+    } catch (e) {
+      area.removeAttribute("readonly");
+      area.select();
+      document.execCommand("copy");
+      area.readOnly = true;
+    }
+    said.textContent = "copié";
+    setTimeout(() => { said.textContent = ""; }, 2000);
+  });
+
+  return card;
+}
+
+/* ---------- rencontres : liste, filtres, sélection ---------- */
+const state = { team: "", scope: "upcoming", matchId: null };
+
+const dayOf = f => (f.kickoff || "").split(" ")[0] || "";
+const detailFor = id => DATA.matches.find(m => m.match_id === id) || null;
+
+function visibleFixtures() {
+  return (DATA.fixtures || []).filter(f => {
+    if (state.team && f.home !== state.team && f.away !== state.team) return false;
+    if (state.scope === "upcoming") return !f.played;
+    if (state.scope === "played") return f.played;
+    if (state.scope === "today") return dayOf(f) === DATA.today;
+    return true;
+  });
+}
+
+function fixtureRow(f) {
+  const has = !!detailFor(f.match_id);
+  // Une rencontre sans fiche récupérée reste listée — on la montre, sans
+  // prétendre qu'on peut l'ouvrir.
+  const row = el(has ? "button" : "div", "fx");
+  if (has) {
+    row.type = "button";
+    row.setAttribute("aria-current", String(f.match_id === state.matchId));
+    row.addEventListener("click", () => { state.matchId = f.match_id; renderAll(); });
+  }
+
+  const when = el("div", "when");
+  if (f.played && f.score) when.appendChild(el("span", "sc", f.score));
+  else when.appendChild(el("span", null, (f.kickoff || "").split(" ")[1] || "—"));
+  row.appendChild(when);
+
+  const who = el("div", "who");
+  who.appendChild(teamLabel(f.home, "sm"));
+  who.appendChild(el("span", "sep", "—"));
+  who.appendChild(teamLabel(f.away, "sm"));
+  if (dayOf(f) === DATA.today && !f.played) who.appendChild(el("span", "badge", "aujourd'hui"));
+  // La chaîne n'apparaît dans la liste que si elle a été renseignée : afficher
+  // « habituellement… » sur chaque ligne serait du bruit.
+  if (f.broadcast && f.broadcast.confirmed) {
+    who.appendChild(el("span", "badge", f.broadcast.channel));
+  }
+  row.appendChild(who);
+
+  // Trois états distincts : fiche disponible, rencontre simplement inscrite au
+  // calendrier (Flashscore, trop lointaine pour que Forebet la détaille), ou
+  // fiche que la collecte n'a pas ramenée.
+  row.appendChild(el("div", "go",
+    has ? "voir les stats ›"
+        : f.source === "flashscore" ? "au calendrier"
+        : "fiche non récupérée"));
+  return row;
+}
+
+function renderFixtures() {
+  const host = document.getElementById("fixtures");
+  host.textContent = "";
+  const card = el("div", "card");
+  card.appendChild(el("h2", null, "Rencontres"));
+  const loin = (DATA.fixtures || []).filter(f => f.source === "flashscore").length;
+  card.appendChild(el("p", "sub",
+    `Journée et résultats récents relevés sur Forebet` +
+    (loin ? `, complétés par ${loin} rencontre${loin > 1 ? "s" : ""} du calendrier ` +
+            `Flashscore — celles-là n'ont pas encore de fiche statistique` : "") +
+    `. « Aujourd'hui » se rapporte au ${DATA.today}, jour de génération de cette page.`));
+
+  const list = visibleFixtures();
+  if (!list.length) {
+    card.appendChild(el("div", "empty", "Aucune rencontre pour ce filtre."));
+  } else {
+    let day = null;
+    list.forEach(f => {
+      const d = dayOf(f);
+      if (d !== day) {
+        day = d;
+        card.appendChild(el("div", "daylabel", d === DATA.today ? `${d} · aujourd'hui` : d));
+      }
+      card.appendChild(fixtureRow(f));
+    });
+  }
+  host.appendChild(card);
+}
+
+function renderDetail() {
+  const app = document.getElementById("app");
+  app.textContent = "";
+  const m = detailFor(state.matchId);
+  if (!m) {
+    const card = el("div", "card");
+    card.appendChild(el("div", "empty",
+      "Choisis une rencontre ci-dessus pour afficher les statistiques des deux équipes."));
+    app.appendChild(card);
+    document.title = "Console Forebet";
+    return;
+  }
+  // Le classement part dans une colonne collante à droite : c'est la référence
+  // qu'on veut garder sous les yeux en parcourant les stats.
+  const layout = el("div", "layout");
+  const main = el("div", "main");
+  const side = el("div", "side");
+
+  main.appendChild(renderHead(m));
+  main.appendChild(renderPromptCard(m));
+  // Le relevé du match passe avant les agrégats de saison : quand il existe,
+  // c'est l'information la plus concrète de la page.
+  const live = renderMatchStats(m);
+  if (live) main.appendChild(live);
+  main.appendChild(renderIdentity(m));
+  main.appendChild(renderCompare(m));
+  main.appendChild(renderRuns(m));
+  main.appendChild(renderContext(m));
+  side.appendChild(renderStandings(m));
+
+  layout.appendChild(main);
+  layout.appendChild(side);
+  app.appendChild(layout);
+  document.title = `${m.home} - ${m.away} · Console Forebet`;
+}
+
+function renderAll() {
+  // Si la sélection courante sort du filtre, on bascule sur la première
+  // rencontre visible qui a une fiche plutôt que de laisser un détail orphelin.
+  const list = visibleFixtures();
+  if (!list.some(f => f.match_id === state.matchId && detailFor(f.match_id))) {
+    const first = list.find(f => detailFor(f.match_id));
+    state.matchId = first ? first.match_id : null;
+  }
+  renderFixtures();
+  renderDetail();
+}
+
+function boot() {
+  const teams = [...new Set((DATA.fixtures || []).flatMap(f => [f.home, f.away]))]
+    .filter(Boolean).sort((a, b) => a.localeCompare(b, "fr"));
+  const sel = document.getElementById("team");
+  sel.appendChild(el("option", null, "Toutes les équipes"));
+  sel.lastChild.value = "";
+  teams.forEach(t => {
+    const o = el("option", null, t);
+    o.value = t;
+    sel.appendChild(o);
+  });
+  sel.addEventListener("change", e => { state.team = e.target.value; renderAll(); });
+
+  const scope = document.getElementById("scope");
+  scope.value = state.scope;
+  scope.addEventListener("change", e => { state.scope = e.target.value; renderAll(); });
+
+  document.getElementById("theme").addEventListener("click", () => {
+    const cur = document.documentElement.getAttribute("data-theme");
+    const dark = cur ? cur === "dark" : matchMedia("(prefers-color-scheme: dark)").matches;
+    document.documentElement.setAttribute("data-theme", dark ? "light" : "dark");
+  });
+
+  document.getElementById("foot").textContent =
+    `Généré le ${DATA.generated} depuis le cache local — aucune donnée n'est ` +
+    `chargée à l'ouverture, la page fonctionne hors ligne. Source : Forebet. ` +
+    `Les pronostics de la source sont volontairement écartés : cette console ` +
+    `présente les relevés des deux équipes, pas une prédiction.`;
+
+  renderAll();
+}
+boot();
+</script>
+</body>
+</html>
