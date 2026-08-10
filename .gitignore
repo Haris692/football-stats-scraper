@@ -6,9 +6,11 @@
 cache/
 
 # Sorties générées par build_console.py et build_json.py.
-# `index.html` fait exception : c'est la copie publiée sur GitHub Pages, la
-# seule sortie que le dépôt garde (voir la section « Publication » du README).
+# `index.html` et son `index.data.json` font exception : c'est ce qui est publié
+# sur GitHub Pages (voir la section « Publication » du README). Le fichier de
+# données porte le nom de sa page, pour qu'un build local n'écrase pas le publié.
 console.html
+console.data.json
 output/
 
 __pycache__/

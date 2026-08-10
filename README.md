@@ -68,6 +68,7 @@ match déjà en cache.
 | `crests.py` | écussons des clubs et couleurs dominantes qu'on en extrait |
 | `build_console.py` | assemble `console.html` |
 | `build_json.py` | assemble `output/` |
+| `serve.py` | sert la console en local et lui donne un vrai bouton « Rafraîchir » |
 
 Chacun s'exécute seul et accepte `--help`. `parse_match.py` et `fetch_stats.py`
 ont un `--summary` qui affiche un résumé lisible en console : c'est le moyen de
@@ -113,6 +114,37 @@ d'un hash court. Rien n'est retéléchargé tant que l'entrée n'a pas dépassé
 Le vider est sans risque : tout se retélécharge. `.chrome-profile/` est le profil
 Chrome dédié au scraper ; le supprimer oblige à repasser le challenge Cloudflare.
 
+## Le bouton « Rafraîchir »
+
+La console a un bouton **Rafraîchir**. Il ne fait pas la même chose partout, et
+il le dit sous la barre d'outils :
+
+- **Servie par `serve.py`**, la page déclenche une **vraie collecte**. C'est
+  Python qui pilote Chrome, franchit le challenge Cloudflare, réécrit
+  `console.html` et `data.json`, puis renvoie la charge utile fraîche. La page
+  se redessine sans être rechargée. Compter environ une minute.
+
+  ```
+  python serve.py            # http://127.0.0.1:8800, ouvre le navigateur
+  python serve.py --port 9000 --scope played
+  ```
+
+- **Publiée sur GitHub Pages, ou ouverte en `file://`**, elle ne peut pas :
+  **Forebet n'envoie aucun en-tête CORS** (vérifié le 10/08/2026 depuis
+  l'origine `github.io` : `TypeError: Failed to fetch` sur la page ligue comme
+  sur l'endpoint statistiques). Le bouton va alors chercher le `data.json`
+  déposé à côté de la page. Il rapporte donc ce qui a été **publié** depuis la
+  génération de la page — et annonce clairement quand il n'y a rien de plus
+  récent.
+
+Le fichier de données est écrit à chaque build, à côté de la page et **sous son
+nom** : `index.html` → `index.data.json`, `console.html` → `console.data.json`.
+Ainsi un build local n'écrase pas la donnée publiée. Il pèse 165 Ko contre
+608 Ko pour la page : **les écussons en sont retirés**, puisque la page les a
+déjà et qu'ils ne changent pas. La charge utile reste **aussi** embarquée dans
+la page — la console doit continuer de s'ouvrir seule, hors ligne.
+`--no-data-file` pour ne pas l'écrire.
+
 ## Publication
 
 La console est publiée sur **GitHub Pages** :
@@ -128,8 +160,8 @@ git commit -am "chore: console du JJ/MM"
 git push
 ```
 
-`index.html` est donc le seul artefact de build que le dépôt garde ;
-`console.html` et `output/` restent ignorés.
+`index.html` et `index.data.json` sont donc les seuls artefacts de build que le
+dépôt garde ; `console.html`, `console.data.json` et `output/` restent ignorés.
 
 ## Le reste
 

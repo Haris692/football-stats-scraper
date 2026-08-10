@@ -260,6 +260,13 @@ button.fx:hover { background: color-mix(in srgb, var(--text-primary) 4%, transpa
 
 .scroll { overflow-x: auto; }
 .foot { margin-top: 26px; font-size: 12px; color: var(--text-muted); }
+
+/* Le bouton « Rafraîchir » parle sous la barre : la collecte prend une minute,
+   il faut de la place pour dire ce qui se passe, pas seulement un spinner. */
+.refnote { font-size: 12px; color: var(--text-muted); margin: -6px 0 14px; min-height: 1em; }
+.refnote.err { color: var(--critical); }
+.refnote.ok { color: var(--good); }
+.btn[aria-busy="true"] { opacity: .6; cursor: progress; }
 </style>
 </head>
 <body>
@@ -274,16 +281,21 @@ button.fx:hover { background: color-mix(in srgb, var(--text-primary) 4%, transpa
         <option value="played">Joués</option>
         <option value="all">Toutes</option>
       </select>
+      <button class="btn" id="refresh" type="button">Rafraîchir</button>
       <button class="btn" id="theme" type="button">Thème</button>
     </div>
   </div>
+  <div class="refnote" id="refnote"></div>
   <div id="fixtures"></div>
   <div id="app"></div>
   <div class="foot" id="foot"></div>
 </div>
 
 <script>
-const DATA = /*__CONSOLE_DATA__*/null;
+/* `let` et non `const` : le bouton « Rafraîchir » remplace la charge utile en
+   place. Elle reste embarquée dans la page pour que celle-ci s'ouvre seule, en
+   file:// et hors ligne — c'est la raison d'être de ce fichier unique. */
+let DATA = /*__CONSOLE_DATA__*/null;
 
 /* ---------- utilitaires ---------- */
 const el = (t, cls, txt) => {
@@ -1345,10 +1357,11 @@ function renderAll() {
   renderDetail();
 }
 
-function boot() {
+function fillTeamSelect() {
   const teams = [...new Set((DATA.fixtures || []).flatMap(f => [f.home, f.away]))]
     .filter(Boolean).sort((a, b) => a.localeCompare(b, "fr"));
   const sel = document.getElementById("team");
+  sel.textContent = "";
   sel.appendChild(el("option", null, "Toutes les équipes"));
   sel.lastChild.value = "";
   teams.forEach(t => {
@@ -1356,7 +1369,139 @@ function boot() {
     o.value = t;
     sel.appendChild(o);
   });
-  sel.addEventListener("change", e => { state.team = e.target.value; renderAll(); });
+  // Après un rafraîchissement, on garde le filtre en cours — sauf si l'équipe
+  // a disparu des rencontres, auquel cas le laisser afficherait une liste vide.
+  if (state.team && !teams.includes(state.team)) state.team = "";
+  sel.value = state.team;
+}
+
+function renderFoot() {
+  document.getElementById("foot").textContent =
+    `Généré le ${DATA.generated} depuis le cache local — aucune donnée n'est ` +
+    `chargée à l'ouverture, la page fonctionne hors ligne. Source : Forebet. ` +
+    `Les pronostics de la source sont volontairement écartés : cette console ` +
+    `présente les relevés des deux équipes, pas une prédiction.`;
+}
+
+/* ---------- rafraîchissement ---------- */
+/* Deux situations, et le bouton n'a aucun moyen de les deviner à l'avance :
+
+   - servie par `serve.py`, la page peut demander une VRAIE collecte : c'est
+     Python qui pilote Chrome, franchit le challenge Cloudflare et réécrit la
+     page ;
+   - publiée (GitHub Pages) ou ouverte en file://, elle ne peut pas : Forebet
+     n'envoie aucun en-tête CORS, un fetch direct meurt en « Failed to fetch ».
+     Elle se rabat alors sur le `data.json` déposé à côté d'elle, qui apporte ce
+     qui a été publié depuis la génération de la page.
+
+   D'où : on tente le serveur, on retombe sur le fichier, et on dit lequel des
+   deux a répondu — un bouton qui semble marcher sans rien rapporter serait pire
+   que pas de bouton. */
+const note = (text, cls) => {
+  const n = document.getElementById("refnote");
+  n.className = "refnote" + (cls ? " " + cls : "");
+  n.textContent = text;
+};
+
+function applyData(payload) {
+  // `data.json` n'embarque pas les écussons — 387 Ko d'images inchangées qu'on
+  // ne va pas retélécharger à chaque clic. On garde donc ceux de la page quand
+  // la charge utile reçue n'en apporte pas. La réponse de `serve.py`, elle, est
+  // complète.
+  DATA = payload.teams ? payload : { ...payload, teams: DATA.teams };
+  fillTeamSelect();
+  renderFoot();
+  renderAll();
+}
+
+async function askServer() {
+  // file:// n'a pas d'origine à qui parler : inutile d'essayer.
+  if (location.protocol === "file:") return null;
+  let res;
+  try {
+    res = await fetch("api/refresh", { method: "POST" });
+  } catch (e) {
+    return null;                     // personne au bout du fil
+  }
+  // On ne se fie PAS au code HTTP pour savoir si serve.py est là : un
+  // `http.server` nu répond 501, GitHub Pages 405, un autre hébergeur autre
+  // chose encore. Ce qui identifie serve.py, c'est qu'il répond du JSON — lui
+  // en renvoie sur toutes ses réponses, succès comme erreur.
+  if (!(res.headers.get("content-type") || "").includes("application/json")) {
+    return null;
+  }
+  const body = await res.json().catch(() => null);
+  if (!res.ok) throw new Error((body && body.error) || `HTTP ${res.status}`);
+  return body;
+}
+
+/* Le fichier de données porte le nom de la page : `index.html` ->
+   `index.data.json`. Sinon un build local sur `console.html` écraserait la
+   donnée publiée à côté de `index.html`. Une URL en « / » sert index.html. */
+function dataUrl() {
+  const file = location.pathname.split("/").pop() || "index.html";
+  return file.replace(/\.html?$/i, "") + ".data.json";
+}
+
+async function askDataFile() {
+  // Cache-busting : sans ça le navigateur resservirait le fichier qu'il a déjà,
+  // et le bouton ne rapporterait jamais rien de neuf.
+  const url = dataUrl();
+  const res = await fetch(url + "?t=" + Date.now(), { cache: "no-store" });
+  if (!res.ok) throw new Error(`${url} : HTTP ${res.status}`);
+  return res.json();
+}
+
+async function refresh(btn) {
+  btn.disabled = true;
+  btn.setAttribute("aria-busy", "true");
+  note("collecte en cours — une minute environ…");
+  try {
+    let fresh = null;
+    try {
+      fresh = await askServer();
+    } catch (e) {
+      // Le serveur a répondu et a échoué : c'est une vraie panne de collecte,
+      // pas l'absence de serveur. On s'arrête là plutôt que de resservir un
+      // data.json qui masquerait l'erreur.
+      note("la collecte a échoué : " + e.message, "err");
+      return;
+    }
+    if (fresh) {
+      applyData(fresh);
+      note(`collecte terminée : données du ${fresh.generated}.`, "ok");
+      return;
+    }
+
+    // Pas de serveur de collecte : reste le data.json déposé à côté.
+    note("recherche d'une version plus récente…");
+    let data;
+    try {
+      data = await askDataFile();
+    } catch (e) {
+      note("rien à rafraîchir ici : cette page est un instantané, et Forebet " +
+           "n'autorise pas le navigateur à l'interroger (pas de CORS). " +
+           "Lance « python serve.py » en local pour un vrai rafraîchissement.");
+      return;
+    }
+    if (data.now_iso && DATA.now_iso && data.now_iso <= DATA.now_iso) {
+      note(`déjà à jour : rien de plus récent que le ${DATA.generated}. ` +
+           `Cette page est un instantané ; pour aller rechercher les données, ` +
+           `lance « python serve.py » en local.`);
+      return;
+    }
+    applyData(data);
+    note(`mis à jour : données du ${data.generated}.`, "ok");
+  } finally {
+    btn.disabled = false;
+    btn.removeAttribute("aria-busy");
+  }
+}
+
+function boot() {
+  fillTeamSelect();
+  document.getElementById("team")
+    .addEventListener("change", e => { state.team = e.target.value; renderAll(); });
 
   const scope = document.getElementById("scope");
   scope.value = state.scope;
@@ -1368,12 +1513,10 @@ function boot() {
     document.documentElement.setAttribute("data-theme", dark ? "light" : "dark");
   });
 
-  document.getElementById("foot").textContent =
-    `Généré le ${DATA.generated} depuis le cache local — aucune donnée n'est ` +
-    `chargée à l'ouverture, la page fonctionne hors ligne. Source : Forebet. ` +
-    `Les pronostics de la source sont volontairement écartés : cette console ` +
-    `présente les relevés des deux équipes, pas une prédiction.`;
+  const btn = document.getElementById("refresh");
+  btn.addEventListener("click", () => refresh(btn));
 
+  renderFoot();
   renderAll();
 }
 boot();

@@ -627,6 +627,48 @@ laisserait croire à un échec de collecte. Forebet reste la source de référen
 c'est lui qui apporte l'identifiant et la fiche détaillée, et ce sont ses noms de
 clubs qui sont affichés. Si Flashscore tombe, le build continue sans lui.
 
+## Bouton « Rafraîchir » (10/08/2026)
+
+### Forebet n'autorise pas le navigateur — mesuré, pas supposé
+
+Depuis l'origine `https://haris692.github.io`, un `fetch()` sur la page ligue
+**et** sur `get_evs_n.php` échoue en `TypeError: Failed to fetch` : **aucun
+en-tête CORS**. C'est la différence avec `kuwait-football`, où TheSportsDB
+renvoie `Access-Control-Allow-Origin: *` et permet un vrai bouton côté client.
+**Ne pas re-tester, et ne pas promettre un rafraîchissement en ligne.**
+
+### Le bouton fait donc deux choses, et le dit
+
+1. **Servie par `serve.py`** (nouveau) : `POST /api/refresh` déclenche la
+   collecte Python complète (`assemble()` avec `force=True`), réécrit la page
+   et son fichier de données, et renvoie la charge utile. La console se
+   redessine sans rechargement. ~1 min.
+2. **Publiée ou en `file://`** : repli sur le fichier de données déposé à côté
+   de la page. Le bouton rapporte ce qui a été *publié* depuis la génération de
+   la page, et annonce explicitement quand il n'y a rien de plus récent.
+
+⚠️ **Ne pas détecter `serve.py` par le code HTTP.** Un `http.server` nu répond
+**501** à un POST, GitHub Pages **405**, un autre hébergeur autre chose. La
+première version traitait tout ce qui n'était pas 404 comme une collecte ratée
+et affichait « la collecte a échoué : HTTP 501 » au lieu de se rabattre. Le
+test qui marche : **le `Content-Type` est-il du JSON ?** `serve.py` en renvoie
+sur toutes ses réponses, succès comme erreur.
+
+### Deux détails qui comptent
+
+- **Le fichier de données porte le nom de sa page** : `index.html` →
+  `index.data.json`. Avec un `data.json` unique, chaque build local sur
+  `console.html` écrasait la donnée publiée et salissait le dépôt. Le bouton
+  reconstruit ce nom depuis `location.pathname`.
+- **Les écussons n'y sont pas** : 387 Ko de `data:` URI sur 556, pour des images
+  que la page a déjà. `applyData()` garde donc celles de la page quand la charge
+  utile reçue n'en apporte pas. Résultat : 165 Ko au lieu de 556. La réponse de
+  `serve.py`, elle, est complète.
+
+La charge utile reste **embarquée dans la page** en plus d'être servie à part :
+la console doit continuer de s'ouvrir seule, en `file://` et hors ligne. C'est
+la raison d'être du fichier unique, on ne la sacrifie pas au bouton.
+
 ## Reste à faire
 
 Les trois points de la session du 06/08 sont soldés : `build_json.py`,

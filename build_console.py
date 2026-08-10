@@ -30,6 +30,16 @@ TEMPLATE = ROOT / "console_template.html"
 OUTPUT = ROOT / "console.html"
 TOKEN = "/*__CONSOLE_DATA__*/null"
 
+def data_file_for(page: Path) -> Path:
+    """`index.html` -> `index.data.json`, à côté de la page.
+
+    Le nom suit celui de la page, et pas un `data.json` unique : sinon un build
+    local sur `console.html` écraserait la donnée publiée à côté de
+    `index.html`, et le dépôt se salirait à chaque essai. Le bouton
+    « Rafraîchir » reconstruit ce nom depuis l'URL courante.
+    """
+    return page.parent / (page.stem + ".data.json")
+
 # Les cinq blocs de résultats arrivent toujours dans cet ordre (voir PROGRESS.md).
 # Leurs titres d'origine sont peu lisibles (« AL Les 6 derniers matchs ») : on
 # les réécrit avec le nom de l'équipe concernée.
@@ -257,11 +267,8 @@ def reconcile(fixtures: list[dict], matches: list[dict]) -> None:
     fixtures.sort(key=lambda f: f["kickoff_iso"] or "")
 
 
-def build(matches: list[dict], fixtures: list[dict], output: Path) -> Path:
-    template = TEMPLATE.read_text(encoding="utf-8")
-    if TOKEN not in template:
-        raise RuntimeError(f"jeton {TOKEN!r} absent de {TEMPLATE.name}")
-
+def make_payload(matches: list[dict], fixtures: list[dict]) -> dict:
+    """La charge utile que consomme la console, embarquée comme servie à chaud."""
     now = datetime.now()
     teams = load_store()
     # Couleur retenue pour chaque camp, match par match : deux clubs peuvent
@@ -271,7 +278,7 @@ def build(matches: list[dict], fixtures: list[dict], output: Path) -> Path:
 
     # « Aujourd'hui » est figé à la génération : la page est un fichier statique,
     # elle ne doit pas prétendre savoir quel jour on l'ouvre.
-    payload = {
+    return {
         "generated": now.strftime("%d/%m/%Y à %H:%M"),
         "today": now.strftime("%d/%m/%Y"),
         "now_iso": now.isoformat(timespec="minutes"),
@@ -279,9 +286,32 @@ def build(matches: list[dict], fixtures: list[dict], output: Path) -> Path:
         "fixtures": fixtures,
         "matches": matches,
     }
+
+
+def build(matches: list[dict], fixtures: list[dict], output: Path,
+          data_file: Path | None = None) -> Path:
+    template = TEMPLATE.read_text(encoding="utf-8")
+    if TOKEN not in template:
+        raise RuntimeError(f"jeton {TOKEN!r} absent de {TEMPLATE.name}")
+
+    payload = make_payload(matches, fixtures)
     # `</script>` dans une valeur fermerait la balise : on neutralise la séquence.
     blob = json.dumps(payload, ensure_ascii=False).replace("</", "<\\/")
     output.write_text(template.replace(TOKEN, blob), encoding="utf-8")
+
+    # La même charge utile, à côté de la page. Elle reste **aussi** embarquée :
+    # la console doit continuer de s'ouvrir seule, en file:// et hors ligne.
+    # Ce fichier ne sert qu'au bouton « Rafraîchir », qui va y chercher une
+    # version plus récente que celle figée dans la page.
+    #
+    # Les écussons en sont retirés : 387 Ko de `data:` URI sur 556, pour des
+    # images que la page a déjà et qui ne changent pas d'une collecte à l'autre.
+    # La console garde les siennes quand la charge utile reçue n'en apporte pas
+    # (voir `applyData()`).
+    if data_file is not None:
+        light = {k: v for k, v in payload.items() if k != "teams"}
+        data_file.write_text(json.dumps(light, ensure_ascii=False),
+                             encoding="utf-8")
     return output
 
 
@@ -382,6 +412,9 @@ def main() -> int:
     parser = argparse.ArgumentParser(description="Construit la console HTML.")
     add_source_arguments(parser)
     parser.add_argument("--out", default=str(OUTPUT), help="fichier de sortie")
+    parser.add_argument("--no-data-file", action="store_true",
+                        help="ne pas écrire le data.json qui alimente le bouton "
+                             "« Rafraîchir »")
     args = parser.parse_args()
 
     matches, fixtures = assemble(args)
@@ -390,9 +423,14 @@ def main() -> int:
               "donnée.", file=sys.stderr)
         return 1
 
-    out = build(matches, fixtures, Path(args.out))
+    out = Path(args.out)
+    data_file = None if args.no_data_file else data_file_for(out)
+    out = build(matches, fixtures, out, data_file)
     print(f"écrit : {out}  ({len(matches)} fiche(s) sur {len(fixtures)} rencontres, "
           f"{out.stat().st_size // 1024} Ko)")
+    if data_file is not None:
+        print(f"écrit : {data_file}  ({data_file.stat().st_size // 1024} Ko, "
+              f"pour le bouton « Rafraîchir »)")
     for m in matches:
         print(f"  · {m['home']} - {m['away']}  {m['kickoff'] or ''}")
     return 0
