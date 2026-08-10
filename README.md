@@ -153,6 +153,42 @@ python shoot.py monsite.fr --hide "#cookie-banner" --dark
 | `--dark` | forcer le thème sombre de la page |
 | `--format` / `--quality` | `png` (défaut) ou `jpeg` |
 | `--name` | nom de fichier imposé (une seule URL, une seule taille) |
+| `--profile [NOM]` | utiliser **ton** profil Chrome (`Default`, `Profile 1`…) |
+| `--user-data-dir D` | dossier de profils, si le tien n'est pas à l'emplacement habituel |
+
+### Utiliser ton profil Chrome
+
+Par défaut l'outil ouvre un profil dédié, vierge : il ne voit que ce qu'un
+visiteur anonyme verrait. `--profile` lui donne **le tien** — tes sessions, donc
+les pages derrière une authentification.
+
+```
+python shoot.py monsite.fr --profile              # profil « Default »
+python shoot.py monsite.fr --profile "Profile 1"  # un autre profil
+```
+
+⚠️ **Chrome doit être fermé au moment du lancement.** Un Chrome déjà démarré ne
+peut plus ouvrir son port de débogage : relancer l'exécutable rend simplement la
+main à l'instance existante. L'outil le détecte et te le dit au lieu d'attendre.
+
+L'alternative, si tu ne veux rien fermer : démarre Chrome **une fois** avec
+
+```
+chrome.exe --remote-debugging-port=9333
+```
+
+Il s'utilise ensuite normalement, et toutes les captures suivantes s'y
+raccrocheront.
+
+Deux garde-fous, parce que ce Chrome-là est le tien :
+
+- **on ouvre notre propre onglet** au lieu de réutiliser le premier — sinon ta
+  page en cours partirait ailleurs ;
+- **on ne ferme jamais ton navigateur** à la fin, seulement l'onglet ouvert.
+
+À savoir : une capture prise avec ton profil peut contenir des informations
+personnelles (nom de compte, notifications, contenu privé). Regarde l'image
+avant de la partager.
 
 Sans `--wait`, l'outil attend que le réseau se calme — sinon on photographie une
 page à moitié peinte. `--hide` **retire** les éléments du DOM plutôt que de

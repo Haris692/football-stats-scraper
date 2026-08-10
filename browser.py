@@ -50,6 +50,42 @@ CHROME_CANDIDATES = [
 ]
 
 
+def chrome_user_data_dir() -> Path:
+    """Le dossier de profils du Chrome de l'utilisateur, selon le système."""
+    if sys.platform == "win32":
+        return Path(os.path.expandvars(r"%LOCALAPPDATA%\Google\Chrome\User Data"))
+    if sys.platform == "darwin":
+        return Path.home() / "Library/Application Support/Google/Chrome"
+    return Path.home() / ".config/google-chrome"
+
+
+def debug_port_open(port: int = None) -> bool:
+    """Un Chrome écoute-t-il déjà en CDP ?"""
+    import socket
+    with socket.socket() as s:
+        s.settimeout(0.5)
+        return s.connect_ex(("127.0.0.1", port or DEBUG_PORT)) == 0
+
+
+def chrome_is_running() -> bool:
+    """Y a-t-il déjà un Chrome ouvert ?
+
+    Un Chrome démarré sans `--remote-debugging-port` ne peut plus ouvrir ce port
+    ensuite : relancer l'exécutable rend juste la main à l'instance existante.
+    Autant le dire tout de suite plutôt que d'attendre trente secondes.
+    """
+    try:
+        if sys.platform == "win32":
+            out = subprocess.run(["tasklist", "/FI", "IMAGENAME eq chrome.exe"],
+                                 capture_output=True, text=True, timeout=10).stdout
+            return "chrome.exe" in out.lower()
+        out = subprocess.run(["pgrep", "-x", "chrome"],
+                             capture_output=True, text=True, timeout=10)
+        return out.returncode == 0
+    except Exception:
+        return False      # dans le doute, on laisse la tentative se faire
+
+
 def find_chrome() -> str:
     for path in CHROME_CANDIDATES:
         if path and os.path.exists(path):
@@ -87,10 +123,19 @@ class CdpBrowser:
     """
 
     def __init__(self, headless_profile: bool = True, keep_open: bool = False,
-                 max_age_hours: float = 6.0, verbose: bool = True):
+                 max_age_hours: float = 6.0, verbose: bool = True,
+                 user_data_dir: str | Path | None = None,
+                 profile_name: str | None = None):
         # `headless_profile` : utilise un profil Chrome dédié au scraper plutôt que
         # celui de l'utilisateur (évite de perturber ses onglets et ses cookies).
-        self.profile_dir = PROFILE_DIR if headless_profile else None
+        #
+        # `user_data_dir` / `profile_name` : pour travailler dans le VRAI profil
+        # de l'utilisateur — sessions ouvertes, cookies, extensions. Utile pour
+        # photographier une page derrière une authentification.
+        self.user_data_dir = Path(user_data_dir) if user_data_dir else None
+        self.profile_name = profile_name
+        self.profile_dir = (self.user_data_dir if self.user_data_dir
+                            else (PROFILE_DIR if headless_profile else None))
         self.keep_open = keep_open
         self.max_age_hours = max_age_hours
         self.verbose = verbose
@@ -98,6 +143,8 @@ class CdpBrowser:
         self._pw = None
         self._browser = None
         self._page = None
+        self._owns_page = False
+        self._last_err = None
         self._last_request = 0.0
 
     # -- cycle de vie ----------------------------------------------------
@@ -128,29 +175,58 @@ class CdpBrowser:
             "about:blank",
         ]
         if self.profile_dir:
-            self.profile_dir.mkdir(parents=True, exist_ok=True)
+            if not self.user_data_dir:
+                self.profile_dir.mkdir(parents=True, exist_ok=True)
             args.insert(2, f"--user-data-dir={self.profile_dir}")
-
-        self._log(f"→ lancement de Chrome (port CDP {DEBUG_PORT})…")
-        self._proc = subprocess.Popen(args, stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL)
+        if self.profile_name:
+            args.insert(2, f"--profile-directory={self.profile_name}")
 
         self._pw = sync_playwright().start()
-        last_err = None
-        for _ in range(30):  # Chrome met quelques secondes à ouvrir le port
-            time.sleep(1)
-            try:
-                self._browser = self._pw.chromium.connect_over_cdp(
-                    f"http://127.0.0.1:{DEBUG_PORT}"
+
+        # Un Chrome déjà lancé avec le port ouvert : on s'y raccroche plutôt que
+        # d'en démarrer un second, qui échouerait à ouvrir le même port.
+        if self._try_connect(attempts=1):
+            self._log(f"→ Chrome déjà en écoute sur le port {DEBUG_PORT}")
+        else:
+            # Seul le profil habituel pose problème : un `--user-data-dir`
+            # distinct démarre sa propre instance même si Chrome est ouvert.
+            if (self.user_data_dir == chrome_user_data_dir()
+                    and chrome_is_running()):
+                raise RuntimeError(
+                    "Chrome est déjà ouvert avec ton profil, et un Chrome déjà "
+                    "lancé ne peut pas ouvrir le port de débogage après coup.\n"
+                    "  → ferme complètement Chrome (toutes les fenêtres) puis "
+                    "relance la commande,\n"
+                    "  → ou démarre Chrome avec "
+                    f"--remote-debugging-port={DEBUG_PORT} et relance."
                 )
-                break
-            except Exception as exc:  # port pas encore ouvert
-                last_err = exc
-        if self._browser is None:
-            raise RuntimeError(f"Impossible de s'attacher à Chrome en CDP : {last_err}")
+            self._log(f"→ lancement de Chrome (port CDP {DEBUG_PORT})…")
+            self._proc = subprocess.Popen(args, stdout=subprocess.DEVNULL,
+                                          stderr=subprocess.DEVNULL)
+            if not self._try_connect(attempts=30):
+                raise RuntimeError(
+                    f"Impossible de s'attacher à Chrome en CDP : {self._last_err}")
 
         ctx = self._browser.contexts[0]
-        self._page = ctx.pages[0] if ctx.pages else ctx.new_page()
+        # ⚠️ Dans le vrai profil, `ctx.pages[0]` est un onglet DE L'UTILISATEUR :
+        # le réutiliser reviendrait à le faire naviguer ailleurs, donc à lui
+        # faire perdre ce qu'il avait sous les yeux. On ouvre le nôtre.
+        self._owns_page = bool(self.user_data_dir) or not ctx.pages
+        self._page = ctx.new_page() if self._owns_page else ctx.pages[0]
         return self._page
+
+    def _try_connect(self, attempts: int) -> bool:
+        self._last_err = None
+        for i in range(attempts):
+            if i:
+                time.sleep(1)  # Chrome met quelques secondes à ouvrir le port
+            try:
+                self._browser = self._pw.chromium.connect_over_cdp(
+                    f"http://127.0.0.1:{DEBUG_PORT}")
+                return True
+            except Exception as exc:      # port pas encore ouvert
+                self._last_err = exc
+        return False
 
     def page(self):
         """L'onglet piloté, Chrome lancé si besoin.
@@ -161,6 +237,14 @@ class CdpBrowser:
         return self._ensure_page()
 
     def close(self):
+        # Dans le profil de l'utilisateur, on referme seulement l'onglet qu'on a
+        # ouvert : le reste de la fenêtre est à lui.
+        if self.user_data_dir and self._owns_page and self._page is not None:
+            try:
+                self._page.close()
+            except Exception:
+                pass
+
         if self._browser is not None:
             try:
                 self._browser.close()
@@ -171,7 +255,11 @@ class CdpBrowser:
                 self._pw.stop()
             except Exception:
                 pass
-        if self._proc is not None and not self.keep_open:
+        # On ne tue jamais le Chrome de l'utilisateur : soit il tournait déjà et
+        # ce n'est pas le nôtre, soit on l'a lancé sur son profil et ses fenêtres
+        # habituelles s'y sont rouvertes. Il le fermera lui-même.
+        if (self._proc is not None and not self.keep_open
+                and not self.user_data_dir):
             try:
                 self._proc.terminate()
             except Exception:

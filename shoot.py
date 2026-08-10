@@ -13,9 +13,21 @@ de plus. C'est un appareil photo, pas un robot d'exploration.
     python shoot.py https://a.com https://b.com --size 1440x900 --size 390x844
     python shoot.py https://example.com --element "main" --scale 2
     python shoot.py https://example.com --hide "#cookie-banner" --dark
+    python shoot.py https://monsite.fr --profile          # TON profil Chrome
 
 Les images vont dans `captures/` par défaut, nommées
 `<slug de l'URL>-<largeur>x<hauteur>-<horodatage>.png`.
+
+`--profile` ouvre les pages dans ton vrai profil : tes sessions, donc les pages
+derrière une authentification. Deux conséquences à connaître :
+
+- **Chrome doit être fermé au lancement.** Un Chrome déjà démarré ne peut plus
+  ouvrir son port de débogage. À défaut, démarre-le une fois avec
+  `--remote-debugging-port=9333` : l'outil s'y raccrochera ensuite sans rien
+  fermer.
+- **On ouvre un onglet à nous et on ne referme que celui-là.** Réutiliser le
+  premier onglet le ferait naviguer ailleurs, et le Chrome n'est pas le nôtre :
+  on ne le tue jamais.
 """
 
 from __future__ import annotations
@@ -28,7 +40,8 @@ import time
 from datetime import datetime
 from pathlib import Path
 
-from browser import CdpBrowser
+from browser import (DEBUG_PORT, CdpBrowser, chrome_is_running,
+                     chrome_user_data_dir, debug_port_open)
 
 ROOT = Path(__file__).resolve().parent
 OUTPUT = ROOT / "captures"
@@ -177,6 +190,13 @@ def main() -> int:
     parser.add_argument("--name", help="nom de fichier imposé (sans extension)")
     parser.add_argument("--timeout", type=int, default=45,
                         help="délai maximum par page, en secondes")
+    parser.add_argument("--profile", nargs="?", const="Default", metavar="NOM",
+                        help="utiliser TON profil Chrome (sessions et cookies) "
+                             "au lieu du profil dédié ; « Default » par défaut, "
+                             "sinon « Profile 1 », « Profile 2 »…")
+    parser.add_argument("--user-data-dir", metavar="DOSSIER",
+                        help="dossier de profils Chrome, si le tien n'est pas "
+                             "à l'emplacement habituel")
     parser.add_argument("--keep-open", action="store_true",
                         help="laisser Chrome ouvert à la fin")
     args = parser.parse_args()
@@ -189,8 +209,41 @@ def main() -> int:
     out = Path(args.out)
     print(f"→ {len(args.urls)} page(s) × {len(args.size)} taille(s) vers {out}")
 
+    # Profil réel : les pages sont vues comme par toi, sessions ouvertes
+    # comprises. C'est l'intérêt, et c'est aussi pourquoi une capture peut
+    # contenir des informations personnelles — regarde ce que tu partages.
+    user_dir = None
+    if args.profile or args.user_data_dir:
+        user_dir = Path(args.user_data_dir) if args.user_data_dir else chrome_user_data_dir()
+        if not user_dir.exists():
+            print(f"profil Chrome introuvable : {user_dir}\n"
+                  f"  → indique-le avec --user-data-dir", file=sys.stderr)
+            return 1
+        print(f"profil : {user_dir}\\{args.profile or 'Default'}")
+        # Contrôlé ici plutôt que dans la boucle : le conseil tient en plusieurs
+        # lignes et n'a aucune raison d'être répété par URL.
+        #
+        # Le blocage ne vaut que pour le profil habituel : un `--user-data-dir`
+        # différent démarre sa propre instance, même Chrome ouvert par ailleurs.
+        target_is_live = user_dir == chrome_user_data_dir()
+        if target_is_live and chrome_is_running() and not debug_port_open():
+            print(
+                "\nChrome est déjà ouvert, et un Chrome lancé sans le port de "
+                "débogage ne peut plus l'ouvrir ensuite.\n"
+                "Deux façons de s'en sortir :\n"
+                "  1. fermer complètement Chrome (toutes les fenêtres), puis "
+                "relancer cette commande ;\n"
+                f"  2. démarrer Chrome avec --remote-debugging-port={DEBUG_PORT} "
+                "— il restera utilisable normalement,\n"
+                "     et les prochaines captures s'y raccrocheront sans rien "
+                "fermer.\n"
+                "Sans --profile, l'outil utilise son profil dédié et fonctionne "
+                "quoi qu'il arrive.", file=sys.stderr)
+            return 1
+
     written = []
-    with CdpBrowser(keep_open=args.keep_open) as browser:
+    with CdpBrowser(keep_open=args.keep_open, user_data_dir=user_dir,
+                    profile_name=(args.profile or "Default") if user_dir else None) as browser:
         if args.dark:
             browser.page().emulate_media(color_scheme="dark")
         for url in args.urls:
