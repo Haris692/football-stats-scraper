@@ -70,6 +70,7 @@ match déjà en cache.
 | `build_console.py` | assemble `console.html` |
 | `build_json.py` | assemble `output/` |
 | `serve.py` | sert la console en local et lui donne un vrai bouton « Rafraîchir » |
+| `shoot.py` | captures d'écran d'une page web vers un dossier (outil autonome) |
 
 Chacun s'exécute seul et accepte `--help`. `parse_match.py` et `fetch_stats.py`
 ont un `--summary` qui affiche un résumé lisible en console : c'est le moyen de
@@ -124,6 +125,52 @@ d'un hash court. Rien n'est retéléchargé tant que l'entrée n'a pas dépassé
 
 Le vider est sans risque : tout se retélécharge. `.chrome-profile/` est le profil
 Chrome dédié au scraper ; le supprimer oblige à repasser le challenge Cloudflare.
+
+## Captures d'écran (`shoot.py`)
+
+Outil à part, sans rapport avec la collecte : il photographie les pages qu'on
+lui donne et range les images dans un dossier. Il réutilise le Chrome piloté de
+`browser.py` — donc un profil dédié, tes onglets ne bougent pas.
+
+```
+python shoot.py example.com
+python shoot.py a.com b.com --out captures/lundi --full
+python shoot.py monsite.fr --size 1440x900 --size 390x844     # desktop + mobile
+python shoot.py monsite.fr --element "main" --scale 2          # un bloc, en retina
+python shoot.py monsite.fr --hide "#cookie-banner" --dark
+```
+
+| option | effet |
+|---|---|
+| `--out DIR` | dossier de sortie (défaut : `captures/`) |
+| `--full` | page entière et non la seule partie visible |
+| `--element SEL` | ne capturer qu'un élément (sélecteur CSS) |
+| `--size LxH` | taille de rendu, **répétable** |
+| `--scale N` | densité de pixels ; `2` pour du retina |
+| `--wait SEL` | attendre ce sélecteur avant de déclencher |
+| `--delay S` | attendre S secondes de plus |
+| `--hide SEL` | retirer des éléments avant la photo, **répétable** |
+| `--dark` | forcer le thème sombre de la page |
+| `--format` / `--quality` | `png` (défaut) ou `jpeg` |
+| `--name` | nom de fichier imposé (une seule URL, une seule taille) |
+
+Sans `--wait`, l'outil attend que le réseau se calme — sinon on photographie une
+page à moitié peinte. `--hide` **retire** les éléments du DOM plutôt que de
+cliquer dessus : cliquer sur un bandeau de cookies, ce serait accepter quelque
+chose à ta place.
+
+Il **ne suit aucun lien** : il capture exactement les adresses demandées. C'est
+un appareil photo, pas un robot d'exploration.
+
+⚠️ **Deux pièges de densité, réglés mais à connaître** si tu touches au code.
+`page.screenshot()` de Playwright **ignore** la densité imposée par l'émulation :
+il ne sait produire que du 1x ou la densité réelle de l'écran — sur un écran
+Windows à 150 %, un `--scale 2` sortait en 1,5x. La capture passe donc par CDP
+`Page.captureScreenshot`, qui la respecte au pixel près. Et les métriques
+doivent être **réappliquées après la navigation** : `page.goto` les remet à
+celles de la fenêtre.
+
+`captures/` est ignoré par git.
 
 ## Langue
 

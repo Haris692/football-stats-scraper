@@ -152,6 +152,14 @@ class CdpBrowser:
         self._page = ctx.pages[0] if ctx.pages else ctx.new_page()
         return self._page
 
+    def page(self):
+        """L'onglet piloté, Chrome lancé si besoin.
+
+        Exposé pour les usages qui ne passent pas par `get()` — capture d'écran,
+        exécution de script — et qui n'ont donc rien à faire du cache HTML.
+        """
+        return self._ensure_page()
+
     def close(self):
         if self._browser is not None:
             try:

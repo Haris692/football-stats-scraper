@@ -15,3 +15,6 @@ output/
 
 __pycache__/
 *.pyc
+
+# Captures produites par shoot.py : elles ne sont pas de la donnée du projet.
+captures/
