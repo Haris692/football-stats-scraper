@@ -13,21 +13,20 @@ de plus. C'est un appareil photo, pas un robot d'exploration.
     python shoot.py https://a.com https://b.com --size 1440x900 --size 390x844
     python shoot.py https://example.com --element "main" --scale 2
     python shoot.py https://example.com --hide "#cookie-banner" --dark
-    python shoot.py https://monsite.fr --profile          # TON profil Chrome
+    python shoot.py https://monsite.fr --login   # page derrière une connexion
 
 Les images vont dans `captures/` par défaut, nommées
 `<slug de l'URL>-<largeur>x<hauteur>-<horodatage>.png`.
 
-`--profile` ouvre les pages dans ton vrai profil : tes sessions, donc les pages
-derrière une authentification. Deux conséquences à connaître :
+Pour une page qui demande d'être connecté : `--login` ouvre Chrome, attend que
+tu te connectes à la main, puis photographie. Le profil dédié étant persistant,
+la session vaut pour toutes les captures suivantes.
 
-- **Chrome doit être fermé au lancement.** Un Chrome déjà démarré ne peut plus
-  ouvrir son port de débogage. À défaut, démarre-le une fois avec
-  `--remote-debugging-port=9333` : l'outil s'y raccrochera ensuite sans rien
-  fermer.
-- **On ouvre un onglet à nous et on ne referme que celui-là.** Réutiliser le
-  premier onglet le ferait naviguer ailleurs, et le Chrome n'est pas le nôtre :
-  on ne le tue jamais.
+⛔ Piloter le **profil Chrome habituel** est impossible depuis Chrome 136 :
+`--remote-debugging-port` y est ignoré, pour qu'un programme local ne puisse pas
+lire les cookies du navigateur. Le drapeau part, le port ne s'ouvre jamais.
+`--user-data-dir` vers une *copie* de profil reste possible, mais `--login` est
+plus simple.
 """
 
 from __future__ import annotations
@@ -142,6 +141,22 @@ def shoot(browser: CdpBrowser, url: str, args) -> list[Path]:
         # Avant la navigation : la page doit se *dessiner* à cette largeur.
         set_metrics(session, width, height, args.scale)
         page.goto(url, wait_until="domcontentloaded", timeout=args.timeout * 1000)
+
+        if args.login:
+            # Le profil dédié est persistant : une fois connecté ici, la session
+            # vaut pour toutes les captures suivantes, sans --login.
+            #
+            # On rend la fenêtre à sa taille normale le temps de la connexion :
+            # se connecter dans une fenêtre bridée à 390 px est pénible.
+            session.send("Emulation.clearDeviceMetricsOverride")
+            print("\n  Chrome est ouvert sur la page. Connecte-toi dans la "
+                  "fenêtre,\n  puis reviens ici et appuie sur Entrée.")
+            try:
+                input("  > ")
+            except EOFError:
+                print("  (pas de terminal interactif : on continue sans attendre)")
+            set_metrics(session, width, height, args.scale)
+
         prepare(page, args)
         # Après : la navigation a rendu la main à la fenêtre réelle.
         set_metrics(session, width, height, args.scale)
@@ -190,6 +205,10 @@ def main() -> int:
     parser.add_argument("--name", help="nom de fichier imposé (sans extension)")
     parser.add_argument("--timeout", type=int, default=45,
                         help="délai maximum par page, en secondes")
+    parser.add_argument("--login", action="store_true",
+                        help="ouvrir la page et attendre que tu te connectes à "
+                             "la main avant de photographier ; le profil dédié "
+                             "garde la session pour les fois suivantes")
     parser.add_argument("--profile", nargs="?", const="Default", metavar="NOM",
                         help="utiliser TON profil Chrome (sessions et cookies) "
                              "au lieu du profil dédié ; « Default » par défaut, "
@@ -219,27 +238,31 @@ def main() -> int:
             print(f"profil Chrome introuvable : {user_dir}\n"
                   f"  → indique-le avec --user-data-dir", file=sys.stderr)
             return 1
-        print(f"profil : {user_dir}\\{args.profile or 'Default'}")
-        # Contrôlé ici plutôt que dans la boucle : le conseil tient en plusieurs
-        # lignes et n'a aucune raison d'être répété par URL.
-        #
-        # Le blocage ne vaut que pour le profil habituel : un `--user-data-dir`
-        # différent démarre sa propre instance, même Chrome ouvert par ailleurs.
-        target_is_live = user_dir == chrome_user_data_dir()
-        if target_is_live and chrome_is_running() and not debug_port_open():
+        # ⚠️ Depuis Chrome 136, `--remote-debugging-port` est IGNORÉ sur le
+        # profil par défaut : durcissement voulu par Google, pour qu'un
+        # programme local ne puisse pas lire les cookies du navigateur. Le
+        # drapeau est bien passé, le port ne s'ouvre simplement jamais. Aucune
+        # manipulation n'en vient à bout — autant le dire tout de suite.
+        if user_dir == chrome_user_data_dir():
             print(
-                "\nChrome est déjà ouvert, et un Chrome lancé sans le port de "
-                "débogage ne peut plus l'ouvrir ensuite.\n"
-                "Deux façons de s'en sortir :\n"
-                "  1. fermer complètement Chrome (toutes les fenêtres), puis "
-                "relancer cette commande ;\n"
-                f"  2. démarrer Chrome avec --remote-debugging-port={DEBUG_PORT} "
-                "— il restera utilisable normalement,\n"
-                "     et les prochaines captures s'y raccrocheront sans rien "
-                "fermer.\n"
-                "Sans --profile, l'outil utilise son profil dédié et fonctionne "
-                "quoi qu'il arrive.", file=sys.stderr)
+                "\nLe profil Chrome par défaut ne peut pas être piloté : depuis "
+                "Chrome 136, --remote-debugging-port y est ignoré (Google a fermé\n"
+                "cette porte pour qu'un programme local ne puisse pas lire tes "
+                "cookies). Le drapeau part bien, le port ne s'ouvre jamais.\n\n"
+                "Deux voies qui marchent :\n"
+                "  1. --login : connecte-toi UNE fois dans le profil dédié de "
+                "l'outil, il garde la session ensuite.\n"
+                f"       python shoot.py {args.urls[0]} --login\n"
+                "  2. --user-data-dir vers une COPIE de ton profil (Chrome "
+                "accepte le pilotage hors dossier par défaut).",
+                file=sys.stderr)
             return 1
+        print(f"profil : {user_dir}\\{args.profile or 'Default'}")
+        # Un `--user-data-dir` distinct démarre sa propre instance, même si
+        # Chrome tourne par ailleurs — mais pas si le port est déjà pris.
+        if chrome_is_running() and not debug_port_open():
+            print("  (Chrome est ouvert par ailleurs ; ce profil-ci démarrera "
+                  "sa propre instance)")
 
     written = []
     with CdpBrowser(keep_open=args.keep_open, user_data_dir=user_dir,

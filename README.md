@@ -153,54 +153,55 @@ python shoot.py monsite.fr --hide "#cookie-banner" --dark
 | `--dark` | forcer le thème sombre de la page |
 | `--format` / `--quality` | `png` (défaut) ou `jpeg` |
 | `--name` | nom de fichier imposé (une seule URL, une seule taille) |
-| `--profile [NOM]` | utiliser **ton** profil Chrome (`Default`, `Profile 1`…) |
-| `--user-data-dir D` | dossier de profils, si le tien n'est pas à l'emplacement habituel |
+| `--login` | attendre que tu te connectes à la main avant de photographier |
+| `--user-data-dir D` | piloter une copie de profil (voir plus bas) |
 
-### Utiliser ton profil Chrome
+### Photographier une page derrière une connexion
 
-Par défaut l'outil ouvre un profil dédié, vierge : il ne voit que ce qu'un
-visiteur anonyme verrait. `--profile` lui donne **le tien** — tes sessions, donc
-les pages derrière une authentification.
+Par défaut l'outil ouvre un profil dédié et **persistant** : il ne voit d'abord
+que ce qu'un visiteur anonyme verrait, mais il garde ce qu'on y installe.
 
-```
-python shoot.py monsite.fr --profile              # profil « Default »
-python shoot.py monsite.fr --profile "Profile 1"  # un autre profil
-```
-
-⚠️ **Chrome doit être fermé au moment du lancement.** Un Chrome déjà démarré ne
-peut plus ouvrir son port de débogage : relancer l'exécutable rend simplement la
-main à l'instance existante. L'outil le détecte et te le dit au lieu d'attendre.
-
-L'alternative, si tu ne veux rien fermer : démarre Chrome **une fois** avec
+**La bonne façon de faire : s'y connecter une fois.**
 
 ```
-chrome.exe --remote-debugging-port=9333
+python shoot.py https://monsite.fr --login
 ```
 
-Il s'utilise ensuite normalement, et toutes les captures suivantes s'y
-raccrocheront.
+Chrome s'ouvre sur la page, tu te connectes **à la main** dans la fenêtre, tu
+reviens au terminal et tu appuies sur Entrée. La capture part, et la session
+reste dans le profil dédié : les fois suivantes, `--login` est inutile.
 
-⚠️ **Si Chrome s'ouvre mais que rien ne se passe**, c'est que le drapeau a été
-ignoré : un processus Chrome subsistait en arrière-plan (icône de la zone de
-notification, ou l'option « Continuer à exécuter les applications en arrière-plan »)
-et a repris la main. Le contrôle qui tranche :
+```
+python shoot.py https://monsite.fr/page-privee    # déjà connecté
+```
+
+⛔ **`--profile` sur ton profil Chrome habituel ne peut pas fonctionner.**
+Depuis **Chrome 136**, `--remote-debugging-port` est **ignoré** sur le dossier de
+profil par défaut — Google a fermé cette porte pour qu'un programme local ne
+puisse pas lire les cookies du navigateur. Le drapeau est bien transmis, les
+processus Chrome le portent, et le port ne s'ouvre jamais. Aucune manipulation
+n'en vient à bout : ni fermer Chrome, ni le relancer autrement. L'outil détecte
+le cas et le dit, au lieu de te laisser chercher.
+
+Le contrôle qui tranche, si tu veux le constater :
 
 ```powershell
-curl.exe http://127.0.0.1:9333/json/version   # doit répondre du JSON
+curl.exe http://127.0.0.1:9333/json/version   # ne répondra pas
 ```
 
-S'il ne répond pas : `Stop-Process -Name chrome -Force`, puis relance Chrome
-avec le drapeau.
+Il reste `--user-data-dir` vers une **copie** de ton profil : Chrome accepte le
+pilotage dès lors que le dossier n'est pas celui par défaut. Plus lourd, et la
+copie vieillit — `--login` est presque toujours préférable.
 
-Deux garde-fous, parce que ce Chrome-là est le tien :
+Deux garde-fous quand un profil autre que celui de l'outil est utilisé :
 
-- **on ouvre notre propre onglet** au lieu de réutiliser le premier — sinon ta
+- **on ouvre notre propre onglet** au lieu de réutiliser le premier — sinon la
   page en cours partirait ailleurs ;
-- **on ne ferme jamais ton navigateur** à la fin, seulement l'onglet ouvert.
+- **on ne ferme jamais le navigateur** à la fin, seulement l'onglet ouvert.
 
-À savoir : une capture prise avec ton profil peut contenir des informations
-personnelles (nom de compte, notifications, contenu privé). Regarde l'image
-avant de la partager.
+À savoir : une capture prise depuis une session connectée peut contenir des
+informations personnelles (nom de compte, notifications, contenu privé). Regarde
+l'image avant de la partager.
 
 Sans `--wait`, l'outil attend que le réseau se calme — sinon on photographie une
 page à moitié peinte. `--hide` **retire** les éléments du DOM plutôt que de
