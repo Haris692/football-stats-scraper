@@ -22,7 +22,10 @@ Les séparer évite que la page attende 390 Ko d'images pour afficher un score.
 from __future__ import annotations
 
 import argparse
+import hashlib
 import json
+import re
+import shutil
 import sys
 from datetime import datetime
 from pathlib import Path
@@ -39,10 +42,68 @@ ROOT = Path(__file__).resolve().parent
 SITE = ROOT / "data" / "site.json"
 CRESTS = ROOT / "data" / "crests.json"
 
+SRC = ROOT / "src"          # les sources : on les édite, elles ne sont pas servies
+ASSETS = ROOT / "assets"    # ce qui est servi : une copie par version
+PAGES = ["index.html", "match.html", "clubs.html", "club.html",
+         "classement.html", "calendrier.html"]
+
 
 def key(name: str) -> str:
     k = normalise(name or "")
     return ALIASES.get(k, k)
+
+
+def publish_assets() -> str:
+    """Copie `src/` dans `assets/<empreinte>/`, et pointe les pages dessus.
+
+    ⚠️ **Pourquoi un dossier par version, et pas un simple `?v=` sur l'URL.**
+    Un navigateur met chaque module ES en cache *par URL*. Ajouter une requête
+    à l'entrée ne change rien à ses imports : `match.js?v=2` importe toujours
+    `../core/data.js`, sans requête, donc la version en cache. Après un
+    déploiement, on obtient un mélange — et un mélange de modules ne se lie
+    pas. Constaté en vrai le 11/08/2026 :
+
+        SyntaxError: The requested module '../core/data.js'
+        does not provide an export named 'isLive'
+
+    Un module qui ne se lie pas n'exécute rien du tout : pas de rendu, pas de
+    filet d'erreur, **écran noir**. Le pire des échecs.
+
+    En copiant l'arbre entier sous une empreinte, les imports relatifs se
+    résolvent à l'intérieur de la copie : une page charge donc toujours un jeu
+    de modules cohérent, et un déploiement ne peut pas produire d'état mixte.
+    L'empreinte vient du contenu, donc une construction qui ne change rien ne
+    change pas l'URL et ne casse pas les caches pour rien.
+    """
+    files = sorted(p for p in SRC.rglob("*") if p.is_file())
+    if not files:
+        raise RuntimeError(f"aucune source dans {SRC}")
+
+    digest = hashlib.sha256()
+    for path in files:
+        digest.update(path.relative_to(SRC).as_posix().encode())
+        digest.update(path.read_bytes())
+    stamp = digest.hexdigest()[:10]
+
+    target = ASSETS / stamp
+    if not target.exists():
+        # Les versions précédentes s'en vont : elles ne sont plus référencées,
+        # et les garder ferait grossir le dépôt d'une copie par déploiement.
+        if ASSETS.exists():
+            shutil.rmtree(ASSETS)
+        shutil.copytree(SRC, target)
+
+    for name in PAGES:
+        page = ROOT / name
+        if not page.exists():
+            continue
+        html = page.read_text(encoding="utf-8")
+        fixed = re.sub(r'assets/[^/"]*/(css|js)/', rf"assets/{stamp}/\1/", html)
+        if fixed != html:
+            page.write_text(fixed, encoding="utf-8")
+
+    print(f"assets : version {stamp} ({len(files)} fichiers)")
+    return stamp
 
 
 def freshest_standings(matches: list[dict]) -> list[dict]:
@@ -231,6 +292,8 @@ def main() -> int:
     if not args.urls and not args.file:
         args.fixtures = True
         args.scope = "all"
+
+    publish_assets()
 
     matches, fixtures = assemble(args)
     if not matches:

@@ -36,8 +36,13 @@ LOG = ROOT / "daily.log"
 # Ce que la publication emporte. Volontairement énuméré plutôt que `git add -A`
 # : un `.chrome-profile` ou un `cache/` qui échapperait au `.gitignore` n'a
 # rien à faire dans un commit automatique que personne ne relit.
+# `assets/` et les pages en font partie : `build_site.py` republie les fichiers
+# servis sous une empreinte de contenu, et réécrit les pages pour la pointer.
+# Une modification de `src/` non commitée à la main serait sinon perdue.
 PUBLISHED = ["data/site.json", "data/crests.json", "data/events.json",
-             "data/squads.json"]
+             "data/squads.json", "assets",
+             "index.html", "match.html", "clubs.html", "club.html",
+             "classement.html", "calendrier.html"]
 
 STEPS = [
     # Les effectifs bougent peu, mais le classement des buteurs change à chaque

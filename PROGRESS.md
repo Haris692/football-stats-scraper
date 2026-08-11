@@ -1319,6 +1319,46 @@ extrémités : une flèche qui ne mène nulle part est un mensonge.
 - Les modules ES sont mis en cache par le navigateur : après un déploiement,
   penser à un rechargement forcé pour vérifier une correction.
 
+## ⚠️ L'écran noir des modules ES (11/08/2026)
+
+Après un déploiement, cliquer sur une rencontre donnait une **page noire**, sans
+message. La console disait :
+
+    SyntaxError: The requested module '../core/data.js'
+    does not provide an export named 'isLive'
+
+**Ce n'était pas un accident, c'était structurel.** Un navigateur met chaque
+module ES en cache **par URL**. GitHub Pages sert avec `max-age=600` : pendant
+les dix minutes qui suivent un déploiement, un visiteur récent peut recevoir un
+`match.js` neuf et garder un `data.js` périmé. Les deux ne s'accordent plus, le
+graphe de modules **ne se lie pas**, et un graphe qui ne se lie pas n'exécute
+rien — ni rendu, ni `try/catch`, ni écran d'erreur. Écran noir.
+
+⚠️ **Un `?v=` sur l'entrée ne corrige pas ça** : la requête n'est pas héritée
+par les imports. `match.js?v=2` importe toujours `../core/data.js` tout court,
+donc la version en cache. Ne pas retenter cette piste.
+
+**La correction, en deux niveaux :**
+
+1. **Les sources déménagent dans `src/`**, et `build_site.py` en publie une
+   copie sous `assets/<empreinte>/`. Les imports relatifs se résolvent à
+   l'intérieur de la copie : une page charge donc toujours un jeu cohérent, et
+   un état mixte devient impossible. L'empreinte vient du contenu — une
+   construction qui ne change rien ne casse aucun cache.
+2. **Un filet dans le HTML**, en script *classique* et non en module : c'est un
+   module qui peut échouer, et il faut que le secours survive à son échec. Il
+   guette les erreurs, et si `#main` est encore vide 1,2 s après le chargement,
+   il affiche ce qui s'est passé et un bouton qui recharge en contournant le
+   cache. Vérifié en cassant volontairement une page.
+
+ℹ️ **La racine du site se coupe désormais sur `/assets/`** au lieu de compter
+les niveaux : `../../../` pointait à côté dès que l'empreinte a ajouté un
+niveau. C'est le genre de chemin qui casse en silence à la première
+réorganisation.
+
+ℹ️ `daily.py` publie donc aussi `assets/` et les six pages : `build_site.py`
+les réécrit quand l'empreinte change.
+
 ## Reste à faire
 
 Les trois points de la session du 06/08 sont soldés : `build_json.py`,

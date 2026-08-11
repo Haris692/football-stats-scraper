@@ -1,0 +1,320 @@
+/* ============================================================================
+   COMPOSANTS — tout ce qui se répète d'une page à l'autre.
+   Un composant = une classe racine. Pas de style contextuel « ce bouton mais
+   dans cette page » : c'est ce qui fait diverger deux pages avec le temps.
+   ========================================================================= */
+
+/* ---------------------------------------------------------------- barre haute
+   Elle ne bouge jamais, sur les six pages, et elle dit toujours où on est.
+   C'est le seul repère stable quand on navigue de match en club en classement. */
+.nav {
+  position: sticky; top: 0; z-index: var(--z-nav);
+  background: color-mix(in srgb, var(--ink-900) 88%, transparent);
+  backdrop-filter: blur(14px) saturate(140%);
+  border-bottom: 1px solid var(--line);
+}
+.nav__in {
+  width: min(var(--page), 100%); margin-inline: auto;
+  padding: var(--s-3) var(--gutter);
+  display: flex; align-items: center; gap: var(--s-5);
+}
+.brand {
+  display: flex; align-items: baseline; gap: var(--s-2);
+  font-family: var(--display); text-transform: uppercase;
+  letter-spacing: 0.02em; font-size: var(--t-2); white-space: nowrap;
+}
+.brand b { color: var(--flood); font-weight: 600; }
+.brand span { font-size: var(--t--1); color: var(--text-3); letter-spacing: 0.14em; }
+
+.nav__links { display: flex; gap: var(--s-1); margin-inline-start: auto; }
+.nav__link {
+  font-family: var(--display); font-size: var(--t-0);
+  text-transform: uppercase; letter-spacing: 0.07em;
+  color: var(--text-3); padding: var(--s-2) var(--s-3);
+  border-radius: var(--r-2); position: relative;
+  transition: color var(--fast) var(--ease), background var(--fast) var(--ease);
+}
+.nav__link:hover { color: var(--text); background: var(--ink-700); }
+.nav__link[aria-current="page"] { color: var(--text); }
+.nav__link[aria-current="page"]::after {
+  content: ""; position: absolute; left: var(--s-3); right: var(--s-3);
+  bottom: -1px; height: 2px; background: var(--flood); border-radius: 2px;
+}
+.nav__tools { display: flex; gap: var(--s-2); align-items: center; }
+
+/* Sous 900 px les liens passent sous la marque et défilent latéralement :
+   un menu à tiroir cacherait la navigation d'un site qui n'a que six pages. */
+@media (max-width: 900px) {
+  .nav__in { flex-wrap: wrap; gap: var(--s-3); }
+  .nav__links {
+    order: 3; width: 100%; margin-inline-start: 0;
+    overflow-x: auto; padding-bottom: var(--s-1);
+  }
+  .nav__tools { margin-inline-start: auto; }
+}
+
+/* --------------------------------------------------------------- commandes */
+.btn {
+  display: inline-flex; align-items: center; gap: var(--s-2);
+  font-family: var(--display); font-size: var(--t-0);
+  text-transform: uppercase; letter-spacing: 0.06em;
+  padding: var(--s-2) var(--s-4); border-radius: var(--r-2);
+  border: 1px solid var(--line-strong); color: var(--text);
+  background: var(--ink-700);
+  transition: background var(--fast) var(--ease), border-color var(--fast) var(--ease),
+              transform var(--fast) var(--ease);
+}
+.btn:hover { background: var(--ink-500); border-color: var(--text-3); color: var(--text); }
+.btn:active { transform: translateY(1px); }
+.btn--primary {
+  background: var(--flood); color: var(--flood-ink); border-color: var(--flood);
+}
+.btn--primary:hover { background: var(--flood); color: var(--flood-ink); filter: brightness(1.08); }
+.btn--ghost { background: none; }
+.btn--sm { padding: var(--s-1) var(--s-3); font-size: var(--t--1); }
+.btn[aria-busy="true"] { opacity: 0.6; cursor: progress; }
+
+select.btn { padding-inline-end: var(--s-3); }
+
+/* ------------------------------------------------------------------- carte */
+.card {
+  background: var(--ink-700); border: 1px solid var(--line);
+  border-radius: var(--r-3); padding: var(--s-5);
+}
+.card__head {
+  display: flex; align-items: baseline; gap: var(--s-3);
+  flex-wrap: wrap; margin-bottom: var(--s-4);
+}
+.card__head h2, .card__head h3 { font-size: var(--t-2); }
+
+/* La note de méthode : chaque bloc dit ce qu'il sait, d'où ça vient et ce qui
+   manque — mais seulement quand on le demande. Déplié partout, ce serait plus
+   de commentaire que de données. */
+.note { margin-top: var(--s-3); }
+.note > summary {
+  display: inline-flex; align-items: center; gap: var(--s-2);
+  font-size: var(--t--1); color: var(--text-3); cursor: pointer;
+  list-style: none; width: max-content;
+}
+.note > summary::-webkit-details-marker { display: none; }
+.note > summary::before {
+  content: "?"; font-family: var(--mono); font-size: 10px; line-height: 1;
+  width: 15px; height: 15px; border: 1px solid var(--line-strong);
+  border-radius: var(--r-full); display: grid; place-items: center;
+}
+.note > summary:hover { color: var(--text-2); }
+.note p { margin-top: var(--s-2); font-size: var(--t-0); color: var(--text-2); max-width: 66ch; }
+
+/* ------------------------------------------------------------------ écusson */
+.crest {
+  width: 28px; height: 28px; object-fit: contain; flex: none;
+  filter: drop-shadow(0 1px 2px rgba(0,0,0,.5));
+}
+.crest--lg { width: 44px; height: 44px; }
+.crest--xl { width: clamp(56px, 9vw, 96px); height: clamp(56px, 9vw, 96px); }
+.crest--sm { width: 20px; height: 20px; }
+/* Un club sans écusson récupéré garde sa place : une pastille à ses initiales
+   plutôt qu'un trou dans l'alignement. */
+.crest--none {
+  display: grid; place-items: center; border-radius: var(--r-full);
+  background: var(--ink-600); color: var(--text-3);
+  font-family: var(--display); font-size: var(--t--1);
+}
+
+.team-chip { display: inline-flex; align-items: center; gap: var(--s-2); min-width: 0; }
+.team-chip__name { font-weight: 600; }
+
+/* ------------------------------------------------------------------ pastille */
+.badge {
+  display: inline-flex; align-items: center; gap: var(--s-1);
+  font-family: var(--mono); font-size: 10px; letter-spacing: 0.1em;
+  text-transform: uppercase; color: var(--text-3);
+  border: 1px solid var(--line); border-radius: var(--r-full);
+  padding: 2px var(--s-2); white-space: nowrap;
+}
+.badge--flood { color: var(--flood); border-color: var(--flood); }
+.badge--live { color: var(--live); border-color: var(--live); }
+.badge--live::before {
+  content: ""; width: 6px; height: 6px; border-radius: 50%;
+  background: var(--live); animation: pulse 1.6s ease-in-out infinite;
+}
+.badge--solid { background: var(--ink-600); border-color: transparent; color: var(--text-2); }
+
+/* Le marqueur « en cours » : il se pose au-dessus de l'heure, clignote en
+   rouge, et ne ressemble à aucune autre pastille du site — c'est le seul
+   élément qui change tout seul, il a le droit d'attirer l'œil.
+   Le clignotement s'arrête si la personne a demandé moins d'animations : c'est
+   le rouge qui porte l'information, le battement n'est qu'un renfort. */
+.live-mark {
+  display: inline-flex; align-items: center; gap: 5px;
+  font-family: var(--mono); font-size: var(--t--1);
+  letter-spacing: 0.16em; text-transform: uppercase;
+  color: var(--live); animation: blink 1.3s ease-in-out infinite;
+  cursor: help;
+}
+.live-mark__dot {
+  width: 7px; height: 7px; border-radius: 50%; background: var(--live);
+  box-shadow: 0 0 0 3px color-mix(in srgb, var(--live) 22%, transparent);
+}
+@keyframes blink { 50% { opacity: 0.28; } }
+
+/* Le marqueur se pose au-dessus de l'heure et reste centré sur elle. Sans
+   marqueur, l'empilement ne laisse aucune place vide : l'heure d'une rencontre
+   à venir garde exactement la hauteur du score de sa voisine. */
+.kick-stack {
+  display: inline-flex; flex-direction: column; align-items: center;
+  gap: 2px; line-height: 1;
+}
+
+.dot { width: 9px; height: 9px; border-radius: 50%; flex: none; display: inline-block; }
+.dot--home { background: var(--home); }
+.dot--away { background: var(--away); }
+
+/* ------------------------------------------------------------- rail (Netflix)
+   Une rangée qui défile latéralement, avec accroche. C'est le seul emprunt
+   assumé aux plateformes vidéo, et il tient parce qu'on a de quoi la remplir :
+   84 rencontres, 8 clubs, 50 buteurs. Un rail de trois cartes serait ridicule —
+   les composants qui n'ont pas assez de contenu passent en grille. */
+.rail { position: relative; }
+.rail__head {
+  display: flex; align-items: baseline; gap: var(--s-3);
+  margin-bottom: var(--s-4); padding-inline: var(--gutter);
+}
+.rail__head h2 { font-size: var(--t-3); }
+.rail__more { margin-inline-start: auto; font-size: var(--t-0); color: var(--text-3); }
+.rail__more:hover { color: var(--flood); }
+.rail__track {
+  display: flex; gap: var(--s-4); overflow-x: auto; overscroll-behavior-x: contain;
+  scroll-snap-type: x proximity; padding: var(--s-1) var(--gutter) var(--s-5);
+}
+.rail__track > * { scroll-snap-align: start; flex: none; }
+/* Les flèches ne remplacent pas le défilement, elles le rendent visible à la
+   souris. Cachées au clavier et au tactile, qui ont déjà mieux. */
+.rail__arrow {
+  position: absolute; top: 50%; translate: 0 -30%;
+  width: 40px; height: 64px; display: none; place-items: center;
+  background: color-mix(in srgb, var(--ink-900) 82%, transparent);
+  border: 1px solid var(--line); border-radius: var(--r-2);
+  color: var(--text); font-size: var(--t-2); z-index: 2;
+  transition: background var(--fast) var(--ease);
+}
+.rail__arrow:hover { background: var(--ink-600); }
+.rail__arrow[hidden] { display: none; }
+.rail__arrow--prev { left: 4px; }
+.rail__arrow--next { right: 4px; }
+@media (hover: hover) and (min-width: 900px) { .rail__arrow { display: grid; } }
+
+/* --------------------------------------------------------- carte rencontre */
+.fixture {
+  width: 280px; background: var(--ink-700); border: 1px solid var(--line);
+  border-radius: var(--r-3); padding: var(--s-4); display: block;
+  transition: transform var(--mid) var(--ease), border-color var(--mid) var(--ease),
+              box-shadow var(--mid) var(--ease), background var(--mid) var(--ease);
+}
+.fixture:hover, .fixture:focus-visible {
+  transform: translateY(-3px); border-color: var(--line-strong);
+  box-shadow: var(--lift-2); background: var(--ink-600); color: var(--text);
+}
+.fixture__top {
+  display: flex; align-items: center; gap: var(--s-2);
+  margin-bottom: var(--s-4); font-size: var(--t--1); color: var(--text-3);
+}
+.fixture__side {
+  display: flex; align-items: center; gap: var(--s-3); padding-block: var(--s-1);
+}
+.fixture__side .name { flex: 1; min-width: 0; font-weight: 600; }
+.fixture__side .score {
+  font-family: var(--display); font-size: var(--t-2); min-width: 1.4ch; text-align: right;
+}
+/* Le perdant s'efface d'un cran : on lit le résultat sans lire les chiffres. */
+.fixture__side--lost { color: var(--text-3); }
+.fixture__side--lost .score { color: var(--text-3); }
+.fixture__foot {
+  margin-top: var(--s-3); padding-top: var(--s-3); border-top: 1px solid var(--line);
+  font-size: var(--t--1); color: var(--text-3);
+  display: flex; align-items: center; gap: var(--s-2);
+}
+.fixture__kick { font-family: var(--display); font-size: var(--t-3); color: var(--text-2); }
+
+/* ------------------------------------------------------------- carte club */
+.club {
+  width: 200px; border-radius: var(--r-3); border: 1px solid var(--line);
+  background: var(--ink-700); padding: var(--s-5) var(--s-4);
+  display: grid; justify-items: center; gap: var(--s-3); text-align: center;
+  transition: transform var(--mid) var(--ease), box-shadow var(--mid) var(--ease),
+              border-color var(--mid) var(--ease);
+  position: relative; overflow: hidden;
+}
+/* La couleur du club ne teinte que ce voile, jamais un graphique : deux clubs
+   peuvent partager une teinte, et une couleur de club peut être blanche. */
+.club::before {
+  content: ""; position: absolute; inset: 0 0 auto; height: 3px;
+  background: var(--club, var(--line-strong));
+}
+.club:hover, .club:focus-visible {
+  transform: translateY(-4px); box-shadow: var(--lift-2);
+  border-color: var(--line-strong); color: var(--text);
+}
+.club__name { font-family: var(--display); font-size: var(--t-1); text-transform: uppercase; }
+.club__meta { font-size: var(--t--1); color: var(--text-3); }
+
+/* ------------------------------------------------------------------ tableau */
+.table { width: 100%; border-collapse: collapse; font-size: var(--t-0); }
+.table th {
+  text-align: left; font-family: var(--mono); font-size: 10px;
+  letter-spacing: 0.14em; text-transform: uppercase; color: var(--text-3);
+  font-weight: 400; padding: var(--s-2) var(--s-3); border-bottom: 1px solid var(--line-strong);
+}
+.table td { padding: var(--s-3); border-bottom: 1px solid var(--line); }
+.table tbody tr { transition: background var(--fast) var(--ease); }
+.table tbody tr:hover { background: var(--ink-600); }
+.table .n { text-align: right; font-variant-numeric: tabular-nums; }
+.table .rank { color: var(--text-3); width: 2.5ch; text-align: right; font-family: var(--display); }
+.table__wrap { overflow-x: auto; }
+
+/* Les places qui comptent, marquées à gauche plutôt que par une couleur de
+   fond : le classement reste lisible en noir et blanc. */
+.table tr[data-zone="up"] td:first-child { box-shadow: inset 3px 0 0 var(--good); }
+.table tr[data-zone="down"] td:first-child { box-shadow: inset 3px 0 0 var(--bad); }
+.table tr[data-highlight] td { background: color-mix(in srgb, var(--flood) 10%, transparent); }
+
+/* ------------------------------------------------------------- barre comparée */
+.h2h { display: grid; grid-template-columns: 4.5ch 1fr minmax(9ch, auto) 1fr 4.5ch; gap: var(--s-2) var(--s-3); align-items: center; }
+.h2h__label { text-align: center; font-size: var(--t--1); color: var(--text-2); }
+.h2h__bar { height: 8px; border-radius: var(--r-full); background: var(--ink-600); overflow: hidden; display: flex; }
+.h2h__bar--home { justify-content: flex-end; }
+.h2h__fill { height: 100%; border-radius: var(--r-full); }
+.h2h__fill--home { background: var(--home); }
+.h2h__fill--away { background: var(--away); }
+.h2h__v { font-family: var(--display); font-size: var(--t-0); }
+.h2h__v--l { text-align: right; }
+.h2h__group {
+  grid-column: 1 / -1; margin-top: var(--s-4); font-family: var(--mono);
+  font-size: 10px; letter-spacing: 0.14em; text-transform: uppercase; color: var(--text-3);
+}
+
+/* -------------------------------------------------------------- états vides */
+.empty {
+  display: grid; gap: var(--s-3); justify-items: start;
+  padding: var(--s-6); border: 1px dashed var(--line-strong);
+  border-radius: var(--r-3); color: var(--text-2);
+}
+.empty h3 { font-size: var(--t-2); color: var(--text); }
+
+/* Le squelette : ce qui s'affiche pendant que les données arrivent. Il a la
+   FORME du contenu attendu, pas une roue qui tourne — la page ne doit pas
+   sauter quand les vraies valeurs se posent. */
+.skel {
+  background: linear-gradient(90deg, var(--ink-700), var(--ink-600), var(--ink-700));
+  background-size: 200% 100%; border-radius: var(--r-2);
+  animation: shimmer 1.4s linear infinite;
+}
+@keyframes shimmer { to { background-position: -200% 0; } }
+
+/* -------------------------------------------------------------------- pied */
+.foot {
+  border-top: 1px solid var(--line); margin-top: var(--s-8);
+  padding-block: var(--s-6) var(--s-8); color: var(--text-3); font-size: var(--t-0);
+}
+.foot__grid { display: flex; flex-wrap: wrap; gap: var(--s-5); justify-content: space-between; }
+.foot a { text-decoration: underline; text-underline-offset: 3px; }

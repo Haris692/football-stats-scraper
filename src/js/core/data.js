@@ -12,10 +12,14 @@ let SITE = null;
 let CRESTS = {};
 
 /** La racine du site, déduite de l'emplacement de CE module et non de la page
- *  courante. Trois niveaux à remonter : `assets/js/core/`. Passer par
- *  `import.meta.url` rend le site déployable dans un sous-dossier — ce qui est
- *  exactement le cas sur GitHub Pages (`/football-stats-scraper/`). */
-const base = new URL("../../../", import.meta.url).href;
+ *  courante — ce qui rend le site déployable dans un sous-dossier, cas de
+ *  GitHub Pages (`/football-stats-scraper/`).
+ *
+ *  ⚠️ On coupe à `/assets/` au lieu de compter les niveaux à remonter. Les
+ *  fichiers servis vivent sous `assets/<empreinte>/js/core/`, et l'empreinte
+ *  ajoute un niveau : un `../../../` codé en dur pointait une version sur deux
+ *  à côté. Couper sur le repère ne dépend d'aucune profondeur. */
+const base = import.meta.url.replace(/assets\/.*$/, "");
 
 async function json(path) {
   const res = await fetch(path, { cache: "no-cache" });

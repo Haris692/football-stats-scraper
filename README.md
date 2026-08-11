@@ -452,14 +452,26 @@ survivre à ça.
 ### L'organisation du code
 
 ```
-assets/css/  tokens.css      couleur, lettre, espace, mouvement — la seule source de vérité
-             base.css        remise à zéro, focus, accessibilité de plancher
-             components.css  tout ce qui se répète d'une page à l'autre
-             pages.css       ce qui n'existe qu'à un endroit
-assets/js/core/        dom · i18n · data · shell
-assets/js/components/  pieces · cards · rail
-assets/js/pages/       un module par page
+src/css/  tokens.css      couleur, lettre, espace, mouvement — la seule source de vérité
+          base.css        remise à zéro, focus, accessibilité de plancher
+          components.css  tout ce qui se répète d'une page à l'autre
+          pages.css       ce qui n'existe qu'à un endroit
+src/js/core/        dom · i18n · data · shell
+src/js/components/  pieces · cards · rail
+src/js/pages/       un module par page
+
+assets/<empreinte>/   la copie SERVIE, écrite par build_site.py
 ```
+
+⚠️ **On édite `src/`, jamais `assets/`.** `build_site.py` recopie `src/` sous
+une empreinte de son contenu et réécrit les pages pour la pointer. Sans ça, un
+navigateur peut mélanger un module neuf et un module en cache après un
+déploiement — le graphe ne se lie plus et la page reste **noire**, sans même
+un message. Un `?v=` sur l'entrée ne suffit pas : la requête n'est pas héritée
+par les imports. Détail dans `PROGRESS.md`.
+
+Il faut donc relancer `python build_site.py` après chaque modification de
+`src/` pour voir le changement.
 
 Règles tenues, et qui expliquent la découpe :
 
