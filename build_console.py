@@ -135,6 +135,7 @@ def collect(urls: list[str], files: list[str], force: bool) -> list[dict]:
 
 
 BROADCASTS = ROOT / "data" / "broadcasts.json"
+MOTM = ROOT / "data" / "motm.json"
 
 
 def load_broadcasts() -> dict:
@@ -147,6 +148,58 @@ def load_broadcasts() -> dict:
         # Une valeur vide veut dire « pas encore renseigné », pas « aucune ».
         "matches": {str(k): v for k, v in (data.get("matches") or {}).items() if v},
     }
+
+
+def load_motm() -> dict:
+    """Hommes du match observés à la main (voir `data/motm.json`)."""
+    if not MOTM.exists():
+        return {}
+    data = json.loads(MOTM.read_text(encoding="utf-8"))
+    return {str(k): v for k, v in (data.get("matches") or {}).items() if v}
+
+
+def attach_motm(matches: list[dict], observed: dict) -> int:
+    """Désigne un homme du match, et dit toujours d'où vient la désignation.
+
+    Aucune source ne publie de statistique individuelle sur cette division : ni
+    note, ni minutes, ni arrêts. Un « meilleur joueur » ne se calcule donc pas.
+    Deux cas seulement, et jamais un troisième :
+
+    - **`auto`** — un joueur a marqué au moins deux buts dans la rencontre.
+      C'est le seul cas où la donnée tranche toute seule.
+    - **`observé`** — quelqu'un a regardé le match et l'a saisi. Un gardien ou
+      un milieu peut alors être désigné, ce qu'aucun relevé ne permettrait.
+
+    La distinction est portée jusque dans le brief Instagram : on ne fait pas
+    passer un jugement pour une mesure.
+    """
+    found = 0
+    for match in matches:
+        picks = {}
+
+        # Le doublé, seul verdict que les chiffres rendent sans nous.
+        tally: dict[tuple[str, str], int] = {}
+        for event in match.get("timeline") or []:
+            if event.get("type") == "goal" and event.get("player"):
+                key = (event["side"], event["player"])
+                tally[key] = tally.get(key, 0) + 1
+        for (side, player), count in tally.items():
+            if count >= 2:
+                picks[side] = {
+                    "player": player,
+                    "why": f"{count} buts dans la rencontre.",
+                    "source": "auto",
+                }
+
+        # L'observation prime : elle voit ce que le relevé ne mesure pas.
+        for side, pick in (observed.get(str(match.get("match_id"))) or {}).items():
+            if side in ("home", "away") and (pick or {}).get("player"):
+                picks[side] = {**pick, "source": "observé"}
+
+        if picks:
+            match["motm"] = picks
+            found += 1
+    return found
 
 
 def attach_broadcast(items: list[dict], broadcasts: dict) -> None:
@@ -512,6 +565,11 @@ def assemble(args) -> tuple[list[dict], list[dict]]:
     except Exception as exc:
         print(f"rencontres Sofascore indisponibles ({exc}) — on continue",
               file=sys.stderr)
+
+    # Après les chronologies : le doublé se lit dedans, et le camp doit déjà
+    # être dans le bon sens.
+    picked = attach_motm(matches, load_motm())
+    print(f"homme du match : {picked} rencontre(s) renseignée(s)")
 
     broadcasts = load_broadcasts()
     attach_broadcast(matches, broadcasts)

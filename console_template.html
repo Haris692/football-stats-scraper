@@ -272,6 +272,23 @@ select, .btn {
 
 .wrap-in { padding-top: 18px; }
 .tvline { margin: -4px 0 0; font-size: 12px; color: var(--text-muted); }
+
+/* --- homme du match --- */
+.motm { margin-top: 22px; }
+.motm .mrow { display: flex; gap: 9px; align-items: baseline; margin-top: 10px; }
+.motm .pip { width: 9px; height: 9px; border-radius: 50%; flex: none; }
+.motm .pip.home { background: var(--home); }
+.motm .pip.away { background: var(--away); }
+.motm .mname { display: flex; flex-wrap: wrap; align-items: baseline; gap: 8px; }
+.motm .mwhy { font-size: 13px; color: var(--text-secondary); max-width: 60ch; }
+/* La provenance se lit avec le nom, jamais en note de bas de carte : c'est ce
+   qui sépare « quelqu'un a regardé » de « la source a mesuré ». */
+.motm .src {
+  font-size: 10px; letter-spacing: .05em; text-transform: uppercase;
+  color: var(--text-muted); border: 1px solid var(--border);
+  border-radius: 999px; padding: 1px 7px;
+}
+.motm .src.auto { color: var(--flood); border-color: var(--flood); }
 /* Les pastilles de la ligne des buteurs, sous le rail. */
 .rail .who .pip.home { background: var(--home); }
 .rail .who .pip.away { background: var(--away); }
@@ -582,6 +599,8 @@ const EN = {
   "Le match": "The match", "Les équipes": "The teams", "La saison": "The season",
   "buteur non nommé": "scorer not named",
   "Pas encore joué": "Not played yet",
+  "Homme du match": "Standout player",
+  "observé": "watched", "d'après les buts": "from the goals",
   "Voir les deux équipes": "See both teams",
   "pén.": "pen.", "c.s.c.": "o.g.",
   "Suivre les matchs en cours, relevé toutes les minutes":
@@ -1095,7 +1114,39 @@ function renderRail(m) {
   if (who.children.length) rail.appendChild(who);
 
   card.appendChild(rail);
+  const motm = renderMotm(m);
+  if (motm) card.appendChild(motm);
   return card;
+}
+
+/* L'homme du match. Aucune source ne mesure quoi que ce soit d'individuel sur
+   cette division — ni note, ni minutes, ni arrêts. La désignation vient donc
+   soit d'un doublé, seul verdict que les chiffres rendent seuls, soit de
+   quelqu'un qui a regardé le match. La carte dit laquelle des deux, à chaque
+   fois : un jugement affiché comme une mesure serait un mensonge de mise en
+   page. */
+function renderMotm(m) {
+  const picks = m.motm;
+  if (!picks || (!picks.home && !picks.away)) return null;
+
+  const box = el("div", "motm");
+  box.appendChild(el("div", "grp2", t("Homme du match")));
+  ["home", "away"].forEach(side => {
+    const p = picks[side];
+    if (!p) return;
+    const row = el("div", "mrow");
+    row.appendChild(el("span", "pip " + side));
+    const body = el("div");
+    const head = el("div", "mname");
+    head.appendChild(el("b", null, p.player));
+    head.appendChild(el("span", "src" + (p.source === "auto" ? " auto" : ""),
+      p.source === "auto" ? t("d'après les buts") : t("observé")));
+    body.appendChild(head);
+    body.appendChild(el("div", "mwhy", p.why));
+    row.appendChild(body);
+    box.appendChild(row);
+  });
+  return box;
 }
 
 /* Diffuseur : confirmé (saisi) ou simple rappel des chaînes habituelles. */
@@ -2025,6 +2076,21 @@ function matchStatsText(m) {
       : rich.length && g.class === "ownGoal" ? (en ? " o.g." : " c.s.c.") : "";
     return when + who + how;
   }).join(", ");
+  // L'homme du match porte SA provenance jusque dans le brief : « observé »
+  // veut dire que quelqu'un a regardé la rencontre, « auto » qu'un joueur a
+  // marqué deux fois. Sans cette mention, le carrousel présenterait un jugement
+  // comme une mesure — et aucune source ne mesure quoi que ce soit d'individuel
+  // sur cette division.
+  const motmLines = ["home", "away"].map(side => {
+    const p = (m.motm || {})[side];
+    if (!p) return "";
+    const club = side === "home" ? m.home : m.away;
+    const tag = p.source === "auto"
+      ? (en ? "from the goals scored" : "d'après les buts marqués")
+      : (en ? "watched, not measured" : "observé, non mesuré");
+    return `  ${(club + " :").padEnd(15)} ${p.player} — ${p.why} (${tag})`;
+  }).filter(Boolean);
+
   if (en) {
     return [
       `Statistics recorded for THIS fixture (${m.home} / ${m.away})`,
@@ -2035,6 +2101,8 @@ function matchStatsText(m) {
       s.attacks && !s.attacks.suspect
         ? `  Attacks         ${s.attacks.home.total} / ${s.attacks.away.total} (dangerous ${s.attacks.home.dangerous} / ${s.attacks.away.dangerous})`
         : "",
+      motmLines.length ? "\nStandout player per side" : "",
+      ...motmLines,
     ].filter(Boolean).join("\n");
   }
   return [
@@ -2046,6 +2114,8 @@ function matchStatsText(m) {
     s.attacks && !s.attacks.suspect
       ? `  Attaques        ${s.attacks.home.total} / ${s.attacks.away.total} (dangereuses ${s.attacks.home.dangerous} / ${s.attacks.away.dangerous})`
       : "",
+    motmLines.length ? "\nHomme du match, par équipe" : "",
+    ...motmLines,
   ].filter(Boolean).join("\n");
 }
 

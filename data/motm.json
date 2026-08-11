@@ -1,0 +1,44 @@
+{
+  "_lisez_moi": [
+    "Homme du match, par équipe et par rencontre.",
+    "",
+    "AUCUNE source ne publie de statistique individuelle sur cette division :",
+    "ni note, ni minutes jouées, ni passes, ni arrêts du gardien (vérifié",
+    "endpoint par endpoint, voir PROGRESS.md). Sofascore donne les buteurs",
+    "nommés, et c'est tout. Un « meilleur joueur » ne peut donc PAS être calculé.",
+    "",
+    "Deux façons de le désigner, et la console dit toujours laquelle :",
+    "",
+    "  · AUTOMATIQUE — seulement quand un joueur marque au moins deux buts dans",
+    "    la rencontre. C'est le seul cas où la donnée suffit à trancher toute",
+    "    seule. Rien à saisir ici.",
+    "",
+    "  · OBSERVÉ — quelqu'un a regardé le match. C'est ce fichier. Un joueur",
+    "    sans but peut alors être désigné : un gardien, un milieu récupérateur.",
+    "    C'est du jugement, la console l'écrit comme tel et ne le fait jamais",
+    "    passer pour une mesure.",
+    "",
+    "Format : identifiant du match (celui de l'URL Forebet) -> { home, away }.",
+    "Chaque côté prend { player, why } ; 'why' est la phrase qui sera reprise",
+    "telle quelle dans le brief Instagram. Laisser un côté absent quand on n'a",
+    "rien à en dire vaut mieux que de désigner quelqu'un pour remplir la case."
+  ],
+  "matches": {
+    "2487397": {
+      "away": {
+        "player": "Hedy Chaabi",
+        "why": "Milieu d'Al Jazira, très gros match dans le jeu — sans marquer ce soir-là."
+      },
+      "home": {
+        "player": "Le gardien de Khaitan",
+        "why": "Décisif face aux 10 tirs cadrés d'Al Jazira. Pas nommé : Khaitan aligne deux gardiens dans son effectif et aucune source ne publie les compositions de cette division."
+      }
+    },
+    "2487395": {
+      "home": {
+        "player": "Cleiton Padilha",
+        "why": "Attaquant du Sahel, a ouvert le score et signé son 3e but de la saison."
+      }
+    }
+  }
+}

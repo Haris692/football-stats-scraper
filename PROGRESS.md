@@ -1220,6 +1220,35 @@ Trois détails qui ont demandé une reprise :
   qui la place dans l'onglet « La saison ».
 - `.controls` ne se repliait pas : sept boutons alignés débordaient sous 520 px.
 
+## Homme du match (11/08/2026)
+
+Demandé pour le carrousel de la J18. **Un meilleur joueur ne se calcule pas sur
+cette division** : ni note, ni minutes jouées, ni passes, ni arrêts du gardien —
+vérifié endpoint par endpoint chez Sofascore comme chez Forebet. La seule
+statistique individuelle qui existe, ce sont les buts.
+
+D'où deux provenances, jamais une troisième, et **la console dit toujours
+laquelle** :
+
+- **`auto`** — un joueur a marqué au moins deux buts dans la rencontre. Seul cas
+  où la donnée tranche seule. Calculé depuis la chronologie Sofascore.
+- **`observé`** — saisi dans `data/motm.json` par quelqu'un qui a regardé le
+  match. C'est ce qui permet de désigner un gardien ou un milieu.
+
+La mention voyage jusque dans le brief Instagram (`observé, non mesuré` /
+`d'après les buts marqués`). Sans elle, un carrousel présenterait un jugement
+comme une mesure — ce que toute cette console s'emploie à éviter ailleurs.
+
+⚠️ **`attach_motm()` tourne après `attach_events()`** : le doublé se lit dans la
+chronologie, et le camp doit déjà être dans le bon sens.
+
+ℹ️ Laisser un côté absent est un choix valable, et c'est ce qui a été fait pour
+Al Shamiya le 10/08 : battue 0-3 avec 5 tirs, il n'y avait personne à désigner.
+
+ℹ️ **On ne sait pas qui garde les buts.** Khaitan aligne deux gardiens dans son
+effectif (Ahmad Al Dousari n°40, Ossama Al Enezi) et aucune source ne publie de
+composition. Le 10/08, l'entrée dit donc « Le gardien de Khaitan », sans nom.
+
 ## Reste à faire
 
 Les trois points de la session du 06/08 sont soldés : `build_json.py`,

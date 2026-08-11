@@ -144,6 +144,22 @@ correspondants sont donc à remplir à la main :
   est vide, la console affiche les chaînes habituelles comme une possibilité non
   confirmée, et le brief Instagram n'imprime rien : on ne publie pas une
   diffusion incertaine.
+- **`data/motm.json`** — l'homme du match, par équipe. Aucune statistique
+  individuelle n'existe sur cette division : ni note, ni minutes jouées, ni
+  arrêts du gardien. Un meilleur joueur ne se **calcule** donc pas.
+
+La console distingue toujours **deux provenances**, et l'écrit à côté du nom :
+
+| provenance | quand | qui la produit |
+|---|---|---|
+| **d'après les buts** | un joueur a marqué au moins 2 buts dans la rencontre | automatique, seul cas où les chiffres tranchent seuls |
+| **observé** | quelqu'un a regardé le match | `data/motm.json` |
+
+C'est le mode « observé » qui permet de désigner un gardien ou un milieu, que
+nul relevé ne mesure ici. La mention part jusque dans le brief Instagram :
+**un jugement ne doit jamais être présenté comme une mesure.** Laisser un côté
+absent vaut mieux que de remplir la case — une équipe battue 0-3 n'a pas
+forcément d'homme du match.
 `data/squads.json` **n'est plus une saisie manuelle** : `fetch_squads.py` le
 remplit depuis Sofascore (230 joueurs sur 8 clubs, avec poste, numéro, pays et
 buts). Le relancer après un mercato :
