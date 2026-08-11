@@ -227,10 +227,24 @@ button.fx:hover { background: color-mix(in srgb, var(--text-primary) 4%, transpa
 .fx .who .sep { color: var(--text-muted); }
 .fx .go { font-size: 12px; color: var(--text-muted); }
 .fx .sc { font-weight: 600; font-variant-numeric: tabular-nums; }
+.fx .sc.live { color: var(--critical); }
 .badge {
   font-size: 11px; letter-spacing: .04em; text-transform: uppercase;
   border: 1px solid var(--border); border-radius: 999px; padding: 2px 8px;
   color: var(--text-secondary);
+}
+/* Le direct se signale par une pastille qui bat. Le battement s'arrête si la
+   personne a demandé moins d'animations — c'est un ornement, pas une info. */
+.badge.live { color: var(--critical); border-color: var(--critical); }
+.badge.live::before {
+  content: ""; display: inline-block; width: 6px; height: 6px;
+  border-radius: 50%; background: var(--critical);
+  margin-right: 6px; vertical-align: middle;
+  animation: pulse 1.6s ease-in-out infinite;
+}
+@keyframes pulse { 50% { opacity: .25; } }
+@media (prefers-reduced-motion: reduce) {
+  .badge.live::before { animation: none; }
 }
 .empty { font-size: 13px; color: var(--text-secondary); padding: 8px 0; }
 
@@ -306,6 +320,9 @@ button.fx:hover { background: color-mix(in srgb, var(--text-primary) 4%, transpa
         <option value="played"></option>
         <option value="all"></option>
       </select>
+      <!-- N'apparaît que pendant qu'une rencontre se joue : un bouton « Direct »
+           visible un mardi matin ne pourrait rien suivre. -->
+      <button class="btn" id="live" type="button" hidden></button>
       <button class="btn" id="refresh" type="button"></button>
       <!-- Langue de l'interface, et langue du brief Instagram : deux réglages
            distincts. Le carrousel est du contenu éditorial — sa langue ne doit
@@ -340,6 +357,21 @@ const EN = {
   "Toutes les équipes": "All teams",
   "À venir": "Upcoming", "Aujourd'hui": "Today", "Joués": "Played", "Toutes": "All",
   "Rafraîchir": "Refresh", "Thème": "Theme",
+  "Direct": "Live", "en direct": "live",
+  "Suivre les matchs en cours, relevé toutes les minutes":
+    "Follow matches in progress, updated every minute",
+  "Arrêter le suivi en direct": "Stop following live",
+  "connexion au direct…": "connecting to the live feed…",
+  "suivi en direct arrêté — les chiffres affichés restent ceux du dernier relevé.":
+    "live tracking stopped — the figures on screen are those of the last reading.",
+  "aucun relevé pour l'instant — le premier arrive dans moins d'une minute.":
+    "nothing recorded yet — the first reading lands within a minute.",
+  "le direct demande « python serve.py » : cette page ne peut pas interroger Forebet elle-même (pas de CORS).":
+    "live needs “python serve.py”: this page cannot query Forebet itself (no CORS).",
+  "Score en direct, à confirmer : la source a déjà réattribué un but d'un camp à l'autre sur cette rencontre.":
+    "Live score, unconfirmed: the source has already moved a goal from one side to the other in this match.",
+  "Relevé en direct, encore incomplet : la source remplit les rubriques au fil du match, et ne publie ni la minute ni les faits de jeu avant la fin.":
+    "Live reading, still partial: the source fills the categories as the match goes on, and publishes neither the clock nor the events before full time.",
   "Filtrer par équipe": "Filter by team", "Filtrer par période": "Filter by period",
   "Console Forebet · Division 1 Koweït": "Forebet console · Kuwait Division 1",
   "Console Forebet": "Forebet console",
@@ -539,6 +571,14 @@ const PH = {
       `instantané ; pour aller rechercher les données, lance « python serve.py » en local.`,
     en: g => `already current: nothing newer than ${g}. This page is a snapshot; ` +
       `run “python serve.py” locally to actually go and fetch the data.`,
+  },
+  liveAt: {
+    fr: h => `relevé de ${h}`,
+    en: h => `recorded at ${h}`,
+  },
+  liveWatching: {
+    fr: n => n > 1 ? `${n} matchs suivis en direct` : `1 match suivi en direct`,
+    en: n => n > 1 ? `${n} matches followed live` : `1 match followed live`,
   },
 };
 
@@ -917,10 +957,34 @@ function renderMatchStats(m) {
   const card = el("div", "card");
   card.appendChild(el("h2", null, t("Statistiques du match")));
 
+  if (m.live) {
+    const badge = el("span", "badge live", t("en direct"));
+    badge.style.marginLeft = "10px";
+    card.querySelector("h2").appendChild(badge);
+  }
+
   const meta = ph("matchMeta", s.venue, s.venue_capacity, s.half_time, s.full_time);
   card.appendChild(el("p", "sub", t(
     "Relevé de cette rencontre, pas de la saison — c'est la seule carte de la " +
     "page qui décrit ce match. ") + (meta ? meta + "." : "")));
+
+  // Ce que le direct ne peut pas montrer, dit une fois plutôt que laissé à
+  // deviner devant des rubriques qui manquent.
+  if (m.live) {
+    const p = el("p", "sub", t(
+      "Relevé en direct, encore incomplet : la source remplit les rubriques au " +
+      "fil du match, et ne publie ni la minute ni les faits de jeu avant la fin."));
+    p.style.margin = "8px 0 0";
+    card.appendChild(p);
+  }
+  if (s.unstable) {
+    const p = el("p", "sub", t(
+      "Score en direct, à confirmer : la source a déjà réattribué un but d'un " +
+      "camp à l'autre sur cette rencontre."));
+    p.style.margin = "8px 0 0";
+    p.style.color = "var(--critical)";
+    card.appendChild(p);
+  }
 
   const bar = possessionBar(s);
   if (bar) card.appendChild(bar);
@@ -1803,7 +1867,10 @@ function fixtureRow(f) {
   }
 
   const when = el("div", "when");
-  if (f.played && f.score) when.appendChild(el("span", "sc", f.score));
+  // Un match en cours montre son score comme un match joué, mais signalé : le
+  // chiffre n'est pas définitif, et il peut encore être corrigé par la source.
+  if (f.live && f.score) when.appendChild(el("span", "sc live", f.score));
+  else if (f.played && f.score) when.appendChild(el("span", "sc", f.score));
   else when.appendChild(el("span", null, (f.kickoff || "").split(" ")[1] || "—"));
   row.appendChild(when);
 
@@ -1811,7 +1878,8 @@ function fixtureRow(f) {
   who.appendChild(teamLabel(f.home, "sm"));
   who.appendChild(el("span", "sep", "—"));
   who.appendChild(teamLabel(f.away, "sm"));
-  if (dayOf(f) === DATA.today && !f.played) who.appendChild(el("span", "badge", t("aujourd'hui")));
+  if (f.live) who.appendChild(el("span", "badge live", t("en direct")));
+  else if (dayOf(f) === DATA.today && !f.played) who.appendChild(el("span", "badge", t("aujourd'hui")));
   // La chaîne n'apparaît dans la liste que si elle a été renseignée : afficher
   // « habituellement… » sur chaque ligne serait du bruit.
   if (f.broadcast && f.broadcast.confirmed) {
@@ -1902,6 +1970,9 @@ function renderAll() {
   }
   renderFixtures();
   renderDetail();
+  // Une rencontre qui entre dans sa fenêtre allume le direct toute seule : la
+  // console reste ouverte des heures, on ne va pas demander un rechargement.
+  syncLive();
 }
 
 function fillTeamSelect() {
@@ -1939,6 +2010,7 @@ function renderChrome() {
   document.getElementById("team").setAttribute("aria-label", t("Filtrer par équipe"));
   document.getElementById("refresh").textContent = t("Rafraîchir");
   document.getElementById("theme").textContent = t("Thème");
+  renderLiveButton();
   // Les deux boutons de langue affichent la langue vers laquelle ils basculent :
   // « EN » veut dire « passer en anglais », pas « tu es en anglais ».
   const langBtn = document.getElementById("lang");
@@ -1958,6 +2030,167 @@ function setLang(next) {
   fillTeamSelect();
   renderFoot();
   renderAll();
+}
+
+/* ---------- direct ---------- */
+/* La page ne va JAMAIS chercher Forebet elle-même — elle ne le peut pas, il n'y
+   a pas de CORS. Elle interroge `serve.py`, qui tient un fil de fond relevant
+   les matchs en cours une fois par minute. On peut donc l'interroger souvent
+   sans rien coûter à la source : on lit un instantané déjà pris.
+
+   Deux limites de la source, constatées le 10/08/2026 en cours de match et
+   assumées par l'affichage :
+
+   - ni minute ni statut, et aucun fait de jeu avant la fin : on date le relevé,
+     on n'affiche pas d'horloge de match qu'on n'a pas ;
+   - le score des premières minutes peut être réattribué d'un camp à l'autre.
+     Le serveur marque ces rencontres `unstable`, et la carte le dit. */
+
+const LIVE_BEFORE_MS = 5 * 60000;    // même fenêtre que serve.py
+const LIVE_AFTER_MS = 150 * 60000;
+/* On interroge le serveur plus souvent qu'il ne relève : c'est gratuit, et le
+   relevé s'affiche ainsi dans les secondes qui suivent sa prise. */
+const LIVE_EVERY_MS = 15000;
+
+let liveTimer = null;
+let liveSnapshot = null;
+/* `null` = l'utilisateur n'a rien choisi ; on décide alors pour lui (voir
+   `liveWanted`). Une fois qu'il a cliqué, son choix prime et il est retenu. */
+let liveChoice = (() => {
+  try {
+    const v = localStorage.getItem("console-live");
+    return v === null ? null : v === "1";
+  } catch (e) { return null; }
+})();
+
+/* Les rencontres qui devraient être en train de se jouer, d'après l'heure. Les
+   dates sans fuseau sont lues en heure locale, exactement comme côté Python. */
+function liveFixtures() {
+  const now = Date.now();
+  return (DATA.fixtures || []).filter(f => {
+    if (!f.match_id || !f.kickoff_iso) return false;
+    const ko = Date.parse(f.kickoff_iso);
+    return isFinite(ko) && now >= ko - LIVE_BEFORE_MS && now <= ko + LIVE_AFTER_MS;
+  });
+}
+
+/* Par défaut, on suit : si une rencontre se joue pendant qu'on regarde la
+   console, c'est ce qu'on est venu voir. Le bouton permet de couper, et ce
+   refus-là est retenu. En file://, personne à interroger. */
+function liveWanted() {
+  if (location.protocol === "file:") return false;
+  if (!liveFixtures().length) return false;
+  return liveChoice === null ? true : liveChoice;
+}
+
+function setLive(on, why) {
+  liveChoice = on;
+  try { localStorage.setItem("console-live", on ? "1" : "0"); } catch (e) { /* mode privé */ }
+  if (why) note(why);
+  syncLive();
+}
+
+/* Démarre ou arrête la boucle selon ce que veut l'utilisateur et ce que dit
+   l'horloge. Appelée après chaque rendu : une rencontre qui entre dans sa
+   fenêtre allume le direct sans qu'on ait à recharger la page. */
+function syncLive() {
+  const want = liveWanted();
+  if (want && liveTimer === null) {
+    note(t("connexion au direct…"));
+    pollLive();
+    liveTimer = setInterval(pollLive, LIVE_EVERY_MS);
+  } else if (!want && liveTimer !== null) {
+    clearInterval(liveTimer);
+    liveTimer = null;
+    liveSnapshot = null;
+  }
+  renderLiveButton();
+}
+
+function renderLiveButton() {
+  const btn = document.getElementById("live");
+  if (!btn) return;
+  const possible = location.protocol !== "file:" && liveFixtures().length > 0;
+  btn.hidden = !possible;
+  if (!possible) return;
+  const on = liveTimer !== null;
+  btn.textContent = (on ? "● " : "○ ") + t("Direct");
+  btn.setAttribute("aria-pressed", String(on));
+  btn.title = on ? t("Arrêter le suivi en direct")
+                 : t("Suivre les matchs en cours, relevé toutes les minutes");
+}
+
+async function pollLive() {
+  let snap;
+  try {
+    const res = await fetch("api/live?t=" + Date.now(), { cache: "no-store" });
+    // Comme pour « Rafraîchir » : ce n'est pas le code HTTP qui prouve la
+    // présence de serve.py, c'est qu'il réponde du JSON.
+    if (!(res.headers.get("content-type") || "").includes("application/json")) {
+      throw new Error("pas de serveur de collecte");
+    }
+    snap = await res.json();
+  } catch (e) {
+    // Page publiée ou serveur arrêté : on coupe, en le disant une fois.
+    setLive(false, t("le direct demande « python serve.py » : cette page ne peut " +
+                     "pas interroger Forebet elle-même (pas de CORS)."));
+    return;
+  }
+  liveSnapshot = snap;
+  // Repeindre seulement quand quelque chose a bougé, mais dater le relevé à
+  // tous les coups : c'est cette heure qui dit que le direct avance encore.
+  if (applyLive(snap)) renderAll();
+  renderLiveNote();
+}
+
+/* Recopie les relevés reçus dans la charge utile en place. Renvoie vrai si
+   quelque chose a bougé — inutile de repeindre la page toutes les quinze
+   secondes pour rien. */
+function applyLive(snap) {
+  const live = snap.live || {};
+  let changed = false;
+
+  (DATA.matches || []).forEach(m => {
+    const block = live[String(m.match_id)];
+    if (!block) return;
+    if (JSON.stringify(m.match_stats) !== JSON.stringify(block)) changed = true;
+    m.match_stats = block;
+    m.live = !block.full_time;
+  });
+
+  /* Le score de la liste des rencontres suit les buts relevés : c'est la
+     première chose qu'on regarde. `played` n'est PAS touché — un match en cours
+     n'est pas un match joué, et les filtres doivent continuer de le classer
+     parmi les rencontres à venir. */
+  (DATA.fixtures || []).forEach(f => {
+    const block = live[String(f.match_id)];
+    if (!block) return;
+    const h = (block.home || {}).goals, a = (block.away || {}).goals;
+    const wasLive = f.live;
+    f.live = !block.full_time;
+    f.unstable = !!block.unstable;
+    if (h === null || h === undefined || a === null || a === undefined) return;
+    const score = h + " - " + a;
+    if (f.score !== score || wasLive !== f.live) { f.score = score; changed = true; }
+  });
+
+  return changed;
+}
+
+/* L'heure du relevé, sous la barre : sans elle, on ne saurait pas si le direct
+   avance ou s'il est resté bloqué sur un vieux chiffre. */
+function renderLiveNote() {
+  if (liveTimer === null || !liveSnapshot) return;
+  const snap = liveSnapshot;
+  if (snap.state && snap.state !== "ok") {
+    note(snap.state === "démarrage"
+      ? t("aucun relevé pour l'instant — le premier arrive dans moins d'une minute.")
+      : snap.state);
+    return;
+  }
+  const when = (snap.collected || "").split("T")[1] || "";
+  const n = Object.keys(snap.live || {}).length;
+  note(ph("liveWatching", n) + " · " + ph("liveAt", when) + ".", "ok");
 }
 
 /* ---------- rafraîchissement ---------- */
@@ -2105,8 +2338,16 @@ function boot() {
   const btn = document.getElementById("refresh");
   btn.addEventListener("click", () => refresh(btn));
 
+  document.getElementById("live").addEventListener("click", () => {
+    const on = liveTimer === null;
+    // À l'arrêt, on le dit : sinon la ligne d'état garderait l'heure du dernier
+    // relevé, et on croirait le direct figé plutôt qu'éteint.
+    setLive(on, on ? null : t("suivi en direct arrêté — les chiffres affichés " +
+                              "restent ceux du dernier relevé."));
+  });
+
   renderFoot();
-  renderAll();
+  renderAll();   // allume le direct au passage, si une rencontre se joue
 }
 boot();
 </script>

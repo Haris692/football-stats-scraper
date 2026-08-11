@@ -393,13 +393,54 @@ Autres points d'entrée repérés dans `all.js` : `/gsv/` (cotes),
 `/scripts/getftr.php?int=N&ln=` (listes de matchs). Deux URL `http://localhost/`
 traînent dans le code : ce sont des restes de dev, pas des endpoints publics.
 
-### Ce qui reste à vérifier
+### TRANCHÉ le 10/08/2026 : oui, les stats se remplissent pendant le match
 
-Les stats de `gmc=1` sont-elles remplies **pendant** le match, ou seulement à la
-fin ? Toujours non tranché au 10/08. **Le test décisif est un match koweïtien en
-cours** : lancer `python fetch_stats.py <mid> --force --summary` une vingtaine de
-minutes après un coup d'envoi et regarder si possession et tirs sont déjà non
-nuls. Rien à coder pour ça — l'outil est là, il manque juste le bon créneau.
+La question est réglée, ne pas la rouvrir. Relevés pris sur Khaitan SC -
+Al Jazira (`2487397`) pendant la rencontre :
+
+| | 19:42 | 19:46 | 20:07 |
+|---|---|---|---|
+| possession | 65 / 35 | 64 / 36 | 58 / 42 |
+| tirs | 1 / 0 | 1 / 0 | 3 / 4 |
+| attaques | 17 / 13 | 22 / 16 | — |
+| remplacements | — | 0 / 1 | 0 / 1 |
+
+Trois enseignements, tous constatés et non déduits :
+
+- **Les chiffres bougent d'un relevé à l'autre**, à la granularité de quelques
+  minutes. `--force` est indispensable : servi depuis le cache, un relevé en
+  direct n'a aucun intérêt.
+- ⚠️ **Les rubriques apparaissent au fil du match** — « remplacements » n'existe
+  pas au coup d'envoi. Tout code qui consomme ces stats doit tolérer des clés
+  absentes, jamais supposer un jeu de champs fixe.
+- ⚠️ **Ni minute, ni statut, ni faits de jeu en direct.** L'en-tête ne porte que
+  `date`, `host`/`guest` (+ id, couleur, entraîneur), `venue`,
+  `venue_capacity`, `referee` et les scores — **pas de `minute` ni de
+  `status`** — et `events` reste **vide** tant que le match n'est pas fini. On
+  ne peut donc pas afficher d'horloge de match : c'est l'heure du *relevé* qu'on
+  date. Pour la minute, il faudrait le flux SSE `/glvs/` décrit plus haut.
+
+### ⚠️ Le score des premières minutes peut changer de camp
+
+Sur Sahel - Al Shamiya (`2487395`), le **but unique** a été attribué à
+Al Shamiya à 19:41 (`ht_score` « 0-1 », `goals` 0/1) puis à Sahel à 19:52
+(`ht_score` « 1-0 », `goals` 1/0). Contrôlé dans la foulée : `host_id` (6084,
+Sahel) et `guest_id` (28045) sont **présents et corrects**, et les lignes de
+`stats` arrivent dans l'ordre `[hôte, invité]`. **Ce n'est donc pas le repli
+positionnel de `normalise()`** — c'est la source qui s'est reprise. Le cache
+ayant été écrasé par le `--force`, l'appel de 19:41 n'est plus rejugeable.
+
+À rapprocher du désaccord Forebet / Sofascore sur qui reçoit : les deux
+symptômes portent sur la même chose, l'attribution des camps.
+
+Conséquence retenue plutôt qu'un correctif : le serveur **compare chaque relevé
+au précédent et marque `unstable` toute rencontre dont le compte de buts
+recule** — un but ne se démarque pas. La console affiche alors le score avec
+une réserve explicite au lieu de le présenter comme acquis.
+
+Noter au passage que **`ht_score` porte le score courant pendant la première
+période**, pas le score à la mi-temps : c'est la seule source de score du flux
+`gmc=1`, il ne faut pas la lire comme un « mi-temps » définitif.
 
 ## Statistiques de match : branchées le 10/08/2026
 
@@ -928,6 +969,59 @@ vrai joueur dans le second cas. Un joueur sur 230.
 ℹ️ **Le stade déclaré par club est conservé (`declared_venue`) mais n'est pas
 affiché** : ce n'est pas là que le club joue, les terrains étant partagés.
 
+## Mode direct (10/08/2026)
+
+La console suit les rencontres pendant qu'elles se jouent : score, possession et
+tirs se mettent à jour tout seuls, sans rechargement.
+
+**L'architecture est le point important.** La règle « rafraîchissement déclenché
+à la main, jamais périodique » (héritée de `kuwait-football`) visait à ne pas
+marteler la source. Le direct la respecte en déplaçant la périodicité **du côté
+serveur** :
+
+- `serve.py` tient un **unique fil de fond** (`LiveCollector`) qui relève les
+  seuls matchs en cours, **une fois par minute**, avec un seul Chrome gardé
+  ouvert d'un cycle à l'autre ;
+- la page interroge `GET /api/live` toutes les **15 s**, mais ne fait que **lire
+  le dernier instantané** — elle ne déclenche aucune collecte ;
+- donc **dix onglets ouverts coûtent à Forebet exactement ce que coûte un
+  seul**, ce qu'un polling côté page n'aurait pas permis.
+
+Trois garde-fous, chacun pour une raison précise :
+
+- **Le collecteur démarre à la première demande et s'arrête après 180 s sans
+  demande.** Fermer l'onglet suffit donc à ne plus solliciter la source — sinon
+  un `serve.py` oublié la sonderait toute la nuit.
+- **C'est le serveur qui décide quoi relever**, à partir des `fixtures` de son
+  `data.json` ; la page n'envoie aucun identifiant. Sans ça, un onglet pourrait
+  lui faire interroger n'importe quel `match_id`.
+- **`/api/refresh` a la priorité** : les deux pilotent le même Chrome sur le
+  port CDP 9333. Le direct tente `Handler.lock` sans bloquer et **saute son
+  tour** si une collecte complète est en cours.
+
+Fenêtre « en cours » : de 5 min avant le coup d'envoi à 150 min après. Large,
+parce que **rien dans la source ne dit qu'un match est fini** — c'est `ft_score`
+qui, en se remplissant, sort la rencontre du suivi.
+
+**Côté page** : un bouton « ● Direct » qui **n'apparaît que pendant qu'une
+rencontre se joue** (inutile un mardi matin), allumé par défaut, le refus étant
+retenu en `localStorage`. Score en rouge et pastille « en direct » qui bat dans
+la liste ; badge sur la carte « Statistiques du match », qui dit aussi qu'un
+relevé en direct est encore incomplet. `renderAll()` rappelle `syncLive()` : une
+rencontre qui entre dans sa fenêtre allume le direct **sans rechargement**.
+
+⚠️ **`played` n'est jamais modifié par le direct**, seulement `score` et `live` :
+un match en cours n'est pas un match joué, et les filtres doivent continuer de
+le classer parmi les rencontres à venir.
+
+⚠️ **Rien de tout ça ne marche sur GitHub Pages** — `/api/live` n'y existe pas.
+La page le détecte (réponse non-JSON, comme pour « Rafraîchir »), coupe le suivi
+et le dit. Le direct est une fonctionnalité de `python serve.py`, point.
+
+Vérifié en conditions réelles pendant Sahel - Al Shamiya et Khaitan - Al Jazira
+le 10/08 : deux cycles à 62 s d'intervalle, possession 70 → 71 %, tirs 5 → 6,
+aucune erreur console, bascule arrêt/reprise et persistance du refus contrôlées.
+
 ## Reste à faire
 
 Les trois points de la session du 06/08 sont soldés : `build_json.py`,
@@ -937,14 +1031,22 @@ Forebet) — inutile de chercher une page `fixtures` chez Forebet.
 
 Ce qui reste ouvert, par ordre d'intérêt :
 
-1. **Trancher si les stats se remplissent pendant le match** (voir plus haut) :
-   c'est la seule inconnue qui change ce que la console peut afficher en direct.
-2. **Le direct par Server-Sent Events** (`/glvs/`) n'est pas branché : score et
-   minute poussés en temps réel, sans polling. N'a de sens que dans une page qui
-   reste ouverte — la console est un fichier statique, donc à décider.
-3. ~~Effectifs~~ — **fait le 10/08**, voir plus haut. 230 joueurs, 8 clubs.
-5. ⚠️ **Trancher qui reçoit.** Forebet et Sofascore s'opposent sur les
-   4 rencontres communes. Tant que ce n'est pas arbitré, « reçoit », les bilans
+1. ~~Trancher si les stats se remplissent pendant le match~~ — **tranché le
+   10/08 : oui**, voir la section « Direct et statistiques par match ».
+2. ~~Effectifs~~ — **fait le 10/08**, voir plus haut. 230 joueurs, 8 clubs.
+3. ⚠️ **Trancher qui reçoit.** Forebet et Sofascore s'opposent sur les
+   4 rencontres communes, et Forebet s'est en plus contredit tout seul en cours
+   de match le 10/08 (voir « Le score des premières minutes peut changer de
+   camp »). Tant que ce n'est pas arbitré, « reçoit », les bilans
    domicile/extérieur et les slides « LES HÔTES / LES VISITEURS » reposent sur
-   une donnée contestée.
-4. **Diffuseurs** : `data/broadcasts.json` a quatre cases vides.
+   une donnée contestée. **C'est désormais le point ouvert le plus gênant** :
+   le direct affiche un score par camp, donc l'erreur devient visible.
+4. **Le flux SSE `/glvs/`** reste débranché. Il apporterait ce que le mode
+   direct ne peut pas montrer : la **minute de jeu** et le temps additionnel,
+   absents de `gmc=1`. À faire consommer par `serve.py`, comme le collecteur —
+   pas par la page, qui n'a pas accès à Forebet.
+5. **Diffuseurs** : `data/broadcasts.json` a quatre cases vides.
+6. **`shoot.py` n'est documenté nulle part ici.** L'outil (captures d'écran
+   d'une page web, nettoyage des bandeaux, `--login`) a été écrit le 10/08 en
+   9 commits et n'a pas de section dans ce fichier. Il est autonome et sans
+   rapport avec la collecte, mais l'absence de trace est un trou de suivi.

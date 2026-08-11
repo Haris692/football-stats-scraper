@@ -69,7 +69,7 @@ match déjà en cache.
 | `crests.py` | écussons des clubs et couleurs dominantes qu'on en extrait |
 | `build_console.py` | assemble `console.html` |
 | `build_json.py` | assemble `output/` |
-| `serve.py` | sert la console en local et lui donne un vrai bouton « Rafraîchir » |
+| `serve.py` | sert la console en local, lui donne un vrai bouton « Rafraîchir » et le suivi en direct |
 | `shoot.py` | captures d'écran d'une page web vers un dossier (outil autonome) |
 | `test_reject_labels.py` | garde-fou : quels libellés de bandeau sont cliquables |
 
@@ -423,6 +423,35 @@ Ainsi un build local n'écrase pas la donnée publiée. Il pèse 165 Ko contre
 déjà et qu'ils ne changent pas. La charge utile reste **aussi** embarquée dans
 la page — la console doit continuer de s'ouvrir seule, hors ligne.
 `--no-data-file` pour ne pas l'écrire.
+
+## Le mode direct
+
+Pendant qu'une rencontre se joue, la console la suit : score, possession et tirs
+se mettent à jour seuls. Un bouton **« ● Direct »** apparaît dans la barre — et
+seulement à ce moment-là, puisqu'il n'aurait rien à suivre le reste du temps.
+
+C'est une fonctionnalité de `python serve.py`, pas de la page publiée : celle-ci
+n'a aucun moyen d'interroger Forebet (pas de CORS). Elle le détecte et le dit.
+
+La périodicité est **du côté serveur**, volontairement :
+
+- un **unique fil de fond** relève les seuls matchs en cours, **une fois par
+  minute**, avec un seul Chrome réutilisé d'un cycle à l'autre ;
+- la page lit `GET /api/live` toutes les 15 s, mais ne fait que **consulter le
+  dernier instantané** — elle ne déclenche aucune collecte ;
+- **dix onglets ouverts coûtent donc à Forebet ce que coûte un seul** ;
+- le collecteur **démarre à la première demande et s'arrête après 180 s sans
+  demande** : fermer l'onglet suffit à ne plus rien solliciter.
+
+Deux limites viennent de la source, et l'interface les affiche plutôt que de les
+masquer :
+
+- **pas de minute de jeu** — `gmc=1` ne publie ni `minute`, ni `status`, ni les
+  faits de jeu avant la fin du match. C'est l'heure du *relevé* qui est datée,
+  pas le temps écoulé ;
+- **le score des premières minutes peut être réattribué d'un camp à l'autre**
+  (constaté le 10/08/2026). Le serveur repère les rencontres dont le compte de
+  buts recule et la console affiche alors le score avec une réserve explicite.
 
 ## Publication
 
