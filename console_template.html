@@ -15,53 +15,77 @@
    n'est jamais une équipe : il porte les buts encaissés, que la position sous
    la ligne de base distingue déjà.
 --------------------------------------------------------------------------- */
+/* ---------------------------------------------------------------------------
+   DIRECTION : LE TABLEAU D'AFFICHAGE, À 19 H 25
+
+   Toutes les rencontres de cette division se jouent le soir — 19:15, 19:25,
+   19:45, 20:45 — sous les projecteurs. La console est donc sombre par défaut,
+   et pas d'un noir neutre : le fond porte une pointe de vert, celle d'une
+   pelouse éclairée de nuit, et l'encre est un blanc légèrement verdi plutôt
+   que du blanc pur. Un seul accent chaud, `--flood`, la couleur du projecteur
+   lui-même — réservé à la ligne de score et au direct. Nulle part ailleurs.
+
+   Le clair reste à un clic et reste soigné : on lit une console de statistiques
+   en plein jour aussi.
+--------------------------------------------------------------------------- */
 :root {
-  color-scheme: light;
-  --surface-1: #fcfcfb;
-  --plane: #f9f9f7;
-  --text-primary: #0b0b0b;
-  --text-secondary: #52514e;
-  --text-muted: #898781;
-  --grid: #e1e0d9;
-  --axis: #c3c2b7;
-  --border: rgba(11, 11, 11, 0.10);
-  --home: #2a78d6;
-  --away: #eb6834;
-  --muted-bar: #898781;
-  --good: #0ca30c;
-  --critical: #d03b3b;
-  --shadow: 0 1px 2px rgba(11, 11, 11, 0.05);
-}
-@media (prefers-color-scheme: dark) {
-  :root:where(:not([data-theme="light"])) {
-    color-scheme: dark;
-    --surface-1: #1a1a19; --plane: #0d0d0d;
-    --text-primary: #ffffff; --text-secondary: #c3c2b7; --text-muted: #898781;
-    --grid: #2c2c2a; --axis: #383835; --border: rgba(255, 255, 255, 0.10);
-    --home: #3987e5; --away: #d95926; --muted-bar: #898781;
-    --shadow: none;
-  }
-}
-:root[data-theme="dark"] {
   color-scheme: dark;
-  --surface-1: #1a1a19; --plane: #0d0d0d;
-  --text-primary: #ffffff; --text-secondary: #c3c2b7; --text-muted: #898781;
-  --grid: #2c2c2a; --axis: #383835; --border: rgba(255, 255, 255, 0.10);
-  --home: #3987e5; --away: #d95926; --muted-bar: #898781;
+  --plane: #0c1310;          /* la nuit au-dessus du stade */
+  --surface-1: #121b17;      /* les panneaux, à peine détachés du fond */
+  --surface-2: #18231e;      /* ce qui se pose SUR un panneau */
+  --text-primary: #e9efea;   /* blanc de projecteur, pas blanc pur */
+  --text-secondary: #a3b3aa;
+  --text-muted: #74857b;
+  --grid: #1e2b25;
+  --axis: #2c3d34;
+  --border: rgba(233, 239, 234, 0.11);
+  /* Paire validée pour fond sombre (dataviz) : séparation CVD ΔE 26.8.
+     Le domicile est TOUJOURS bleu, l'extérieur TOUJOURS orange. */
+  --home: #3987e5;
+  --away: #d95926;
+  --muted-bar: #74857b;
+  --good: #3fbf6a;
+  --critical: #ff6b5e;
+  --flood: #f2c14e;          /* le projecteur : score et direct, rien d'autre */
   --shadow: none;
+}
+:root[data-theme="light"] {
+  color-scheme: light;
+  --plane: #f4f6f4; --surface-1: #ffffff; --surface-2: #f7f9f7;
+  --text-primary: #0b0f0d; --text-secondary: #4c5a52; --text-muted: #7b8a81;
+  --grid: #e2e7e3; --axis: #c4cec8; --border: rgba(11, 15, 13, 0.12);
+  --home: #2a78d6; --away: #eb6834; --muted-bar: #7b8a81;
+  --good: #0a8f36; --critical: #cc3a2e;
+  --flood: #a06b00;          /* l'amber tient le contraste sur fond clair */
+  --shadow: 0 1px 2px rgba(11, 15, 13, 0.06);
+}
+
+/* La face d'affichage : Bahnschrift est un DIN livré avec Windows, la lettre
+   des panneaux de signalisation et des tableaux de stade. Elle est là, sur la
+   machine, sans rien télécharger — la page doit rester autonome et hors ligne.
+   Les replis visent le même dessin étroit et technique ailleurs. */
+:root {
+  --display: "Bahnschrift", "DIN Alternate", "Oswald", "Roboto Condensed",
+             "Segoe UI Variable Display", system-ui, sans-serif;
+  --body: system-ui, -apple-system, "Segoe UI", sans-serif;
+  --mono: "Cascadia Mono", ui-monospace, Consolas, "SF Mono", monospace;
 }
 
 * { box-sizing: border-box; }
 body {
   margin: 0; background: var(--plane); color: var(--text-primary);
-  font: 15px/1.5 system-ui, -apple-system, "Segoe UI", sans-serif;
+  font: 15px/1.55 var(--body);
   -webkit-font-smoothing: antialiased;
 }
+/* Un chiffre qui change ne doit pas déplacer ses voisins : toute la console est
+   en chiffres tabulaires, pas seulement les tableaux. */
+body { font-variant-numeric: tabular-nums; }
 .wrap { max-width: 1080px; margin: 0 auto; padding: 24px 20px 72px; }
 
 .topbar { display: flex; flex-wrap: wrap; gap: 12px; align-items: center; justify-content: space-between; margin-bottom: 20px; }
 .brand { font-size: 13px; letter-spacing: .08em; text-transform: uppercase; color: var(--text-muted); }
-.controls { display: flex; gap: 8px; align-items: center; }
+/* Sept contrôles alignés débordaient sous 520 px : ils se replient. */
+.controls { display: flex; flex-wrap: wrap; gap: 8px; align-items: center; }
 select, .btn {
   font: inherit; font-size: 13px; color: var(--text-primary);
   background: var(--surface-1); border: 1px solid var(--border);
@@ -84,6 +108,184 @@ select, .btn {
 .dot.home { background: var(--home); }
 .dot.away { background: var(--away); }
 .kickoff { font-size: 13px; color: var(--text-secondary); width: 100%; }
+
+/* ---------------------------------------------------------------------------
+   LE TABLEAU D'AFFICHAGE
+
+   La ligne de score est le sujet de la page : elle se lit avant tout le reste,
+   et elle reste en haut quand on descend. Elle porte aussi le rang et les
+   points des deux clubs — la seule part du classement dont on a besoin en
+   lisant un match, ce qui évite de garer un tableau entier sur le côté.
+--------------------------------------------------------------------------- */
+.board {
+  position: sticky; top: 0; z-index: 20;
+  /* Presque opaque, et pas translucide : le contenu qui défilait derrière le
+     score le rendait illisible, et un tableau d'affichage ne clignote pas. */
+  background: var(--plane);
+  border-bottom: 1px solid var(--border);
+  box-shadow: 0 8px 16px -12px rgba(0, 0, 0, .8);
+  margin: 0 -20px 20px; padding: 14px 20px 0;
+}
+.board .line {
+  display: grid; grid-template-columns: 1fr auto 1fr;
+  align-items: center; gap: 14px; max-width: 1080px; margin: 0 auto;
+}
+.board .team { display: flex; align-items: center; gap: 10px; min-width: 0; }
+.board .team.away { flex-direction: row-reverse; }
+.board .team .crest { width: 34px; height: 34px; object-fit: contain; flex: none; }
+.board .nm {
+  font-family: var(--display); font-size: 24px; line-height: 1.05;
+  letter-spacing: .01em; text-transform: uppercase;
+  overflow: hidden; text-overflow: ellipsis; white-space: nowrap;
+}
+.board .rank { font-size: 12px; color: var(--text-muted); white-space: nowrap; }
+.board .team.away .rank, .board .team.away .nm { text-align: right; }
+/* Le score : la seule chose de la page qui a le droit d'être grande. */
+.board .score {
+  font-family: var(--display); font-size: 42px; line-height: 1;
+  letter-spacing: .02em; color: var(--flood); white-space: nowrap;
+  background: none; border: 0; padding: 0 6px; cursor: pointer;
+}
+.board .score .dash { color: var(--text-muted); margin: 0 4px; }
+.board .score:hover, .board .score:focus-visible { text-decoration: underline; }
+.board .score.pending { font-size: 26px; color: var(--text-secondary); }
+.board .meta {
+  max-width: 1080px; margin: 8px auto 0; padding-bottom: 12px;
+  font-size: 12px; color: var(--text-muted);
+  display: flex; flex-wrap: wrap; gap: 4px 12px; align-items: center;
+}
+@media (max-width: 640px) {
+  .board .line { grid-template-columns: 1fr auto 1fr; gap: 8px; }
+  .board .nm { font-size: 15px; white-space: normal; }
+  .board .score { font-size: 30px; }
+  .board .team .crest { width: 24px; height: 24px; }
+}
+
+/* --- le rail des minutes : la signature de cette console ------------------
+   Personne d'autre ne publie les buteurs de cette division. Depuis qu'on les a
+   nommés ET minutés, on peut poser le match sur une ligne de temps : domicile
+   au-dessus, extérieur au-dessous, à la minute réelle. C'est le seul endroit de
+   la page où l'on dépense de l'emphase. */
+.rail { margin: 4px 0 0; }
+.rail .track {
+  position: relative; height: 96px;
+  /* La bande centrale est la pelouse sous les projecteurs : plus claire au
+     milieu, éteinte sur les bords. C'est le seul dégradé de la page. */
+  background:
+    linear-gradient(180deg, transparent 0 8%,
+      color-mix(in srgb, var(--surface-2) 70%, transparent) 8% 92%, transparent 92%);
+  border-radius: 6px;
+}
+/* La ligne médiane est le temps ; tout se lit par rapport à elle. */
+.rail .track::after {
+  content: ""; position: absolute; left: 0; right: 0; top: 50%;
+  border-top: 1px solid var(--axis);
+}
+/* Un trait tous les quarts d'heure : on situe une action sans compter. */
+.rail .grid15 {
+  position: absolute; top: 14%; bottom: 14%; width: 1px; background: var(--grid);
+}
+.rail .half {
+  position: absolute; top: 4%; bottom: 4%; width: 1px; background: var(--axis);
+}
+.rail .mk {
+  position: absolute; transform: translateX(-50%);
+  display: flex; flex-direction: column; align-items: center; gap: 3px;
+  background: none; border: 0; padding: 0; cursor: default; color: inherit;
+}
+.rail .mk.home { top: 8px; }
+.rail .mk.away { bottom: 8px; flex-direction: column-reverse; }
+/* L'anneau de la couleur du fond détache la pastille de la ligne du temps
+   qu'elle croise, sans ajouter de contour dessiné. */
+.rail .pip {
+  width: 13px; height: 13px; border-radius: 50%;
+  box-shadow: 0 0 0 3px var(--surface-1);
+}
+.rail .mk.home .pip { background: var(--home); }
+.rail .mk.away .pip { background: var(--away); }
+/* Un carton n'est pas un but : carré, plus discret, il ne doit pas se compter
+   comme un but d'un coup d'œil. */
+.rail .mk.card .pip {
+  border-radius: 2px; width: 8px; height: 11px;
+  background: var(--flood); opacity: .75;
+}
+.rail .mk.card.red .pip { background: var(--critical); opacity: 1; }
+.rail .mn {
+  font-size: 11px; font-family: var(--mono); color: var(--text-secondary);
+  white-space: nowrap;
+}
+/* Le score au moment du but : c'est ce qui transforme une frise de pastilles
+   en récit — on voit l'égalisation arriver. */
+.rail .mn .at { color: var(--flood); }
+.rail .scale {
+  display: flex; justify-content: space-between;
+  font-size: 10px; color: var(--text-muted); font-family: var(--mono);
+  margin-top: 4px;
+}
+.rail .who {
+  margin-top: 10px; display: flex; flex-wrap: wrap; gap: 4px 14px;
+  font-size: 12px; color: var(--text-secondary);
+}
+.rail .who b { font-weight: 600; color: var(--text-primary); }
+.rail .who .pip { display: inline-block; margin-right: 5px; vertical-align: 1px; }
+
+/* --- onglets --------------------------------------------------------------
+   Neuf cartes en un seul défilement de 5 700 px : on ne trouvait rien. Les
+   onglets suivent l'intention — ce match / ces deux équipes / la saison — et
+   non le découpage des sources, qui ne regarde que nous. */
+.tabs {
+  display: flex; gap: 2px; max-width: 1080px; margin: 0 auto;
+  border-bottom: 1px solid var(--border);
+}
+.tab {
+  font-family: var(--display); font-size: 14px; letter-spacing: .06em;
+  text-transform: uppercase; color: var(--text-muted);
+  background: none; border: 0; border-bottom: 2px solid transparent;
+  padding: 10px 14px; cursor: pointer; white-space: nowrap;
+}
+.tab:hover { color: var(--text-secondary); }
+.tab[aria-selected="true"] { color: var(--text-primary); border-bottom-color: var(--flood); }
+.tab:focus-visible { outline: 2px solid var(--flood); outline-offset: -2px; }
+.tab .n { font-family: var(--mono); font-size: 11px; color: var(--text-muted); margin-left: 6px; }
+@media (max-width: 640px) {
+  .tabs { overflow-x: auto; }
+  .tab { padding: 10px; font-size: 13px; }
+}
+
+/* --- la note de méthode, repliée -----------------------------------------
+   Chaque carte disait en trois lignes ce qu'elle sait et ce qu'elle ignore.
+   C'est la marque de cette console et ça reste — mais replié : fois neuf, ça
+   faisait trente lignes de commentaire devant les chiffres. */
+.note { margin: 0 0 16px; }
+.note > summary {
+  font-size: 12px; color: var(--text-muted); cursor: pointer;
+  list-style: none; display: inline-flex; align-items: center; gap: 6px;
+  border-bottom: 1px dotted var(--axis); padding-bottom: 1px;
+}
+.note > summary::-webkit-details-marker { display: none; }
+.note > summary::before { content: "?"; font-family: var(--mono); font-size: 10px;
+  border: 1px solid var(--axis); border-radius: 50%; width: 14px; height: 14px;
+  display: inline-flex; align-items: center; justify-content: center; }
+.note > summary:hover { color: var(--text-secondary); }
+.note[open] > summary { margin-bottom: 8px; }
+.note p { margin: 0; font-size: 13px; color: var(--text-secondary); max-width: 68ch; }
+
+.wrap-in { padding-top: 18px; }
+.tvline { margin: -4px 0 0; font-size: 12px; color: var(--text-muted); }
+/* Les pastilles de la ligne des buteurs, sous le rail. */
+.rail .who .pip.home { background: var(--home); }
+.rail .who .pip.away { background: var(--away); }
+
+/* Le classement n'est plus garé dans une colonne collante : il vit dans
+   l'onglet « La saison », et le tableau d'affichage porte déjà le rang et les
+   points des deux clubs — la seule part dont on ait besoin en lisant un match. */
+.layout { display: block; }
+.side { position: static; }
+
+@media (prefers-reduced-motion: reduce) {
+  .board .score { animation: none !important; }
+  html { scroll-behavior: auto; }
+}
 
 /* --- carte d'identité : deux colonnes de tuiles --- */
 .idgrid { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
@@ -342,7 +544,6 @@ button.fx:hover { background: color-mix(in srgb, var(--text-primary) 4%, transpa
     </div>
   </div>
   <div class="refnote" id="refnote"></div>
-  <div id="fixtures"></div>
   <div id="app"></div>
   <div class="foot" id="foot"></div>
 </div>
@@ -376,6 +577,13 @@ const EN = {
   "Matchs sans encaisser": "Clean sheets",
   "Buts sur penalty": "Penalty goals",
   "Bilan de saison · Sofascore": "Season record · Sofascore",
+  "Méthode": "Method", "Journée": "Matchday", "Mi-temps": "Half-time",
+  "Changer de rencontre": "Change match",
+  "Le match": "The match", "Les équipes": "The teams", "La saison": "The season",
+  "buteur non nommé": "scorer not named",
+  "Pas encore joué": "Not played yet",
+  "Voir les deux équipes": "See both teams",
+  "pén.": "pen.", "c.s.c.": "o.g.",
   "Suivre les matchs en cours, relevé toutes les minutes":
     "Follow matches in progress, updated every minute",
   "Arrêter le suivi en direct": "Stop following live",
@@ -594,6 +802,20 @@ const PH = {
     fr: h => `relevé de ${h}`,
     en: h => `recorded at ${h}`,
   },
+  // Sous le nom du club, dans le tableau d'affichage : le rang et les points
+  // suffisent. C'est la seule part du classement utile en lisant un match.
+  pointsShort: {
+    fr: p => `${p} pts`,
+    en: p => `${p} pts`,
+  },
+  notPlayedYet: {
+    fr: m => `Coup d'envoi le ${m.kickoff}. Ni chronologie ni statistiques ` +
+      `avant la fin de la rencontre — la source ne publie rien pendant, sauf ` +
+      `la possession et les tirs, que le mode direct affiche ici même.`,
+    en: m => `Kick-off ${m.kickoff}. No timeline and no statistics until the ` +
+      `match ends — the source publishes nothing during play except ` +
+      `possession and shots, which live mode shows right here.`,
+  },
   liveWatching: {
     fr: n => n > 1 ? `${n} matchs suivis en direct` : `1 match suivi en direct`,
     en: n => n > 1 ? `${n} matches followed live` : `1 match followed live`,
@@ -650,6 +872,17 @@ const el = (t, cls, txt) => {
   if (txt !== undefined && txt !== null) n.textContent = txt;
   return n;
 };
+/* La note de méthode d'une carte : ce qu'elle sait, ce qu'elle ignore, d'où ça
+   vient. Cette console tient à le dire — c'est ce qui la distingue d'un tableau
+   de chiffres sans provenance — mais fois neuf cartes, ça faisait trente lignes
+   de commentaire devant les données. Replié par défaut, à un clic. */
+function methodNote(text) {
+  const box = el("details", "note");
+  box.appendChild(el("summary", null, t("Méthode")));
+  box.appendChild(el("p", null, text));
+  return box;
+}
+
 // Les totaux de la section « autres » sont parfois du texte (« 0 / 0 » pour les
 // penaltys) : on ne trace une barre que si les deux côtés sont numériques.
 const num = v => {
@@ -696,20 +929,172 @@ function teamLabel(name, size) {
 const block = (m, i) => (m.result_blocks || [])[i] || null;
 
 /* ---------- bandeau ---------- */
-function renderHead(m) {
+/* Le tableau d'affichage : ce que dit un panneau de stade, et rien de plus —
+   les deux clubs, le score, et la minute où chaque but est tombé. Il reste
+   collé en haut : en descendant dans les chiffres, on ne doit jamais avoir à
+   remonter pour se rappeler qui menait. */
+function boardSide(m, side) {
+  const name = side === "home" ? m.home : m.away;
+  const box = el("div", "team " + side);
+  const crest = crestOf(name);
+  if (crest) box.appendChild(crest);
+  const text = el("div");
+  text.appendChild(el("div", "nm", name));
+  const row = rowOf(m, name);
+  if (row) {
+    text.appendChild(el("div", "rank",
+      `${ordinal(row.rank)} · ${ph("pointsShort", row.points)}`));
+  }
+  box.appendChild(text);
+  return box;
+}
+
+/* Le score vient de la rencontre, pas de la fiche : c'est `fixtures` qui porte
+   le résultat, la fiche ne porte que les statistiques. */
+function scoreOf(m) {
+  const fx = (DATA.fixtures || []).find(f => f.match_id === m.match_id);
+  if (fx && fx.score) return { text: fx.score, live: !!fx.live };
+  const ft = (m.match_stats || {}).full_time;
+  return ft ? { text: ft.replace("-", " - "), live: false } : null;
+}
+
+function renderBoard(m) {
+  const board = el("div", "board");
+
+  const line = el("div", "line");
+  line.appendChild(boardSide(m, "home"));
+
+  // Le score est un bouton : il ramène à la liste des rencontres. C'est le
+  // seul chemin pour changer de match une fois qu'on est dans les onglets, il
+  // doit donc porter sur ce qu'on regarde déjà.
+  const sc = el("button", "score");
+  sc.type = "button";
+  const found = scoreOf(m);
+  if (found) {
+    const [a, b] = found.text.split(/\s*-\s*/);
+    sc.appendChild(el("span", null, a));
+    sc.appendChild(el("span", "dash", "–"));
+    sc.appendChild(el("span", null, b));
+    if (found.live) sc.style.animation = "pulse 1.6s ease-in-out infinite";
+  } else {
+    sc.classList.add("pending");
+    sc.textContent = (m.kickoff || "").split(" ")[1] || "—";
+  }
+  sc.title = t("Changer de rencontre");
+  sc.setAttribute("aria-label", t("Changer de rencontre"));
+  sc.addEventListener("click", () => showTab("saison", { scrollToFixtures: true }));
+  line.appendChild(sc);
+
+  line.appendChild(boardSide(m, "away"));
+  board.appendChild(line);
+
+  // Le bandeau reste collé en haut : il ne porte que ce qu'on veut garder sous
+  // les yeux tout du long. La diffusion, elle, se lit une fois — elle descend
+  // dans l'onglet du match.
+  const meta = el("div", "meta");
+  meta.appendChild(el("span", null, ph("kickoffLine", m)));
+  if (m.round) meta.appendChild(el("span", null, t("Journée") + " " + m.round));
+  board.appendChild(meta);
+
+  return board;
+}
+
+/* Le rail : chaque but et chaque carton à sa minute réelle, domicile au-dessus
+   de la ligne, extérieur au-dessous. Il n'apparaît que si l'on a la chronologie
+   nommée de Sofascore — la chronologie Forebet, sans noms, n'aurait rien de
+   plus à montrer ici que la carte du match ne montre déjà. */
+const railMinute = e => (e.minute || 0) + (e.added || 0);
+const railStamp = e => e.minute + (e.added ? "+" + e.added : "");
+
+function renderRail(m) {
+  const line = m.timeline || [];
+  if (!line.length) return null;
+
+  // La fin du rail suit le match : un but à 90+9 doit tomber dans le cadre, pas
+  // s'écraser contre le bord. 96 est le plancher, pour qu'un match sans temps
+  // additionnel ne s'étire pas jusqu'au bout de la ligne.
+  const end = Math.max(96, ...line.map(railMinute));
+
   const card = el("div", "card");
-  const box = el("div", "matchhead");
-  const vs = el("div", "vs");
-  vs.appendChild(el("span", "dot home"));
-  vs.appendChild(teamLabel(m.home, "lg"));
-  vs.appendChild(el("span", "sep", t("reçoit")));
-  vs.appendChild(el("span", "dot away"));
-  vs.appendChild(teamLabel(m.away, "lg"));
-  box.appendChild(vs);
-  box.appendChild(el("div", "kickoff", ph("kickoffLine", m)));
-  const tv = broadcastLine(m);
-  if (tv) box.appendChild(tv);
-  card.appendChild(box);
+  card.appendChild(el("h2", null, t("Chronologie")));
+  card.appendChild(methodNote(t(
+    "Buts et cartons à la minute où la source les situe. Domicile au-dessus de " +
+    "la ligne, extérieur au-dessous. Source : Sofascore — c'est la seule qui " +
+    "nomme les buteurs de cette division.")));
+
+  const rail = el("div", "rail");
+  const track = el("div", "track");
+
+  for (let q = 15; q < end; q += 15) {
+    if (q === 45) continue;              // la mi-temps a son propre trait
+    const g = el("div", "grid15");
+    g.style.left = (q / end * 100) + "%";
+    track.appendChild(g);
+  }
+  const half = el("div", "half");
+  half.style.left = (45 / end * 100) + "%";
+  half.title = t("Mi-temps");
+  track.appendChild(half);
+
+  // Deux buts à trois minutes d'écart écriraient leurs minutes l'une sur
+  // l'autre. On garde le repère visuel — la pastille — et on lâche le chiffre,
+  // qui reste dans l'infobulle. Le compte se fait par camp : les libellés du
+  // haut et ceux du bas ne se croisent jamais.
+  const lastLabel = { home: -99, away: -99 };
+  const tooClose = 5;
+
+  line.forEach(e => {
+    const minute = railMinute(e);
+    const mk = el("div", "mk " + e.side + (e.type === "card" ? " card" : "") +
+      (e.class === "red" ? " red" : ""));
+    mk.style.left = (minute / end * 100) + "%";
+    mk.appendChild(el("span", "pip"));
+    // La minute n'est écrite que sous les buts : la répéter sous chaque carton
+    // ferait une frise de chiffres où l'on ne verrait plus les buts.
+    if (e.type === "goal" && minute - lastLabel[e.side] >= tooClose) {
+      const stamp = el("span", "mn", railStamp(e) + "'");
+      // Le score porté par le but, retourné avec le reste par `attach_events`.
+      if (e.score) {
+        stamp.appendChild(document.createTextNode(" "));
+        stamp.appendChild(el("span", "at", e.score.replace("-", "–")));
+      }
+      mk.appendChild(stamp);
+      lastLabel[e.side] = minute;
+    }
+    mk.title = [railStamp(e) + "'",
+                t(SOFA_LABEL[e.type + "/" + e.class] || e.type),
+                e.player, e.side === "home" ? m.home : m.away]
+      .filter(Boolean).join(" · ");
+    track.appendChild(mk);
+  });
+  rail.appendChild(track);
+
+  const scale = el("div", "scale");
+  scale.appendChild(el("span", null, "0'"));
+  scale.appendChild(el("span", null, "45'"));
+  scale.appendChild(el("span", null, end > 96 ? "90+" : "90'"));
+  rail.appendChild(scale);
+
+  // Sous le rail, les buteurs en toutes lettres : le rail donne le rythme, la
+  // ligne donne les noms. Les cartons n'y figurent pas, ils ne racontent rien.
+  const who = el("div", "who");
+  line.filter(e => e.type === "goal").forEach(e => {
+    const item = el("span");
+    item.appendChild(el("span", "pip " + e.side));
+    // Sans nom de buteur, on écrit le club : « buteur non nommé » se répète mal
+    // et n'apprend rien, alors que le camp est une vraie information.
+    item.appendChild(el("b", null,
+      e.player || (e.side === "home" ? m.home : m.away)));
+    item.appendChild(document.createTextNode(
+      " " + railStamp(e) + "'" +
+      (e.class === "penalty" ? " " + t("pén.") : "") +
+      (e.class === "ownGoal" ? " " + t("c.s.c.") : "")));
+    if (!e.player) item.title = t("La source ne nomme pas ce buteur.");
+    who.appendChild(item);
+  });
+  if (who.children.length) rail.appendChild(who);
+
+  card.appendChild(rail);
   return card;
 }
 
@@ -743,7 +1128,7 @@ function tile(label, value, note) {
 function renderIdentity(m) {
   const card = el("div", "card");
   card.appendChild(el("h2", null, t("Carte d'identité")));
-  card.appendChild(el("p", "sub", t(
+  card.appendChild(methodNote(t(
     "Chiffres de la saison en cours, tirés du classement et des relevés de la " +
     "source. Les moyennes sont par match joué.")));
 
@@ -835,7 +1220,7 @@ function h2hRow(grid, label, hv, av) {
 function renderCompare(m) {
   const card = el("div", "card");
   card.appendChild(el("h2", null, t("Comparatif")));
-  card.appendChild(el("p", "sub", t(
+  card.appendChild(methodNote(t(
     "Chaque ligne est mise à l'échelle indépendamment : la longueur compare les " +
     "deux équipes entre elles, pas une ligne à l'autre. Les valeurs sont écrites " +
     "de part et d'autre, donc rien ne dépend de la couleur ni du survol.")));
@@ -1034,10 +1419,17 @@ function renderMatchStats(m) {
     card.querySelector("h2").appendChild(badge);
   }
 
+  // Le stade et la mi-temps sont de la donnée relevée, pas de la méthode : ils
+  // restent visibles. Seule l'explication du rôle de la carte se replie.
   const meta = ph("matchMeta", s.venue, s.venue_capacity, s.half_time, s.full_time);
-  card.appendChild(el("p", "sub", t(
+  if (meta) {
+    const p = el("p", "sub", meta + ".");
+    p.style.margin = "0 0 10px";
+    card.appendChild(p);
+  }
+  card.appendChild(methodNote(t(
     "Relevé de cette rencontre, pas de la saison — c'est la seule carte de la " +
-    "page qui décrit ce match. ") + (meta ? meta + "." : "")));
+    "page qui décrit ce match.")));
 
   // Ce que le direct ne peut pas montrer, dit une fois plutôt que laissé à
   // deviner devant des rubriques qui manquent.
@@ -1161,7 +1553,7 @@ function renderSquads(m) {
   if (!s.home && !s.away) return null;
   const card = el("div", "card");
   card.appendChild(el("h2", null, t("Effectifs")));
-  card.appendChild(el("p", "sub", t(
+  card.appendChild(methodNote(t(
     "Effectifs de la saison, pas les compositions du jour : aucune source ne " +
     "publie de feuille de match pour ce championnat. Les buts sont la seule " +
     "statistique individuelle disponible. Source : Sofascore.")));
@@ -1260,7 +1652,7 @@ function formChips(form) {
 function renderRuns(m) {
   const card = el("div", "card");
   card.appendChild(el("h2", null, t("Parcours")));
-  card.appendChild(el("p", "sub", t(
+  card.appendChild(methodNote(t(
     "Un trait par match, du plus ancien au plus récent : au-dessus de la ligne " +
     "les buts marqués, en dessous les buts encaissés. Les deux équipes partagent " +
     "la même échelle, donc les hauteurs sont comparables d'un graphique à l'autre. " +
@@ -1332,7 +1724,7 @@ function renderRuns(m) {
 function renderContext(m) {
   const card = el("div", "card");
   card.appendChild(el("h2", null, t("Contexte de la rencontre")));
-  card.appendChild(el("p", "sub", t(
+  card.appendChild(methodNote(t(
     "Les deux bilans qui concernent directement cette affiche — l'équipe qui " +
     "reçoit à domicile, celle qui se déplace à l'extérieur — puis leurs " +
     "confrontations passées.")));
@@ -1391,7 +1783,7 @@ function renderContext(m) {
 function renderStandings(m) {
   const card = el("div", "card");
   card.appendChild(el("h2", null, t("Classement")));
-  card.appendChild(el("p", "sub", t(
+  card.appendChild(methodNote(t(
     "Les deux équipes de la rencontre sont surlignées. Le championnat koweïtien " +
     "départage à la confrontation directe, pas à la différence de buts.")));
 
@@ -1881,7 +2273,7 @@ te semble vide, enlève une ligne plutôt que d'inventer une statistique.`;
 function renderPromptCard(m) {
   const card = el("div", "card");
   card.appendChild(el("h2", null, t("Contenu Instagram")));
-  card.appendChild(el("p", "sub", t(
+  card.appendChild(methodNote(t(
     "Génère un brief prêt à coller dans Claude pour produire le carrousel de " +
     "4 slides. Toutes les valeurs sont tirées de cette fiche — le brief interdit " +
     "explicitement d'en inventer et exclut tout pronostic.")));
@@ -1995,12 +2387,10 @@ function fixtureRow(f) {
 }
 
 function renderFixtures() {
-  const host = document.getElementById("fixtures");
-  host.textContent = "";
   const card = el("div", "card");
   card.appendChild(el("h2", null, t("Rencontres")));
   const loin = (DATA.fixtures || []).filter(f => f.source === "flashscore").length;
-  card.appendChild(el("p", "sub", ph("fixturesNote", loin, DATA.today)));
+  card.appendChild(methodNote(ph("fixturesNote", loin, DATA.today)));
 
   const list = visibleFixtures();
   if (!list.length) {
@@ -2016,7 +2406,71 @@ function renderFixtures() {
       card.appendChild(fixtureRow(f));
     });
   }
-  host.appendChild(card);
+  return card;
+}
+
+/* ---------- onglets ----------
+   Trois intentions, pas trois sources : « ce match », « ces deux équipes »,
+   « la saison ». Le choix est retenu d'une rencontre à l'autre — on compare
+   souvent le même onglet sur plusieurs matchs d'affilée. */
+const TABS = [
+  ["match", "Le match"],
+  ["equipes", "Les équipes"],
+  ["saison", "La saison"],
+];
+let currentTab = (() => {
+  try { return localStorage.getItem("console-tab") || "match"; }
+  catch (e) { return "match"; }
+})();
+
+function showTab(name, opts) {
+  if (!TABS.some(([id]) => id === name)) name = "match";
+  currentTab = name;
+  try { localStorage.setItem("console-tab", name); } catch (e) {}
+  document.querySelectorAll("[data-panel]").forEach(p => {
+    p.hidden = p.dataset.panel !== name;
+  });
+  document.querySelectorAll(".tab").forEach(b => {
+    b.setAttribute("aria-selected", String(b.dataset.tab === name));
+  });
+  if (opts && opts.scrollToFixtures) {
+    const card = document.querySelector('[data-panel="saison"] .card');
+    if (card) card.scrollIntoView({ block: "start", behavior: "smooth" });
+  }
+}
+
+function renderTabs() {
+  const bar = el("div", "tabs");
+  bar.setAttribute("role", "tablist");
+  TABS.forEach(([id, label]) => {
+    const b = el("button", "tab", t(label));
+    b.type = "button";
+    b.dataset.tab = id;
+    b.setAttribute("role", "tab");
+    b.setAttribute("aria-selected", String(id === currentTab));
+    b.addEventListener("click", () => showTab(id));
+    // Flèches gauche/droite entre onglets : c'est ce qu'attend un tablist.
+    b.addEventListener("keydown", ev => {
+      const step = ev.key === "ArrowRight" ? 1 : ev.key === "ArrowLeft" ? -1 : 0;
+      if (!step) return;
+      ev.preventDefault();
+      const ids = TABS.map(([x]) => x);
+      const next = ids[(ids.indexOf(id) + step + ids.length) % ids.length];
+      showTab(next);
+      document.querySelector(`.tab[data-tab="${next}"]`).focus();
+    });
+    bar.appendChild(b);
+  });
+  return bar;
+}
+
+function panel(name, parts) {
+  const box = el("div");
+  box.dataset.panel = name;
+  box.setAttribute("role", "tabpanel");
+  box.hidden = name !== currentTab;
+  parts.filter(Boolean).forEach(p => box.appendChild(p));
+  return box;
 }
 
 function renderDetail() {
@@ -2024,36 +2478,50 @@ function renderDetail() {
   app.textContent = "";
   const m = detailFor(state.matchId);
   if (!m) {
-    const card = el("div", "card");
-    card.appendChild(el("div", "empty",
-      t("Choisis une rencontre ci-dessus pour afficher les statistiques des deux équipes.")));
-    app.appendChild(card);
+    // Sans rencontre choisie, la page n'a qu'un seul job : en faire choisir
+    // une. Pas d'onglets, pas de tableau d'affichage vide.
+    app.appendChild(renderFixtures());
     document.title = t("Console Forebet");
     return;
   }
-  // Le classement part dans une colonne collante à droite : c'est la référence
-  // qu'on veut garder sous les yeux en parcourant les stats.
-  const layout = el("div", "layout");
-  const main = el("div", "main");
-  const side = el("div", "side");
 
-  main.appendChild(renderHead(m));
-  main.appendChild(renderPromptCard(m));
-  // Le relevé du match passe avant les agrégats de saison : quand il existe,
-  // c'est l'information la plus concrète de la page.
-  const live = renderMatchStats(m);
-  if (live) main.appendChild(live);
-  main.appendChild(renderIdentity(m));
-  main.appendChild(renderCompare(m));
-  main.appendChild(renderRuns(m));
-  main.appendChild(renderContext(m));
-  const squads = renderSquads(m);
-  if (squads) main.appendChild(squads);
-  side.appendChild(renderStandings(m));
+  app.appendChild(renderBoard(m));
+  app.appendChild(renderTabs());
 
-  layout.appendChild(main);
-  layout.appendChild(side);
-  app.appendChild(layout);
+  const body = el("div", "wrap-in");
+  const tv = broadcastLine(m);
+  if (tv) { tv.className = "sub tvline"; }
+
+  const rail = renderRail(m);
+  const stats = renderMatchStats(m);
+  // Une rencontre à venir n'a ni chronologie ni relevé : l'onglet se réduirait
+  // au brief Instagram, sans dire pourquoi. On nomme ce qui manque et on
+  // renvoie là où il y a quelque chose à lire.
+  let empty = null;
+  if (!rail && !stats) {
+    empty = el("div", "card");
+    empty.appendChild(el("h2", null, t("Pas encore joué")));
+    empty.appendChild(el("p", "sub", ph("notPlayedYet", m)));
+    const go = el("button", "btn", t("Voir les deux équipes"));
+    go.type = "button";
+    go.addEventListener("click", () => showTab("equipes"));
+    empty.appendChild(go);
+  }
+
+  body.appendChild(panel("match", [rail, stats, empty, renderPromptCard(m), tv]));
+  body.appendChild(panel("equipes", [
+    renderIdentity(m),
+    renderCompare(m),
+    renderRuns(m),
+    renderContext(m),
+    renderSquads(m),
+  ]));
+  body.appendChild(panel("saison", [
+    renderFixtures(),
+    renderStandings(m),
+  ]));
+  app.appendChild(body);
+
   document.title = `${m.home} - ${m.away} · ${t("Console Forebet")}`;
 }
 
@@ -2065,7 +2533,6 @@ function renderAll() {
     const first = list.find(f => detailFor(f.match_id));
     state.matchId = first ? first.match_id : null;
   }
-  renderFixtures();
   renderDetail();
   // Une rencontre qui entre dans sa fenêtre allume le direct toute seule : la
   // console reste ouverte des heures, on ne va pas demander un rechargement.

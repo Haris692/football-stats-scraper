@@ -1140,6 +1140,86 @@ Journal dans `daily.log`. À la main : `Start-ScheduledTask -TaskName
 FootballStatsScraper-Daily`, ou `python daily.py --dry-run` pour voir ce qu'il
 ferait.
 
+## Refonte de l'interface (11/08/2026)
+
+Le problème n'était pas le manque de données, c'était de ne rien y retrouver :
+**neuf cartes empilées sur 5 737 px**, toutes du même poids visuel, chacune
+précédée de trois lignes d'explication, et **le score nulle part en évidence**.
+
+### Ce qui change
+
+**Trois onglets, par intention** — « Le match », « Les équipes », « La saison ».
+Le découpage suit ce qu'on cherche, pas les sources, qui ne regardent que nous.
+L'onglet du match tombe de 5 737 à ~1 500 px. Le choix est retenu en
+`localStorage` : on compare souvent le même onglet sur plusieurs rencontres.
+
+**Un tableau d'affichage collant en haut** : les deux clubs, leur rang et leurs
+points, et le score en grand. Il ne bouge plus quand on descend — on ne doit
+jamais avoir à remonter pour se rappeler qui menait. Le score est un bouton :
+il ramène à la liste des rencontres, seul chemin pour changer de match une fois
+dans les onglets.
+
+⚠️ **Le classement n'est plus dans une colonne collante à droite.** Le bandeau
+porte le rang et les points des deux clubs — la seule part dont on ait besoin en
+lisant un match — et la table complète vit dans « La saison ». Garer un tableau
+de huit lignes en permanence coûtait une colonne pour une information qu'on
+consulte deux fois.
+
+**Les notes de méthode se replient** (`<details class="note">`). Cette console
+tient à dire ce qu'elle sait et ce qu'elle ignore — c'est ce qui la distingue
+d'un tableau de chiffres sans provenance — mais fois neuf cartes, ça faisait
+trente lignes de commentaire devant les données. Le stade et la mi-temps, eux,
+**restent visibles** : c'est du relevé, pas de la méthode.
+
+### La direction : le tableau d'affichage, à 19 h 25
+
+Toutes les rencontres de cette division se jouent le soir sous les projecteurs.
+D'où un fond sombre par défaut, et **pas d'un noir neutre** : une pointe de vert
+(`#0c1310`), celle d'une pelouse éclairée de nuit, et une encre légèrement
+verdie plutôt que du blanc pur. Un seul accent chaud, `--flood` (`#f2c14e`), la
+couleur du projecteur — **réservé à la ligne de score, au rail et au direct**.
+Le clair reste à un clic et reste soigné.
+
+Typographie : **Bahnschrift** pour l'affichage, le DIN livré avec Windows, la
+lettre des panneaux de signalisation. Elle est sur la machine, sans rien
+télécharger — la page doit rester un fichier autonome et hors ligne. Replis vers
+`DIN Alternate`, `Oswald`, `Roboto Condensed`.
+
+⚠️ **La paire domicile/extérieur ne bouge pas** : `#3987e5` / `#d95926` en
+sombre, validée CVD ΔE 26.8. La refonte change le sol et la typographie, pas les
+couleurs porteuses de sens.
+
+### La signature : le rail des minutes
+
+Depuis que Sofascore nous donne des buteurs **nommés et minutés**, on peut poser
+le match sur une ligne de temps : domicile au-dessus, extérieur au-dessous,
+chaque but à sa minute, **avec le score qu'il installe**. C'est ce qui
+transforme une frise de pastilles en récit — on voit l'égalisation arriver. Le
+seul endroit de la page où l'on dépense de l'emphase.
+
+Trois détails qui ont demandé une reprise :
+
+- **La fin du rail suit le match** (`max(96, dernière minute)`) : à 96 fixe, un
+  but à 90+9 s'écrasait contre le bord.
+- **Deux buts trop proches écrivaient leurs minutes l'une sur l'autre.** Sous
+  5 minutes d'écart et du même camp, on garde la pastille et on lâche le
+  chiffre, qui reste dans l'infobulle.
+- **Un but sans buteur nommé affiche le club**, pas « buteur non nommé » : le
+  camp est une vraie information, la mention répétée n'en est pas une.
+
+### Détails de mise en œuvre à ne pas re-découvrir
+
+- ⚠️ **`note` était déjà pris** : c'est la fonction qui écrit la ligne d'état du
+  bouton « Rafraîchir ». Le helper des notes repliées s'appelle `methodNote`.
+  Deux `const note` dans la même portée = erreur de syntaxe, page blanche.
+- ⚠️ Deux fonctions déclarent une variable locale `note` (`renderIdentity`,
+  `renderCompare`). Elle masque le helper global dans ces portées — d'où le nom
+  distinct plutôt qu'un renommage en cascade.
+- Le conteneur `#fixtures` a disparu du HTML : `renderFixtures()` **renvoie**
+  désormais une carte au lieu d'écrire dans un hôte, et c'est `renderDetail()`
+  qui la place dans l'onglet « La saison ».
+- `.controls` ne se repliait pas : sept boutons alignés débordaient sous 520 px.
+
 ## Reste à faire
 
 Les trois points de la session du 06/08 sont soldés : `build_json.py`,

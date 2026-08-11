@@ -402,6 +402,32 @@ celles de la fenêtre.
 
 `captures/` est ignoré par git.
 
+## Lire la console
+
+**Trois onglets**, découpés par ce qu'on cherche :
+
+| onglet | ce qu'on y trouve |
+|---|---|
+| **Le match** | chronologie des buts, statistiques relevées, brief Instagram |
+| **Les équipes** | carte d'identité, comparatif, parcours, face à face, effectifs |
+| **La saison** | toutes les rencontres, et le classement |
+
+Le **tableau d'affichage** reste collé en haut : les deux clubs, leur rang, leurs
+points, le score. Cliquer le score ramène à la liste des rencontres — c'est le
+chemin pour changer de match.
+
+Le **rail des minutes**, dans « Le match », pose chaque but à sa minute réelle :
+domicile au-dessus de la ligne, extérieur au-dessous, avec le score que le but
+installe. Survoler une pastille donne le détail ; les cartons y figurent en
+carré, plus discrets.
+
+Les notes de méthode sont **repliées** derrière un « ? » : chaque carte dit ce
+qu'elle sait, d'où ça vient et ce qui manque, mais seulement quand on le
+demande.
+
+La console est **sombre par défaut** — cette division joue le soir — et le
+bouton « Thème » bascule en clair.
+
 ## Langue
 
 La console s'affiche en **français ou en anglais**. La langue est choisie à
