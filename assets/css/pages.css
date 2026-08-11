@@ -53,6 +53,49 @@
   .hero__grid { gap: var(--s-2); }
 }
 
+/* Plusieurs rencontres à la une — le cas normal : une journée de cette division
+   se joue en deux à quatre matchs le même soir. Chacune garde un panneau
+   entier, cliquable d'un bout à l'autre. Aucune n'est reléguée derrière une
+   autre : elles ont toutes eu lieu ce soir-là. */
+.hero__matches {
+  display: grid; gap: var(--s-4);
+  grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+}
+.hmatch {
+  display: block; padding: var(--s-4) var(--s-5);
+  background: color-mix(in srgb, var(--ink-700) 72%, transparent);
+  backdrop-filter: blur(6px);
+  border: 1px solid var(--line); border-radius: var(--r-3);
+  transition: transform var(--mid) var(--ease), border-color var(--mid) var(--ease),
+              box-shadow var(--mid) var(--ease);
+}
+a.hmatch:hover, a.hmatch:focus-visible {
+  transform: translateY(-3px); border-color: var(--line-strong);
+  box-shadow: var(--lift-2); color: var(--text);
+}
+.hmatch__top {
+  display: flex; align-items: center; gap: var(--s-2);
+  font-size: var(--t--1); color: var(--text-3); margin-bottom: var(--s-3);
+}
+.hmatch__grid {
+  display: grid; grid-template-columns: 1fr auto 1fr;
+  align-items: center; gap: var(--s-3);
+}
+.hmatch__side { display: grid; justify-items: center; gap: var(--s-2); min-width: 0; text-align: center; }
+.hmatch__name {
+  font-family: var(--display); font-size: var(--t-1); text-transform: uppercase;
+  line-height: 1.1; overflow-wrap: anywhere;
+}
+.hmatch__score { font-family: var(--display); font-size: var(--t-4); color: var(--flood); white-space: nowrap; }
+.hmatch__score .sep { color: var(--text-3); margin-inline: 0.1em; }
+.hmatch__kick { font-family: var(--display); font-size: var(--t-3); color: var(--text-2); }
+.hmatch__line {
+  margin-top: var(--s-3); padding-top: var(--s-3); border-top: 1px solid var(--line);
+  display: flex; flex-wrap: wrap; gap: var(--s-1) var(--s-3);
+  font-size: var(--t--1); color: var(--text-2);
+}
+.hmatch__line b { color: var(--text); font-weight: 600; }
+
 /* ------------------------------------------------------------------ chiffres */
 .stats-strip {
   display: grid; grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));

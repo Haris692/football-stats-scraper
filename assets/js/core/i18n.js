@@ -17,6 +17,7 @@ const EN = {
 
   // accueil
   "À la une": "Featured", "Ce soir": "Tonight", "À venir": "Upcoming",
+  "Prochaine journée": "Next matchday", "Dernière journée": "Last matchday",
   "Derniers résultats": "Latest results", "Les clubs": "The clubs",
   "Meilleurs buteurs": "Top scorers", "Tout voir": "See all",
   "Voir la rencontre": "View match", "Voir le club": "View club",

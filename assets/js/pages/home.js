@@ -6,7 +6,7 @@ import { el, append } from "../core/dom.js";
 import { t } from "../core/i18n.js";
 import { boot } from "../core/shell.js";
 import {
-  site, featured, played, upcoming, teams, scorers, standings,
+  site, headline, played, upcoming, teams, scorers, standings,
   nameOf, seasonTotals, match as matchOf,
 } from "../core/data.js";
 import { crestOf, badge, clubColor, stat } from "../components/pieces.js";
@@ -23,47 +23,99 @@ function heroSide(key) {
   ]);
 }
 
-function hero(f) {
-  if (!f) return null;
+/** La ligne des buteurs d'une rencontre. C'est ce que Sofascore nous apporte et
+ *  que personne d'autre n'a sur cette division : elle fait la différence entre
+ *  « 2-2 » et une rencontre dont on a envie de lire le détail. */
+function scorerLine(f, cls) {
   const detail = f.match_id ? matchOf(f.match_id) : null;
-  const score = (f.score || "").split(/\s*-\s*/);
+  const goals = (detail?.timeline || []).filter(e => e.type === "goal");
+  if (!goals.length) return null;
+  return el("div", { class: cls }, goals.map(g => el("span", {}, [
+    el("b", { text: g.player || nameOf(g.side === "home" ? f.home_key : f.away_key) }),
+    ` ${g.minute}${g.added ? "+" + g.added : ""}'`,
+  ])));
+}
 
-  const centre = f.score
-    ? el("div", { class: "hero__score" }, [
+const centrePiece = (f, cls) => {
+  const score = (f.score || "").split(/\s*-\s*/);
+  return f.score
+    ? el("div", { class: cls.score }, [
         el("span", { text: score[0] }),
         el("span", { class: "sep", text: "–" }),
         el("span", { text: score[1] }),
       ])
-    : el("div", { class: "hero__kick", text: (f.kickoff || "").split(" ")[1] || "—" });
+    : el("div", { class: cls.kick, text: (f.kickoff || "").split(" ")[1] || "—" });
+};
 
-  // Sous le score, la ligne des buteurs : c'est ce que Sofascore nous apporte
-  // et que personne d'autre n'a sur cette division. Elle fait la différence
-  // entre « 2-2 » et une rencontre dont on a envie de lire le détail.
-  const goals = (detail?.timeline || []).filter(e => e.type === "goal");
-  const line = goals.length ? el("div", { class: "hero__line" },
-    goals.map(g => el("span", {}, [
-      el("b", { text: g.player || nameOf(g.side === "home" ? f.home_key : f.away_key) }),
-      ` ${g.minute}${g.added ? "+" + g.added : ""}'`,
-    ]))) : null;
+/** Une rencontre seule : elle prend toute la une. */
+function heroSolo(f) {
+  return [
+    el("div", { class: "hero__grid" }, [
+      heroSide(f.home_key),
+      centrePiece(f, { score: "hero__score", kick: "hero__kick" }),
+      heroSide(f.away_key),
+    ]),
+    scorerLine(f, "hero__line"),
+    el("div", { class: "hero__cta" }, [
+      f.match_id ? el("a", { class: "btn btn--primary",
+                             href: `match.html?id=${f.match_id}`,
+                             text: t("Voir la rencontre") }) : null,
+      el("a", { class: "btn", href: "classement.html", text: t("Classement") }),
+    ]),
+  ];
+}
+
+/** Plusieurs rencontres le même soir — le cas normal ici : une journée de cette
+ *  division en compte deux à quatre. Chacune garde un panneau entier, cliquable
+ *  d'un bout à l'autre ; aucune n'est reléguée. */
+function heroPanel(f) {
+  const side = key => el("div", { class: "hmatch__side" }, [
+    crestOf(key, "lg"),
+    el("div", { class: "hmatch__name", text: nameOf(key) }),
+  ]);
+  const inner = [
+    el("div", { class: "hmatch__top" }, [
+      // L'heure n'apparaît ici que si le centre porte déjà un score. Sur une
+      // rencontre à venir, le centre EST l'heure : l'écrire deux fois la
+      // faisait lire comme deux informations différentes.
+      f.score ? el("span", { class: "mono", text: (f.kickoff || "").split(" ")[1] || "" }) : null,
+      f.live ? badge("LIVE", "live") : null,
+      f.score ? badge(t("Score final")) : badge(t("À venir")),
+    ]),
+    el("div", { class: "hmatch__grid" }, [
+      side(f.home_key),
+      centrePiece(f, { score: "hmatch__score", kick: "hmatch__kick" }),
+      side(f.away_key),
+    ]),
+    scorerLine(f, "hmatch__line"),
+  ];
+  return f.match_id
+    ? el("a", { class: "hmatch", href: `match.html?id=${f.match_id}` }, inner)
+    : el("div", { class: "hmatch" }, inner);
+}
+
+const HEADLINE = {
+  today: "Aujourd'hui",
+  next: "Prochaine journée",
+  last: "Dernière journée",
+};
+
+function hero(group) {
+  if (!group.fixtures.length) return null;
+  const list = group.fixtures;
+  const first = list[0];
 
   return el("section", { class: "hero" }, [
     el("div", { class: "page hero__in" }, [
       el("div", { class: "hero__meta" }, [
-        el("span", { class: "eyebrow", text: t("À la une") }),
-        f.round ? badge(t("Journée") + " " + f.round) : null,
-        badge((f.kickoff || "").split(" ")[0]),
-        f.live ? badge("LIVE", "live") : null,
+        el("span", { class: "eyebrow", text: t(HEADLINE[group.kind] || "À la une") }),
+        first.round ? badge(t("Journée") + " " + first.round) : null,
+        badge((first.kickoff || "").split(" ")[0]),
+        list.some(f => f.live) ? badge("LIVE", "live") : null,
       ]),
-      el("div", { class: "hero__grid" }, [
-        heroSide(f.home_key), centre, heroSide(f.away_key),
-      ]),
-      line,
-      el("div", { class: "hero__cta" }, [
-        f.match_id ? el("a", { class: "btn btn--primary",
-                               href: `match.html?id=${f.match_id}`,
-                               text: t("Voir la rencontre") }) : null,
-        el("a", { class: "btn", href: "classement.html", text: t("Classement") }),
-      ]),
+      ...(list.length === 1
+        ? heroSolo(first)
+        : [el("div", { class: "hero__matches" }, list.map(heroPanel))]),
     ]),
   ]);
 }
@@ -127,7 +179,7 @@ boot(async host => {
   const last = played().slice(0, 10);
 
   append(host, [
-    hero(featured()),
+    hero(headline()),
     strip(),
     railOrGrid("Derniers résultats", last.map(fixtureCard),
                { more: "calendrier.html" }),

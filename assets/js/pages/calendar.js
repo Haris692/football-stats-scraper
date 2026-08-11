@@ -11,7 +11,7 @@
 import { el, append } from "../core/dom.js";
 import { t } from "../core/i18n.js";
 import { boot } from "../core/shell.js";
-import { site, fixtures, teams, nameOf } from "../core/data.js";
+import { site, fixtures, teams, nameOf, todayKey } from "../core/data.js";
 import { crestOf, badge, methodNote } from "../components/pieces.js";
 
 const state = { team: "", scope: "all" };
@@ -84,7 +84,7 @@ function list(rows) {
       out.push(el("div", { class: "day", id: (r.iso || "").slice(0, 10) }, [
         el("div", { class: "day__h" }, [
           el("span", { text: d || "—" }),
-          d === site().today ? badge(t("Aujourd'hui") || "Aujourd'hui", "flood") : null,
+          d === todayKey() ? badge(t("Aujourd'hui"), "flood") : null,
         ]),
       ]));
     }

@@ -111,17 +111,48 @@ export function upcoming() {
     .sort((a, b) => (a.kickoff_iso || "").localeCompare(b.kickoff_iso || ""));
 }
 
-/** La rencontre à mettre à la une. Dans l'ordre : une qui se joue maintenant,
- *  sinon celle du jour, sinon la dernière jouée. On ne met jamais en avant une
- *  rencontre lointaine : la une doit être ce qui vient de se passer. */
-export function featured() {
-  const live = fixtures().find(f => f.live);
-  if (live) return live;
-  const today = fixtures().filter(f => (f.kickoff || "").startsWith(SITE.today));
-  if (today.length) {
-    return today.find(f => !f.played) || today[today.length - 1];
+/** La date du jour au format des données, `JJ/MM/AAAA`.
+ *
+ *  ⚠️ Prise sur l'horloge du VISITEUR, pas sur `SITE.today`, qui est la date de
+ *  génération. Les deux coïncident le jour où le site est régénéré ; le
+ *  lendemain, `SITE.today` afficherait « aujourd'hui » sur les matchs de la
+ *  veille. Un site public est lu n'importe quand. */
+export function todayKey(now = new Date()) {
+  const p = n => String(n).padStart(2, "0");
+  return `${p(now.getDate())}/${p(now.getMonth() + 1)}/${now.getFullYear()}`;
+}
+
+const dayOf = f => (f.kickoff || "").split(" ")[0];
+const byTime = (a, b) => (a.kickoff_iso || "").localeCompare(b.kickoff_iso || "");
+
+/** Toutes les rencontres d'un jour donné, dans l'ordre des coups d'envoi. */
+export function fixturesOn(day) {
+  return fixtures().filter(f => dayOf(f) === day).sort(byTime);
+}
+
+/** Ce que la une doit montrer. Une journée de cette division compte **deux à
+ *  quatre rencontres jouées le même soir** : mettre une seule affiche en avant
+ *  passait les autres sous silence. On renvoie donc un groupe, et son motif.
+ *
+ *  Dans l'ordre : les rencontres du jour, sinon la prochaine journée, sinon les
+ *  dernières jouées. Ainsi la une a toujours quelque chose de pertinent, quel
+ *  que soit le jour où l'on ouvre le site. */
+export function headline() {
+  const today = fixturesOn(todayKey());
+  if (today.length) return { kind: "today", fixtures: today };
+
+  const next = upcoming();
+  if (next.length) {
+    const day = dayOf(next[0]);
+    return { kind: "next", fixtures: next.filter(f => dayOf(f) === day) };
   }
-  return played()[0] || upcoming()[0] || fixtures()[0] || null;
+
+  const last = played();
+  if (last.length) {
+    const day = dayOf(last[0]);
+    return { kind: "last", fixtures: fixturesOn(day).filter(f => f.played) };
+  }
+  return { kind: "none", fixtures: [] };
 }
 
 /** Le total des buts et des matchs de la saison, pour les chiffres d'entête.
