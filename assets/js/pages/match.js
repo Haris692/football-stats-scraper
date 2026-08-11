@@ -7,8 +7,8 @@
 import { el, append, param, qsa } from "../core/dom.js";
 import { t } from "../core/i18n.js";
 import { boot } from "../core/shell.js";
-import { match as matchOf, team, nameOf, fixtures } from "../core/data.js";
-import { crestOf, badge, dot, methodNote } from "../components/pieces.js";
+import { match as matchOf, team, nameOf, fixtures, isLive } from "../core/data.js";
+import { crestOf, badge, dot, methodNote, liveMark } from "../components/pieces.js";
 
 const LABELS = {
   possession: "Possession", shots: "Tirs", shots_on: "Tirs cadrés",
@@ -58,8 +58,11 @@ function board(m, fx) {
         el("span", { text: score[0] }), el("span", { class: "sep", text: "–" }),
         el("span", { text: score[1] }),
       ])
-    : el("div", { class: "board__score",
-                  text: (m.kickoff || "").split(" ")[1] || "—" });
+    : el("div", { class: "kick-stack" }, [
+        fx && isLive(fx) ? liveMark() : null,
+        el("div", { class: "board__score",
+                    text: (m.kickoff || "").split(" ")[1] || "—" }),
+      ]);
 
   return el("div", { class: "board" }, [
     el("div", { class: "page board__in" }, [
@@ -69,7 +72,7 @@ function board(m, fx) {
         el("span", { text: m.kickoff }),
         m.round ? el("span", { text: `${t("Journée")} ${m.round}` }) : null,
         m.match_stats?.venue ? el("span", { text: m.match_stats.venue }) : null,
-        fx?.live ? badge("LIVE", "live") : null,
+
       ]),
     ]),
   ]);

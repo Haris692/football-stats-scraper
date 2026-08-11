@@ -125,6 +125,30 @@ export function todayKey(now = new Date()) {
 const dayOf = f => (f.kickoff || "").split(" ")[0];
 const byTime = (a, b) => (a.kickoff_iso || "").localeCompare(b.kickoff_iso || "");
 
+/* Une rencontre est tenue pour « en cours » dans cette fenêtre autour du coup
+   d'envoi. Large après, parce que rien ne dit qu'un match est fini : c'est le
+   score final qui, en arrivant, l'en sort. Mêmes bornes que `serve.py`, pour
+   que l'outil interne et le site ne se contredisent pas. */
+const LIVE_BEFORE = 5 * 60000;
+const LIVE_AFTER = 150 * 60000;
+
+/** La rencontre se joue-t-elle en ce moment ?
+ *
+ *  ⚠️ Déduit de l'HORLOGE, pas d'un flux. Le site est statique : il ne peut pas
+ *  interroger la source, et le drapeau `live` que posait `serve.py` n'existe
+ *  pas ici. Ce que le marqueur dit, c'est « cette rencontre est en train de se
+ *  jouer » — pas « ce score est suivi en direct ». La différence est écrite
+ *  dans l'infobulle du marqueur, elle ne doit pas se perdre.
+ *
+ *  Un drapeau explicite dans les données l'emporte : servi par `serve.py`, il
+ *  vaut mieux qu'une déduction. */
+export function isLive(f, now = Date.now()) {
+  if (f.live) return true;
+  if (f.played || f.score) return false;
+  const ko = Date.parse(f.kickoff_iso || "");
+  return Number.isFinite(ko) && now >= ko - LIVE_BEFORE && now <= ko + LIVE_AFTER;
+}
+
 /** Toutes les rencontres d'un jour donné, dans l'ordre des coups d'envoi. */
 export function fixturesOn(day) {
   return fixtures().filter(f => dayOf(f) === day).sort(byTime);

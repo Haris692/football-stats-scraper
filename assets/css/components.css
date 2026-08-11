@@ -140,6 +140,32 @@ select.btn { padding-inline-end: var(--s-3); }
 }
 .badge--solid { background: var(--ink-600); border-color: transparent; color: var(--text-2); }
 
+/* Le marqueur « en cours » : il se pose au-dessus de l'heure, clignote en
+   rouge, et ne ressemble à aucune autre pastille du site — c'est le seul
+   élément qui change tout seul, il a le droit d'attirer l'œil.
+   Le clignotement s'arrête si la personne a demandé moins d'animations : c'est
+   le rouge qui porte l'information, le battement n'est qu'un renfort. */
+.live-mark {
+  display: inline-flex; align-items: center; gap: 5px;
+  font-family: var(--mono); font-size: var(--t--1);
+  letter-spacing: 0.16em; text-transform: uppercase;
+  color: var(--live); animation: blink 1.3s ease-in-out infinite;
+  cursor: help;
+}
+.live-mark__dot {
+  width: 7px; height: 7px; border-radius: 50%; background: var(--live);
+  box-shadow: 0 0 0 3px color-mix(in srgb, var(--live) 22%, transparent);
+}
+@keyframes blink { 50% { opacity: 0.28; } }
+
+/* Le marqueur se pose au-dessus de l'heure et reste centré sur elle. Sans
+   marqueur, l'empilement ne laisse aucune place vide : l'heure d'une rencontre
+   à venir garde exactement la hauteur du score de sa voisine. */
+.kick-stack {
+  display: inline-flex; flex-direction: column; align-items: center;
+  gap: 2px; line-height: 1;
+}
+
 .dot { width: 9px; height: 9px; border-radius: 50%; flex: none; display: inline-block; }
 .dot--home { background: var(--home); }
 .dot--away { background: var(--away); }

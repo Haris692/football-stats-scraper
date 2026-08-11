@@ -42,6 +42,22 @@ export function clubChip(key, { size = "", link = true, bold = true } = {}) {
 export const badge = (text, variant) =>
   el("span", { class: "badge" + (variant ? ` badge--${variant}` : ""), text });
 
+/** Le marqueur « en cours », posé juste au-dessus de l'heure de coup d'envoi.
+ *
+ *  ⚠️ Il annonce qu'une rencontre **se joue en ce moment**, pas que son score
+ *  est suivi. Le site est statique : il n'a aucun flux. L'infobulle le dit, et
+ *  elle n'est pas décorative — sans elle, un rouge clignotant promet un
+ *  rafraîchissement qui n'arrivera pas. */
+export function liveMark() {
+  return el("span", {
+    class: "live-mark",
+    title: t("Rencontre en cours. Le score n'est pas suivi en direct sur cette page."),
+  }, [
+    el("span", { text: "live" }),
+    el("span", { class: "live-mark__dot", "aria-hidden": "true" }),
+  ]);
+}
+
 export const dot = side => el("span", { class: `dot dot--${side}` });
 
 /** La note de méthode d'un bloc, repliée. Le site dit ce qu'il sait, d'où ça

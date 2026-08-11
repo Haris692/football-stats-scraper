@@ -7,9 +7,9 @@ import { t } from "../core/i18n.js";
 import { boot } from "../core/shell.js";
 import {
   site, headline, played, upcoming, teams, scorers, standings,
-  nameOf, seasonTotals, match as matchOf,
+  nameOf, seasonTotals, isLive, match as matchOf,
 } from "../core/data.js";
-import { crestOf, badge, clubColor, stat } from "../components/pieces.js";
+import { crestOf, badge, clubColor, stat, liveMark } from "../components/pieces.js";
 import { fixtureCard, clubCard, scorerCard } from "../components/cards.js";
 import { railOrGrid } from "../components/rail.js";
 
@@ -36,15 +36,22 @@ function scorerLine(f, cls) {
   ])));
 }
 
+/* Le centre d'une affiche : le score si on l'a, l'heure sinon. Une rencontre en
+   cours porte le marqueur « live » JUSTE AU-DESSUS de son heure — c'est là que
+   l'œil va chercher quand le match a commencé. */
 const centrePiece = (f, cls) => {
   const score = (f.score || "").split(/\s*-\s*/);
-  return f.score
-    ? el("div", { class: cls.score }, [
-        el("span", { text: score[0] }),
-        el("span", { class: "sep", text: "–" }),
-        el("span", { text: score[1] }),
-      ])
-    : el("div", { class: cls.kick, text: (f.kickoff || "").split(" ")[1] || "—" });
+  if (f.score) {
+    return el("div", { class: cls.score }, [
+      el("span", { text: score[0] }),
+      el("span", { class: "sep", text: "–" }),
+      el("span", { text: score[1] }),
+    ]);
+  }
+  return el("div", { class: "kick-stack" }, [
+    isLive(f) ? liveMark() : null,
+    el("div", { class: cls.kick, text: (f.kickoff || "").split(" ")[1] || "—" }),
+  ]);
 };
 
 /** Une rencontre seule : elle prend toute la une. */
@@ -79,8 +86,7 @@ function heroPanel(f) {
       // rencontre à venir, le centre EST l'heure : l'écrire deux fois la
       // faisait lire comme deux informations différentes.
       f.score ? el("span", { class: "mono", text: (f.kickoff || "").split(" ")[1] || "" }) : null,
-      f.live ? badge("LIVE", "live") : null,
-      f.score ? badge(t("Score final")) : badge(t("À venir")),
+      f.score ? badge(t("Score final")) : isLive(f) ? null : badge(t("À venir")),
     ]),
     el("div", { class: "hmatch__grid" }, [
       side(f.home_key),
@@ -111,7 +117,7 @@ function hero(group) {
         el("span", { class: "eyebrow", text: t(HEADLINE[group.kind] || "À la une") }),
         first.round ? badge(t("Journée") + " " + first.round) : null,
         badge((first.kickoff || "").split(" ")[0]),
-        list.some(f => f.live) ? badge("LIVE", "live") : null,
+        list.some(isLive) ? badge("LIVE", "live") : null,
       ]),
       ...(list.length === 1
         ? heroSolo(first)

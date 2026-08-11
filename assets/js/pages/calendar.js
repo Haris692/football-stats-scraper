@@ -11,8 +11,8 @@
 import { el, append } from "../core/dom.js";
 import { t } from "../core/i18n.js";
 import { boot } from "../core/shell.js";
-import { site, fixtures, teams, nameOf, todayKey } from "../core/data.js";
-import { crestOf, badge, methodNote } from "../components/pieces.js";
+import { site, fixtures, teams, nameOf, todayKey, isLive } from "../core/data.js";
+import { crestOf, badge, methodNote, liveMark } from "../components/pieces.js";
 
 const state = { team: "", scope: "all" };
 
@@ -54,8 +54,10 @@ function visible(rows) {
 
 function row(r) {
   const inner = el("div", { class: "row-fx" }, [
-    el("span", { class: "row-fx__t",
-                 text: (r.kickoff || "").split(" ")[1] || "" }),
+    el("span", { class: "row-fx__t kick-stack" }, [
+      isLive(r) ? liveMark() : null,
+      el("span", { text: (r.kickoff || "").split(" ")[1] || "" }),
+    ]),
     el("span", { class: "row-fx__m" }, [
       crestOf(r.home, "sm"),
       el("span", { class: "truncate", text: nameOf(r.home) }),
@@ -63,7 +65,6 @@ function row(r) {
       crestOf(r.away, "sm"),
       el("span", { class: "truncate", text: nameOf(r.away) }),
       r.round ? badge("J" + r.round) : null,
-      r.live ? badge("LIVE", "live") : null,
       // Sans arbitrage, on ne prétend pas savoir qui reçoit.
       !r.arbitrated ? badge("?", "solid") : null,
     ]),

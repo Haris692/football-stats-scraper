@@ -4,8 +4,8 @@
 
 import { el } from "../core/dom.js";
 import { t } from "../core/i18n.js";
-import { nameOf, team } from "../core/data.js";
-import { crestOf, badge, clubColor } from "./pieces.js";
+import { nameOf, team, isLive } from "../core/data.js";
+import { crestOf, badge, clubColor, liveMark } from "./pieces.js";
 
 const parseScore = s => {
   const [h, a] = String(s || "").split(/\s*-\s*/).map(Number);
@@ -29,7 +29,7 @@ export function fixtureCard(f) {
     el("span", { text: (f.kickoff || "").split(" ")[0] }),
     f.round ? badge("J" + f.round) : null,
   ];
-  if (f.live) top.push(badge("LIVE", "live"));
+
 
   const body = score
     ? [
@@ -46,8 +46,11 @@ export function fixtureCard(f) {
         el("span", { text: t("Voir la rencontre") + " ›" }),
       ])
     : el("div", { class: "fixture__foot" }, [
-        el("span", { class: "fixture__kick",
-                     text: (f.kickoff || "").split(" ")[1] || "—" }),
+        el("span", { class: "kick-stack" }, [
+          isLive(f) ? liveMark() : null,
+          el("span", { class: "fixture__kick",
+                       text: (f.kickoff || "").split(" ")[1] || "—" }),
+        ]),
       ]);
 
   const href = f.match_id
