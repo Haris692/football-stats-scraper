@@ -1249,6 +1249,76 @@ Al Shamiya le 10/08 : battue 0-3 avec 5 tirs, il n'y avait personne à désigner
 effectif (Ahmad Al Dousari n°40, Ossama Al Enezi) et aucune source ne publie de
 composition. Le 10/08, l'entrée dit donc « Le gardien de Khaitan », sans nom.
 
+## Le site public (11/08/2026)
+
+La console était **un outil** : un fichier unique de 750 Ko, autonome, ouvrable
+hors ligne. Le projet doit maintenant être **montré à des clubs koweïtiens** —
+c'est un site, et un site se visite.
+
+### L'architecture
+
+```
+index.html  calendrier.html  classement.html  clubs.html  club.html  match.html
+assets/css/   tokens · base · components · pages
+assets/js/core/        dom · i18n · data · shell
+assets/js/components/  pieces · cards · rail
+assets/js/pages/       un module par page
+data/site.json (230 Ko)   data/crests.json (377 Ko)
+```
+
+⚠️ **Le fichier unique ouvrable en `file://` disparaît.** Un site multi-pages
+charge ses données par `fetch`, donc il lui faut un serveur — GitHub Pages ou
+`python serve.py`. C'était la propriété fondatrice de `console.html` ; elle est
+échangée contre la navigation, sciemment.
+
+ℹ️ **`console.html` reste l'outil interne** et garde ce qui n'a rien à faire sur
+un site public : le générateur de brief Instagram. Les deux se construisent
+depuis la même collecte (`assemble()`), donc les chiffres ne peuvent pas
+diverger.
+
+**Deux fichiers de données, chargés en parallèle** : `site.json` porte tout ce
+qui s'affiche, `crests.json` ne porte que des images. Séparés, un score ne
+patiente pas derrière 377 Ko d'écussons ; les emplacements sont réservés à la
+bonne taille et les images se posent sans décaler la page.
+
+### Ce que le site emprunte aux plateformes vidéo, et pourquoi
+
+Des **rails horizontaux** — derniers résultats, prochaines rencontres, buteurs,
+clubs. C'est le seul emprunt, et il ne tient que parce qu'il y a de quoi les
+remplir : 84 rencontres, 50 buteurs, 8 clubs. `railOrGrid()` bascule
+automatiquement en grille sous quatre cartes, un rail qui ne défile pas étant
+une grille déguisée. Les flèches n'apparaissent qu'à la souris et se cachent aux
+extrémités : une flèche qui ne mène nulle part est un mensonge.
+
+### Trois bugs de données trouvés en construisant
+
+- ⚠️ **Le classement affiché était périmé.** Chaque page match de Forebet
+  embarque la table **à sa date** ; prendre la première fiche venue affichait
+  Yarmouk 1er à 35 pts alors que Sahel menait à 40. `freshest_standings()`
+  retient la table dont les équipes ont disputé le plus de rencontres. Le rang
+  affiché vient désormais de l'annuaire, jamais de la fiche.
+- ⚠️ **Le calendrier de saison partait à l'envers.** Sofascore est la seule
+  source à couvrir septembre → août, mais il inverse domicile/extérieur sur 61
+  rencontres sur 70. Flashscore couvrant elle aussi toute la saison par sa page
+  résultats, `season_events()` arbitre chaque rencontre contre elle :
+  **84/84 arbitrées**. Sans ça, presque tout le calendrier aurait été faux.
+- Les intitulés de groupe des barres comparées étaient avalés par le test des
+  lignes vides — ils n'ont, par nature, ni valeur à gauche ni valeur à droite.
+
+### Détails à ne pas re-découvrir
+
+- `daily.py` lance **`build_site.py`**, plus `build_console.py --out index.html`
+  qui écraserait maintenant une page statique versionnée.
+- `el()` **refuse le HTML sous forme de chaîne** : aucun nom de joueur ou de
+  club venu d'une source ne peut être interprété comme du balisage.
+- La racine du site est déduite d'`import.meta.url` et non de la page courante :
+  c'est ce qui rend le site déployable dans un sous-dossier, cas de GitHub
+  Pages.
+- Le thème est posé par un script en ligne **avant le premier rendu**, sinon la
+  page clignote en sombre avant de basculer en clair.
+- Les modules ES sont mis en cache par le navigateur : après un déploiement,
+  penser à un rechargement forcé pour vérifier une correction.
+
 ## Reste à faire
 
 Les trois points de la session du 06/08 sont soldés : `build_json.py`,

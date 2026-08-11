@@ -36,7 +36,7 @@ LOG = ROOT / "daily.log"
 # Ce que la publication emporte. Volontairement énuméré plutôt que `git add -A`
 # : un `.chrome-profile` ou un `cache/` qui échapperait au `.gitignore` n'a
 # rien à faire dans un commit automatique que personne ne relit.
-PUBLISHED = ["index.html", "index.data.json", "data/events.json",
+PUBLISHED = ["data/site.json", "data/crests.json", "data/events.json",
              "data/squads.json"]
 
 STEPS = [
@@ -46,8 +46,10 @@ STEPS = [
     # Les journées passées sortent du cache ; seules la journée courante et les
     # suivantes repartent sur le réseau.
     (["fetch_events.py"], "rencontres, chronologies et journées"),
-    (["build_console.py", "--fixtures", "--scope", "all", "--out", "index.html"],
-     "console publiée"),
+    # ⚠️ `build_site.py`, pas `build_console.py` : depuis le passage au site
+    # multi-pages, `index.html` est une page statique versionnée qu'aucune
+    # collecte ne réécrit. Ce sont les JSON de `data/` qui changent.
+    (["build_site.py", "--fixtures", "--scope", "all"], "données du site"),
 ]
 
 

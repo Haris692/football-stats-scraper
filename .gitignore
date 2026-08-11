@@ -6,11 +6,12 @@
 cache/
 
 # Sorties générées par build_console.py et build_json.py.
-# `index.html` et son `index.data.json` font exception : c'est ce qui est publié
-# sur GitHub Pages (voir la section « Publication » du README). Le fichier de
-# données porte le nom de sa page, pour qu'un build local n'écrase pas le publié.
+# `console.html` reste l'OUTIL interne : un fichier unique, autonome, avec le
+# générateur de brief Instagram. Ce qui est publié, c'est le site — ses pages
+# sont versionnées, et ses données vivent dans `data/site.json`.
 console.html
 console.data.json
+index.data.json
 output/
 
 __pycache__/

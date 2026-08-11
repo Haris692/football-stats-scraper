@@ -4,12 +4,16 @@ Collecte et met en forme les **statistiques de la Division 1 koweïtienne**
 (2e division : Yarmouk, Sulaibikhat, Sahel, Al Jazira, Khaitan, Burgan,
 Al Shamiya, Sporty), à partir de [Forebet](https://www.forebet.com).
 
-Deux sorties, alimentées par la même collecte :
+**Trois sorties, alimentées par la même collecte** — les chiffres ne peuvent
+donc pas diverger de l'une à l'autre :
 
-- **`console.html`** — une console autonome, à ouvrir dans un navigateur. Aucune
-  requête à l'ouverture, aucun asset externe : elle fonctionne hors ligne, y
-  compris en `file://`. Elle embarque aussi un générateur de brief pour un
-  carrousel Instagram de 4 slides.
+- **le site** (`index.html` et ses cinq pages) — ce qui est publié. Un accueil,
+  un calendrier de saison, un classement, une page par club, une page par
+  rencontre. Deux langues, deux thèmes. ⚠️ Il charge ses données par `fetch` :
+  il lui faut un serveur, il ne s'ouvre pas en double-cliquant un fichier.
+- **`console.html`** — l'outil interne, resté un fichier unique et autonome,
+  ouvrable hors ligne y compris en `file://`. Il garde ce qui n'a rien à faire
+  sur un site public : le **générateur de brief Instagram**.
 - **`output/`** — le même contenu en JSON, un fichier par match plus un index,
   pour être consommé par un autre programme.
 
@@ -36,14 +40,22 @@ Le détail des tentatives écartées (urllib, curl, Playwright classique) est da
 ## Usage courant
 
 ```
-python build_console.py --fixtures --scope all      # console complète
+python build_site.py    --fixtures --scope all      # le site publié
+python build_console.py --fixtures --scope all      # l'outil interne
 python build_json.py    --fixtures --scope all      # export JSON
 ```
 
 `--fixtures` part de la page ligue, y lit les rencontres, puis récupère la fiche
 de chacune. `--scope` choisit lesquelles : `upcoming` (défaut), `played`, `all`.
 
-Options communes aux deux commandes :
+Pour **voir le site**, il faut le servir — `fetch` ne marche pas en `file://` :
+
+```
+python serve.py             # http://127.0.0.1:8800
+python -m http.server 8811  # ou n'importe quel serveur statique
+```
+
+Options communes aux trois commandes :
 
 | option | effet |
 |---|---|
@@ -69,6 +81,7 @@ match déjà en cache.
 | `fetch_stats.py` | statistiques relevées d'un match (possession, tirs, corners) |
 | `fetch_squads.py` | effectifs des 8 clubs et bilans de saison, via Sofascore |
 | `fetch_events.py` | rencontres Sofascore : journées, buteurs nommés, entraîneurs |
+| `build_site.py` | assemble `data/site.json` et `data/crests.json`, les données du site |
 | `daily.py` | rafraîchissement de 8 h : collecte, régénère, commite, pousse |
 | `crests.py` | écussons des clubs et couleurs dominantes qu'on en extrait |
 | `build_console.py` | assemble `console.html` |
@@ -418,7 +431,67 @@ celles de la fenêtre.
 
 `captures/` est ignoré par git.
 
-## Lire la console
+## Le site
+
+Six pages, une par intention. La barre haute est identique partout et marque
+toujours où l'on est.
+
+| page | ce qu'on y trouve |
+|---|---|
+| `index.html` | la une, les derniers résultats, les prochaines rencontres, les buteurs, les clubs, le classement condensé |
+| `calendrier.html` | toute la saison depuis septembre, filtrable par club et par état |
+| `classement.html` | le classement complet et les buteurs |
+| `clubs.html` | les huit clubs, et leurs bilans comparés |
+| `club.html?c=<clé>` | un club : bilan, parcours, résultats, effectif |
+| `match.html?id=<id>` | une rencontre : chronologie, statistiques, homme du match, comparatif, effectifs |
+
+Les liens se font **par clé**, jamais par nom : les sources écrivent
+« Yarmouk (KUW) », « Yarmouk SC » et « Yarmouk » selon l'humeur, et une URL doit
+survivre à ça.
+
+### L'organisation du code
+
+```
+assets/css/  tokens.css      couleur, lettre, espace, mouvement — la seule source de vérité
+             base.css        remise à zéro, focus, accessibilité de plancher
+             components.css  tout ce qui se répète d'une page à l'autre
+             pages.css       ce qui n'existe qu'à un endroit
+assets/js/core/        dom · i18n · data · shell
+assets/js/components/  pieces · cards · rail
+assets/js/pages/       un module par page
+```
+
+Règles tenues, et qui expliquent la découpe :
+
+- **Aucune valeur brute hors de `tokens.css`.** Si une couleur n'y est pas, elle
+  n'existe pas.
+- **Un composant = une classe racine.** Pas de « ce bouton, mais dans cette
+  page » : c'est ce qui fait diverger deux pages avec le temps.
+- **`el()` refuse le HTML en chaîne.** Un nom de joueur venu d'une source ne
+  peut donc jamais être interprété comme du balisage.
+- **Le focus est traité une fois, globalement.** Trente règles par composant
+  finissent toujours par diverger.
+
+### Direction artistique
+
+Cette division ne joue **que le soir**, sous les projecteurs. Le site est donc
+sombre par défaut, d'un noir qui tire sur le vert — une pelouse éclairée de nuit
+— et pas d'un gris neutre. Un seul accent chaud, `--flood`, la couleur du
+projecteur, tenu en réserve pour les scores et le direct. La lettre d'affichage
+est **Bahnschrift**, le DIN livré avec Windows, celle des panneaux de
+signalisation : disponible sans rien télécharger, donc le site reste servable
+depuis un simple dossier.
+
+La paire domicile/extérieur ne bouge pas : `#3987e5` / `#d95926`, validée pour
+la vision des couleurs. La refonte change le sol et la lettre, pas les couleurs
+qui portent du sens.
+
+**Le fil du match**, sur `match.html`, est l'élément signature : chaque but à sa
+minute réelle, domicile au-dessus de la ligne, extérieur au-dessous, avec le
+score qu'il installe. Il n'existe que parce que Sofascore nomme et minute les
+buteurs de cette division — ce que personne d'autre ne publie.
+
+## Lire la console (outil interne)
 
 **Trois onglets**, découpés par ce qu'on cherche :
 

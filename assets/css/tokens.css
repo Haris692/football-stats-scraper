@@ -1,0 +1,113 @@
+/* ============================================================================
+   JETONS — la seule source de vérité pour la couleur, la lettre et l'espace.
+   Aucune valeur brute ailleurs. Si une couleur n'est pas ici, elle n'existe pas.
+
+   DIRECTION : LE STADE À 19 H 25
+   Cette division ne joue qu'en soirée, sous les projecteurs. Le site est donc
+   sombre par défaut, et d'un noir qui tire sur le vert — celui d'une pelouse
+   éclairée de nuit — jamais d'un gris neutre. Un seul accent chaud, la couleur
+   du projecteur, tenu en réserve pour ce qui compte : un score, un direct.
+   ========================================================================= */
+
+:root {
+  color-scheme: dark;
+
+  /* --- surfaces : du plus profond au plus proche ------------------------ */
+  --ink-900: #070c0a;   /* le fond de page, la nuit derrière le stade */
+  --ink-800: #0c1310;   /* les sections */
+  --ink-700: #121b17;   /* les cartes */
+  --ink-600: #18231e;   /* ce qui se pose SUR une carte */
+  --ink-500: #1f2d27;   /* survol */
+
+  --line: rgba(233, 239, 234, 0.10);
+  --line-strong: rgba(233, 239, 234, 0.20);
+
+  /* --- encre : un blanc de projecteur, légèrement verdi --------------- */
+  --text: #e9efea;
+  --text-2: #a3b3aa;
+  --text-3: #74857b;
+
+  /* --- entités : paire validée dataviz, séparation CVD ΔE 26.8 ---------
+     Le domicile est TOUJOURS bleu, l'extérieur TOUJOURS orange. La couleur
+     suit l'équipe, jamais son rang ni son résultat. Ne pas y toucher. */
+  --home: #3987e5;
+  --away: #d95926;
+  --neutral-bar: #74857b;
+
+  /* --- signal ----------------------------------------------------------- */
+  --flood: #f2c14e;     /* le projecteur : score, direct, sélection */
+  --flood-ink: #1a1405; /* ce qu'on écrit SUR le projecteur */
+  --good: #3fbf6a;
+  --warn: #f2a33f;
+  --bad: #ff6b5e;
+  --live: #ff4438;
+
+  /* --- lettre -----------------------------------------------------------
+     Bahnschrift est le DIN livré avec Windows : la lettre des panneaux de
+     signalisation et des tableaux de stade, disponible sans rien télécharger.
+     Le site doit rester servable depuis un dossier, sans CDN. */
+  --display: "Bahnschrift", "DIN Alternate", "Oswald", "Roboto Condensed",
+             "Segoe UI Variable Display", system-ui, sans-serif;
+  --body: system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
+  --mono: "Cascadia Mono", ui-monospace, Consolas, "SF Mono", monospace;
+
+  /* Échelle fluide : le même rapport du téléphone au grand écran. */
+  --t--1: 0.75rem;
+  --t-0: 0.875rem;
+  --t-1: 1rem;
+  --t-2: clamp(1.05rem, 0.98rem + 0.35vw, 1.25rem);
+  --t-3: clamp(1.3rem, 1.15rem + 0.7vw, 1.75rem);
+  --t-4: clamp(1.75rem, 1.4rem + 1.6vw, 2.75rem);
+  --t-5: clamp(2.4rem, 1.7rem + 3.2vw, 4.5rem);
+  --t-6: clamp(3rem, 1.8rem + 5.6vw, 7rem);
+
+  /* --- espace : une seule progression, pas d'exception ------------------ */
+  --s-1: 4px;   --s-2: 8px;   --s-3: 12px;  --s-4: 16px;
+  --s-5: 24px;  --s-6: 32px;  --s-7: 48px;  --s-8: 64px;  --s-9: 96px;
+
+  --r-1: 4px; --r-2: 8px; --r-3: 12px; --r-4: 20px; --r-full: 999px;
+
+  --page: 1240px;       /* la largeur de lecture */
+  --gutter: clamp(16px, 4vw, 40px);
+
+  /* --- mouvement --------------------------------------------------------
+     Une seule courbe pour tout le site : sortie franche, arrivée posée. */
+  --ease: cubic-bezier(0.2, 0.7, 0.2, 1);
+  --fast: 120ms;
+  --mid: 220ms;
+  --slow: 380ms;
+
+  --lift: 0 1px 2px rgba(0,0,0,.4), 0 8px 24px -12px rgba(0,0,0,.7);
+  --lift-2: 0 2px 4px rgba(0,0,0,.5), 0 20px 48px -20px rgba(0,0,0,.85);
+
+  --z-nav: 100;
+  --z-board: 90;
+  --z-pop: 200;
+}
+
+/* Le clair n'est pas une inversion mécanique : les surfaces se réordonnent
+   (la carte devient plus claire que le fond) et l'ambre s'assombrit pour tenir
+   le contraste sur blanc. */
+:root[data-theme="light"] {
+  color-scheme: light;
+  --ink-900: #eef1ef;
+  --ink-800: #f5f7f5;
+  --ink-700: #ffffff;
+  --ink-600: #f7f9f7;
+  --ink-500: #eef2ef;
+  --line: rgba(11, 15, 13, 0.12);
+  --line-strong: rgba(11, 15, 13, 0.24);
+  --text: #0b0f0d;
+  --text-2: #4c5a52;
+  --text-3: #7b8a81;
+  --home: #2a78d6;
+  --away: #eb6834;
+  --flood: #8a5a00;
+  --flood-ink: #ffffff;
+  --good: #0a8f36;
+  --warn: #9a6200;
+  --bad: #cc3a2e;
+  --live: #d32b1e;
+  --lift: 0 1px 2px rgba(11,15,13,.06), 0 8px 24px -16px rgba(11,15,13,.25);
+  --lift-2: 0 2px 6px rgba(11,15,13,.08), 0 24px 48px -24px rgba(11,15,13,.3);
+}
