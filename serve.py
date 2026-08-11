@@ -338,7 +338,7 @@ def main() -> int:
     # « Rafraîchir » veut dire « va rechercher », pas « ressers-moi le cache ».
     Handler.options = SimpleNamespace(
         urls=[], file=[], fixtures=True, scope=args.scope, force=True,
-        no_calendar=False, no_stats=False,
+        no_calendar=False, no_stats=False, no_hosts=False,
     )
 
     url = f"http://127.0.0.1:{args.port}/{PAGE}"

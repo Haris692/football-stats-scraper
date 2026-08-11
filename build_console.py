@@ -24,6 +24,7 @@ from fetch_fixtures import load_league_html, parse_fixtures, to_iso
 from fetch_flashscore import load as load_calendar, normalise
 from fetch_squads import for_team as squad_for, load as load_squads
 from fetch_stats import fetch as fetch_stats
+from hosts import arbitrate, load_verdict_source
 from parse_match import parse_match
 
 ROOT = Path(__file__).resolve().parent
@@ -179,25 +180,30 @@ def merge_calendar(fixtures: list[dict], calendar: list[dict]) -> int:
     # rapproche sur la paire d'équipes pour les matchs à venir — les deux
     # sources peuvent diverger d'un jour sur l'horaire, et une même affiche ne
     # se rejoue pas dans la fenêtre couverte.
-    upcoming = {(normalise(f["home"]), normalise(f["away"]))
+    # Le rapprochement ignore l'ordre des deux clubs : les sources ne
+    # s'accordent pas toujours sur qui reçoit (voir `hosts.py`), et une paire
+    # ordonnée laisserait alors passer la même affiche deux fois.
+    upcoming = {frozenset((normalise(f["home"]), normalise(f["away"])))
                 for f in fixtures if not f.get("played")}
-    played = {(normalise(f["home"]), normalise(f["away"]), (f.get("kickoff") or "").split(" ")[0])
+    played = {(frozenset((normalise(f["home"]), normalise(f["away"]))),
+               (f.get("kickoff") or "").split(" ")[0])
               for f in fixtures if f.get("played")}
 
     added = 0
     for entry in calendar:
-        pair = (normalise(entry["home"]), normalise(entry["away"]))
+        names = (normalise(entry["home"]), normalise(entry["away"]))
+        pair = frozenset(names)
         if pair in upcoming:
             continue
-        if (*pair, (entry.get("kickoff") or "").split(" ")[0]) in played:
+        if (pair, (entry.get("kickoff") or "").split(" ")[0]) in played:
             continue
 
         fixtures.append({
             "match_id": None,
             "url": None,
             "competition_tag": tag,
-            "home": canonical.get(pair[0], entry["home"]),
-            "away": canonical.get(pair[1], entry["away"]),
+            "home": canonical.get(names[0], entry["home"]),
+            "away": canonical.get(names[1], entry["away"]),
             "kickoff": entry["kickoff"],
             "kickoff_iso": entry["kickoff_iso"],
             "score": None,
@@ -350,6 +356,9 @@ def add_source_arguments(parser: argparse.ArgumentParser) -> None:
                         help="ne pas compléter avec le calendrier Flashscore")
     parser.add_argument("--no-stats", action="store_true",
                         help="ne pas récupérer les statistiques relevées des matchs")
+    parser.add_argument("--no-hosts", action="store_true",
+                        help="ne pas arbitrer qui reçoit : garder l'étiquette "
+                             "de Forebet telle quelle")
 
 
 def assemble(args) -> tuple[list[dict], list[dict]]:
@@ -414,6 +423,24 @@ def assemble(args) -> tuple[list[dict], list[dict]]:
             # le build s'il tombe.
             print(f"statistiques de match indisponibles ({exc}) — on continue",
                   file=sys.stderr)
+
+    # Après les statistiques, jamais avant : la permutation emporte les
+    # colonnes de `match_stats`, qui doivent donc déjà être là.
+    if not args.no_hosts:
+        try:
+            swaps = arbitrate(fixtures, matches, load_verdict_source(args.force))
+            if swaps:
+                print(f"qui reçoit : {len(swaps)} rencontre(s) remises dans le "
+                      f"sens de Flashscore")
+                for line in swaps:
+                    print(f"  {line}")
+            else:
+                print("qui reçoit : aucune divergence avec Flashscore")
+        except Exception as exc:
+            # Comme le calendrier et les stats : un arbitre absent ne fait pas
+            # échouer le build, il laisse l'étiquette de Forebet.
+            print(f"arbitrage de l'hôte indisponible ({exc}) — on garde "
+                  f"l'étiquette Forebet", file=sys.stderr)
 
     broadcasts = load_broadcasts()
     attach_broadcast(matches, broadcasts)

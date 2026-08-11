@@ -50,6 +50,7 @@ Options communes aux deux commandes :
 | `--force` | ignorer le cache disque et tout retélécharger |
 | `--no-calendar` | ne pas compléter avec le calendrier Flashscore |
 | `--no-stats` | ne pas récupérer les statistiques relevées des matchs |
+| `--no-hosts` | ne pas arbitrer qui reçoit : garder l'étiquette de Forebet |
 | `--file <html>` | partir d'une page déjà enregistrée (répétable) |
 | `<url> …` | partir d'URL de pages match précises |
 
@@ -62,7 +63,8 @@ match déjà en cache.
 |---|---|
 | `browser.py` | récupération : Chrome + CDP, cache disque, throttling 2-5 s |
 | `fetch_fixtures.py` | rencontres de la page ligue Forebet |
-| `fetch_flashscore.py` | calendrier plus lointain (Forebet ne montre que 2 jours) |
+| `fetch_flashscore.py` | calendrier plus lointain (Forebet ne montre que 2 jours) et résultats passés |
+| `hosts.py` | qui reçoit : arbitre les sources, qui ne s'accordent pas |
 | `parse_match.py` | parseur d'une fiche match : classement, forme, face à face |
 | `fetch_stats.py` | statistiques relevées d'un match (possession, tirs, corners) |
 | `fetch_squads.py` | effectifs des 8 clubs, via Sofascore (230 joueurs) |
@@ -72,6 +74,7 @@ match déjà en cache.
 | `serve.py` | sert la console en local, lui donne un vrai bouton « Rafraîchir » et le suivi en direct |
 | `shoot.py` | captures d'écran d'une page web vers un dossier (outil autonome) |
 | `test_reject_labels.py` | garde-fou : quels libellés de bandeau sont cliquables |
+| `test_hosts.py` | garde-fou : une permutation d'hôte emporte bien tous les chiffres |
 
 Chacun s'exécute seul et accepte `--help`. `parse_match.py` et `fetch_stats.py`
 ont un `--summary` qui affiche un résumé lisible en console : c'est le moyen de
@@ -98,6 +101,28 @@ Un zéro servi par la source ne veut donc pas dire zéro — il veut souvent dir
 plutôt que d'afficher « 0 faute », et la console nomme explicitement ce qu'elle
 tait. Les **attaques dangereuses dépassent parfois les attaques totales** : le
 couple est alors marqué `suspect` et n'est pas publié.
+
+## Qui reçoit
+
+Les sources ne désignent pas le même hôte. Elles s'accordent pourtant sur le
+résultat et sur les chiffres par équipe : **seule l'étiquette diverge**.
+
+**Flashscore fait autorité** — elle est la seule à n'être jamais minoritaire :
+Sofascore l'inverse sur 61 des 70 rencontres de la saison, et Forebet la suit
+8 fois sur 10 (contre 0 fois sur 10 pour Sofascore). `hosts.py` remet donc les
+rencontres divergentes dans son sens, en permutant le couple d'équipes **avec
+toutes ses colonnes** — statistiques de saison, relevé du match, score,
+effectifs, palette. Jamais un chiffre tout seul.
+
+Une rencontre que Flashscore ne connaît pas garde l'étiquette de Forebet, faute
+d'arbitre. `--no-hosts` désactive complètement la correction.
+
+⚠️ Ce qui n'est pas rattrapé : les bilans « à domicile » et « à l'extérieur »
+de la saison, que Forebet calcule à partir de sa propre idée de qui reçoit.
+
+    python test_hosts.py     # la permutation n'oublie rien
+
+Le détail du relevé, et la réserve qui subsiste, sont dans `PROGRESS.md`.
 
 ## Saisie manuelle
 

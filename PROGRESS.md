@@ -741,27 +741,53 @@ joueur reste donc impossible, comme conclu dans `kuwait-football` — mais **le
 classement des buteurs, lui, existe** (50 joueurs, de 12 buts à 1), et aucune
 autre source testée ne l'avait.
 
-#### ⚠️ Forebet et Sofascore inversent domicile et extérieur — systématiquement
+#### ⚠️ Qui reçoit : tranché le 11/08/2026 — Flashscore fait autorité
 
-Sur les **4 rencontres communes**, les deux sources désignent l'hôte à
-l'opposé l'une de l'autre. Ce n'est pas un accident isolé :
+Les sources ne désignent pas le même hôte. Elles s'accordent en revanche sur le
+**résultat** et sur les **chiffres par équipe** (Yarmouk 66 % / 9 corners /
+1 jaune des deux côtés) : le désaccord porte uniquement sur l'étiquette. Elles
+divergent aussi sur le **stade** du même match (« Jaber Al-Mubarak Stadium »
+contre « Al Shabab Mubarak Alaiar Stadium »).
 
-| date | Sofascore | Forebet |
+**Le relevé, refait proprement le 11/08 :**
+
+| confrontation | accord | inversé |
 |---|---|---|
-| 02/08 18:00 | Yarmouk **3-0** Al-Shamiya | Al-Shamiya **0-3** Yarmouk |
-| 02/08 19:45 | Sulaibikhat **1-0** Khaitan | Khaitan **0-1** Sulaibikhat |
-| 07/08 19:45 | Khaitan **0-0** Yarmouk | Yarmouk **0-0** Khaitan |
-| 07/08 19:45 | Sulaibikhat **0-0** Burgan | Burgan **0-0** Sulaibikhat |
+| Flashscore vs Sofascore, saison entière (70 rencontres) | 9 | **61** |
+| Forebet vs Flashscore, sur les 10 qu'il étiquette lui-même | **8** | 2 |
+| Forebet vs Sofascore, sur ces mêmes 10 | 0 | **10** |
 
-Les deux s'accordent sur le **résultat** et sur les **chiffres par équipe**
-(Yarmouk 66 % / 9 corners / 1 jaune des deux côtés) : le désaccord porte
-uniquement sur l'étiquette. Ils divergent aussi sur le **stade** du même match
-(« Jaber Al-Mubarak Stadium » contre « Al Shabab Mubarak Alaiar Stadium »).
+Flashscore n'est donc **jamais minoritaire**, et deux sources indépendantes
+s'opposent à Sofascore. D'où la décision : **son hôte fait foi**, et
+`hosts.py` remet les rencontres divergentes dans son sens. Concrètement, ça
+corrige deux matchs du 02/08 (Al Shamiya - Yarmouk et Al Jazira - Sporty, que
+Forebet donnait à l'envers) et laisse tout le reste en place.
 
-**Non tranché — il faudrait un arbitre extérieur** (fédération koweïtienne). Ne
-pas choisir au hasard : la console écrit « reçoit », calcule des bilans « à
-domicile » et « à l'extérieur », et le brief Instagram titre « LES HÔTES » et
-« LES VISITEURS ». Si Forebet a tort, ces quatre éléments sont faux.
+Deux pièges méthodologiques, tous deux tombés dedans avant d'en sortir :
+
+- ⚠️ **Ne pas arbitrer sur les rencontres à venir.** Elles viennent déjà de
+  Flashscore via `merge_calendar` : les confronter à Forebet, c'est confronter
+  Flashscore à elle-même. Seules les 10 rencontres que Forebet étiquette de son
+  côté valent quelque chose.
+- ⚠️ **Apparier sur la date autant que sur la paire d'équipes.** Un aller-retour
+  fournit les deux ordres ; chercher la seule paire trouve toujours une
+  correspondance et conclut à tort à l'accord. C'est ce qui avait d'abord fait
+  lire « 66 accords sur 70 » là où il y en a 9.
+
+La version précédente de cette section — « Forebet et Sofascore inversent
+systématiquement, non tranché » — **était fausse sur les deux points** : le
+désaccord ne portait que sur 4 rencontres choisies, et Forebet a raison 8 fois
+sur 10.
+
+⚠️ **Ce que l'arbitrage ne rattrape pas** : les bilans « à domicile » et « à
+l'extérieur » de la saison, que Forebet calcule lui-même à partir de sa propre
+idée de qui reçoit. Permuter une étiquette ne les recalcule pas.
+
+⚠️ **La réserve qui reste** : si Forebet et Flashscore partagent un flux en
+amont, leur accord ne vaut pas double, et Sofascore pourrait avoir raison
+contre les deux. Rien dans les données ne permet de le dire — il faudrait la
+fédération koweïtienne. `--no-hosts` rend l'étiquette à Forebet si la décision
+doit être revue.
 
 À noter, et ça relativise l'enjeu : **les clubs partagent les terrains.**
 Burgan - Sulaibikhat se joue au « Khaitan Stadium », où Khaitan ne joue pas ;
@@ -801,6 +827,25 @@ Il confirme aussi la journée 17, ce qui valide la déduction `max(joués) + 1`.
 Bilan : **Forebet reste strictement supérieur pour les statistiques** (il a
 possession et tirs via `get_evs_n.php`, Flashscore n'a rien). Flashscore ne sert
 qu'au calendrier — c'est exactement l'usage qui en est fait.
+
+#### La page `results/`, branchée le 11/08/2026
+
+Second usage depuis l'arbitrage de l'hôte : `load_results()` lit
+`/football/kuwait/division-1/results/`, **70 rencontres depuis le 14/09/2025**.
+C'est la seule source qui porte, sur les matchs passés, une étiquette
+domicile/extérieur indépendante de Forebet. Elle est autorisée : `robots.txt`
+n'interdit que `/standings/`, `/draw/` et `/newsfeed/`.
+
+Deux pièges de parsing, réglés :
+
+- **Deux formats de date cohabitent sur la même page** : « 06.08. 19:45 » pour
+  les rencontres récentes, « 31.12.2025 » — datée mais sans heure — pour les
+  plus anciennes. Ne lire que la première laissait **36 résultats sur 70 sans
+  date**, donc hors d'atteinte de l'arbitrage.
+- **`resolve_year()` raisonnait à l'envers sur cette page.** Son heuristique
+  (« une date loin dans le passé appartient à l'année suivante ») vaut pour un
+  calendrier, pas pour des résultats : une rencontre de janvier lue en août s'y
+  retrouvait datée de 2027. D'où le paramètre `past=True`.
 
 ### Calendrier lointain, branché le 06/08/2026
 
@@ -1034,13 +1079,11 @@ Ce qui reste ouvert, par ordre d'intérêt :
 1. ~~Trancher si les stats se remplissent pendant le match~~ — **tranché le
    10/08 : oui**, voir la section « Direct et statistiques par match ».
 2. ~~Effectifs~~ — **fait le 10/08**, voir plus haut. 230 joueurs, 8 clubs.
-3. ⚠️ **Trancher qui reçoit.** Forebet et Sofascore s'opposent sur les
-   4 rencontres communes, et Forebet s'est en plus contredit tout seul en cours
-   de match le 10/08 (voir « Le score des premières minutes peut changer de
-   camp »). Tant que ce n'est pas arbitré, « reçoit », les bilans
-   domicile/extérieur et les slides « LES HÔTES / LES VISITEURS » reposent sur
-   une donnée contestée. **C'est désormais le point ouvert le plus gênant** :
-   le direct affiche un score par camp, donc l'erreur devient visible.
+3. ~~Trancher qui reçoit~~ — **tranché le 11/08 : Flashscore fait autorité**,
+   voir la section dédiée. Reste, en beaucoup plus petit, deux choses que
+   l'arbitrage ne couvre pas : les bilans domicile/extérieur calculés par
+   Forebet, et le fait qu'une rencontre inconnue de Flashscore garde
+   l'étiquette Forebet faute d'arbitre.
 4. **Le flux SSE `/glvs/`** reste débranché. Il apporterait ce que le mode
    direct ne peut pas montrer : la **minute de jeu** et le temps additionnel,
    absents de `gmc=1`. À faire consommer par `serve.py`, comme le collecteur —
