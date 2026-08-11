@@ -23,6 +23,7 @@ from crests import load_store, pair_note
 from fetch_fixtures import load_league_html, parse_fixtures, to_iso
 from fetch_flashscore import load as load_calendar, normalise
 from fetch_squads import for_team as squad_for, load as load_squads
+from fetch_events import for_match as event_for, key as event_key, load as load_events
 from fetch_stats import fetch as fetch_stats
 from hosts import arbitrate, load_verdict_source
 from parse_match import parse_match
@@ -254,6 +255,67 @@ def attach_stats(matches: list[dict], fixtures: list[dict], force: bool) -> int:
     return len(stats)
 
 
+def attach_events(matches: list[dict], fixtures: list[dict]) -> tuple[int, int]:
+    """Accroche ce que Sofascore sait d'une rencontre et que Forebet ignore.
+
+    Trois choses : la **chronologie nommée** (buteurs et cartons, à la minute),
+    les **deux entraîneurs du soir**, et le **numéro de journée**.
+
+    ⚠️ **À lancer après `arbitrate()`, jamais avant.** Sofascore oriente
+    domicile/extérieur à l'envers de Flashscore sur 61 rencontres sur 70 : on
+    compare donc son hôte au nôtre, et on retourne son `side` quand ils
+    diffèrent. Accrocher avant l'arbitrage reviendrait à comparer à une
+    étiquette qu'on s'apprête à changer.
+    """
+    store = load_events()
+    if not store.get("events"):
+        return 0, 0
+
+    def hook(item: dict) -> dict | None:
+        event = event_for(store, item.get("home"), item.get("away"),
+                          (item.get("kickoff") or "").split(" ")[0])
+        if event:
+            item["round"] = event.get("round")
+        return event
+
+    timelines = 0
+    for match in matches:
+        event = hook(match)
+        if not event:
+            continue
+        # Le retournement éventuel, décidé une fois pour la fiche entière.
+        flipped = event.get("home_key") != event_key(match.get("home") or "")
+        other = {"home": "away", "away": "home"}
+
+        def turn(item: dict) -> dict:
+            if not flipped:
+                return dict(item)
+            # Le score courant porté par l'événement se retourne aussi : sans
+            # ça la chronologie raconterait « 1-0 » au moment où notre hôte
+            # vient d'encaisser.
+            score = item.get("score")
+            if score and "-" in score:
+                left, right = score.split("-", 1)
+                score = f"{right}-{left}"
+            return dict(item, side=other[item["side"]], score=score)
+
+        line = [turn(i) for i in event.get("timeline") or []]
+        if line:
+            match["timeline"] = line
+            timelines += 1
+
+        bench = event.get("managers") or {}
+        if bench.get("home") or bench.get("away"):
+            match["managers"] = ({"home": bench["away"], "away": bench["home"]}
+                                 if flipped else dict(bench))
+
+    rounds = 0
+    for fixture in fixtures:
+        if hook(fixture):
+            rounds += 1
+    return timelines, rounds
+
+
 def reconcile(fixtures: list[dict], matches: list[dict]) -> None:
     """Aligne la date d'une rencontre sur celle de sa fiche.
 
@@ -441,6 +503,15 @@ def assemble(args) -> tuple[list[dict], list[dict]]:
             # échouer le build, il laisse l'étiquette de Forebet.
             print(f"arbitrage de l'hôte indisponible ({exc}) — on garde "
                   f"l'étiquette Forebet", file=sys.stderr)
+
+    # Après l'arbitrage : Sofascore n'oriente pas les camps comme nous.
+    try:
+        lines, rounds = attach_events(matches, fixtures)
+        print(f"Sofascore : {lines} chronologie(s) accrochée(s), "
+              f"{rounds} rencontre(s) datées d'une journée")
+    except Exception as exc:
+        print(f"rencontres Sofascore indisponibles ({exc}) — on continue",
+              file=sys.stderr)
 
     broadcasts = load_broadcasts()
     attach_broadcast(matches, broadcasts)

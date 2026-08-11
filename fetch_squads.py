@@ -144,6 +144,28 @@ def team_details(browser: CdpBrowser, team_id: int, force: bool) -> dict:
     }
 
 
+def team_season(browser: CdpBrowser, team_id: int, sid: int, force: bool) -> dict:
+    """Le bilan de saison du club, tel que Sofascore l'agrège.
+
+    Cinq chiffres seulement, mais **trois que Forebet n'a pas** : les matchs
+    sans encaisser, les buts sur penalty et les cartons rouges de la saison.
+    Pas de tirs ni de possession ici non plus — cette source ne les a nulle
+    part sur cette division.
+    """
+    data = browser.get_json(
+        f"{BASE}/api/v1/team/{team_id}/unique-tournament/{TOURNAMENT}"
+        f"/season/{sid}/statistics/overall", force=force, referer=HOST_PAGE)
+    stats = (data or {}).get("statistics") or {}
+    return {
+        "matches": stats.get("matches"),
+        "goals_scored": stats.get("goalsScored"),
+        "goals_conceded": stats.get("goalsConceded"),
+        "clean_sheets": stats.get("cleanSheets"),
+        "penalty_goals": stats.get("penaltyGoals"),
+        "red_cards": stats.get("redCards"),
+    }
+
+
 def collect(force: bool = False) -> dict:
     with CdpBrowser() as browser:
         sid, year = season_id(browser, force)
@@ -157,14 +179,17 @@ def collect(force: bool = False) -> dict:
         for tid, name in sorted(teams.items(), key=lambda x: x[1]):
             players = squad(browser, tid, goals, force)
             details = team_details(browser, tid, force)
+            season = team_season(browser, tid, sid, force)
             out[key(name)] = {
                 "sofascore_id": tid,
                 "sofascore_name": name,
                 **details,
+                "season": season,
                 "players": players,
             }
             print(f"  · {name:24} {len(players):2} joueurs"
-                  f"  ({details['manager'] or 'entraîneur inconnu'})")
+                  f"  ({details['manager'] or 'entraîneur inconnu'})"
+                  f"  {season['clean_sheets']} clean sheet(s)")
 
     return {
         "generated": datetime.now().isoformat(timespec="seconds"),

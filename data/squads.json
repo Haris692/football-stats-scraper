@@ -1,5 +1,5 @@
 {
-  "generated": "2026-08-10T14:26:21",
+  "generated": "2026-08-11T08:27:12",
   "source": "sofascore",
   "tournament": {
     "id": 20044,
@@ -13,6 +13,14 @@
       "manager": "Ibrahim Obaid",
       "declared_venue": "Kuwait Oil Company Stadium",
       "city": "Al Ahmadi",
+      "season": {
+        "matches": 18,
+        "goals_scored": 39,
+        "goals_conceded": 21,
+        "clean_sheets": 8,
+        "penalty_goals": 0,
+        "red_cards": 1
+      },
       "players": [
         {
           "id": 2259303,
@@ -141,6 +149,16 @@
           "number": null,
           "country": "Algeria",
           "country_code": "DZ",
+          "goals": 4,
+          "penalties": null
+        },
+        {
+          "id": 1140881,
+          "name": "Marouane Zila",
+          "position": "M",
+          "number": null,
+          "country": "Morocco",
+          "country_code": "MA",
           "goals": 3,
           "penalties": null
         },
@@ -161,16 +179,6 @@
           "number": "24",
           "country": "Senegal",
           "country_code": "SN",
-          "goals": 2,
-          "penalties": null
-        },
-        {
-          "id": 1140881,
-          "name": "Marouane Zila",
-          "position": "M",
-          "number": null,
-          "country": "Morocco",
-          "country_code": "MA",
           "goals": 2,
           "penalties": null
         },
@@ -215,6 +223,16 @@
           "penalties": null
         },
         {
+          "id": 1629762,
+          "name": "Fahad Al Rajhi",
+          "position": "F",
+          "number": "15",
+          "country": "Kuwait",
+          "country_code": "KW",
+          "goals": 3,
+          "penalties": null
+        },
+        {
           "id": 1404710,
           "name": "Yao Jean Charles Olivier",
           "position": "F",
@@ -222,16 +240,6 @@
           "country": "Côte d'Ivoire",
           "country_code": "CI",
           "goals": 3,
-          "penalties": null
-        },
-        {
-          "id": 1629762,
-          "name": "Fahad Al Rajhi",
-          "position": "F",
-          "number": "15",
-          "country": "Kuwait",
-          "country_code": "KW",
-          "goals": 2,
           "penalties": null
         },
         {
@@ -342,6 +350,14 @@
       "manager": "Yousef Mudhaf",
       "declared_venue": "Abu Halifa City Stadium",
       "city": "Kuwait City",
+      "season": {
+        "matches": 18,
+        "goals_scored": 31,
+        "goals_conceded": 13,
+        "clean_sheets": 10,
+        "penalty_goals": 3,
+        "red_cards": 0
+      },
       "players": [
         {
           "id": 2064189,
@@ -490,7 +506,7 @@
           "number": "8",
           "country": "Brazil",
           "country_code": "BR",
-          "goals": 1,
+          "goals": 2,
           "penalties": null
         },
         {
@@ -590,7 +606,7 @@
           "number": "27",
           "country": "Brazil",
           "country_code": "BR",
-          "goals": 2,
+          "goals": 3,
           "penalties": null
         },
         {
@@ -651,6 +667,14 @@
       "manager": "António Miranda",
       "declared_venue": "Al Sulaibikhat Stadium",
       "city": "Kuwait City",
+      "season": {
+        "matches": 17,
+        "goals_scored": 33,
+        "goals_conceded": 15,
+        "clean_sheets": 5,
+        "penalty_goals": 3,
+        "red_cards": 2
+      },
       "players": [
         {
           "id": 2057428,
@@ -933,12 +957,12 @@
           "penalties": null
         },
         {
-          "id": 2215109,
-          "name": "Dheryke Cristiano Madeira Rodrigues",
+          "id": 218748,
+          "name": "Christian Irobiso",
           "position": "F",
-          "number": "97",
-          "country": "Brazil",
-          "country_code": "BR",
+          "number": null,
+          "country": "Nigeria",
+          "country_code": "NG",
           "goals": null,
           "penalties": null
         },
@@ -970,6 +994,14 @@
       "manager": "Falah Anwar Al Sahli",
       "declared_venue": "Jaber Training Stadium 1",
       "city": "Ardiya",
+      "season": {
+        "matches": 18,
+        "goals_scored": 15,
+        "goals_conceded": 54,
+        "clean_sheets": 1,
+        "penalty_goals": 1,
+        "red_cards": 2
+      },
       "players": [
         {
           "id": 2277148,
@@ -1199,6 +1231,14 @@
       "manager": null,
       "declared_venue": "Ali Sabah Al-Salem Stadium",
       "city": "Al Farwaniyah",
+      "season": {
+        "matches": 17,
+        "goals_scored": 17,
+        "goals_conceded": 24,
+        "clean_sheets": 4,
+        "penalty_goals": 1,
+        "red_cards": 1
+      },
       "players": [
         {
           "id": 2040609,
@@ -1518,6 +1558,14 @@
       "manager": "Cenk Ozcan",
       "declared_venue": "Khaitan Stadium",
       "city": "Kuwait City",
+      "season": {
+        "matches": 18,
+        "goals_scored": 17,
+        "goals_conceded": 20,
+        "clean_sheets": 6,
+        "penalty_goals": 1,
+        "red_cards": 2
+      },
       "players": [
         {
           "id": 2072639,
@@ -1777,6 +1825,14 @@
       "manager": "Ibrahim Shehab",
       "declared_venue": null,
       "city": null,
+      "season": {
+        "matches": 17,
+        "goals_scored": 8,
+        "goals_conceded": 34,
+        "clean_sheets": 1,
+        "penalty_goals": 0,
+        "red_cards": 1
+      },
       "players": [
         {
           "id": 2664713,
@@ -2046,6 +2102,14 @@
       "manager": "João Mota",
       "declared_venue": "Mishref Stadium",
       "city": "Kuwait City",
+      "season": {
+        "matches": 17,
+        "goals_scored": 35,
+        "goals_conceded": 14,
+        "clean_sheets": 8,
+        "penalty_goals": 1,
+        "red_cards": 2
+      },
       "players": [
         {
           "id": 809501,

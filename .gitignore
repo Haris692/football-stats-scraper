@@ -18,3 +18,7 @@ __pycache__/
 
 # Captures produites par shoot.py : elles ne sont pas de la donnée du projet.
 captures/
+
+# Journal du rafraîchissement de 8 h : une trace d'exécution locale, qui
+# grossirait d'une dizaine de lignes par jour dans l'historique pour rien.
+daily.log

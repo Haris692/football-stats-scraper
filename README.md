@@ -67,7 +67,9 @@ match déjà en cache.
 | `hosts.py` | qui reçoit : arbitre les sources, qui ne s'accordent pas |
 | `parse_match.py` | parseur d'une fiche match : classement, forme, face à face |
 | `fetch_stats.py` | statistiques relevées d'un match (possession, tirs, corners) |
-| `fetch_squads.py` | effectifs des 8 clubs, via Sofascore (230 joueurs) |
+| `fetch_squads.py` | effectifs des 8 clubs et bilans de saison, via Sofascore |
+| `fetch_events.py` | rencontres Sofascore : journées, buteurs nommés, entraîneurs |
+| `daily.py` | rafraîchissement de 8 h : collecte, régénère, commite, pousse |
 | `crests.py` | écussons des clubs et couleurs dominantes qu'on en extrait |
 | `build_console.py` | assemble `console.html` |
 | `build_json.py` | assemble `output/` |
@@ -91,10 +93,19 @@ cadrés), corners, cartons, remplacements**, et parfois la chronologie des buts.
 Restent vides : passes, fautes, tacles, arrêts, hors-jeu, compositions, noms des
 buteurs.
 
-**Sofascore complète Forebet, il ne le remplace pas** : il apporte les
-effectifs, les entraîneurs et le classement des buteurs — mais **aucun tir**.
-Le partage est donc : Forebet pour les statistiques de match, Sofascore pour les
-gens. Les compositions n'existent nulle part pour ce championnat.
+**Sofascore complète Forebet, il ne le remplace pas.** Il apporte les effectifs,
+le classement des buteurs, les **buteurs nommés et minutés** de chaque match,
+les cartons minutés, les deux entraîneurs du soir, le **numéro de journée** et
+un bilan de saison (clean sheets, buts sur penalty, rouges).
+
+Mais **aucun tir** : son endpoint `event/{id}/statistics` répond bien 200 sur
+cette division, avec une seule ligne — « Red cards ». Le partage est donc :
+**Forebet pour les chiffres du match, Sofascore pour les gens et le récit.**
+Les compositions n'existent nulle part pour ce championnat.
+
+⚠️ Sofascore oriente domicile/extérieur **à l'envers des deux autres** (voir
+« Qui reçoit »). Tout ce qui en vient est retourné à l'accrochage — le camp de
+chaque but comme le score courant qu'il porte.
 
 Un zéro servi par la source ne veut donc pas dire zéro — il veut souvent dire
 « non couvert ». `fetch_stats.py` supprime les rubriques nulles des deux côtés
@@ -495,6 +506,28 @@ git push
 
 `index.html` et `index.data.json` sont donc les seuls artefacts de build que le
 dépôt garde ; `console.html`, `console.data.json` et `output/` restent ignorés.
+
+### Tous les matins à 8 h
+
+`daily.py` fait cet enchaînement tout seul — effectifs, rencontres, console,
+puis commit et push **de ce qui a changé, et rien si rien n'a changé**.
+
+```
+powershell -ExecutionPolicy Bypass -File schedule_daily.ps1      # inscrire
+powershell -ExecutionPolicy Bypass -File schedule_daily.ps1 -At 07:30
+powershell -ExecutionPolicy Bypass -File schedule_daily.ps1 -Remove
+python daily.py --dry-run        # ce qu'il ferait, sans le faire
+python daily.py --no-push        # tout sauf la publication
+```
+
+La tâche est **locale, pas dans le cloud** : la collecte a besoin du Chrome de
+cette machine et de sa clearance Cloudflare. Elle tourne en session ouverte, et
+`StartWhenAvailable` la rattrape si la machine était éteinte à 8 h. Journal
+dans `daily.log`, exécution manuelle par
+`Start-ScheduledTask -TaskName FootballStatsScraper-Daily`.
+
+⚠️ Une étape en échec **arrête la suite** : mieux vaut ne rien publier que
+publier une page régénérée à partir d'une collecte incomplète.
 
 ## Le reste
 

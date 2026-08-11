@@ -134,6 +134,12 @@ select, .btn {
 .ev .side { width: 8px; height: 8px; border-radius: 50%; flex: none; }
 .ev .side.home { background: var(--home); }
 .ev .side.away { background: var(--away); }
+/* Le nom du buteur : c'est l'information neuve de cette chronologie, elle doit
+   se lire avant le libellé qui la précède. */
+.ev b.who { font-weight: 600; color: var(--text-primary); }
+/* Un carton compte moins qu'un but : il s'efface d'un cran plutôt que de
+   ponctuer la ligne au même niveau. */
+.ev.card-ev { opacity: .72; }
 
 /* --- effectifs --- */
 .squad { display: grid; grid-template-columns: 1fr 1fr; gap: 22px; }
@@ -235,6 +241,9 @@ button.fx:hover { background: color-mix(in srgb, var(--text-primary) 4%, transpa
 }
 /* Le direct se signale par une pastille qui bat. Le battement s'arrête si la
    personne a demandé moins d'animations — c'est un ornement, pas une info. */
+/* Le numéro de journée est un repère, pas une alerte : il reste discret pour
+   ne pas concurrencer « aujourd'hui » ou « en direct » sur la même ligne. */
+.badge.round { color: var(--text-muted); letter-spacing: 0; }
 .badge.live { color: var(--critical); border-color: var(--critical); }
 .badge.live::before {
   content: ""; display: inline-block; width: 6px; height: 6px;
@@ -358,6 +367,15 @@ const EN = {
   "À venir": "Upcoming", "Aujourd'hui": "Today", "Joués": "Played", "Toutes": "All",
   "Rafraîchir": "Refresh", "Thème": "Theme",
   "Direct": "Live", "en direct": "live",
+  "But": "Goal", "But sur penalty": "Penalty", "But contre son camp": "Own goal",
+  "Carton jaune": "Yellow card", "Carton rouge": "Red card",
+  "Second jaune": "Second yellow",
+  "La source ne nomme pas tous les buteurs ; les buts sans nom sont conservés, le compte reste juste.":
+    "The source does not name every scorer; unnamed goals are kept, so the count stays right.",
+  "Sur le banc": "In the dugout",
+  "Matchs sans encaisser": "Clean sheets",
+  "Buts sur penalty": "Penalty goals",
+  "Bilan de saison · Sofascore": "Season record · Sofascore",
   "Suivre les matchs en cours, relevé toutes les minutes":
     "Follow matches in progress, updated every minute",
   "Arrêter le suivi en direct": "Stop following live",
@@ -870,6 +888,18 @@ function renderCompare(m) {
     group("Discipline");
     disc.forEach(k => h2hRow(grid, ...pick(k, k)));
   }
+  // Le bilan que Sofascore agrège de son côté. Il est mis à part, et pas fondu
+  // dans les lignes du dessus, parce que les deux sources ne comptent pas le
+  // même nombre de matchs : les mélanger ferait croire à une contradiction là
+  // où il n'y a qu'un décalage de fraîcheur. Ce qu'il apporte vraiment, ce sont
+  // les **buts sur penalty** — Forebet affiche « 0 / 0 » pour tout le monde.
+  const HS = m.squads?.home?.season, AS = m.squads?.away?.season;
+  if (HS || AS) {
+    group("Bilan de saison · Sofascore");
+    h2hRow(grid, t("Matchs sans encaisser"), HS?.clean_sheets, AS?.clean_sheets);
+    h2hRow(grid, t("Buts sur penalty"), HS?.penalty_goals, AS?.penalty_goals);
+    h2hRow(grid, t("Cartons rouges"), HS?.red_cards, AS?.red_cards);
+  }
   card.appendChild(grid);
 
   // Forebet expose des rubriques qu'il ne renseigne pas pour ce championnat
@@ -929,25 +959,66 @@ function possessionBar(s) {
   return box;
 }
 
+/* Deux chronologies possibles, et une seule affichée.
+
+   Sofascore passe devant parce qu'il **nomme les buteurs** — 187 buts nommés
+   sur 195 relevés sur la saison — là où Forebet donne un libellé et un camp,
+   jamais un nom. Le repli sur Forebet reste utile : une rencontre trop récente
+   pour Sofascore, ou absente de son calendrier, garde une chronologie.
+
+   ⚠️ Le `side` de Sofascore est déjà retourné côté Python (`attach_events`) :
+   cette source oriente domicile/extérieur à l'envers des autres. Rien à
+   corriger ici, et surtout rien à re-corriger. */
+const SOFA_LABEL = {
+  "goal/regular": "But", "goal/penalty": "But sur penalty",
+  "goal/ownGoal": "But contre son camp", "goal/owngoal": "But contre son camp",
+  "card/yellow": "Carton jaune", "card/red": "Carton rouge",
+  "card/yellowRed": "Second jaune",
+};
+
 function renderTimeline(s, m) {
-  if (!s.timeline || !s.timeline.length) return null;
+  const rich = m.timeline && m.timeline.length ? m.timeline : null;
+  const plain = s && s.timeline && s.timeline.length ? s.timeline : null;
+  if (!rich && !plain) return null;
+
   const box = el("div");
   box.style.marginTop = "22px";
   box.appendChild(el("div", "grp2", t("Chronologie")));
   const line = el("div", "tline");
-  s.timeline.forEach(e => {
+
+  (rich || plain).forEach(e => {
     const chip = el("div", "ev");
     if (e.side) chip.appendChild(el("span", "side " + e.side));
-    chip.appendChild(el("b", null, e.minute + (e.extra ? "+" + e.extra : "") + "'"));
-    // Les noms de joueurs sont toujours absents sur cette division : le libellé
-    // et le camp sont tout ce qu'on peut honnêtement afficher. Le libellé arrive
-    // en français ; on repart de `type`, qui est neutre.
-    const label = lang === "en" ? (EVENT_EN[e.type] || e.type.replace(/_/g, " ")) : e.label;
+    const extra = rich ? e.added : e.extra;
+    chip.appendChild(el("b", null, e.minute + (extra ? "+" + extra : "") + "'"));
+
+    let label;
+    if (rich) {
+      label = t(SOFA_LABEL[e.type + "/" + e.class] || e.type);
+      if (e.type === "card") chip.classList.add("card-ev");
+    } else {
+      // Le libellé de Forebet arrive en français ; on repart de `type`, neutre.
+      label = lang === "en" ? (EVENT_EN[e.type] || e.type.replace(/_/g, " ")) : e.label;
+    }
     chip.appendChild(el("span", null, label));
-    chip.title = e.side ? `${label} — ${e.side === "home" ? m.home : m.away}` : label;
+
+    // Le nom passe en gras : c'est lui qu'on vient chercher dans cette carte.
+    if (rich && e.player) chip.appendChild(el("b", "who", e.player));
+
+    const who = e.side ? (e.side === "home" ? m.home : m.away) : null;
+    chip.title = [label, e.player, who].filter(Boolean).join(" — ");
     line.appendChild(chip);
   });
+
   box.appendChild(line);
+  // Un but sans buteur, ça arrive : le dire vaut mieux que laisser croire à un
+  // oubli d'affichage.
+  if (rich && rich.some(e => e.type === "goal" && !e.player)) {
+    const p = el("p", "sub", t("La source ne nomme pas tous les buteurs ; " +
+      "les buts sans nom sont conservés, le compte reste juste."));
+    p.style.margin = "10px 0 0";
+    box.appendChild(p);
+  }
   return box;
 }
 
@@ -1007,6 +1078,7 @@ function renderMatchStats(m) {
   if (drawn) card.appendChild(grid);
 
   const tl = renderTimeline(s, m);
+  if (tl) tl.dataset.source = m.timeline && m.timeline.length ? "sofascore" : "forebet";
   if (tl) card.appendChild(tl);
 
   // La source sert un zéro pour les rubriques qu'elle ne couvre pas : les taire
@@ -1041,7 +1113,7 @@ const POS_LABEL = {
   en: { G: "Goalkeepers", D: "Defenders", M: "Midfielders", F: "Forwards", "?": "Position unknown" },
 };
 
-function squadColumn(side, name, squad) {
+function squadColumn(side, name, squad, bench) {
   const col = el("div");
   const head = el("div", "sqhead");
   head.appendChild(el("span", "dot " + side));
@@ -1051,6 +1123,13 @@ function squadColumn(side, name, squad) {
   const bits = [ph("squadCount", squad.players.length)];
   if (squad.manager) bits.push(ph("coach", squad.manager));
   col.appendChild(el("div", "sqmeta", bits.join(" · ")));
+
+  // L'entraîneur ci-dessus est celui du club AUJOURD'HUI ; celui-ci était sur
+  // le banc ce soir-là. On ne l'affiche que s'ils diffèrent — sinon c'est la
+  // même ligne écrite deux fois.
+  if (bench && bench !== squad.manager) {
+    col.appendChild(el("div", "sqmeta", t("Sur le banc") + " : " + bench));
+  }
 
   const groups = {};
   squad.players.forEach(p => {
@@ -1090,7 +1169,7 @@ function renderSquads(m) {
   const grid = el("div", "squad");
   [["home", m.home, s.home], ["away", m.away, s.away]].forEach(([side, name, sq]) => {
     if (sq && sq.players && sq.players.length) {
-      grid.appendChild(squadColumn(side, name, sq));
+      grid.appendChild(squadColumn(side, name, sq, (m.managers || {})[side]));
     } else {
       const col = el("div");
       const head = el("div", "sqhead");
@@ -1539,8 +1618,21 @@ function matchStatsText(m) {
     if (s.home[k] === null && s.away[k] === null) return;
     rows.push(`  ${label(k).padEnd(15)} ${s.home[k]} / ${s.away[k]}`);
   }));
-  const goals = (s.timeline || []).filter(e => e.type === "goal" || e.type === "owngoal");
-  const scorers = goals.map(g => g.minute + "'" + (g.side === "home" ? " " + m.home : " " + m.away)).join(", ");
+  // Sofascore d'abord : un carrousel qui nomme les buteurs vaut mieux qu'un
+  // carrousel qui dit « 87' Al Jazira ». Repli sur Forebet, qui date les buts
+  // sans jamais les attribuer à quelqu'un.
+  const rich = (m.timeline || []).filter(e => e.type === "goal");
+  const goals = rich.length
+    ? rich
+    : (s.timeline || []).filter(e => e.type === "goal" || e.type === "owngoal");
+  const scorers = goals.map(g => {
+    const when = g.minute + (rich.length && g.added ? "+" + g.added : "") + "'";
+    const club = g.side === "home" ? m.home : m.away;
+    const who = rich.length && g.player ? ` ${g.player} (${club})` : ` ${club}`;
+    const how = rich.length && g.class === "penalty" ? (en ? " pen." : " pén.")
+      : rich.length && g.class === "ownGoal" ? (en ? " o.g." : " c.s.c.") : "";
+    return when + who + how;
+  }).join(", ");
   if (en) {
     return [
       `Statistics recorded for THIS fixture (${m.home} / ${m.away})`,
@@ -1569,10 +1661,11 @@ function buildPrompt(m) {
   const H = teamFacts(m, "home"), A = teamFacts(m, "away");
   const pal = m.palette || {};
   const table = m.standings || [];
-  // Journée déduite du nombre de matchs joués — seulement si toutes les équipes
-  // en ont disputé autant, sinon le chiffre serait faux.
+  // La journée vient de Sofascore quand il la connaît : c'est un chiffre relevé,
+  // pas déduit. Sinon on retombe sur la déduction par le nombre de matchs joués,
+  // valable seulement si toutes les équipes en ont disputé autant.
   const played = [...new Set(table.map(r => r.played))];
-  const matchday = played.length === 1 ? played[0] + 1 : null;
+  const matchday = m.round || (played.length === 1 ? played[0] + 1 : null);
   const date = (m.kickoff || "").split(" ")[0];
   return promptLang === "en"
     ? promptEn(m, H, A, pal, table, matchday, date)
@@ -1880,6 +1973,10 @@ function fixtureRow(f) {
   who.appendChild(teamLabel(f.away, "sm"));
   if (f.live) who.appendChild(el("span", "badge live", t("en direct")));
   else if (dayOf(f) === DATA.today && !f.played) who.appendChild(el("span", "badge", t("aujourd'hui")));
+  // Le numéro de journée vient de Sofascore : ni Forebet ni Flashscore ne le
+  // donnent sur cette division, et sans lui la liste n'est qu'une suite de
+  // dates.
+  if (f.round) who.appendChild(el("span", "badge round", "J" + f.round));
   // La chaîne n'apparaît dans la liste que si elle a été renseignée : afficher
   // « habituellement… » sur chaque ligne serait du bruit.
   if (f.broadcast && f.broadcast.confirmed) {

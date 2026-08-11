@@ -1,0 +1,5148 @@
+{
+  "generated": "2026-08-11T08:36:52",
+  "source": "sofascore",
+  "season": 75693,
+  "season_year": "25/26",
+  "current_round": 18,
+  "events": [
+    {
+      "sofascore_id": 14685502,
+      "round": 1,
+      "kickoff": "14/09/2025 17:20",
+      "kickoff_iso": "2025-09-14T17:20",
+      "home": "Al Sahel SC",
+      "away": "Khaitan SC",
+      "home_key": "sahel",
+      "away_key": "khaitan",
+      "home_score": 0,
+      "away_score": 0,
+      "finished": true,
+      "timeline": [
+        {
+          "type": "card",
+          "class": "yellow",
+          "minute": 53,
+          "added": null,
+          "player": null,
+          "side": "home",
+          "score": null
+        },
+        {
+          "type": "card",
+          "class": "yellow",
+          "minute": 57,
+          "added": null,
+          "player": null,
+          "side": "away",
+          "score": null
+        },
+        {
+          "type": "card",
+          "class": "yellow",
+          "minute": 59,
+          "added": null,
+          "player": null,
+          "side": "away",
+          "score": null
+        },
+        {
+          "type": "card",
+          "class": "yellow",
+          "minute": 66,
+          "added": null,
+          "player": null,
+          "side": "away",
+          "score": null
+        },
+        {
+          "type": "card",
+          "class": "yellow",
+          "minute": 90,
+          "added": 3,
+          "player": null,
+          "side": "home",
+          "score": null
+        }
+      ],
+      "managers": {
+        "home": null,
+        "away": null
+      }
+    },
+    {
+      "sofascore_id": 15401133,
+      "round": 1,
+      "kickoff": "14/09/2025 19:45",
+      "kickoff_iso": "2025-09-14T19:45",
+      "home": "Al-Shamiya FC",
+      "away": "Al Sulaibikhat FC",
+      "home_key": "shamiya",
+      "away_key": "sulaibikhat",
+      "home_score": 1,
+      "away_score": 2,
+      "finished": true,
+      "timeline": [
+        {
+          "type": "goal",
+          "class": "regular",
+          "minute": 51,
+          "added": null,
+          "player": "Ali Wali",
+          "side": "home",
+          "score": "1-0"
+        },
+        {
+          "type": "goal",
+          "class": "regular",
+          "minute": 60,
+          "added": null,
+          "player": "Bruno Domingues",
+          "side": "away",
+          "score": "1-1"
+        },
+        {
+          "type": "goal",
+          "class": "regular",
+          "minute": 69,
+          "added": null,
+          "player": "Lucas Shallon",
+          "side": "away",
+          "score": "1-2"
+        },
+        {
+          "type": "card",
+          "class": "yellow",
+          "minute": 84,
+          "added": null,
+          "player": null,
+          "side": "home",
+          "score": null
+        }
+      ],
+      "managers": {
+        "home": null,
+        "away": null
+      }
+    },
+    {
+      "sofascore_id": 14608564,
+      "round": 1,
+      "kickoff": "15/09/2025 17:20",
+      "kickoff_iso": "2025-09-15T17:20",
+      "home": "Sporty FC",
+      "away": "Yarmouk SC",
+      "home_key": "sporty",
+      "away_key": "yarmouk",
+      "home_score": 0,
+      "away_score": 2,
+      "finished": true,
+      "timeline": [
+        {
+          "type": "goal",
+          "class": "regular",
+          "minute": 8,
+          "added": null,
+          "player": "Abdullah Al Shami",
+          "side": "away",
+          "score": "0-1"
+        },
+        {
+          "type": "goal",
+          "class": "regular",
+          "minute": 78,
+          "added": null,
+          "player": "Ibrahim Al Dhufairi",
+          "side": "away",
+          "score": "0-2"
+        }
+      ],
+      "managers": {
+        "home": "Khalid Al-Turky",
+        "away": "Dhahir Al-Adwani"
+      }
+    },
+    {
+      "sofascore_id": 14608566,
+      "round": 1,
+      "kickoff": "15/09/2025 19:35",
+      "kickoff_iso": "2025-09-15T19:35",
+      "home": "Burgan SC",
+      "away": "Al Jazeera FC Kuwait",
+      "home_key": "burgan",
+      "away_key": "jazira",
+      "home_score": 0,
+      "away_score": 0,
+      "finished": true,
+      "timeline": [
+        {
+          "type": "card",
+          "class": "yellow",
+          "minute": 14,
+          "added": null,
+          "player": null,
+          "side": "home",
+          "score": null
+        },
+        {
+          "type": "card",
+          "class": "yellow",
+          "minute": 41,
+          "added": null,
+          "player": null,
+          "side": "away",
+          "score": null
+        },
+        {
+          "type": "card",
+          "class": "yellow",
+          "minute": 73,
+          "added": null,
+          "player": null,
+          "side": "home",
+          "score": null
+        },
+        {
+          "type": "card",
+          "class": "yellow",
+          "minute": 90,
+          "added": null,
+          "player": null,
+          "side": "home",
+          "score": null
+        }
+      ],
+      "managers": {
+        "home": "Cenk Ozcan",
+        "away": "Ibrahim Obaid"
+      }
+    },
+    {
+      "sofascore_id": 14647017,
+      "round": 2,
+      "kickoff": "21/09/2025 17:15",
+      "kickoff_iso": "2025-09-21T17:15",
+      "home": "Al Sulaibikhat FC",
+      "away": "Khaitan SC",
+      "home_key": "sulaibikhat",
+      "away_key": "khaitan",
+      "home_score": 2,
+      "away_score": 1,
+      "finished": true,
+      "timeline": [
+        {
+          "type": "goal",
+          "class": "regular",
+          "minute": 52,
+          "added": null,
+          "player": "Emmanuel Evaristus",
+          "side": "home",
+          "score": "1-0"
+        },
+        {
+          "type": "goal",
+          "class": "regular",
+          "minute": 80,
+          "added": null,
+          "player": "Lucas Shallon",
+          "side": "home",
+          "score": "2-0"
+        },
+        {
+          "type": "goal",
+          "class": "regular",
+          "minute": 90,
+          "added": null,
+          "player": "Hamad Al Taweel",
+          "side": "away",
+          "score": "2-1"
+        }
+      ],
+      "managers": {
+        "home": "António Miranda",
+        "away": "Hatem Almoadab"
+      }
+    },
+    {
+      "sofascore_id": 14647018,
+      "round": 2,
+      "kickoff": "21/09/2025 19:30",
+      "kickoff_iso": "2025-09-21T19:30",
+      "home": "Burgan SC",
+      "away": "Al Sahel SC",
+      "home_key": "burgan",
+      "away_key": "sahel",
+      "home_score": 0,
+      "away_score": 0,
+      "finished": true,
+      "timeline": [
+        {
+          "type": "card",
+          "class": "yellow",
+          "minute": 39,
+          "added": null,
+          "player": null,
+          "side": "home",
+          "score": null
+        },
+        {
+          "type": "card",
+          "class": "yellow",
+          "minute": 45,
+          "added": null,
+          "player": null,
+          "side": "home",
+          "score": null
+        },
+        {
+          "type": "card",
+          "class": "yellow",
+          "minute": 61,
+          "added": null,
+          "player": null,
+          "side": "away",
+          "score": null
+        },
+        {
+          "type": "card",
+          "class": "yellow",
+          "minute": 64,
+          "added": null,
+          "player": null,
+          "side": "home",
+          "score": null
+        }
+      ],
+      "managers": {
+        "home": "Cenk Ozcan",
+        "away": "Yousef Mudhaf"
+      }
+    },
+    {
+      "sofascore_id": 14647019,
+      "round": 2,
+      "kickoff": "22/09/2025 17:15",
+      "kickoff_iso": "2025-09-22T17:15",
+      "home": "Sporty FC",
+      "away": "Al Jazeera FC Kuwait",
+      "home_key": "sporty",
+      "away_key": "jazira",
+      "home_score": 0,
+      "away_score": 3,
+      "finished": true,
+      "timeline": [
+        {
+          "type": "goal",
+          "class": "regular",
+          "minute": 15,
+          "added": null,
+          "player": "Donovan Ewolo",
+          "side": "away",
+          "score": "0-1"
+        },
+        {
+          "type": "card",
+          "class": "yellow",
+          "minute": 17,
+          "added": null,
+          "player": null,
+          "side": "home",
+          "score": null
+        },
+        {
+          "type": "goal",
+          "class": "regular",
+          "minute": 60,
+          "added": null,
+          "player": "Matheus Vieira",
+          "side": "away",
+          "score": "0-2"
+        },
+        {
+          "type": "card",
+          "class": "yellow",
+          "minute": 62,
+          "added": null,
+          "player": null,
+          "side": "home",
+          "score": null
+        },
+        {
+          "type": "goal",
+          "class": "regular",
+          "minute": 78,
+          "added": null,
+          "player": "Fahad Al Rajhi",
+          "side": "away",
+          "score": "0-3"
+        }
+      ],
+      "managers": {
+        "home": "Khalid Al-Turky",
+        "away": "Ibrahim Obaid"
+      }
+    },
+    {
+      "sofascore_id": 14647020,
+      "round": 2,
+      "kickoff": "22/09/2025 19:30",
+      "kickoff_iso": "2025-09-22T19:30",
+      "home": "Yarmouk SC",
+      "away": "Al-Shamiya FC",
+      "home_key": "yarmouk",
+      "away_key": "shamiya",
+      "home_score": 2,
+      "away_score": 0,
+      "finished": true,
+      "timeline": [
+        {
+          "type": "goal",
+          "class": "regular",
+          "minute": 9,
+          "added": null,
+          "player": "Hazem Haj Hassen",
+          "side": "home",
+          "score": "1-0"
+        },
+        {
+          "type": "card",
+          "class": "yellow",
+          "minute": 14,
+          "added": null,
+          "player": null,
+          "side": "away",
+          "score": null
+        },
+        {
+          "type": "card",
+          "class": "yellow",
+          "minute": 45,
+          "added": 1,
+          "player": null,
+          "side": "away",
+          "score": null
+        },
+        {
+          "type": "card",
+          "class": "yellow",
+          "minute": 58,
+          "added": null,
+          "player": null,
+          "side": "away",
+          "score": null
+        },
+        {
+          "type": "card",
+          "class": "yellow",
+          "minute": 63,
+          "added": null,
+          "player": null,
+          "side": "home",
+          "score": null
+        },
+        {
+          "type": "goal",
+          "class": "regular",
+          "minute": 65,
+          "added": null,
+          "player": "Abdullah Al Shami",
+          "side": "home",
+          "score": "2-0"
+        },
+        {
+          "type": "card",
+          "class": "yellow",
+          "minute": 68,
+          "added": null,
+          "player": null,
+          "side": "away",
+          "score": null
+        }
+      ],
+      "managers": {
+        "home": "Dhahir Al-Adwani",
+        "away": null
+      }
+    },
+    {
+      "sofascore_id": 14644950,
+      "round": 3,
+      "kickoff": "29/09/2025 17:05",
+      "kickoff_iso": "2025-09-29T17:05",
+      "home": "Al Jazeera FC Kuwait",
+      "away": "Al-Shamiya FC",
+      "home_key": "jazira",
+      "away_key": "shamiya",
+      "home_score": 3,
+      "away_score": 0,
+      "finished": true,
+      "timeline": [
+        {
+          "type": "card",
+          "class": "yellow",
+          "minute": 5,
+          "added": null,
+          "player": null,
+          "side": "home",
+          "score": null
+        },
+        {
+          "type": "card",
+          "class": "yellow",
+          "minute": 19,
+          "added": null,
+          "player": null,
+          "side": "away",
+          "score": null
+        },
+        {
+          "type": "card",
+          "class": "yellow",
+          "minute": 45,
+          "added": null,
+          "player": null,
+          "side": "away",
+          "score": null
+        },
+        {
+          "type": "card",
+          "class": "yellow",
+          "minute": 45,
+          "added": null,
+          "player": null,
+          "side": "home",
+          "score": null
+        },
+        {
+          "type": "goal",
+          "class": "regular",
+          "minute": 57,
+          "added": null,
+          "player": "Malick Mbaye",
+          "side": "home",
+          "score": "1-0"
+        },
+        {
+          "type": "goal",
+          "class": "regular",
+          "minute": 60,
+          "added": null,
+          "player": "Malick Mbaye",
+          "side": "home",
+          "score": "2-0"
+        },
+        {
+          "type": "card",
+          "class": "yellow",
+          "minute": 69,
+          "added": null,
+          "player": null,
+          "side": "away",
+          "score": null
+        },
+        {
+          "type": "card",
+          "class": "yellow",
+          "minute": 74,
+          "added": null,
+          "player": null,
+          "side": "away",
+          "score": null
+        },
+        {
+          "type": "card",
+          "class": "yellow",
+          "minute": 81,
+          "added": null,
+          "player": null,
+          "side": "home",
+          "score": null
+        },
+        {
+          "type": "goal",
+          "class": "regular",
+          "minute": 88,
+          "added": null,
+          "player": "Nando Welter",
+          "side": "home",
+          "score": "3-0"
+        }
+      ],
+      "managers": {
+        "home": "Ibrahim Obaid",
+        "away": "Falah Anwar Al Sahli"
+      }
+    },
+    {
+      "sofascore_id": 14644951,
+      "round": 3,
+      "kickoff": "29/09/2025 17:05",
+      "kickoff_iso": "2025-09-29T17:05",
+      "home": "Al Sahel SC",
+      "away": "Sporty FC",
+      "home_key": "sahel",
+      "away_key": "sporty",
+      "home_score": 2,
+      "away_score": 0,
+      "finished": true,
+      "timeline": [
+        {
+          "type": "goal",
+          "class": "regular",
+          "minute": 5,
+          "added": null,
+          "player": "Allan Paulista",
+          "side": "home",
+          "score": "1-0"
+        },
+        {
+          "type": "card",
+          "class": "yellow",
+          "minute": 7,
+          "added": null,
+          "player": null,
+          "side": "away",
+          "score": null
+        },
+        {
+          "type": "card",
+          "class": "yellow",
+          "minute": 42,
+          "added": null,
+          "player": null,
+          "side": "home",
+          "score": null
+        },
+        {
+          "type": "goal",
+          "class": "regular",
+          "minute": 43,
+          "added": null,
+          "player": "Birahim Gaye",
+          "side": "home",
+          "score": "2-0"
+        },
+        {
+          "type": "card",
+          "class": "yellow",
+          "minute": 75,
+          "added": null,
+          "player": null,
+          "side": "away",
+          "score": null
+        }
+      ],
+      "managers": {
+        "home": "Yousef Mudhaf",
+        "away": "Khalid Al-Turky"
+      }
+    },
+    {
+      "sofascore_id": 14644952,
+      "round": 3,
+      "kickoff": "29/09/2025 19:20",
+      "kickoff_iso": "2025-09-29T19:20",
+      "home": "Al Sulaibikhat FC",
+      "away": "Burgan SC",
+      "home_key": "sulaibikhat",
+      "away_key": "burgan",
+      "home_score": 3,
+      "away_score": 1,
+      "finished": true,
+      "timeline": [
+        {
+          "type": "goal",
+          "class": "regular",
+          "minute": 11,
+          "added": null,
+          "player": "Michel Potiguar",
+          "side": "home",
+          "score": "1-0"
+        },
+        {
+          "type": "card",
+          "class": "yellow",
+          "minute": 16,
+          "added": null,
+          "player": null,
+          "side": "home",
+          "score": null
+        },
+        {
+          "type": "goal",
+          "class": "penalty",
+          "minute": 26,
+          "added": null,
+          "player": "Hamoud Al-Hazmi",
+          "side": "away",
+          "score": "1-1"
+        },
+        {
+          "type": "goal",
+          "class": "regular",
+          "minute": 44,
+          "added": null,
+          "player": "Lucas Shallon",
+          "side": "home",
+          "score": "2-1"
+        },
+        {
+          "type": "card",
+          "class": "yellow",
+          "minute": 45,
+          "added": null,
+          "player": null,
+          "side": "away",
+          "score": null
+        },
+        {
+          "type": "goal",
+          "class": "regular",
+          "minute": 54,
+          "added": null,
+          "player": "Saleh Khamees Al Enezi",
+          "side": "home",
+          "score": "3-1"
+        },
+        {
+          "type": "card",
+          "class": "yellow",
+          "minute": 56,
+          "added": null,
+          "player": null,
+          "side": "home",
+          "score": null
+        },
+        {
+          "type": "card",
+          "class": "yellow",
+          "minute": 59,
+          "added": null,
+          "player": null,
+          "side": "home",
+          "score": null
+        },
+        {
+          "type": "card",
+          "class": "yellow",
+          "minute": 65,
+          "added": null,
+          "player": null,
+          "side": "home",
+          "score": null
+        },
+        {
+          "type": "card",
+          "class": "yellow",
+          "minute": 70,
+          "added": null,
+          "player": null,
+          "side": "home",
+          "score": null
+        },
+        {
+          "type": "card",
+          "class": "yellow",
+          "minute": 80,
+          "added": null,
+          "player": null,
+          "side": "away",
+          "score": null
+        }
+      ],
+      "managers": {
+        "home": "António Miranda",
+        "away": "Cenk Ozcan"
+      }
+    },
+    {
+      "sofascore_id": 14644953,
+      "round": 3,
+      "kickoff": "29/09/2025 19:20",
+      "kickoff_iso": "2025-09-29T19:20",
+      "home": "Khaitan SC",
+      "away": "Yarmouk SC",
+      "home_key": "khaitan",
+      "away_key": "yarmouk",
+      "home_score": 0,
+      "away_score": 2,
+      "finished": true,
+      "timeline": [
+        {
+          "type": "card",
+          "class": "yellow",
+          "minute": 31,
+          "added": null,
+          "player": null,
+          "side": "away",
+          "score": null
+        },
+        {
+          "type": "card",
+          "class": "yellow",
+          "minute": 37,
+          "added": null,
+          "player": null,
+          "side": "away",
+          "score": null
+        },
+        {
+          "type": "card",
+          "class": "yellow",
+          "minute": 44,
+          "added": null,
+          "player": null,
+          "side": "home",
+          "score": null
+        },
+        {
+          "type": "goal",
+          "class": "regular",
+          "minute": 47,
+          "added": null,
+          "player": "Mohammad Hassan Ahmad Pour",
+          "side": "away",
+          "score": "0-1"
+        },
+        {
+          "type": "card",
+          "class": "yellow",
+          "minute": 57,
+          "added": null,
+          "player": null,
+          "side": "home",
+          "score": null
+        },
+        {
+          "type": "card",
+          "class": "red",
+          "minute": 59,
+          "added": null,
+          "player": null,
+          "side": "home",
+          "score": null
+        },
+        {
+          "type": "goal",
+          "class": "penalty",
+          "minute": 79,
+          "added": null,
+          "player": "Meshari Al Azmi",
+          "side": "away",
+          "score": "0-2"
+        },
+        {
+          "type": "card",
+          "class": "yellow",
+          "minute": 90,
+          "added": null,
+          "player": null,
+          "side": "home",
+          "score": null
+        }
+      ],
+      "managers": {
+        "home": "Hatem Almoadab",
+        "away": "Dhahir Al-Adwani"
+      }
+    },
+    {
+      "sofascore_id": 14647030,
+      "round": 4,
+      "kickoff": "04/10/2025 16:55",
+      "kickoff_iso": "2025-10-04T16:55",
+      "home": "Burgan SC",
+      "away": "Yarmouk SC",
+      "home_key": "burgan",
+      "away_key": "yarmouk",
+      "home_score": 2,
+      "away_score": 1,
+      "finished": true,
+      "timeline": [
+        {
+          "type": "goal",
+          "class": "regular",
+          "minute": 7,
+          "added": null,
+          "player": "Isaac James Ogiri",
+          "side": "home",
+          "score": "1-0"
+        },
+        {
+          "type": "goal",
+          "class": "regular",
+          "minute": 24,
+          "added": null,
+          "player": "Mohammad Hassan Ahmad Pour",
+          "side": "away",
+          "score": "1-1"
+        },
+        {
+          "type": "goal",
+          "class": "regular",
+          "minute": 57,
+          "added": null,
+          "player": "Hamoud Al-Hazmi",
+          "side": "home",
+          "score": "2-1"
+        }
+      ],
+      "managers": {
+        "home": "Cenk Ozcan",
+        "away": "Dhahir Al-Adwani"
+      }
+    },
+    {
+      "sofascore_id": 14647031,
+      "round": 4,
+      "kickoff": "04/10/2025 19:10",
+      "kickoff_iso": "2025-10-04T19:10",
+      "home": "Al-Shamiya FC",
+      "away": "Al Sahel SC",
+      "home_key": "shamiya",
+      "away_key": "sahel",
+      "home_score": 1,
+      "away_score": 3,
+      "finished": true,
+      "timeline": [
+        {
+          "type": "goal",
+          "class": "regular",
+          "minute": 5,
+          "added": null,
+          "player": "Omar Al Maimouni",
+          "side": "home",
+          "score": "1-0"
+        },
+        {
+          "type": "goal",
+          "class": "penalty",
+          "minute": 8,
+          "added": null,
+          "player": "Allan Paulista",
+          "side": "away",
+          "score": "1-1"
+        },
+        {
+          "type": "card",
+          "class": "yellow",
+          "minute": 12,
+          "added": null,
+          "player": null,
+          "side": "home",
+          "score": null
+        },
+        {
+          "type": "goal",
+          "class": "regular",
+          "minute": 45,
+          "added": 1,
+          "player": "Lucas Lucena",
+          "side": "away",
+          "score": "1-2"
+        },
+        {
+          "type": "goal",
+          "class": "regular",
+          "minute": 53,
+          "added": null,
+          "player": "Birahim Gaye",
+          "side": "away",
+          "score": "1-3"
+        }
+      ],
+      "managers": {
+        "home": "Falah Anwar Al Sahli",
+        "away": "Yousef Mudhaf"
+      }
+    },
+    {
+      "sofascore_id": 14647032,
+      "round": 4,
+      "kickoff": "04/10/2025 19:10",
+      "kickoff_iso": "2025-10-04T19:10",
+      "home": "Sporty FC",
+      "away": "Al Sulaibikhat FC",
+      "home_key": "sporty",
+      "away_key": "sulaibikhat",
+      "home_score": 0,
+      "away_score": 2,
+      "finished": true,
+      "timeline": [
+        {
+          "type": "card",
+          "class": "yellow",
+          "minute": 31,
+          "added": null,
+          "player": null,
+          "side": "away",
+          "score": null
+        },
+        {
+          "type": "goal",
+          "class": "regular",
+          "minute": 40,
+          "added": null,
+          "player": "Saleh Khamees Al Enezi",
+          "side": "away",
+          "score": "0-1"
+        },
+        {
+          "type": "card",
+          "class": "yellow",
+          "minute": 59,
+          "added": null,
+          "player": null,
+          "side": "home",
+          "score": null
+        },
+        {
+          "type": "card",
+          "class": "yellow",
+          "minute": 71,
+          "added": null,
+          "player": null,
+          "side": "home",
+          "score": null
+        },
+        {
+          "type": "card",
+          "class": "yellow",
+          "minute": 86,
+          "added": null,
+          "player": null,
+          "side": "away",
+          "score": null
+        },
+        {
+          "type": "card",
+          "class": "yellow",
+          "minute": 90,
+          "added": null,
+          "player": null,
+          "side": "away",
+          "score": null
+        },
+        {
+          "type": "goal",
+          "class": "penalty",
+          "minute": 90,
+          "added": 4,
+          "player": "Lucas Shallon",
+          "side": "away",
+          "score": "0-2"
+        }
+      ],
+      "managers": {
+        "home": "Khalid Al-Turky",
+        "away": "António Miranda"
+      }
+    },
+    {
+      "sofascore_id": 14829375,
+      "round": 4,
+      "kickoff": "05/10/2025 16:55",
+      "kickoff_iso": "2025-10-05T16:55",
+      "home": "Al Jazeera FC Kuwait",
+      "away": "Khaitan SC",
+      "home_key": "jazira",
+      "away_key": "khaitan",
+      "home_score": 2,
+      "away_score": 0,
+      "finished": true,
+      "timeline": [
+        {
+          "type": "goal",
+          "class": "regular",
+          "minute": 16,
+          "added": null,
+          "player": "Mobarak Saeed",
+          "side": "home",
+          "score": "1-0"
+        },
+        {
+          "type": "goal",
+          "class": "regular",
+          "minute": 19,
+          "added": null,
+          "player": "Donovan Ewolo",
+          "side": "home",
+          "score": "2-0"
+        }
+      ],
+      "managers": {
+        "home": "Ibrahim Obaid",
+        "away": "Hatem Almoadab"
+      }
+    },
+    {
+      "sofascore_id": 14644960,
+      "round": 5,
+      "kickoff": "20/10/2025 16:40",
+      "kickoff_iso": "2025-10-20T16:40",
+      "home": "Al Sahel SC",
+      "away": "Al Jazeera FC Kuwait",
+      "home_key": "sahel",
+      "away_key": "jazira",
+      "home_score": 4,
+      "away_score": 1,
+      "finished": true,
+      "timeline": [
+        {
+          "type": "card",
+          "class": "yellow",
+          "minute": 6,
+          "added": null,
+          "player": null,
+          "side": "home",
+          "score": null
+        },
+        {
+          "type": "goal",
+          "class": "regular",
+          "minute": 8,
+          "added": null,
+          "player": "Birahim Gaye",
+          "side": "home",
+          "score": "1-0"
+        },
+        {
+          "type": "card",
+          "class": "yellow",
+          "minute": 45,
+          "added": null,
+          "player": null,
+          "side": "away",
+          "score": null
+        },
+        {
+          "type": "goal",
+          "class": "regular",
+          "minute": 45,
+          "added": 2,
+          "player": "Birahim Gaye",
+          "side": "home",
+          "score": "2-0"
+        },
+        {
+          "type": "goal",
+          "class": "regular",
+          "minute": 49,
+          "added": null,
+          "player": "Donovan Ewolo",
+          "side": "away",
+          "score": "2-1"
+        },
+        {
+          "type": "card",
+          "class": "yellow",
+          "minute": 51,
+          "added": null,
+          "player": null,
+          "side": "home",
+          "score": null
+        },
+        {
+          "type": "goal",
+          "class": "regular",
+          "minute": 53,
+          "added": null,
+          "player": "Birahim Gaye",
+          "side": "home",
+          "score": "3-1"
+        },
+        {
+          "type": "goal",
+          "class": "regular",
+          "minute": 63,
+          "added": null,
+          "player": "Allan Paulista",
+          "side": "home",
+          "score": "4-1"
+        }
+      ],
+      "managers": {
+        "home": "Yousef Mudhaf",
+        "away": "Ibrahim Obaid"
+      }
+    },
+    {
+      "sofascore_id": 14644961,
+      "round": 5,
+      "kickoff": "20/10/2025 16:40",
+      "kickoff_iso": "2025-10-20T16:40",
+      "home": "Sporty FC",
+      "away": "Al-Shamiya FC",
+      "home_key": "sporty",
+      "away_key": "shamiya",
+      "home_score": 1,
+      "away_score": 2,
+      "finished": true,
+      "timeline": [
+        {
+          "type": "card",
+          "class": "yellow",
+          "minute": 24,
+          "added": null,
+          "player": null,
+          "side": "home",
+          "score": null
+        },
+        {
+          "type": "goal",
+          "class": "regular",
+          "minute": 30,
+          "added": null,
+          "player": "Ali Wali",
+          "side": "away",
+          "score": "0-1"
+        },
+        {
+          "type": "card",
+          "class": "yellow",
+          "minute": 46,
+          "added": null,
+          "player": null,
+          "side": "away",
+          "score": null
+        },
+        {
+          "type": "card",
+          "class": "yellow",
+          "minute": 48,
+          "added": null,
+          "player": null,
+          "side": "away",
+          "score": null
+        },
+        {
+          "type": "goal",
+          "class": "regular",
+          "minute": 54,
+          "added": null,
+          "player": "Ibrahim Al Tamimi",
+          "side": "home",
+          "score": "1-1"
+        },
+        {
+          "type": "goal",
+          "class": "regular",
+          "minute": 69,
+          "added": null,
+          "player": "Ali Wali",
+          "side": "away",
+          "score": "1-2"
+        },
+        {
+          "type": "card",
+          "class": "yellow",
+          "minute": 87,
+          "added": null,
+          "player": null,
+          "side": "away",
+          "score": null
+        },
+        {
+          "type": "card",
+          "class": "yellow",
+          "minute": 90,
+          "added": 2,
+          "player": null,
+          "side": "away",
+          "score": null
+        },
+        {
+          "type": "card",
+          "class": "yellow",
+          "minute": 90,
+          "added": 4,
+          "player": null,
+          "side": "home",
+          "score": null
+        }
+      ],
+      "managers": {
+        "home": "Khalid Al-Turky",
+        "away": "Falah Anwar Al Sahli"
+      }
+    },
+    {
+      "sofascore_id": 14644963,
+      "round": 5,
+      "kickoff": "20/10/2025 18:55",
+      "kickoff_iso": "2025-10-20T18:55",
+      "home": "Al Sulaibikhat FC",
+      "away": "Yarmouk SC",
+      "home_key": "sulaibikhat",
+      "away_key": "yarmouk",
+      "home_score": 0,
+      "away_score": 1,
+      "finished": true,
+      "timeline": [
+        {
+          "type": "goal",
+          "class": "regular",
+          "minute": 23,
+          "added": null,
+          "player": "Hazem Haj Hassen",
+          "side": "away",
+          "score": "0-1"
+        }
+      ],
+      "managers": {
+        "home": "António Miranda",
+        "away": "Dhahir Al-Adwani"
+      }
+    },
+    {
+      "sofascore_id": 14644962,
+      "round": 5,
+      "kickoff": "20/10/2025 18:55",
+      "kickoff_iso": "2025-10-20T18:55",
+      "home": "Burgan SC",
+      "away": "Khaitan SC",
+      "home_key": "burgan",
+      "away_key": "khaitan",
+      "home_score": 0,
+      "away_score": 2,
+      "finished": true,
+      "timeline": [
+        {
+          "type": "goal",
+          "class": "regular",
+          "minute": 36,
+          "added": null,
+          "player": "Mohammad Al Enezi",
+          "side": "away",
+          "score": "0-1"
+        },
+        {
+          "type": "goal",
+          "class": "regular",
+          "minute": 57,
+          "added": null,
+          "player": "Hamad Al Taweel",
+          "side": "away",
+          "score": "0-2"
+        }
+      ],
+      "managers": {
+        "home": "Cenk Ozcan",
+        "away": "Hatem Almoadab"
+      }
+    },
+    {
+      "sofascore_id": 14650236,
+      "round": 6,
+      "kickoff": "26/10/2025 15:35",
+      "kickoff_iso": "2025-10-26T15:35",
+      "home": "Al-Shamiya FC",
+      "away": "Burgan SC",
+      "home_key": "shamiya",
+      "away_key": "burgan",
+      "home_score": 2,
+      "away_score": 4,
+      "finished": true,
+      "timeline": [
+        {
+          "type": "goal",
+          "class": "regular",
+          "minute": 11,
+          "added": null,
+          "player": "Ibrahim Zahwa",
+          "side": "away",
+          "score": "0-1"
+        },
+        {
+          "type": "goal",
+          "class": "regular",
+          "minute": 13,
+          "added": null,
+          "player": "Isaac James Ogiri",
+          "side": "away",
+          "score": "0-2"
+        },
+        {
+          "type": "goal",
+          "class": "regular",
+          "minute": 26,
+          "added": null,
+          "player": "Jaber Al-Fadhli",
+          "side": "away",
+          "score": "0-3"
+        },
+        {
+          "type": "goal",
+          "class": "regular",
+          "minute": 28,
+          "added": null,
+          "player": "Ali Wali",
+          "side": "home",
+          "score": "1-3"
+        },
+        {
+          "type": "card",
+          "class": "red",
+          "minute": 61,
+          "added": null,
+          "player": null,
+          "side": "home",
+          "score": null
+        },
+        {
+          "type": "goal",
+          "class": "penalty",
+          "minute": 63,
+          "added": null,
+          "player": "Khaled Al Otaibi",
+          "side": "away",
+          "score": "1-4"
+        },
+        {
+          "type": "goal",
+          "class": "regular",
+          "minute": 73,
+          "added": null,
+          "player": "Mohammed Al Kandari",
+          "side": "home",
+          "score": "2-4"
+        }
+      ],
+      "managers": {
+        "home": "Falah Anwar Al Sahli",
+        "away": "Cenk Ozcan"
+      }
+    },
+    {
+      "sofascore_id": 14650242,
+      "round": 6,
+      "kickoff": "26/10/2025 17:50",
+      "kickoff_iso": "2025-10-26T17:50",
+      "home": "Khaitan SC",
+      "away": "Sporty FC",
+      "home_key": "khaitan",
+      "away_key": "sporty",
+      "home_score": 1,
+      "away_score": 0,
+      "finished": true,
+      "timeline": [
+        {
+          "type": "goal",
+          "class": "regular",
+          "minute": 77,
+          "added": null,
+          "player": "Pablo Vinicius de Moraes Ferreira",
+          "side": "home",
+          "score": "1-0"
+        }
+      ],
+      "managers": {
+        "home": "Hatem Almoadab",
+        "away": "Khalid Al-Turky"
+      }
+    },
+    {
+      "sofascore_id": 14650251,
+      "round": 6,
+      "kickoff": "27/10/2025 15:35",
+      "kickoff_iso": "2025-10-27T15:35",
+      "home": "Yarmouk SC",
+      "away": "Al Jazeera FC Kuwait",
+      "home_key": "yarmouk",
+      "away_key": "jazira",
+      "home_score": 3,
+      "away_score": 1,
+      "finished": true,
+      "timeline": [
+        {
+          "type": "goal",
+          "class": "regular",
+          "minute": 19,
+          "added": null,
+          "player": null,
+          "side": "home",
+          "score": "1-0"
+        },
+        {
+          "type": "goal",
+          "class": "regular",
+          "minute": 28,
+          "added": null,
+          "player": "Meshal Al Enezi",
+          "side": "away",
+          "score": "1-1"
+        },
+        {
+          "type": "goal",
+          "class": "regular",
+          "minute": 89,
+          "added": null,
+          "player": null,
+          "side": "home",
+          "score": "2-1"
+        },
+        {
+          "type": "goal",
+          "class": "regular",
+          "minute": 90,
+          "added": 9,
+          "player": null,
+          "side": "home",
+          "score": "3-1"
+        }
+      ],
+      "managers": {
+        "home": "Dhahir Al-Adwani",
+        "away": "Ibrahim Obaid"
+      }
+    },
+    {
+      "sofascore_id": 14650262,
+      "round": 6,
+      "kickoff": "27/10/2025 17:50",
+      "kickoff_iso": "2025-10-27T17:50",
+      "home": "Al Sahel SC",
+      "away": "Al Sulaibikhat FC",
+      "home_key": "sahel",
+      "away_key": "sulaibikhat",
+      "home_score": 1,
+      "away_score": 0,
+      "finished": true,
+      "timeline": [
+        {
+          "type": "card",
+          "class": "yellow",
+          "minute": 1,
+          "added": null,
+          "player": null,
+          "side": "away",
+          "score": null
+        },
+        {
+          "type": "card",
+          "class": "yellow",
+          "minute": 66,
+          "added": null,
+          "player": null,
+          "side": "home",
+          "score": null
+        },
+        {
+          "type": "card",
+          "class": "yellow",
+          "minute": 73,
+          "added": null,
+          "player": null,
+          "side": "home",
+          "score": null
+        },
+        {
+          "type": "card",
+          "class": "yellow",
+          "minute": 80,
+          "added": null,
+          "player": null,
+          "side": "away",
+          "score": null
+        },
+        {
+          "type": "card",
+          "class": "yellow",
+          "minute": 85,
+          "added": null,
+          "player": null,
+          "side": "home",
+          "score": null
+        },
+        {
+          "type": "card",
+          "class": "yellow",
+          "minute": 88,
+          "added": null,
+          "player": null,
+          "side": "away",
+          "score": null
+        },
+        {
+          "type": "goal",
+          "class": "regular",
+          "minute": 90,
+          "added": 3,
+          "player": "Birahim Gaye",
+          "side": "home",
+          "score": "1-0"
+        }
+      ],
+      "managers": {
+        "home": "Yousef Mudhaf",
+        "away": "António Miranda"
+      }
+    },
+    {
+      "sofascore_id": 14644981,
+      "round": 7,
+      "kickoff": "03/11/2025 15:30",
+      "kickoff_iso": "2025-11-03T15:30",
+      "home": "Burgan SC",
+      "away": "Sporty FC",
+      "home_key": "burgan",
+      "away_key": "sporty",
+      "home_score": 2,
+      "away_score": 1,
+      "finished": true,
+      "timeline": [
+        {
+          "type": "goal",
+          "class": "regular",
+          "minute": 16,
+          "added": null,
+          "player": "Mahmoud Oklah",
+          "side": "away",
+          "score": "0-1"
+        },
+        {
+          "type": "card",
+          "class": "yellow",
+          "minute": 30,
+          "added": null,
+          "player": null,
+          "side": "home",
+          "score": null
+        },
+        {
+          "type": "card",
+          "class": "yellow",
+          "minute": 34,
+          "added": null,
+          "player": null,
+          "side": "away",
+          "score": null
+        },
+        {
+          "type": "goal",
+          "class": "regular",
+          "minute": 37,
+          "added": null,
+          "player": "Haider Theyab",
+          "side": "home",
+          "score": "1-1"
+        },
+        {
+          "type": "card",
+          "class": "yellow",
+          "minute": 44,
+          "added": null,
+          "player": null,
+          "side": "home",
+          "score": null
+        },
+        {
+          "type": "card",
+          "class": "red",
+          "minute": 63,
+          "added": null,
+          "player": null,
+          "side": "away",
+          "score": null
+        },
+        {
+          "type": "card",
+          "class": "yellow",
+          "minute": 85,
+          "added": null,
+          "player": null,
+          "side": "home",
+          "score": null
+        },
+        {
+          "type": "card",
+          "class": "yellow",
+          "minute": 90,
+          "added": 3,
+          "player": null,
+          "side": "away",
+          "score": null
+        },
+        {
+          "type": "goal",
+          "class": "regular",
+          "minute": 90,
+          "added": 15,
+          "player": "Otavio Silva",
+          "side": "home",
+          "score": "2-1"
+        }
+      ],
+      "managers": {
+        "home": "Cenk Ozcan",
+        "away": "Khalid Al-Turky"
+      }
+    },
+    {
+      "sofascore_id": 14644979,
+      "round": 7,
+      "kickoff": "03/11/2025 15:30",
+      "kickoff_iso": "2025-11-03T15:30",
+      "home": "Khaitan SC",
+      "away": "Al-Shamiya FC",
+      "home_key": "khaitan",
+      "away_key": "shamiya",
+      "home_score": 3,
+      "away_score": 1,
+      "finished": true,
+      "timeline": [
+        {
+          "type": "card",
+          "class": "red",
+          "minute": 47,
+          "added": null,
+          "player": null,
+          "side": "home",
+          "score": null
+        },
+        {
+          "type": "card",
+          "class": "yellow",
+          "minute": 57,
+          "added": null,
+          "player": null,
+          "side": "away",
+          "score": null
+        },
+        {
+          "type": "card",
+          "class": "yellow",
+          "minute": 61,
+          "added": null,
+          "player": null,
+          "side": "home",
+          "score": null
+        },
+        {
+          "type": "goal",
+          "class": "regular",
+          "minute": 62,
+          "added": null,
+          "player": "Hameed Al-Hussain",
+          "side": "home",
+          "score": "1-0"
+        },
+        {
+          "type": "goal",
+          "class": "regular",
+          "minute": 77,
+          "added": null,
+          "player": "Hameed Al-Hussain",
+          "side": "home",
+          "score": "2-0"
+        },
+        {
+          "type": "goal",
+          "class": "penalty",
+          "minute": 90,
+          "added": 3,
+          "player": "Pablo Vinicius de Moraes Ferreira",
+          "side": "home",
+          "score": "3-0"
+        },
+        {
+          "type": "goal",
+          "class": "penalty",
+          "minute": 90,
+          "added": 7,
+          "player": "Ali Wali",
+          "side": "away",
+          "score": "3-1"
+        }
+      ],
+      "managers": {
+        "home": "Alexander Mochenov",
+        "away": "Falah Anwar Al Sahli"
+      }
+    },
+    {
+      "sofascore_id": 14644983,
+      "round": 7,
+      "kickoff": "03/11/2025 17:45",
+      "kickoff_iso": "2025-11-03T17:45",
+      "home": "Al Sulaibikhat FC",
+      "away": "Al Jazeera FC Kuwait",
+      "home_key": "sulaibikhat",
+      "away_key": "jazira",
+      "home_score": 0,
+      "away_score": 2,
+      "finished": true,
+      "timeline": [
+        {
+          "type": "card",
+          "class": "yellow",
+          "minute": 25,
+          "added": null,
+          "player": null,
+          "side": "home",
+          "score": null
+        },
+        {
+          "type": "goal",
+          "class": "regular",
+          "minute": 33,
+          "added": null,
+          "player": "Donovan Ewolo",
+          "side": "away",
+          "score": "0-1"
+        },
+        {
+          "type": "card",
+          "class": "yellow",
+          "minute": 39,
+          "added": null,
+          "player": null,
+          "side": "home",
+          "score": null
+        },
+        {
+          "type": "card",
+          "class": "yellow",
+          "minute": 47,
+          "added": null,
+          "player": null,
+          "side": "home",
+          "score": null
+        },
+        {
+          "type": "card",
+          "class": "yellow",
+          "minute": 55,
+          "added": null,
+          "player": null,
+          "side": "home",
+          "score": null
+        },
+        {
+          "type": "card",
+          "class": "yellow",
+          "minute": 57,
+          "added": null,
+          "player": null,
+          "side": "away",
+          "score": null
+        },
+        {
+          "type": "card",
+          "class": "yellow",
+          "minute": 90,
+          "added": 7,
+          "player": null,
+          "side": "away",
+          "score": null
+        },
+        {
+          "type": "goal",
+          "class": "regular",
+          "minute": 90,
+          "added": 10,
+          "player": "Mobarak Saeed",
+          "side": "away",
+          "score": "0-2"
+        }
+      ],
+      "managers": {
+        "home": "António Miranda",
+        "away": "Ibrahim Obaid"
+      }
+    },
+    {
+      "sofascore_id": 14644982,
+      "round": 7,
+      "kickoff": "03/11/2025 17:45",
+      "kickoff_iso": "2025-11-03T17:45",
+      "home": "Yarmouk SC",
+      "away": "Al Sahel SC",
+      "home_key": "yarmouk",
+      "away_key": "sahel",
+      "home_score": 1,
+      "away_score": 2,
+      "finished": true,
+      "timeline": [
+        {
+          "type": "goal",
+          "class": "regular",
+          "minute": 14,
+          "added": null,
+          "player": "Allan Paulista",
+          "side": "away",
+          "score": "0-1"
+        },
+        {
+          "type": "goal",
+          "class": "regular",
+          "minute": 43,
+          "added": null,
+          "player": "Mohammed Abdul Hadi",
+          "side": "home",
+          "score": "1-1"
+        },
+        {
+          "type": "card",
+          "class": "yellow",
+          "minute": 45,
+          "added": null,
+          "player": null,
+          "side": "home",
+          "score": null
+        },
+        {
+          "type": "goal",
+          "class": "regular",
+          "minute": 52,
+          "added": null,
+          "player": "Allan Paulista",
+          "side": "away",
+          "score": "1-2"
+        },
+        {
+          "type": "card",
+          "class": "yellow",
+          "minute": 82,
+          "added": null,
+          "player": null,
+          "side": "away",
+          "score": null
+        }
+      ],
+      "managers": {
+        "home": "Dhahir Al-Adwani",
+        "away": "Yousef Mudhaf"
+      }
+    },
+    {
+      "sofascore_id": 15019763,
+      "round": 8,
+      "kickoff": "21/12/2025 15:25",
+      "kickoff_iso": "2025-12-21T15:25",
+      "home": "Al Sulaibikhat FC",
+      "away": "Al-Shamiya FC",
+      "home_key": "sulaibikhat",
+      "away_key": "shamiya",
+      "home_score": 6,
+      "away_score": 1,
+      "finished": true,
+      "timeline": [
+        {
+          "type": "goal",
+          "class": "regular",
+          "minute": 14,
+          "added": null,
+          "player": "Michel Potiguar",
+          "side": "home",
+          "score": "1-0"
+        },
+        {
+          "type": "goal",
+          "class": "regular",
+          "minute": 41,
+          "added": null,
+          "player": "Emmanuel Evaristus",
+          "side": "home",
+          "score": "2-0"
+        },
+        {
+          "type": "card",
+          "class": "yellow",
+          "minute": 42,
+          "added": null,
+          "player": null,
+          "side": "away",
+          "score": null
+        },
+        {
+          "type": "goal",
+          "class": "regular",
+          "minute": 45,
+          "added": 2,
+          "player": "Bruno Domingues",
+          "side": "home",
+          "score": "3-0"
+        },
+        {
+          "type": "goal",
+          "class": "regular",
+          "minute": 68,
+          "added": null,
+          "player": "Lucas Shallon",
+          "side": "home",
+          "score": "4-0"
+        },
+        {
+          "type": "card",
+          "class": "yellow",
+          "minute": 71,
+          "added": null,
+          "player": null,
+          "side": "away",
+          "score": null
+        },
+        {
+          "type": "goal",
+          "class": "regular",
+          "minute": 72,
+          "added": null,
+          "player": "Othman Al Failakawi",
+          "side": "away",
+          "score": "4-1"
+        },
+        {
+          "type": "goal",
+          "class": "regular",
+          "minute": 78,
+          "added": null,
+          "player": "Lucas Shallon",
+          "side": "home",
+          "score": "5-1"
+        },
+        {
+          "type": "goal",
+          "class": "penalty",
+          "minute": 90,
+          "added": null,
+          "player": "Lucas Shallon",
+          "side": "home",
+          "score": "6-1"
+        }
+      ],
+      "managers": {
+        "home": "António Miranda",
+        "away": "Falah Anwar Al Sahli"
+      }
+    },
+    {
+      "sofascore_id": 15019765,
+      "round": 8,
+      "kickoff": "21/12/2025 17:00",
+      "kickoff_iso": "2025-12-21T17:00",
+      "home": "Al Sahel SC",
+      "away": "Khaitan SC",
+      "home_key": "sahel",
+      "away_key": "khaitan",
+      "home_score": 2,
+      "away_score": 0,
+      "finished": true,
+      "timeline": [
+        {
+          "type": "card",
+          "class": "yellow",
+          "minute": 25,
+          "added": null,
+          "player": null,
+          "side": "home",
+          "score": null
+        },
+        {
+          "type": "card",
+          "class": "yellow",
+          "minute": 29,
+          "added": null,
+          "player": null,
+          "side": "away",
+          "score": null
+        },
+        {
+          "type": "card",
+          "class": "yellow",
+          "minute": 32,
+          "added": null,
+          "player": null,
+          "side": "away",
+          "score": null
+        },
+        {
+          "type": "goal",
+          "class": "regular",
+          "minute": 44,
+          "added": null,
+          "player": "Abdulaziz Mahran",
+          "side": "home",
+          "score": "1-0"
+        },
+        {
+          "type": "goal",
+          "class": "regular",
+          "minute": 51,
+          "added": null,
+          "player": "Birahim Gaye",
+          "side": "home",
+          "score": "2-0"
+        },
+        {
+          "type": "card",
+          "class": "yellow",
+          "minute": 75,
+          "added": null,
+          "player": null,
+          "side": "home",
+          "score": null
+        },
+        {
+          "type": "card",
+          "class": "yellow",
+          "minute": 77,
+          "added": null,
+          "player": null,
+          "side": "home",
+          "score": null
+        }
+      ],
+      "managers": {
+        "home": "Yousef Mudhaf",
+        "away": "Alexander Mochenov"
+      }
+    },
+    {
+      "sofascore_id": 15019767,
+      "round": 8,
+      "kickoff": "22/12/2025 15:25",
+      "kickoff_iso": "2025-12-22T15:25",
+      "home": "Burgan SC",
+      "away": "Al Jazeera FC Kuwait",
+      "home_key": "burgan",
+      "away_key": "jazira",
+      "home_score": 3,
+      "away_score": 3,
+      "finished": true,
+      "timeline": [
+        {
+          "type": "goal",
+          "class": "regular",
+          "minute": 9,
+          "added": null,
+          "player": "Hamoud Al-Hazmi",
+          "side": "home",
+          "score": "1-0"
+        },
+        {
+          "type": "card",
+          "class": "yellow",
+          "minute": 31,
+          "added": null,
+          "player": null,
+          "side": "away",
+          "score": null
+        },
+        {
+          "type": "goal",
+          "class": "regular",
+          "minute": 38,
+          "added": null,
+          "player": "Donovan Ewolo",
+          "side": "away",
+          "score": "1-1"
+        },
+        {
+          "type": "card",
+          "class": "yellow",
+          "minute": 40,
+          "added": null,
+          "player": null,
+          "side": "home",
+          "score": null
+        },
+        {
+          "type": "card",
+          "class": "yellow",
+          "minute": 50,
+          "added": null,
+          "player": null,
+          "side": "away",
+          "score": null
+        },
+        {
+          "type": "goal",
+          "class": "regular",
+          "minute": 53,
+          "added": null,
+          "player": "Mohammed Al Fadhli",
+          "side": "away",
+          "score": "1-2"
+        },
+        {
+          "type": "card",
+          "class": "yellow",
+          "minute": 64,
+          "added": null,
+          "player": null,
+          "side": "home",
+          "score": null
+        },
+        {
+          "type": "goal",
+          "class": "regular",
+          "minute": 64,
+          "added": null,
+          "player": "Sávio Maciel",
+          "side": "home",
+          "score": "2-2"
+        },
+        {
+          "type": "card",
+          "class": "red",
+          "minute": 72,
+          "added": null,
+          "player": null,
+          "side": "away",
+          "score": null
+        },
+        {
+          "type": "card",
+          "class": "yellow",
+          "minute": 81,
+          "added": null,
+          "player": null,
+          "side": "away",
+          "score": null
+        },
+        {
+          "type": "card",
+          "class": "yellow",
+          "minute": 86,
+          "added": null,
+          "player": null,
+          "side": "away",
+          "score": null
+        },
+        {
+          "type": "card",
+          "class": "yellow",
+          "minute": 86,
+          "added": null,
+          "player": null,
+          "side": "home",
+          "score": null
+        },
+        {
+          "type": "goal",
+          "class": "regular",
+          "minute": 90,
+          "added": 2,
+          "player": "Hamoud Al-Hazmi",
+          "side": "home",
+          "score": "3-2"
+        },
+        {
+          "type": "goal",
+          "class": "regular",
+          "minute": 90,
+          "added": 3,
+          "player": "Donovan Ewolo",
+          "side": "away",
+          "score": "3-3"
+        }
+      ],
+      "managers": {
+        "home": "Cenk Ozcan",
+        "away": "Ibrahim Obaid"
+      }
+    },
+    {
+      "sofascore_id": 15019766,
+      "round": 8,
+      "kickoff": "22/12/2025 15:25",
+      "kickoff_iso": "2025-12-22T15:25",
+      "home": "Sporty FC",
+      "away": "Yarmouk SC",
+      "home_key": "sporty",
+      "away_key": "yarmouk",
+      "home_score": 0,
+      "away_score": 3,
+      "finished": true,
+      "timeline": [
+        {
+          "type": "goal",
+          "class": "regular",
+          "minute": 1,
+          "added": null,
+          "player": "Hazem Haj Hassen",
+          "side": "away",
+          "score": "0-1"
+        },
+        {
+          "type": "card",
+          "class": "yellow",
+          "minute": 25,
+          "added": null,
+          "player": null,
+          "side": "home",
+          "score": null
+        },
+        {
+          "type": "goal",
+          "class": "regular",
+          "minute": 48,
+          "added": null,
+          "player": "Hazem Haj Hassen",
+          "side": "away",
+          "score": "0-2"
+        },
+        {
+          "type": "goal",
+          "class": "regular",
+          "minute": 57,
+          "added": null,
+          "player": "Aqeel Al Hazeem",
+          "side": "away",
+          "score": "0-3"
+        },
+        {
+          "type": "card",
+          "class": "yellow",
+          "minute": 86,
+          "added": null,
+          "player": null,
+          "side": "away",
+          "score": null
+        }
+      ],
+      "managers": {
+        "home": "Khalid Al-Turky",
+        "away": "Dhahir Al-Adwani"
+      }
+    },
+    {
+      "sofascore_id": 15282709,
+      "round": 9,
+      "kickoff": "30/12/2025 15:30",
+      "kickoff_iso": "2025-12-30T15:30",
+      "home": "Al Jazeera FC Kuwait",
+      "away": "Sporty FC",
+      "home_key": "jazira",
+      "away_key": "sporty",
+      "home_score": 3,
+      "away_score": 2,
+      "finished": true,
+      "timeline": [
+        {
+          "type": "goal",
+          "class": "regular",
+          "minute": 20,
+          "added": null,
+          "player": "Miracle Nwoagu",
+          "side": "away",
+          "score": "0-1"
+        },
+        {
+          "type": "goal",
+          "class": "ownGoal",
+          "minute": 23,
+          "added": null,
+          "player": "Bader Jamal",
+          "side": "home",
+          "score": "1-1"
+        },
+        {
+          "type": "goal",
+          "class": "regular",
+          "minute": 51,
+          "added": null,
+          "player": "Miracle Nwoagu",
+          "side": "away",
+          "score": "1-2"
+        },
+        {
+          "type": "goal",
+          "class": "regular",
+          "minute": 67,
+          "added": null,
+          "player": "Nando Welter",
+          "side": "home",
+          "score": "2-2"
+        },
+        {
+          "type": "goal",
+          "class": "regular",
+          "minute": 74,
+          "added": null,
+          "player": "Abdulmajeed Al Enezi",
+          "side": "home",
+          "score": "3-2"
+        }
+      ],
+      "managers": {
+        "home": "Ibrahim Obaid",
+        "away": "Khalid Al-Turky"
+      }
+    },
+    {
+      "sofascore_id": 15282706,
+      "round": 9,
+      "kickoff": "30/12/2025 15:30",
+      "kickoff_iso": "2025-12-30T15:30",
+      "home": "Al-Shamiya FC",
+      "away": "Yarmouk SC",
+      "home_key": "shamiya",
+      "away_key": "yarmouk",
+      "home_score": 1,
+      "away_score": 7,
+      "finished": true,
+      "timeline": [
+        {
+          "type": "goal",
+          "class": "regular",
+          "minute": 2,
+          "added": null,
+          "player": "Aqeel Al Hazeem",
+          "side": "away",
+          "score": "0-1"
+        },
+        {
+          "type": "goal",
+          "class": "regular",
+          "minute": 5,
+          "added": null,
+          "player": "Mohammed Al Adwani",
+          "side": "away",
+          "score": "0-2"
+        },
+        {
+          "type": "goal",
+          "class": "regular",
+          "minute": 13,
+          "added": null,
+          "player": "Othman Al Dousari",
+          "side": "away",
+          "score": "0-3"
+        },
+        {
+          "type": "goal",
+          "class": "regular",
+          "minute": 16,
+          "added": null,
+          "player": "Hazem Haj Hassen",
+          "side": "away",
+          "score": "0-4"
+        },
+        {
+          "type": "goal",
+          "class": "regular",
+          "minute": 33,
+          "added": null,
+          "player": "Othman Al Dousari",
+          "side": "away",
+          "score": "0-5"
+        },
+        {
+          "type": "card",
+          "class": "yellow",
+          "minute": 37,
+          "added": null,
+          "player": null,
+          "side": "away",
+          "score": null
+        },
+        {
+          "type": "goal",
+          "class": "regular",
+          "minute": 45,
+          "added": 1,
+          "player": "Aqeel Al Hazeem",
+          "side": "away",
+          "score": "0-6"
+        },
+        {
+          "type": "goal",
+          "class": "regular",
+          "minute": 56,
+          "added": null,
+          "player": "Ahmed Al Shammari",
+          "side": "home",
+          "score": "1-6"
+        },
+        {
+          "type": "goal",
+          "class": "regular",
+          "minute": 68,
+          "added": null,
+          "player": "Bader Saleem",
+          "side": "away",
+          "score": "1-7"
+        },
+        {
+          "type": "card",
+          "class": "yellow",
+          "minute": 75,
+          "added": null,
+          "player": null,
+          "side": "home",
+          "score": null
+        }
+      ],
+      "managers": {
+        "home": "Falah Anwar Al Sahli",
+        "away": "Dhahir Al-Adwani"
+      }
+    },
+    {
+      "sofascore_id": 15282714,
+      "round": 9,
+      "kickoff": "31/12/2025 15:30",
+      "kickoff_iso": "2025-12-31T15:30",
+      "home": "Al Sahel SC",
+      "away": "Burgan SC",
+      "home_key": "sahel",
+      "away_key": "burgan",
+      "home_score": 2,
+      "away_score": 1,
+      "finished": true,
+      "timeline": [
+        {
+          "type": "goal",
+          "class": "regular",
+          "minute": 5,
+          "added": null,
+          "player": "Hamoud Al-Hazmi",
+          "side": "away",
+          "score": "0-1"
+        },
+        {
+          "type": "goal",
+          "class": "regular",
+          "minute": 19,
+          "added": null,
+          "player": "Birahim Gaye",
+          "side": "home",
+          "score": "1-1"
+        },
+        {
+          "type": "card",
+          "class": "yellow",
+          "minute": 65,
+          "added": null,
+          "player": null,
+          "side": "home",
+          "score": null
+        },
+        {
+          "type": "card",
+          "class": "yellow",
+          "minute": 68,
+          "added": null,
+          "player": null,
+          "side": "away",
+          "score": null
+        },
+        {
+          "type": "goal",
+          "class": "regular",
+          "minute": 69,
+          "added": null,
+          "player": "Allan Paulista",
+          "side": "home",
+          "score": "2-1"
+        },
+        {
+          "type": "card",
+          "class": "yellow",
+          "minute": 85,
+          "added": null,
+          "player": null,
+          "side": "home",
+          "score": null
+        },
+        {
+          "type": "card",
+          "class": "yellow",
+          "minute": 89,
+          "added": null,
+          "player": null,
+          "side": "home",
+          "score": null
+        }
+      ],
+      "managers": {
+        "home": "Yousef Mudhaf",
+        "away": "Cenk Ozcan"
+      }
+    },
+    {
+      "sofascore_id": 15282718,
+      "round": 9,
+      "kickoff": "31/12/2025 15:30",
+      "kickoff_iso": "2025-12-31T15:30",
+      "home": "Khaitan SC",
+      "away": "Al Sulaibikhat FC",
+      "home_key": "khaitan",
+      "away_key": "sulaibikhat",
+      "home_score": 2,
+      "away_score": 3,
+      "finished": true,
+      "timeline": [
+        {
+          "type": "goal",
+          "class": "regular",
+          "minute": 16,
+          "added": null,
+          "player": "Lucas Shallon",
+          "side": "away",
+          "score": "0-1"
+        },
+        {
+          "type": "goal",
+          "class": "regular",
+          "minute": 29,
+          "added": null,
+          "player": "Hamad Al Taweel",
+          "side": "home",
+          "score": "1-1"
+        },
+        {
+          "type": "goal",
+          "class": "regular",
+          "minute": 32,
+          "added": null,
+          "player": "Abdulaziz Al Qattan",
+          "side": "away",
+          "score": "1-2"
+        },
+        {
+          "type": "goal",
+          "class": "regular",
+          "minute": 43,
+          "added": null,
+          "player": "Michel Potiguar",
+          "side": "away",
+          "score": "1-3"
+        },
+        {
+          "type": "goal",
+          "class": "regular",
+          "minute": 62,
+          "added": null,
+          "player": "Pablo Vinicius de Moraes Ferreira",
+          "side": "home",
+          "score": "2-3"
+        },
+        {
+          "type": "card",
+          "class": "red",
+          "minute": 90,
+          "added": 6,
+          "player": null,
+          "side": "away",
+          "score": null
+        }
+      ],
+      "managers": {
+        "home": "Alexander Mochenov",
+        "away": "António Miranda"
+      }
+    },
+    {
+      "sofascore_id": 15328707,
+      "round": 10,
+      "kickoff": "15/01/2026 14:20",
+      "kickoff_iso": "2026-01-15T14:20",
+      "home": "Al-Shamiya FC",
+      "away": "Al Jazeera FC Kuwait",
+      "home_key": "shamiya",
+      "away_key": "jazira",
+      "home_score": 1,
+      "away_score": 2,
+      "finished": true,
+      "timeline": [
+        {
+          "type": "goal",
+          "class": "regular",
+          "minute": 7,
+          "added": null,
+          "player": "Othman Al Failakawi",
+          "side": "home",
+          "score": "1-0"
+        },
+        {
+          "type": "card",
+          "class": "yellow",
+          "minute": 30,
+          "added": null,
+          "player": null,
+          "side": "away",
+          "score": null
+        },
+        {
+          "type": "card",
+          "class": "yellow",
+          "minute": 31,
+          "added": null,
+          "player": null,
+          "side": "home",
+          "score": null
+        },
+        {
+          "type": "goal",
+          "class": "regular",
+          "minute": 46,
+          "added": null,
+          "player": "Edrissa Ceesay",
+          "side": "away",
+          "score": "1-1"
+        },
+        {
+          "type": "card",
+          "class": "yellow",
+          "minute": 55,
+          "added": null,
+          "player": null,
+          "side": "home",
+          "score": null
+        },
+        {
+          "type": "goal",
+          "class": "regular",
+          "minute": 59,
+          "added": null,
+          "player": "Donovan Ewolo",
+          "side": "away",
+          "score": "1-2"
+        },
+        {
+          "type": "card",
+          "class": "yellow",
+          "minute": 80,
+          "added": null,
+          "player": null,
+          "side": "away",
+          "score": null
+        },
+        {
+          "type": "card",
+          "class": "yellow",
+          "minute": 90,
+          "added": 4,
+          "player": null,
+          "side": "home",
+          "score": null
+        }
+      ],
+      "managers": {
+        "home": "Falah Anwar Al Sahli",
+        "away": "Ibrahim Obaid"
+      }
+    },
+    {
+      "sofascore_id": 15328708,
+      "round": 10,
+      "kickoff": "15/01/2026 14:20",
+      "kickoff_iso": "2026-01-15T14:20",
+      "home": "Yarmouk SC",
+      "away": "Khaitan SC",
+      "home_key": "yarmouk",
+      "away_key": "khaitan",
+      "home_score": 2,
+      "away_score": 1,
+      "finished": true,
+      "timeline": [
+        {
+          "type": "goal",
+          "class": "regular",
+          "minute": 15,
+          "added": null,
+          "player": "Hamad Al Taweel",
+          "side": "away",
+          "score": "0-1"
+        },
+        {
+          "type": "goal",
+          "class": "regular",
+          "minute": 60,
+          "added": null,
+          "player": "Meshari Al Azmi",
+          "side": "home",
+          "score": "1-1"
+        },
+        {
+          "type": "goal",
+          "class": "regular",
+          "minute": 90,
+          "added": 10,
+          "player": "Moriba Diarra",
+          "side": "home",
+          "score": "2-1"
+        }
+      ],
+      "managers": {
+        "home": "Dhahir Al-Adwani",
+        "away": "Alexander Mochenov"
+      }
+    },
+    {
+      "sofascore_id": 15328710,
+      "round": 10,
+      "kickoff": "16/01/2026 14:20",
+      "kickoff_iso": "2026-01-16T14:20",
+      "home": "Burgan SC",
+      "away": "Al Sulaibikhat FC",
+      "home_key": "burgan",
+      "away_key": "sulaibikhat",
+      "home_score": 1,
+      "away_score": 3,
+      "finished": true,
+      "timeline": [
+        {
+          "type": "card",
+          "class": "yellow",
+          "minute": 5,
+          "added": null,
+          "player": null,
+          "side": "home",
+          "score": null
+        },
+        {
+          "type": "card",
+          "class": "yellow",
+          "minute": 13,
+          "added": null,
+          "player": null,
+          "side": "home",
+          "score": null
+        },
+        {
+          "type": "card",
+          "class": "yellow",
+          "minute": 15,
+          "added": null,
+          "player": null,
+          "side": "home",
+          "score": null
+        },
+        {
+          "type": "goal",
+          "class": "regular",
+          "minute": 34,
+          "added": null,
+          "player": "Emmanuel Evaristus",
+          "side": "away",
+          "score": "0-1"
+        },
+        {
+          "type": "card",
+          "class": "yellow",
+          "minute": 38,
+          "added": null,
+          "player": null,
+          "side": "away",
+          "score": null
+        },
+        {
+          "type": "card",
+          "class": "yellow",
+          "minute": 45,
+          "added": null,
+          "player": null,
+          "side": "away",
+          "score": null
+        },
+        {
+          "type": "goal",
+          "class": "regular",
+          "minute": 51,
+          "added": null,
+          "player": "Hamoud Al-Hazmi",
+          "side": "home",
+          "score": "1-1"
+        },
+        {
+          "type": "card",
+          "class": "yellow",
+          "minute": 66,
+          "added": null,
+          "player": null,
+          "side": "home",
+          "score": null
+        },
+        {
+          "type": "card",
+          "class": "yellow",
+          "minute": 68,
+          "added": null,
+          "player": null,
+          "side": "away",
+          "score": null
+        },
+        {
+          "type": "goal",
+          "class": "regular",
+          "minute": 76,
+          "added": null,
+          "player": "Lucas Shallon",
+          "side": "away",
+          "score": "1-2"
+        },
+        {
+          "type": "card",
+          "class": "yellow",
+          "minute": 77,
+          "added": null,
+          "player": null,
+          "side": "away",
+          "score": null
+        },
+        {
+          "type": "goal",
+          "class": "regular",
+          "minute": 83,
+          "added": null,
+          "player": "Michel Potiguar",
+          "side": "away",
+          "score": "1-3"
+        },
+        {
+          "type": "card",
+          "class": "yellow",
+          "minute": 90,
+          "added": null,
+          "player": null,
+          "side": "away",
+          "score": null
+        }
+      ],
+      "managers": {
+        "home": "Cenk Ozcan",
+        "away": "António Miranda"
+      }
+    },
+    {
+      "sofascore_id": 15328709,
+      "round": 10,
+      "kickoff": "16/01/2026 14:20",
+      "kickoff_iso": "2026-01-16T14:20",
+      "home": "Sporty FC",
+      "away": "Al Sahel SC",
+      "home_key": "sporty",
+      "away_key": "sahel",
+      "home_score": 1,
+      "away_score": 2,
+      "finished": true,
+      "timeline": [
+        {
+          "type": "card",
+          "class": "yellow",
+          "minute": 49,
+          "added": null,
+          "player": null,
+          "side": "home",
+          "score": null
+        },
+        {
+          "type": "goal",
+          "class": "regular",
+          "minute": 56,
+          "added": null,
+          "player": "Allan Paulista",
+          "side": "away",
+          "score": "0-1"
+        },
+        {
+          "type": "goal",
+          "class": "regular",
+          "minute": 70,
+          "added": null,
+          "player": "Allan Paulista",
+          "side": "away",
+          "score": "0-2"
+        },
+        {
+          "type": "goal",
+          "class": "regular",
+          "minute": 74,
+          "added": null,
+          "player": "Yousef Al Mweil",
+          "side": "home",
+          "score": "1-2"
+        },
+        {
+          "type": "card",
+          "class": "yellow",
+          "minute": 90,
+          "added": null,
+          "player": null,
+          "side": "away",
+          "score": null
+        }
+      ],
+      "managers": {
+        "home": "Ibrahim Shehab",
+        "away": "Yousef Mudhaf"
+      }
+    },
+    {
+      "sofascore_id": 15328712,
+      "round": 11,
+      "kickoff": "22/01/2026 14:25",
+      "kickoff_iso": "2026-01-22T14:25",
+      "home": "Al Sulaibikhat FC",
+      "away": "Sporty FC",
+      "home_key": "sulaibikhat",
+      "away_key": "sporty",
+      "home_score": 1,
+      "away_score": 0,
+      "finished": true,
+      "timeline": [
+        {
+          "type": "card",
+          "class": "yellow",
+          "minute": 40,
+          "added": null,
+          "player": null,
+          "side": "home",
+          "score": null
+        },
+        {
+          "type": "goal",
+          "class": "regular",
+          "minute": 62,
+          "added": null,
+          "player": "Lucas Shallon",
+          "side": "home",
+          "score": "1-0"
+        },
+        {
+          "type": "card",
+          "class": "yellow",
+          "minute": 69,
+          "added": null,
+          "player": null,
+          "side": "home",
+          "score": null
+        },
+        {
+          "type": "card",
+          "class": "yellow",
+          "minute": 88,
+          "added": null,
+          "player": null,
+          "side": "home",
+          "score": null
+        },
+        {
+          "type": "card",
+          "class": "yellow",
+          "minute": 90,
+          "added": 4,
+          "player": null,
+          "side": "home",
+          "score": null
+        }
+      ],
+      "managers": {
+        "home": "António Miranda",
+        "away": "Ibrahim Shehab"
+      }
+    },
+    {
+      "sofascore_id": 15328713,
+      "round": 11,
+      "kickoff": "22/01/2026 14:25",
+      "kickoff_iso": "2026-01-22T14:25",
+      "home": "Yarmouk SC",
+      "away": "Burgan SC",
+      "home_key": "yarmouk",
+      "away_key": "burgan",
+      "home_score": 1,
+      "away_score": 0,
+      "finished": true,
+      "timeline": [
+        {
+          "type": "card",
+          "class": "yellow",
+          "minute": 15,
+          "added": null,
+          "player": null,
+          "side": "away",
+          "score": null
+        },
+        {
+          "type": "goal",
+          "class": "regular",
+          "minute": 24,
+          "added": null,
+          "player": "Abdullah Al Shami",
+          "side": "home",
+          "score": "1-0"
+        },
+        {
+          "type": "card",
+          "class": "yellow",
+          "minute": 42,
+          "added": null,
+          "player": null,
+          "side": "home",
+          "score": null
+        }
+      ],
+      "managers": {
+        "home": "Dhahir Al-Adwani",
+        "away": "Cenk Ozcan"
+      }
+    },
+    {
+      "sofascore_id": 15401104,
+      "round": 11,
+      "kickoff": "22/01/2026 14:25",
+      "kickoff_iso": "2026-01-22T14:25",
+      "home": "Al Sahel SC",
+      "away": "Al-Shamiya FC",
+      "home_key": "sahel",
+      "away_key": "shamiya",
+      "home_score": 4,
+      "away_score": 0,
+      "finished": true,
+      "timeline": [
+        {
+          "type": "goal",
+          "class": "regular",
+          "minute": 32,
+          "added": null,
+          "player": "Allan Paulista",
+          "side": "home",
+          "score": "1-0"
+        },
+        {
+          "type": "goal",
+          "class": "penalty",
+          "minute": 37,
+          "added": null,
+          "player": "Birahim Gaye",
+          "side": "home",
+          "score": "2-0"
+        },
+        {
+          "type": "card",
+          "class": "yellow",
+          "minute": 40,
+          "added": null,
+          "player": null,
+          "side": "away",
+          "score": null
+        },
+        {
+          "type": "card",
+          "class": "yellow",
+          "minute": 45,
+          "added": null,
+          "player": null,
+          "side": "home",
+          "score": null
+        },
+        {
+          "type": "card",
+          "class": "yellow",
+          "minute": 45,
+          "added": 2,
+          "player": null,
+          "side": "away",
+          "score": null
+        },
+        {
+          "type": "card",
+          "class": "red",
+          "minute": 61,
+          "added": null,
+          "player": null,
+          "side": "away",
+          "score": null
+        },
+        {
+          "type": "card",
+          "class": "yellow",
+          "minute": 66,
+          "added": null,
+          "player": null,
+          "side": "home",
+          "score": null
+        },
+        {
+          "type": "goal",
+          "class": "regular",
+          "minute": 82,
+          "added": null,
+          "player": "Birahim Gaye",
+          "side": "home",
+          "score": "3-0"
+        },
+        {
+          "type": "card",
+          "class": "yellow",
+          "minute": 85,
+          "added": null,
+          "player": null,
+          "side": "home",
+          "score": null
+        },
+        {
+          "type": "goal",
+          "class": "regular",
+          "minute": 89,
+          "added": null,
+          "player": "Allan Paulista",
+          "side": "home",
+          "score": "4-0"
+        }
+      ],
+      "managers": {
+        "home": "Yousef Mudhaf",
+        "away": "Falah Anwar Al Sahli"
+      }
+    },
+    {
+      "sofascore_id": 15328714,
+      "round": 11,
+      "kickoff": "23/01/2026 14:30",
+      "kickoff_iso": "2026-01-23T14:30",
+      "home": "Khaitan SC",
+      "away": "Al Jazeera FC Kuwait",
+      "home_key": "khaitan",
+      "away_key": "jazira",
+      "home_score": 1,
+      "away_score": 0,
+      "finished": true,
+      "timeline": [
+        {
+          "type": "card",
+          "class": "yellow",
+          "minute": 27,
+          "added": null,
+          "player": null,
+          "side": "away",
+          "score": null
+        },
+        {
+          "type": "card",
+          "class": "yellow",
+          "minute": 42,
+          "added": null,
+          "player": null,
+          "side": "away",
+          "score": null
+        },
+        {
+          "type": "card",
+          "class": "yellow",
+          "minute": 61,
+          "added": null,
+          "player": null,
+          "side": "home",
+          "score": null
+        },
+        {
+          "type": "goal",
+          "class": "regular",
+          "minute": 72,
+          "added": null,
+          "player": "Pablo Vinicius de Moraes Ferreira",
+          "side": "home",
+          "score": "1-0"
+        },
+        {
+          "type": "card",
+          "class": "yellow",
+          "minute": 90,
+          "added": 7,
+          "player": null,
+          "side": "home",
+          "score": null
+        }
+      ],
+      "managers": {
+        "home": "Alexander Mochenov",
+        "away": "Ibrahim Obaid"
+      }
+    },
+    {
+      "sofascore_id": 15328715,
+      "round": 12,
+      "kickoff": "04/02/2026 14:40",
+      "kickoff_iso": "2026-02-04T14:40",
+      "home": "Khaitan SC",
+      "away": "Burgan SC",
+      "home_key": "khaitan",
+      "away_key": "burgan",
+      "home_score": 1,
+      "away_score": 1,
+      "finished": true,
+      "timeline": [
+        {
+          "type": "card",
+          "class": "yellow",
+          "minute": 37,
+          "added": null,
+          "player": null,
+          "side": "home",
+          "score": null
+        },
+        {
+          "type": "card",
+          "class": "yellow",
+          "minute": 39,
+          "added": null,
+          "player": null,
+          "side": "home",
+          "score": null
+        },
+        {
+          "type": "card",
+          "class": "yellow",
+          "minute": 45,
+          "added": 3,
+          "player": null,
+          "side": "home",
+          "score": null
+        },
+        {
+          "type": "card",
+          "class": "yellow",
+          "minute": 64,
+          "added": null,
+          "player": null,
+          "side": "away",
+          "score": null
+        },
+        {
+          "type": "card",
+          "class": "yellow",
+          "minute": 70,
+          "added": null,
+          "player": null,
+          "side": "home",
+          "score": null
+        },
+        {
+          "type": "card",
+          "class": "yellow",
+          "minute": 72,
+          "added": null,
+          "player": null,
+          "side": "away",
+          "score": null
+        },
+        {
+          "type": "card",
+          "class": "yellow",
+          "minute": 78,
+          "added": null,
+          "player": null,
+          "side": "away",
+          "score": null
+        },
+        {
+          "type": "card",
+          "class": "yellow",
+          "minute": 85,
+          "added": null,
+          "player": null,
+          "side": "home",
+          "score": null
+        },
+        {
+          "type": "goal",
+          "class": "regular",
+          "minute": 90,
+          "added": null,
+          "player": "Hameed Al-Hussain",
+          "side": "home",
+          "score": "1-0"
+        },
+        {
+          "type": "card",
+          "class": "yellow",
+          "minute": 90,
+          "added": 3,
+          "player": null,
+          "side": "home",
+          "score": null
+        },
+        {
+          "type": "goal",
+          "class": "regular",
+          "minute": 90,
+          "added": 3,
+          "player": "Hamoud Al-Hazmi",
+          "side": "away",
+          "score": "1-1"
+        }
+      ],
+      "managers": {
+        "home": "Alexander Mochenov",
+        "away": "Cenk Ozcan"
+      }
+    },
+    {
+      "sofascore_id": 15328716,
+      "round": 12,
+      "kickoff": "04/02/2026 14:40",
+      "kickoff_iso": "2026-02-04T14:40",
+      "home": "Yarmouk SC",
+      "away": "Al Sulaibikhat FC",
+      "home_key": "yarmouk",
+      "away_key": "sulaibikhat",
+      "home_score": 2,
+      "away_score": 2,
+      "finished": true,
+      "timeline": [
+        {
+          "type": "card",
+          "class": "yellow",
+          "minute": 16,
+          "added": null,
+          "player": "Hashim Najeeb",
+          "side": "home",
+          "score": null
+        },
+        {
+          "type": "goal",
+          "class": "regular",
+          "minute": 17,
+          "added": null,
+          "player": "Michel Potiguar",
+          "side": "away",
+          "score": "0-1"
+        },
+        {
+          "type": "card",
+          "class": "yellow",
+          "minute": 19,
+          "added": null,
+          "player": null,
+          "side": "away",
+          "score": null
+        },
+        {
+          "type": "goal",
+          "class": "penalty",
+          "minute": 50,
+          "added": null,
+          "player": "Lucas Shallon",
+          "side": "away",
+          "score": "0-2"
+        },
+        {
+          "type": "card",
+          "class": "yellow",
+          "minute": 57,
+          "added": null,
+          "player": "Wilker Santos",
+          "side": "away",
+          "score": null
+        },
+        {
+          "type": "goal",
+          "class": "regular",
+          "minute": 59,
+          "added": null,
+          "player": "Aqeel Al Hazeem",
+          "side": "home",
+          "score": "1-2"
+        },
+        {
+          "type": "card",
+          "class": "yellow",
+          "minute": 66,
+          "added": null,
+          "player": null,
+          "side": "home",
+          "score": null
+        },
+        {
+          "type": "goal",
+          "class": "regular",
+          "minute": 83,
+          "added": null,
+          "player": "Aqeel Al Hazeem",
+          "side": "home",
+          "score": "2-2"
+        }
+      ],
+      "managers": {
+        "home": "Dhahir Al-Adwani",
+        "away": "António Miranda"
+      }
+    },
+    {
+      "sofascore_id": 15328717,
+      "round": 12,
+      "kickoff": "05/02/2026 14:40",
+      "kickoff_iso": "2026-02-05T14:40",
+      "home": "Al Jazeera FC Kuwait",
+      "away": "Al Sahel SC",
+      "home_key": "jazira",
+      "away_key": "sahel",
+      "home_score": 3,
+      "away_score": 1,
+      "finished": true,
+      "timeline": [
+        {
+          "type": "card",
+          "class": "yellow",
+          "minute": 5,
+          "added": null,
+          "player": null,
+          "side": "home",
+          "score": null
+        },
+        {
+          "type": "goal",
+          "class": "regular",
+          "minute": 45,
+          "added": 2,
+          "player": "Nando Welter",
+          "side": "home",
+          "score": "1-0"
+        },
+        {
+          "type": "goal",
+          "class": "regular",
+          "minute": 47,
+          "added": null,
+          "player": "Christian Alex",
+          "side": "away",
+          "score": "1-1"
+        },
+        {
+          "type": "card",
+          "class": "yellow",
+          "minute": 48,
+          "added": null,
+          "player": null,
+          "side": "away",
+          "score": null
+        },
+        {
+          "type": "goal",
+          "class": "regular",
+          "minute": 56,
+          "added": null,
+          "player": "Khaled Abdullah Al Mutairi",
+          "side": "home",
+          "score": "2-1"
+        },
+        {
+          "type": "card",
+          "class": "yellow",
+          "minute": 60,
+          "added": null,
+          "player": null,
+          "side": "away",
+          "score": null
+        },
+        {
+          "type": "goal",
+          "class": "regular",
+          "minute": 77,
+          "added": null,
+          "player": "Mobarak Saeed",
+          "side": "home",
+          "score": "3-1"
+        },
+        {
+          "type": "card",
+          "class": "yellow",
+          "minute": 84,
+          "added": null,
+          "player": null,
+          "side": "home",
+          "score": null
+        },
+        {
+          "type": "card",
+          "class": "yellow",
+          "minute": 85,
+          "added": null,
+          "player": null,
+          "side": "home",
+          "score": null
+        },
+        {
+          "type": "card",
+          "class": "yellow",
+          "minute": 87,
+          "added": null,
+          "player": null,
+          "side": "away",
+          "score": null
+        }
+      ],
+      "managers": {
+        "home": "Ibrahim Obaid",
+        "away": "Yousef Mudhaf"
+      }
+    },
+    {
+      "sofascore_id": 15328722,
+      "round": 12,
+      "kickoff": "05/02/2026 14:40",
+      "kickoff_iso": "2026-02-05T14:40",
+      "home": "Al-Shamiya FC",
+      "away": "Sporty FC",
+      "home_key": "shamiya",
+      "away_key": "sporty",
+      "home_score": 2,
+      "away_score": 1,
+      "finished": true,
+      "timeline": [
+        {
+          "type": "goal",
+          "class": "regular",
+          "minute": 26,
+          "added": null,
+          "player": "Othman Al Failakawi",
+          "side": "home",
+          "score": "1-0"
+        },
+        {
+          "type": "goal",
+          "class": "regular",
+          "minute": 35,
+          "added": null,
+          "player": "Othman Al Failakawi",
+          "side": "home",
+          "score": "2-0"
+        },
+        {
+          "type": "goal",
+          "class": "regular",
+          "minute": 67,
+          "added": null,
+          "player": "Mahmoud Oklah",
+          "side": "away",
+          "score": "2-1"
+        }
+      ],
+      "managers": {
+        "home": "Falah Anwar Al Sahli",
+        "away": "Ibrahim Shehab"
+      }
+    },
+    {
+      "sofascore_id": 15328731,
+      "round": 13,
+      "kickoff": "20/02/2026 19:30",
+      "kickoff_iso": "2026-02-20T19:30",
+      "home": "Al Jazeera FC Kuwait",
+      "away": "Yarmouk SC",
+      "home_key": "jazira",
+      "away_key": "yarmouk",
+      "home_score": 3,
+      "away_score": 3,
+      "finished": true,
+      "timeline": [
+        {
+          "type": "goal",
+          "class": "regular",
+          "minute": 3,
+          "added": null,
+          "player": "Donovan Ewolo",
+          "side": "home",
+          "score": "1-0"
+        },
+        {
+          "type": "goal",
+          "class": "regular",
+          "minute": 13,
+          "added": null,
+          "player": "Issad Lakdja",
+          "side": "away",
+          "score": "1-1"
+        },
+        {
+          "type": "goal",
+          "class": "regular",
+          "minute": 38,
+          "added": null,
+          "player": "Hazem Haj Hassen",
+          "side": "away",
+          "score": "1-2"
+        },
+        {
+          "type": "goal",
+          "class": "regular",
+          "minute": 53,
+          "added": null,
+          "player": "Hedy Chaabi",
+          "side": "home",
+          "score": "2-2"
+        },
+        {
+          "type": "goal",
+          "class": "regular",
+          "minute": 68,
+          "added": null,
+          "player": "Hazem Haj Hassen",
+          "side": "away",
+          "score": "2-3"
+        },
+        {
+          "type": "goal",
+          "class": "regular",
+          "minute": 84,
+          "added": null,
+          "player": "Fahad Al Rajhi",
+          "side": "home",
+          "score": "3-3"
+        }
+      ],
+      "managers": {
+        "home": "Ibrahim Obaid",
+        "away": "Dhahir Al-Adwani"
+      }
+    },
+    {
+      "sofascore_id": 15328730,
+      "round": 13,
+      "kickoff": "20/02/2026 19:30",
+      "kickoff_iso": "2026-02-20T19:30",
+      "home": "Sporty FC",
+      "away": "Khaitan SC",
+      "home_key": "sporty",
+      "away_key": "khaitan",
+      "home_score": 0,
+      "away_score": 2,
+      "finished": true,
+      "timeline": [
+        {
+          "type": "goal",
+          "class": "regular",
+          "minute": 23,
+          "added": null,
+          "player": "Oussema Ben Ayed",
+          "side": "away",
+          "score": "0-1"
+        },
+        {
+          "type": "goal",
+          "class": "regular",
+          "minute": 49,
+          "added": null,
+          "player": "Oussema Ben Ayed",
+          "side": "away",
+          "score": "0-2"
+        }
+      ],
+      "managers": {
+        "home": "Ibrahim Shehab",
+        "away": "Alexander Mochenov"
+      }
+    },
+    {
+      "sofascore_id": 15328732,
+      "round": 13,
+      "kickoff": "21/02/2026 19:30",
+      "kickoff_iso": "2026-02-21T19:30",
+      "home": "Al Sulaibikhat FC",
+      "away": "Al Sahel SC",
+      "home_key": "sulaibikhat",
+      "away_key": "sahel",
+      "home_score": 4,
+      "away_score": 1,
+      "finished": true,
+      "timeline": [
+        {
+          "type": "goal",
+          "class": "regular",
+          "minute": 2,
+          "added": null,
+          "player": "Emmanuel Evaristus",
+          "side": "home",
+          "score": "1-0"
+        },
+        {
+          "type": "goal",
+          "class": "regular",
+          "minute": 21,
+          "added": null,
+          "player": "Christian Alex",
+          "side": "away",
+          "score": "1-1"
+        },
+        {
+          "type": "goal",
+          "class": "regular",
+          "minute": 42,
+          "added": null,
+          "player": "Emmanuel Evaristus",
+          "side": "home",
+          "score": "2-1"
+        },
+        {
+          "type": "goal",
+          "class": "regular",
+          "minute": 54,
+          "added": null,
+          "player": "Lucas Shallon",
+          "side": "home",
+          "score": "3-1"
+        },
+        {
+          "type": "goal",
+          "class": "regular",
+          "minute": 90,
+          "added": 9,
+          "player": "Abdulaziz Al Beshar",
+          "side": "home",
+          "score": "4-1"
+        }
+      ],
+      "managers": {
+        "home": "António Miranda",
+        "away": "Yousef Mudhaf"
+      }
+    },
+    {
+      "sofascore_id": 15328733,
+      "round": 13,
+      "kickoff": "21/02/2026 19:30",
+      "kickoff_iso": "2026-02-21T19:30",
+      "home": "Burgan SC",
+      "away": "Al-Shamiya FC",
+      "home_key": "burgan",
+      "away_key": "shamiya",
+      "home_score": 2,
+      "away_score": 2,
+      "finished": true,
+      "timeline": [
+        {
+          "type": "goal",
+          "class": "regular",
+          "minute": 37,
+          "added": null,
+          "player": "Fawaz Al Shammari",
+          "side": "away",
+          "score": "0-1"
+        },
+        {
+          "type": "goal",
+          "class": "regular",
+          "minute": 43,
+          "added": null,
+          "player": "Cheikh Mohammed Traoré",
+          "side": "home",
+          "score": "1-1"
+        },
+        {
+          "type": "goal",
+          "class": "regular",
+          "minute": 60,
+          "added": null,
+          "player": "Munawwar Al-Mutairi",
+          "side": "away",
+          "score": "1-2"
+        },
+        {
+          "type": "goal",
+          "class": "regular",
+          "minute": 90,
+          "added": 3,
+          "player": "Isaac James Ogiri",
+          "side": "home",
+          "score": "2-2"
+        }
+      ],
+      "managers": {
+        "home": "Cenk Ozcan",
+        "away": "Falah Anwar Al Sahli"
+      }
+    },
+    {
+      "sofascore_id": 16271547,
+      "round": 14,
+      "kickoff": "25/07/2026 19:45",
+      "kickoff_iso": "2026-07-25T19:45",
+      "home": "Al Jazeera FC Kuwait",
+      "away": "Al Sulaibikhat FC",
+      "home_key": "jazira",
+      "away_key": "sulaibikhat",
+      "home_score": 1,
+      "away_score": 1,
+      "finished": true,
+      "timeline": [
+        {
+          "type": "goal",
+          "class": "regular",
+          "minute": 36,
+          "added": null,
+          "player": "Fahad Al Houli",
+          "side": "away",
+          "score": "0-1"
+        },
+        {
+          "type": "goal",
+          "class": "regular",
+          "minute": 46,
+          "added": null,
+          "player": "Yao Jean Charles Olivier",
+          "side": "home",
+          "score": "1-1"
+        },
+        {
+          "type": "card",
+          "class": "yellow",
+          "minute": 60,
+          "added": null,
+          "player": "Edrissa Ceesay",
+          "side": "home",
+          "score": null
+        },
+        {
+          "type": "card",
+          "class": "yellow",
+          "minute": 84,
+          "added": null,
+          "player": "Abdulmajeed Al Enezi",
+          "side": "home",
+          "score": null
+        }
+      ],
+      "managers": {
+        "home": "Ibrahim Obaid",
+        "away": "António Miranda"
+      }
+    },
+    {
+      "sofascore_id": 16271546,
+      "round": 14,
+      "kickoff": "25/07/2026 19:45",
+      "kickoff_iso": "2026-07-25T19:45",
+      "home": "Al Sahel SC",
+      "away": "Yarmouk SC",
+      "home_key": "sahel",
+      "away_key": "yarmouk",
+      "home_score": 1,
+      "away_score": 0,
+      "finished": true,
+      "timeline": [
+        {
+          "type": "card",
+          "class": "yellow",
+          "minute": 11,
+          "added": null,
+          "player": null,
+          "side": "away",
+          "score": null
+        },
+        {
+          "type": "card",
+          "class": "yellow",
+          "minute": 60,
+          "added": null,
+          "player": null,
+          "side": "away",
+          "score": null
+        },
+        {
+          "type": "card",
+          "class": "yellow",
+          "minute": 71,
+          "added": null,
+          "player": null,
+          "side": "home",
+          "score": null
+        },
+        {
+          "type": "card",
+          "class": "yellow",
+          "minute": 73,
+          "added": null,
+          "player": null,
+          "side": "home",
+          "score": null
+        },
+        {
+          "type": "card",
+          "class": "red",
+          "minute": 74,
+          "added": null,
+          "player": null,
+          "side": "away",
+          "score": null
+        },
+        {
+          "type": "goal",
+          "class": "regular",
+          "minute": 90,
+          "added": 4,
+          "player": "Allan Paulista",
+          "side": "home",
+          "score": "1-0"
+        }
+      ],
+      "managers": {
+        "home": "Yousef Mudhaf",
+        "away": "João Mota"
+      }
+    },
+    {
+      "sofascore_id": 16271548,
+      "round": 14,
+      "kickoff": "25/07/2026 19:45",
+      "kickoff_iso": "2026-07-25T19:45",
+      "home": "Al-Shamiya FC",
+      "away": "Khaitan SC",
+      "home_key": "shamiya",
+      "away_key": "khaitan",
+      "home_score": 1,
+      "away_score": 0,
+      "finished": true,
+      "timeline": [
+        {
+          "type": "card",
+          "class": "yellow",
+          "minute": 26,
+          "added": null,
+          "player": null,
+          "side": "home",
+          "score": null
+        },
+        {
+          "type": "goal",
+          "class": "penalty",
+          "minute": 40,
+          "added": null,
+          "player": null,
+          "side": "home",
+          "score": "1-0"
+        },
+        {
+          "type": "card",
+          "class": "yellow",
+          "minute": 45,
+          "added": 4,
+          "player": null,
+          "side": "home",
+          "score": null
+        },
+        {
+          "type": "card",
+          "class": "yellow",
+          "minute": 46,
+          "added": null,
+          "player": null,
+          "side": "away",
+          "score": null
+        },
+        {
+          "type": "card",
+          "class": "yellow",
+          "minute": 46,
+          "added": null,
+          "player": null,
+          "side": "home",
+          "score": null
+        },
+        {
+          "type": "card",
+          "class": "yellow",
+          "minute": 87,
+          "added": null,
+          "player": null,
+          "side": "home",
+          "score": null
+        },
+        {
+          "type": "card",
+          "class": "yellow",
+          "minute": 90,
+          "added": 3,
+          "player": null,
+          "side": "away",
+          "score": null
+        },
+        {
+          "type": "card",
+          "class": "yellow",
+          "minute": 90,
+          "added": 8,
+          "player": null,
+          "side": "home",
+          "score": null
+        }
+      ],
+      "managers": {
+        "home": "Falah Anwar Al Sahli",
+        "away": "Aleksandr Mochinov"
+      }
+    },
+    {
+      "sofascore_id": 16271549,
+      "round": 14,
+      "kickoff": "25/07/2026 19:45",
+      "kickoff_iso": "2026-07-25T19:45",
+      "home": "Sporty FC",
+      "away": "Burgan SC",
+      "home_key": "sporty",
+      "away_key": "burgan",
+      "home_score": 1,
+      "away_score": 0,
+      "finished": true,
+      "timeline": [
+        {
+          "type": "card",
+          "class": "yellow",
+          "minute": 42,
+          "added": null,
+          "player": null,
+          "side": "home",
+          "score": null
+        },
+        {
+          "type": "card",
+          "class": "yellow",
+          "minute": 90,
+          "added": null,
+          "player": null,
+          "side": "home",
+          "score": null
+        },
+        {
+          "type": "goal",
+          "class": "regular",
+          "minute": 90,
+          "added": null,
+          "player": "Abdulrahman Al Enezi",
+          "side": "home",
+          "score": "1-0"
+        }
+      ],
+      "managers": {
+        "home": "Ibrahim Shehab",
+        "away": "Cenk Ozcan"
+      }
+    },
+    {
+      "sofascore_id": 16271553,
+      "round": 15,
+      "kickoff": "29/07/2026 19:45",
+      "kickoff_iso": "2026-07-29T19:45",
+      "home": "Al Jazeera FC Kuwait",
+      "away": "Burgan SC",
+      "home_key": "jazira",
+      "away_key": "burgan",
+      "home_score": 2,
+      "away_score": 0,
+      "finished": true,
+      "timeline": [
+        {
+          "type": "goal",
+          "class": "regular",
+          "minute": 31,
+          "added": null,
+          "player": "Marouane Zila",
+          "side": "home",
+          "score": "1-0"
+        },
+        {
+          "type": "card",
+          "class": "yellow",
+          "minute": 36,
+          "added": null,
+          "player": null,
+          "side": "home",
+          "score": null
+        },
+        {
+          "type": "card",
+          "class": "red",
+          "minute": 45,
+          "added": 5,
+          "player": null,
+          "side": "away",
+          "score": null
+        },
+        {
+          "type": "goal",
+          "class": "regular",
+          "minute": 59,
+          "added": null,
+          "player": "Yao Jean Charles Olivier",
+          "side": "home",
+          "score": "2-0"
+        }
+      ],
+      "managers": {
+        "home": "Ibrahim Obaid",
+        "away": null
+      }
+    },
+    {
+      "sofascore_id": 16271550,
+      "round": 15,
+      "kickoff": "29/07/2026 19:45",
+      "kickoff_iso": "2026-07-29T19:45",
+      "home": "Al-Shamiya FC",
+      "away": "Al Sulaibikhat FC",
+      "home_key": "shamiya",
+      "away_key": "sulaibikhat",
+      "home_score": 0,
+      "away_score": 3,
+      "finished": true,
+      "timeline": [
+        {
+          "type": "goal",
+          "class": "regular",
+          "minute": 17,
+          "added": null,
+          "player": "Daniel Silva Santos",
+          "side": "away",
+          "score": "0-1"
+        },
+        {
+          "type": "goal",
+          "class": "regular",
+          "minute": 59,
+          "added": null,
+          "player": "Elielson Cardoso Bebê",
+          "side": "away",
+          "score": "0-2"
+        },
+        {
+          "type": "goal",
+          "class": "regular",
+          "minute": 88,
+          "added": null,
+          "player": "Bruno Domingues",
+          "side": "away",
+          "score": "0-3"
+        }
+      ],
+      "managers": {
+        "home": "Falah Anwar Al Sahli",
+        "away": "António Miranda"
+      }
+    },
+    {
+      "sofascore_id": 16271551,
+      "round": 15,
+      "kickoff": "29/07/2026 19:45",
+      "kickoff_iso": "2026-07-29T19:45",
+      "home": "Khaitan SC",
+      "away": "Al Sahel SC",
+      "home_key": "khaitan",
+      "away_key": "sahel",
+      "home_score": 1,
+      "away_score": 1,
+      "finished": true,
+      "timeline": [
+        {
+          "type": "goal",
+          "class": "regular",
+          "minute": 5,
+          "added": null,
+          "player": "Cleiton Padilha",
+          "side": "away",
+          "score": "0-1"
+        },
+        {
+          "type": "card",
+          "class": "yellow",
+          "minute": 13,
+          "added": null,
+          "player": null,
+          "side": "away",
+          "score": null
+        },
+        {
+          "type": "goal",
+          "class": "regular",
+          "minute": 15,
+          "added": null,
+          "player": null,
+          "side": "home",
+          "score": "1-1"
+        },
+        {
+          "type": "card",
+          "class": "yellow",
+          "minute": 58,
+          "added": null,
+          "player": null,
+          "side": "home",
+          "score": null
+        },
+        {
+          "type": "card",
+          "class": "yellow",
+          "minute": 62,
+          "added": null,
+          "player": null,
+          "side": "away",
+          "score": null
+        },
+        {
+          "type": "card",
+          "class": "yellow",
+          "minute": 64,
+          "added": null,
+          "player": null,
+          "side": "home",
+          "score": null
+        },
+        {
+          "type": "card",
+          "class": "yellow",
+          "minute": 72,
+          "added": null,
+          "player": null,
+          "side": "away",
+          "score": null
+        },
+        {
+          "type": "card",
+          "class": "yellow",
+          "minute": 82,
+          "added": null,
+          "player": null,
+          "side": "home",
+          "score": null
+        },
+        {
+          "type": "card",
+          "class": "yellow",
+          "minute": 90,
+          "added": 2,
+          "player": null,
+          "side": "away",
+          "score": null
+        },
+        {
+          "type": "card",
+          "class": "yellow",
+          "minute": 90,
+          "added": 2,
+          "player": null,
+          "side": "home",
+          "score": null
+        }
+      ],
+      "managers": {
+        "home": "Cenk Ozcan",
+        "away": "Yousef Mudhaf"
+      }
+    },
+    {
+      "sofascore_id": 16271552,
+      "round": 15,
+      "kickoff": "29/07/2026 19:45",
+      "kickoff_iso": "2026-07-29T19:45",
+      "home": "Yarmouk SC",
+      "away": "Sporty FC",
+      "home_key": "yarmouk",
+      "away_key": "sporty",
+      "home_score": 2,
+      "away_score": 1,
+      "finished": true,
+      "timeline": [
+        {
+          "type": "card",
+          "class": "yellow",
+          "minute": 40,
+          "added": null,
+          "player": null,
+          "side": "home",
+          "score": null
+        },
+        {
+          "type": "goal",
+          "class": "regular",
+          "minute": 50,
+          "added": null,
+          "player": null,
+          "side": "away",
+          "score": "0-1"
+        },
+        {
+          "type": "card",
+          "class": "yellow",
+          "minute": 55,
+          "added": null,
+          "player": null,
+          "side": "home",
+          "score": null
+        },
+        {
+          "type": "goal",
+          "class": "regular",
+          "minute": 60,
+          "added": null,
+          "player": "Joao Vitor",
+          "side": "home",
+          "score": "1-1"
+        },
+        {
+          "type": "goal",
+          "class": "regular",
+          "minute": 86,
+          "added": null,
+          "player": "Joao Vitor",
+          "side": "home",
+          "score": "2-1"
+        }
+      ],
+      "managers": {
+        "home": "João Mota",
+        "away": "Ibrahim Shehab"
+      }
+    },
+    {
+      "sofascore_id": 16271557,
+      "round": 16,
+      "kickoff": "02/08/2026 18:00",
+      "kickoff_iso": "2026-08-02T18:00",
+      "home": "Yarmouk SC",
+      "away": "Al-Shamiya FC",
+      "home_key": "yarmouk",
+      "away_key": "shamiya",
+      "home_score": 3,
+      "away_score": 0,
+      "finished": true,
+      "timeline": [
+        {
+          "type": "card",
+          "class": "yellow",
+          "minute": 19,
+          "added": null,
+          "player": null,
+          "side": "away",
+          "score": null
+        },
+        {
+          "type": "card",
+          "class": "yellow",
+          "minute": 47,
+          "added": null,
+          "player": null,
+          "side": "away",
+          "score": null
+        },
+        {
+          "type": "goal",
+          "class": "regular",
+          "minute": 54,
+          "added": null,
+          "player": "Joao Vitor",
+          "side": "home",
+          "score": "1-0"
+        },
+        {
+          "type": "card",
+          "class": "red",
+          "minute": 60,
+          "added": null,
+          "player": null,
+          "side": "home",
+          "score": null
+        },
+        {
+          "type": "card",
+          "class": "yellow",
+          "minute": 64,
+          "added": null,
+          "player": null,
+          "side": "home",
+          "score": null
+        },
+        {
+          "type": "goal",
+          "class": "regular",
+          "minute": 71,
+          "added": null,
+          "player": "Isaac Mbenza",
+          "side": "home",
+          "score": "2-0"
+        },
+        {
+          "type": "goal",
+          "class": "regular",
+          "minute": 87,
+          "added": null,
+          "player": "Isaac Mbenza",
+          "side": "home",
+          "score": "3-0"
+        }
+      ],
+      "managers": {
+        "home": "João Mota",
+        "away": "Falah Anwar Al Sahli"
+      }
+    },
+    {
+      "sofascore_id": 16271554,
+      "round": 16,
+      "kickoff": "02/08/2026 19:45",
+      "kickoff_iso": "2026-08-02T19:45",
+      "home": "Al Sulaibikhat FC",
+      "away": "Khaitan SC",
+      "home_key": "sulaibikhat",
+      "away_key": "khaitan",
+      "home_score": 1,
+      "away_score": 0,
+      "finished": true,
+      "timeline": [
+        {
+          "type": "card",
+          "class": "yellow",
+          "minute": 74,
+          "added": null,
+          "player": null,
+          "side": "away",
+          "score": null
+        },
+        {
+          "type": "goal",
+          "class": "regular",
+          "minute": 90,
+          "added": 4,
+          "player": "Nasser Al Faylakawi",
+          "side": "home",
+          "score": "1-0"
+        }
+      ],
+      "managers": {
+        "home": "António Miranda",
+        "away": "Cenk Ozcan"
+      }
+    },
+    {
+      "sofascore_id": 16271555,
+      "round": 16,
+      "kickoff": "02/08/2026 19:45",
+      "kickoff_iso": "2026-08-02T19:45",
+      "home": "Burgan SC",
+      "away": "Al Sahel SC",
+      "home_key": "burgan",
+      "away_key": "sahel",
+      "home_score": 0,
+      "away_score": 0,
+      "finished": true,
+      "timeline": [
+        {
+          "type": "card",
+          "class": "yellow",
+          "minute": 18,
+          "added": null,
+          "player": null,
+          "side": "home",
+          "score": null
+        },
+        {
+          "type": "card",
+          "class": "yellow",
+          "minute": 45,
+          "added": 2,
+          "player": null,
+          "side": "away",
+          "score": null
+        }
+      ],
+      "managers": {
+        "home": null,
+        "away": "Yousef Mudhaf"
+      }
+    },
+    {
+      "sofascore_id": 16271556,
+      "round": 16,
+      "kickoff": "02/08/2026 20:45",
+      "kickoff_iso": "2026-08-02T20:45",
+      "home": "Sporty FC",
+      "away": "Al Jazeera FC Kuwait",
+      "home_key": "sporty",
+      "away_key": "jazira",
+      "home_score": 0,
+      "away_score": 3,
+      "finished": true,
+      "timeline": [
+        {
+          "type": "goal",
+          "class": "regular",
+          "minute": 28,
+          "added": null,
+          "player": "Isaac James Ogiri",
+          "side": "away",
+          "score": "0-1"
+        },
+        {
+          "type": "goal",
+          "class": "regular",
+          "minute": 37,
+          "added": null,
+          "player": "Yao Jean Charles Olivier",
+          "side": "away",
+          "score": "0-2"
+        },
+        {
+          "type": "goal",
+          "class": "regular",
+          "minute": 66,
+          "added": null,
+          "player": "Hedy Chaabi",
+          "side": "away",
+          "score": "0-3"
+        },
+        {
+          "type": "card",
+          "class": "yellow",
+          "minute": 83,
+          "added": null,
+          "player": null,
+          "side": "home",
+          "score": null
+        },
+        {
+          "type": "card",
+          "class": "yellow",
+          "minute": 88,
+          "added": null,
+          "player": "Mobarak Saeed",
+          "side": "away",
+          "score": null
+        }
+      ],
+      "managers": {
+        "home": "Ibrahim Shehab",
+        "away": "Ibrahim Obaid"
+      }
+    },
+    {
+      "sofascore_id": 16271558,
+      "round": 17,
+      "kickoff": "06/08/2026 19:45",
+      "kickoff_iso": "2026-08-06T19:45",
+      "home": "Al Jazeera FC Kuwait",
+      "away": "Al-Shamiya FC",
+      "home_key": "jazira",
+      "away_key": "shamiya",
+      "home_score": 5,
+      "away_score": 0,
+      "finished": true,
+      "timeline": [
+        {
+          "type": "goal",
+          "class": "regular",
+          "minute": 5,
+          "added": null,
+          "player": "Marouane Zila",
+          "side": "home",
+          "score": "1-0"
+        },
+        {
+          "type": "goal",
+          "class": "regular",
+          "minute": 9,
+          "added": null,
+          "player": "Isaac James Ogiri",
+          "side": "home",
+          "score": "2-0"
+        },
+        {
+          "type": "goal",
+          "class": "regular",
+          "minute": 45,
+          "added": 5,
+          "player": "Hedy Chaabi",
+          "side": "home",
+          "score": "3-0"
+        },
+        {
+          "type": "goal",
+          "class": "regular",
+          "minute": 50,
+          "added": null,
+          "player": "Mohammad Al Rabie",
+          "side": "home",
+          "score": "4-0"
+        },
+        {
+          "type": "card",
+          "class": "yellow",
+          "minute": 70,
+          "added": null,
+          "player": null,
+          "side": "away",
+          "score": null
+        },
+        {
+          "type": "card",
+          "class": "yellow",
+          "minute": 83,
+          "added": null,
+          "player": null,
+          "side": "away",
+          "score": null
+        },
+        {
+          "type": "goal",
+          "class": "regular",
+          "minute": 90,
+          "added": 4,
+          "player": "Fahad Al Azmi",
+          "side": "home",
+          "score": "5-0"
+        }
+      ],
+      "managers": {
+        "home": "Ibrahim Obaid",
+        "away": "Falah Anwar Al Sahli"
+      }
+    },
+    {
+      "sofascore_id": 16271559,
+      "round": 17,
+      "kickoff": "06/08/2026 19:45",
+      "kickoff_iso": "2026-08-06T19:45",
+      "home": "Al Sahel SC",
+      "away": "Sporty FC",
+      "home_key": "sahel",
+      "away_key": "sporty",
+      "home_score": 2,
+      "away_score": 0,
+      "finished": true,
+      "timeline": [
+        {
+          "type": "card",
+          "class": "yellow",
+          "minute": -5,
+          "added": null,
+          "player": null,
+          "side": "away",
+          "score": null
+        },
+        {
+          "type": "goal",
+          "class": "regular",
+          "minute": 5,
+          "added": null,
+          "player": "Cleiton Padilha",
+          "side": "home",
+          "score": "1-0"
+        },
+        {
+          "type": "card",
+          "class": "yellow",
+          "minute": 42,
+          "added": null,
+          "player": null,
+          "side": "away",
+          "score": null
+        },
+        {
+          "type": "card",
+          "class": "yellow",
+          "minute": 80,
+          "added": null,
+          "player": null,
+          "side": "away",
+          "score": null
+        },
+        {
+          "type": "goal",
+          "class": "regular",
+          "minute": 87,
+          "added": null,
+          "player": "Faisal Ajab Al Azemi",
+          "side": "home",
+          "score": "2-0"
+        }
+      ],
+      "managers": {
+        "home": "Yousef Mudhaf",
+        "away": "Ibrahim Shehab"
+      }
+    },
+    {
+      "sofascore_id": 16271560,
+      "round": 17,
+      "kickoff": "07/08/2026 19:45",
+      "kickoff_iso": "2026-08-07T19:45",
+      "home": "Al Sulaibikhat FC",
+      "away": "Burgan SC",
+      "home_key": "sulaibikhat",
+      "away_key": "burgan",
+      "home_score": 0,
+      "away_score": 0,
+      "finished": true,
+      "timeline": [
+        {
+          "type": "card",
+          "class": "yellow",
+          "minute": 42,
+          "added": null,
+          "player": "Bader Al-Khazeim",
+          "side": "away",
+          "score": null
+        },
+        {
+          "type": "card",
+          "class": "yellow",
+          "minute": 46,
+          "added": null,
+          "player": "Abdulaziz Al Qattan",
+          "side": "home",
+          "score": null
+        },
+        {
+          "type": "card",
+          "class": "yellow",
+          "minute": 68,
+          "added": null,
+          "player": "Bruno Domingues",
+          "side": "home",
+          "score": null
+        },
+        {
+          "type": "card",
+          "class": "yellow",
+          "minute": 87,
+          "added": null,
+          "player": "Khaled Al Rashidi",
+          "side": "home",
+          "score": null
+        },
+        {
+          "type": "card",
+          "class": "yellowRed",
+          "minute": 90,
+          "added": 6,
+          "player": "Abdulaziz Al Qattan",
+          "side": "home",
+          "score": null
+        }
+      ],
+      "managers": {
+        "home": "António Miranda",
+        "away": null
+      }
+    },
+    {
+      "sofascore_id": 16271561,
+      "round": 17,
+      "kickoff": "07/08/2026 19:45",
+      "kickoff_iso": "2026-08-07T19:45",
+      "home": "Khaitan SC",
+      "away": "Yarmouk SC",
+      "home_key": "khaitan",
+      "away_key": "yarmouk",
+      "home_score": 0,
+      "away_score": 0,
+      "finished": true,
+      "timeline": [
+        {
+          "type": "card",
+          "class": "yellow",
+          "minute": 45,
+          "added": 4,
+          "player": null,
+          "side": "away",
+          "score": null
+        }
+      ],
+      "managers": {
+        "home": "Cenk Ozcan",
+        "away": "João Mota"
+      }
+    },
+    {
+      "sofascore_id": 16271563,
+      "round": 18,
+      "kickoff": "10/08/2026 19:25",
+      "kickoff_iso": "2026-08-10T19:25",
+      "home": "Al Jazeera FC Kuwait",
+      "away": "Khaitan SC",
+      "home_key": "jazira",
+      "away_key": "khaitan",
+      "home_score": 2,
+      "away_score": 2,
+      "finished": true,
+      "timeline": [
+        {
+          "type": "goal",
+          "class": "regular",
+          "minute": 27,
+          "added": null,
+          "player": null,
+          "side": "away",
+          "score": "0-1"
+        },
+        {
+          "type": "card",
+          "class": "yellow",
+          "minute": 45,
+          "added": 2,
+          "player": "Isaac James Ogiri",
+          "side": "home",
+          "score": null
+        },
+        {
+          "type": "goal",
+          "class": "regular",
+          "minute": 87,
+          "added": null,
+          "player": "Fahad Al Rajhi",
+          "side": "home",
+          "score": "1-1"
+        },
+        {
+          "type": "goal",
+          "class": "regular",
+          "minute": 90,
+          "added": 3,
+          "player": null,
+          "side": "away",
+          "score": "1-2"
+        },
+        {
+          "type": "card",
+          "class": "yellow",
+          "minute": 90,
+          "added": 6,
+          "player": null,
+          "side": "home",
+          "score": null
+        },
+        {
+          "type": "goal",
+          "class": "regular",
+          "minute": 90,
+          "added": 9,
+          "player": "Marouane Zila",
+          "side": "home",
+          "score": "2-2"
+        }
+      ],
+      "managers": {
+        "home": "Ibrahim Obaid",
+        "away": "Cenk Ozcan"
+      }
+    },
+    {
+      "sofascore_id": 16271565,
+      "round": 18,
+      "kickoff": "10/08/2026 19:25",
+      "kickoff_iso": "2026-08-10T19:25",
+      "home": "Al-Shamiya FC",
+      "away": "Al Sahel SC",
+      "home_key": "shamiya",
+      "away_key": "sahel",
+      "home_score": 0,
+      "away_score": 3,
+      "finished": true,
+      "timeline": [
+        {
+          "type": "goal",
+          "class": "regular",
+          "minute": 27,
+          "added": null,
+          "player": "Cleiton Padilha",
+          "side": "away",
+          "score": "0-1"
+        },
+        {
+          "type": "goal",
+          "class": "penalty",
+          "minute": 60,
+          "added": null,
+          "player": "Mohammed Al Aladhi",
+          "side": "away",
+          "score": "0-2"
+        },
+        {
+          "type": "goal",
+          "class": "regular",
+          "minute": 89,
+          "added": null,
+          "player": "Lucas Lucena",
+          "side": "away",
+          "score": "0-3"
+        }
+      ],
+      "managers": {
+        "home": "Falah Anwar Al Sahli",
+        "away": "Yousef Mudhaf"
+      }
+    },
+    {
+      "sofascore_id": 16271564,
+      "round": 18,
+      "kickoff": "11/08/2026 18:00",
+      "kickoff_iso": "2026-08-11T18:00",
+      "home": "Burgan SC",
+      "away": "Yarmouk SC",
+      "home_key": "burgan",
+      "away_key": "yarmouk",
+      "home_score": null,
+      "away_score": null,
+      "finished": false
+    },
+    {
+      "sofascore_id": 16271566,
+      "round": 18,
+      "kickoff": "11/08/2026 19:25",
+      "kickoff_iso": "2026-08-11T19:25",
+      "home": "Sporty FC",
+      "away": "Al Sulaibikhat FC",
+      "home_key": "sporty",
+      "away_key": "sulaibikhat",
+      "home_score": null,
+      "away_score": null,
+      "finished": false
+    },
+    {
+      "sofascore_id": 16271567,
+      "round": 19,
+      "kickoff": "14/08/2026 19:25",
+      "kickoff_iso": "2026-08-14T19:25",
+      "home": "Al Sahel SC",
+      "away": "Al Jazeera FC Kuwait",
+      "home_key": "sahel",
+      "away_key": "jazira",
+      "home_score": null,
+      "away_score": null,
+      "finished": false
+    },
+    {
+      "sofascore_id": 16271570,
+      "round": 19,
+      "kickoff": "14/08/2026 19:25",
+      "kickoff_iso": "2026-08-14T19:25",
+      "home": "Al Sulaibikhat FC",
+      "away": "Yarmouk SC",
+      "home_key": "sulaibikhat",
+      "away_key": "yarmouk",
+      "home_score": null,
+      "away_score": null,
+      "finished": false
+    },
+    {
+      "sofascore_id": 16271569,
+      "round": 19,
+      "kickoff": "14/08/2026 19:25",
+      "kickoff_iso": "2026-08-14T19:25",
+      "home": "Burgan SC",
+      "away": "Khaitan SC",
+      "home_key": "burgan",
+      "away_key": "khaitan",
+      "home_score": null,
+      "away_score": null,
+      "finished": false
+    },
+    {
+      "sofascore_id": 16271568,
+      "round": 19,
+      "kickoff": "14/08/2026 19:25",
+      "kickoff_iso": "2026-08-14T19:25",
+      "home": "Sporty FC",
+      "away": "Al-Shamiya FC",
+      "home_key": "sporty",
+      "away_key": "shamiya",
+      "home_score": null,
+      "away_score": null,
+      "finished": false
+    },
+    {
+      "sofascore_id": 16271574,
+      "round": 20,
+      "kickoff": "17/08/2026 19:15",
+      "kickoff_iso": "2026-08-17T19:15",
+      "home": "Al Sahel SC",
+      "away": "Al Sulaibikhat FC",
+      "home_key": "sahel",
+      "away_key": "sulaibikhat",
+      "home_score": null,
+      "away_score": null,
+      "finished": false
+    },
+    {
+      "sofascore_id": 16271571,
+      "round": 20,
+      "kickoff": "17/08/2026 19:15",
+      "kickoff_iso": "2026-08-17T19:15",
+      "home": "Al-Shamiya FC",
+      "away": "Burgan SC",
+      "home_key": "shamiya",
+      "away_key": "burgan",
+      "home_score": null,
+      "away_score": null,
+      "finished": false
+    },
+    {
+      "sofascore_id": 16271572,
+      "round": 20,
+      "kickoff": "17/08/2026 19:15",
+      "kickoff_iso": "2026-08-17T19:15",
+      "home": "Khaitan SC",
+      "away": "Sporty FC",
+      "home_key": "khaitan",
+      "away_key": "sporty",
+      "home_score": null,
+      "away_score": null,
+      "finished": false
+    },
+    {
+      "sofascore_id": 16271573,
+      "round": 20,
+      "kickoff": "17/08/2026 19:15",
+      "kickoff_iso": "2026-08-17T19:15",
+      "home": "Yarmouk SC",
+      "away": "Al Jazeera FC Kuwait",
+      "home_key": "yarmouk",
+      "away_key": "jazira",
+      "home_score": null,
+      "away_score": null,
+      "finished": false
+    },
+    {
+      "sofascore_id": 16271578,
+      "round": 21,
+      "kickoff": "20/08/2026 19:10",
+      "kickoff_iso": "2026-08-20T19:10",
+      "home": "Al Sulaibikhat FC",
+      "away": "Al Jazeera FC Kuwait",
+      "home_key": "sulaibikhat",
+      "away_key": "jazira",
+      "home_score": null,
+      "away_score": null,
+      "finished": false
+    },
+    {
+      "sofascore_id": 16271576,
+      "round": 21,
+      "kickoff": "20/08/2026 19:10",
+      "kickoff_iso": "2026-08-20T19:10",
+      "home": "Burgan SC",
+      "away": "Sporty FC",
+      "home_key": "burgan",
+      "away_key": "sporty",
+      "home_score": null,
+      "away_score": null,
+      "finished": false
+    },
+    {
+      "sofascore_id": 16271575,
+      "round": 21,
+      "kickoff": "20/08/2026 19:10",
+      "kickoff_iso": "2026-08-20T19:10",
+      "home": "Khaitan SC",
+      "away": "Al-Shamiya FC",
+      "home_key": "khaitan",
+      "away_key": "shamiya",
+      "home_score": null,
+      "away_score": null,
+      "finished": false
+    },
+    {
+      "sofascore_id": 16271577,
+      "round": 21,
+      "kickoff": "20/08/2026 19:10",
+      "kickoff_iso": "2026-08-20T19:10",
+      "home": "Yarmouk SC",
+      "away": "Al Sahel SC",
+      "home_key": "yarmouk",
+      "away_key": "sahel",
+      "home_score": null,
+      "away_score": null,
+      "finished": false
+    }
+  ]
+}

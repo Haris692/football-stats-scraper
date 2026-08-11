@@ -1067,6 +1067,79 @@ Vérifié en conditions réelles pendant Sahel - Al Shamiya et Khaitan - Al Jazi
 le 10/08 : deux cycles à 62 s d'intervalle, possession 70 → 71 %, tirs 5 → 6,
 aucune erreur console, bascule arrêt/reprise et persistance du refus contrôlées.
 
+## Sofascore élargi (11/08/2026)
+
+Sondage endpoint par endpoint, pour savoir ce que cette source a vraiment sur
+cette division. **Le partage avec Forebet ne change pas** — les chiffres du
+match restent chez Forebet — mais Sofascore comble trois trous réels.
+
+| endpoint | verdict |
+|---|---|
+| `event/{id}/incidents` | ✅ **buteurs nommés et minutés**, cartons minutés |
+| `.../events/round/{n}` + `/rounds` | ✅ saison complète, **numéro de journée**, journée courante |
+| `event/{id}/managers` | ✅ les deux entraîneurs du soir |
+| `team/{id}/.../statistics/overall` | ✅ clean sheets, **buts sur penalty**, rouges |
+| `event/{id}/statistics` | ❌ **une seule ligne : « Red cards »** |
+| `lineups`, `best-players`, `graph`, `odds` | ❌ 404 |
+
+⚠️ **Ne pas relire « Sofascore n'a aucun tir » comme « Sofascore n'a rien ».**
+L'endpoint `statistics` existe et répond 200 : il est simplement presque vide.
+C'est ce qui rend Forebet irremplaçable pour possession et tirs.
+
+**Ce que ça change dans la console** : la carte « Statistiques du match »
+affiche désormais une chronologie **nommée** — 195 buts datés sur la saison,
+**187 avec un buteur** (96 %). L'ancienne chronologie Forebet reste en repli
+pour une rencontre trop récente pour Sofascore. Le brief Instagram cite les
+buteurs au lieu de « 87' Al Jazira », et la journée affichée est relevée au
+lieu d'être déduite du nombre de matchs joués.
+
+**Les buts sur penalty valent le détour** : Forebet affiche « 0 / 0 » pour tous
+les clubs, Sofascore compte 3 penaltys pour Sahel et 3 pour Sulaibikhat. D'où
+un groupe « Bilan de saison · Sofascore » **à part** dans le comparatif : les
+deux sources ne comptent pas le même nombre de matchs, les fondre ferait
+passer un décalage de fraîcheur pour une contradiction.
+
+⚠️ **Tout ce qui sort de Sofascore arrive dans SON orientation.** Il inverse
+Flashscore sur 61 rencontres sur 70. `attach_events()` compare son hôte au
+nôtre et retourne le `side` — **et aussi le score courant** porté par chaque
+événement, sans quoi la chronologie annoncerait « 1-0 » au moment où notre hôte
+vient d'encaisser. Cette fonction doit tourner **après** `arbitrate()`, jamais
+avant.
+
+ℹ️ **Coût maîtrisé** : ~150 requêtes à la première collecte, puis presque rien.
+Une rencontre terminée ne bouge plus, son relevé est donc mis en cache 30 jours
+et `--force` ne s'y applique pas — même compromis que `attach_stats()`.
+
+## Rafraîchissement quotidien (11/08/2026)
+
+`daily.py` enchaîne effectifs → rencontres → console, puis commite et pousse
+**ce qui a changé, et rien si rien n'a changé**. `schedule_daily.ps1` l'inscrit
+au planificateur Windows à 8 h.
+
+**Pourquoi une tâche locale et pas un agent dans le cloud** : la collecte a
+besoin du Chrome de cette machine et de la clearance Cloudflare gardée dans
+`.chrome-profile/`. Depuis ailleurs, Forebet renvoie un challenge insoluble. La
+tâche tourne donc en session ouverte (`-LogonType Interactive`), avec
+`StartWhenAvailable` pour rattraper une machine éteinte à 8 h.
+
+⚠️ **Ça revient sur la règle « déclenchement manuel strict, jamais
+périodique »** héritée de `kuwait-football`. Assumé : cette règle visait à ne
+pas marteler la source, et une passe quotidienne qui laisse le cache servir
+tout ce qui est figé en est très loin. Le mode direct l'avait déjà déplacée une
+première fois, pour la même raison.
+
+Deux garde-fous, chacun pour une raison précise :
+
+- **La première étape en échec arrête tout.** Régénérer la page à partir d'une
+  collecte incomplète publierait une régression que personne ne verrait passer.
+- **La publication énumère ses fichiers** au lieu d'un `git add -A` : un
+  `cache/` ou un `.chrome-profile/` qui échapperait au `.gitignore` n'a rien à
+  faire dans un commit automatique que personne ne relit.
+
+Journal dans `daily.log`. À la main : `Start-ScheduledTask -TaskName
+FootballStatsScraper-Daily`, ou `python daily.py --dry-run` pour voir ce qu'il
+ferait.
+
 ## Reste à faire
 
 Les trois points de la session du 06/08 sont soldés : `build_json.py`,
@@ -1089,6 +1162,7 @@ Ce qui reste ouvert, par ordre d'intérêt :
    absents de `gmc=1`. À faire consommer par `serve.py`, comme le collecteur —
    pas par la page, qui n'a pas accès à Forebet.
 5. **Diffuseurs** : `data/broadcasts.json` a quatre cases vides.
+   Sofascore ne les a pas non plus (`odds` et `tv` : 404, vérifié le 11/08).
 6. **`shoot.py` n'est documenté nulle part ici.** L'outil (captures d'écran
    d'une page web, nettoyage des bandeaux, `--login`) a été écrit le 10/08 en
    9 commits et n'a pas de section dans ce fichier. Il est autonome et sans
