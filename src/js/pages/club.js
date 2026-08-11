@@ -6,7 +6,7 @@
 import { el, append, param } from "../core/dom.js";
 import { t } from "../core/i18n.js";
 import { boot } from "../core/shell.js";
-import { team, nameOf, seasonOf, outcome } from "../core/data.js";
+import { team, nameOf, seasonOf, outcome, players, playersOf } from "../core/data.js";
 import { crestOf, badge, clubColor, stat, methodNote } from "../components/pieces.js";
 import { fixtureCard } from "../components/cards.js";
 
@@ -81,7 +81,11 @@ function squad(c) {
     el("div", { class: "squad", style: { marginTop: "var(--s-5)" } },
       ORDER.filter(k => groups[k]).map(k => el("div", {}, [
         el("div", { class: "squad__grp", text: t(POS[k] || "Poste inconnu") }),
-        ...groups[k].map(p => el("div", { class: "player" }, [
+        // Chaque joueur mène à sa fiche : c'est la première chose qu'un club
+        // vient chercher sur sa propre page.
+        ...groups[k].map(p => el("a", {
+          class: "player", href: `joueur.html?p=${p.id}`,
+        }, [
           el("span", { class: "player__no", text: p.number || "—" }),
           el("span", { class: "player__n truncate", text: p.name || "?" }),
           p.country_code ? badge(p.country_code) : null,

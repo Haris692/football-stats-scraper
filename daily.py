@@ -42,7 +42,8 @@ LOG = ROOT / "daily.log"
 PUBLISHED = ["data/site.json", "data/crests.json", "data/events.json",
              "data/squads.json", "assets",
              "index.html", "match.html", "clubs.html", "club.html",
-             "classement.html", "calendrier.html"]
+             "classement.html", "calendrier.html", "joueur.html",
+             "data/players.site.json", "data/players.json", "data/photos"]
 
 STEPS = [
     # Les effectifs bougent peu, mais le classement des buteurs change à chaque
@@ -51,6 +52,9 @@ STEPS = [
     # Les journées passées sortent du cache ; seules la journée courante et les
     # suivantes repartent sur le réseau.
     (["fetch_events.py"], "rencontres, chronologies et journées"),
+    # Les profils sont mis en cache 30 jours : après la première passe,
+    # cette étape ne coûte presque rien.
+    (["fetch_players.py"], "fiches joueurs"),
     # ⚠️ `build_site.py`, pas `build_console.py` : depuis le passage au site
     # multi-pages, `index.html` est une page statique versionnée qu'aucune
     # collecte ne réécrit. Ce sont les JSON de `data/` qui changent.

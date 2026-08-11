@@ -81,6 +81,7 @@ match déjà en cache.
 | `fetch_stats.py` | statistiques relevées d'un match (possession, tirs, corners) |
 | `fetch_squads.py` | effectifs des 8 clubs et bilans de saison, via Sofascore |
 | `fetch_events.py` | rencontres Sofascore : journées, buteurs nommés, entraîneurs |
+| `fetch_players.py` | fiches joueurs : identité, valeur marchande, carrière, photo |
 | `build_site.py` | assemble `data/site.json` et `data/crests.json`, les données du site |
 | `daily.py` | rafraîchissement de 8 h : collecte, régénère, commite, pousse |
 | `crests.py` | écussons des clubs et couleurs dominantes qu'on en extrait |
@@ -443,6 +444,7 @@ toujours où l'on est.
 | `classement.html` | le classement complet et les buteurs |
 | `clubs.html` | les huit clubs, et leurs bilans comparés |
 | `club.html?c=<clé>` | un club : bilan, parcours, résultats, effectif |
+| `joueur.html?p=<id>` | un joueur : identité, valeur, carrière, profil de buteur |
 | `match.html?id=<id>` | une rencontre : chronologie, statistiques, homme du match, comparatif, effectifs |
 
 Les liens se font **par clé**, jamais par nom : les sources écrivent

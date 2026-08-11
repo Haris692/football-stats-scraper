@@ -87,7 +87,8 @@ export function clubCard(key) {
 export function scorerCard(row, rank) {
   return el("a", {
     class: "fixture", style: { width: "230px" },
-    href: `club.html?c=${encodeURIComponent(row.team)}`,
+    href: row.id ? `joueur.html?p=${row.id}`
+                 : `club.html?c=${encodeURIComponent(row.team)}`,
   }, [
     el("div", { class: "fixture__top" }, [
       el("span", { class: "num", text: `#${rank}` }),

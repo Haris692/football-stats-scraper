@@ -12,6 +12,7 @@ vieille que `max_age_hours`, aucune requête réseau n'est émise.
 
 from __future__ import annotations
 
+import base64
 import hashlib
 import json
 import os
@@ -35,6 +36,10 @@ ROOT = Path(__file__).resolve().parent
 CACHE_DIR = ROOT / "cache"
 PROFILE_DIR = ROOT / ".chrome-profile"
 DEBUG_PORT = 9333
+
+# Sentinelle écrite dans le cache pour une ressource absente : une absence est
+# une réponse, et la redemander à chaque passe coûte pour rien.
+NOT_FOUND = "__http_404__"
 
 # Délai aléatoire entre deux requêtes réseau, comme prévu au cahier des charges.
 MIN_DELAY = 2.0
@@ -374,6 +379,13 @@ class CdpBrowser:
                 self._log(f"  cache  {url}")
                 if not cached.strip():
                     return None  # réponse vide déjà connue, voir plus bas
+                # ⚠️ Une absence est une information, et elle se met en cache
+                # comme le reste : sans ça, chaque collecte redemandait tous
+                # les endpoints inexistants — et sur cette division il y en a
+                # beaucoup. Le sentinelle est relu ici pour lever la même
+                # erreur, sans requête.
+                if cached.startswith(NOT_FOUND):
+                    raise RuntimeError(f"HTTP 404 sur {url}")
                 try:
                     return json.loads(cached)
                 except json.JSONDecodeError:
@@ -403,12 +415,22 @@ class CdpBrowser:
                 continue
             if result and not result.get("error") and result.get("status") == 200:
                 break
+            # Un 404 est une réponse définitive : « cet endpoint n'existe pas
+            # pour cette ressource ». Le retenter deux fois de plus, avec les
+            # pauses, triplait le coût de chaque trou de couverture — et il y en
+            # a beaucoup sur cette division.
+            if result and result.get("status") == 404:
+                break
             self._log(f"    tentative {attempt + 1} : "
                       f"{result.get('error') or 'HTTP ' + str(result.get('status'))}")
             time.sleep(2 + attempt * 2)
 
         if not result or result.get("error"):
             raise RuntimeError(f"fetch impossible : {(result or {}).get('error')}")
+        if result["status"] == 404:
+            CACHE_DIR.mkdir(parents=True, exist_ok=True)
+            cache_path(url, "json").write_text(NOT_FOUND, encoding="utf-8")
+            raise RuntimeError(f"HTTP 404 sur {url}")
         if result["status"] != 200:
             raise RuntimeError(f"HTTP {result['status']} sur {url}")
 
@@ -421,6 +443,58 @@ class CdpBrowser:
         if not result["text"].strip():
             return None
         return json.loads(result["text"])
+
+    def get_bytes(self, url: str, force: bool = False,
+                  max_age_hours: float | None = None,
+                  referer: str | None = None) -> bytes | None:
+        """Le même chemin que `get_json`, pour un binaire.
+
+        Les photos de joueurs de Sofascore répondent **403 à une requête
+        directe** (vérifié en `curl`) et 200 à un `fetch()` exécuté dans une
+        page du site : même origine, mêmes cookies. On les rapatrie donc comme
+        le reste, en passant par le navigateur, et on transporte les octets en
+        base64 parce qu'un `page.evaluate` ne rend que du JSON.
+        """
+        age = self.max_age_hours if max_age_hours is None else max_age_hours
+        if not force:
+            cached = cache_path(url, "b64")
+            if cached.exists():
+                fresh = (time.time() - cached.stat().st_mtime) / 3600 <= age
+                if fresh:
+                    self._log(f"  cache  {url}")
+                    raw = cached.read_text(encoding="utf-8")
+                    return base64.b64decode(raw) if raw.strip() else None
+
+        self._throttle()
+        self._log(f"  réseau {url}")
+        script = """async (u) => {
+            try {
+                const res = await fetch(u, { credentials: "include" });
+                if (res.status !== 200) return { status: res.status };
+                const buf = new Uint8Array(await res.arrayBuffer());
+                let s = "";
+                for (let i = 0; i < buf.length; i++) s += String.fromCharCode(buf[i]);
+                return { status: 200, b64: btoa(s) };
+            } catch (e) {
+                return { error: String(e) };
+            }
+        }"""
+        self._land_on_forebet(referer)
+        try:
+            result = self._page.evaluate(script, url)
+        except Exception as exc:
+            raise RuntimeError(f"fetch impossible : {exc}") from exc
+        if result.get("error"):
+            raise RuntimeError(f"fetch impossible : {result['error']}")
+
+        CACHE_DIR.mkdir(parents=True, exist_ok=True)
+        if result.get("status") != 200:
+            # Une absence est une réponse : on la met en cache pour ne pas la
+            # redemander à chaque collecte.
+            cache_path(url, "b64").write_text("", encoding="utf-8")
+            return None
+        cache_path(url, "b64").write_text(result["b64"], encoding="utf-8")
+        return base64.b64decode(result["b64"])
 
     def grab_images(self, page_url: str, selector: str = "a.team-logo img") -> dict:
         """Extrait des images **déjà affichées** par une page, sans requête.

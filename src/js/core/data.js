@@ -44,6 +44,32 @@ export async function load() {
 export const site = () => SITE;
 export const crest = key => CRESTS[key] || null;
 
+/* Les fiches joueurs pèsent autant que tout le reste du site, et l'accueil n'en
+   a pas besoin : elles se chargent à la demande, une seule fois, et les pages
+   qui les veulent attendent cette promesse. */
+let PLAYERS = null;
+let playersPromise = null;
+
+export function players() {
+  if (PLAYERS) return Promise.resolve(PLAYERS);
+  if (!playersPromise) {
+    playersPromise = json(`${base}data/players.site.json`)
+      .then(d => (PLAYERS = d.players || {}))
+      .catch(() => (PLAYERS = {}));
+  }
+  return playersPromise;
+}
+
+export const player = id => (PLAYERS || {})[String(id)] || null;
+
+/** Les joueurs d'un club, une fois `players()` résolu. */
+export const playersOf = key =>
+  Object.values(PLAYERS || {}).filter(p => p.club === key);
+
+/** L'URL de la photo d'un joueur. Les portraits sont des fichiers séparés :
+ *  230 dans un JSON feraient plusieurs mégaoctets pour en afficher un. */
+export const photoUrl = id => `${base}data/photos/${id}.webp`;
+
 /* ---------------------------------------------------------------- lectures */
 
 export const team = key => (SITE.teams || {})[key] || null;

@@ -314,7 +314,9 @@ function squadCol(key) {
                     marginBottom: "var(--s-3)" }, text: `${t("Entraîneur")} : ${c.manager}` }) : null,
     ...["G", "D", "M", "F", "?"].filter(k => groups[k]).flatMap(k => [
       el("div", { class: "squad__grp", text: t(POS[k] || "Poste inconnu") }),
-      ...groups[k].map(p => el("div", { class: "player" }, [
+      ...groups[k].map(p => el("a", {
+        class: "player", href: `joueur.html?p=${p.id}`,
+      }, [
         el("span", { class: "player__no", text: p.number || "—" }),
         el("span", { class: "player__n truncate", text: p.name }),
         p.goals ? el("span", { class: "player__g", text: p.goals }) : null,

@@ -1359,6 +1359,64 @@ réorganisation.
 ℹ️ `daily.py` publie donc aussi `assets/` et les six pages : `build_site.py`
 les réécrit quand l'empreinte change.
 
+## Fiches joueurs (11/08/2026)
+
+⚠️ **Une conclusion du projet était trop large et doit être corrigée.**
+`kuwait-football` puis ce dépôt affirmaient qu'« aucune statistique
+individuelle n'existe sur cette division ». C'est vrai des statistiques **de
+match** par joueur — et seulement de celles-là.
+
+Sondé endpoint par endpoint le 11/08 :
+
+| endpoint | verdict |
+|---|---|
+| `player/{id}` | ✅ naissance, taille, **pied fort**, poste détaillé, n° de maillot, **valeur marchande**, nom arabe |
+| `player/{id}/transfer-history` | ✅ la carrière entière, club par club, datée |
+| `player/{id}/statistics/seasons` | ✅ les compétitions traversées |
+| `player/{id}/.../statistics/overall` | ✅ buts, penaltys, cartons — rien d'autre |
+| `player/{id}/image` | ✅ la photo (403 en direct, 200 depuis une page du site) |
+| `attribute-overviews`, `heatmap`, `ratings`, `last-year-summary` | ❌ 404 ou vide |
+
+**Il n'y aura donc jamais de radar Football Manager ici** : ni note, ni minutes
+jouées, ni passes, ni tacles. En fabriquer un à partir des seuls buts serait une
+décoration qui ment, et la page le dit explicitement plutôt que de laisser
+croire à un oubli.
+
+**Ce que la page a d'unique, c'est nous qui le calculons.** `goal_profiles()`
+dérive de nos 195 buts datés et nommés : la répartition par tranche de quinze
+minutes, la part de penaltys, les adversaires, le premier et le dernier but.
+Aucune source ne publie ça. Exemple réel : Pablo Vinicius (Khaitan) n'a marqué
+ses 4 buts **que** dans la dernière demi-heure.
+
+ℹ️ L'appariement chronologie ↔ effectif se fait sur le **nom** : la source ne
+met pas d'identifiant de joueur dans ses `incidents`.
+
+### Ce que la collecte a appris sur le collecteur
+
+Trois corrections à `browser.py`, toutes nées de cette passe de 230 joueurs :
+
+- ⚠️ **Un 404 n'était pas mis en cache** : chaque collecte redemandait tous les
+  endpoints inexistants. Une sentinelle est désormais écrite, et relue pour
+  lever la même erreur sans requête.
+- ⚠️ **Un 404 était retenté trois fois**, avec les pauses. Un 404 est définitif :
+  on sort immédiatement.
+- **`get_bytes()`** : les photos répondent 403 à une requête directe et 200 à un
+  `fetch()` exécuté dans une page du site, comme le reste. Les octets
+  transitent en base64, un `page.evaluate` ne rendant que du JSON.
+
+Et deux à `fetch_players.py`, pour un lot qui dure des heures :
+
+- **Un `Failed to fetch` passager ne tue plus la collecte** — c'était arrivé
+  après 25 joueurs. La classe `Flaky` compte les échecs **consécutifs** et
+  n'abandonne qu'au-delà de 15 : sinon on écrirait 230 fiches vides par-dessus
+  les bonnes le jour où Cloudflare ferme la porte.
+- **L'écriture se fait après chaque club**, pas à la fin.
+
+ℹ️ Les portraits sont des fichiers séparés (`data/photos/<id>.webp`, ~3 Ko
+chacun) et non des `data:` URI : 230 dans un JSON feraient plusieurs mégaoctets
+à charger pour en afficher un. Les fiches elles-mêmes vivent dans
+`data/players.site.json`, chargé **à la demande** — l'accueil n'en a pas besoin.
+
 ## Reste à faire
 
 Les trois points de la session du 06/08 sont soldés : `build_json.py`,

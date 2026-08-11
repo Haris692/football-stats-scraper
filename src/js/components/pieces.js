@@ -4,7 +4,7 @@
 
 import { el } from "../core/dom.js";
 import { t } from "../core/i18n.js";
-import { crest, team, nameOf } from "../core/data.js";
+import { crest, team, nameOf, photoUrl } from "../core/data.js";
 
 /** L'écusson d'un club. L'emplacement est réservé à la bonne taille AVANT que
  *  l'image n'arrive : `crests.json` est chargé après le reste, et rien ne doit
@@ -37,6 +37,22 @@ export function clubChip(key, { size = "", link = true, bold = true } = {}) {
   return link
     ? el("a", { class: "team-chip", href: `club.html?c=${encodeURIComponent(key)}` }, inner)
     : el("span", { class: "team-chip" }, inner);
+}
+
+/** Le portrait d'un joueur, avec repli sur ses initiales.
+ *  Tous les joueurs n'ont pas de photo chez la source : un trou dans une grille
+ *  se voit plus qu'une pastille. */
+export function photoOf(p, size = "") {
+  const cls = "photo" + (size ? ` photo--${size}` : "");
+  const initials = (p.name || "?").split(/\s+/).slice(0, 2)
+    .map(w => w[0]).join("").toUpperCase();
+  if (!p.photo) return el("span", { class: `${cls} photo--none`, text: initials });
+  const img = el("img", {
+    class: cls, src: photoUrl(p.id), alt: "", loading: "lazy", decoding: "async",
+  });
+  img.addEventListener("error", () => img.replaceWith(
+    el("span", { class: `${cls} photo--none`, text: initials })), { once: true });
+  return img;
 }
 
 export const badge = (text, variant) =>

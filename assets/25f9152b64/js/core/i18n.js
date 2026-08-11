@@ -62,6 +62,32 @@ const EN = {
   "Équipe": "Team",
 
   "Aujourd'hui": "Today", "Joueur": "Player", "Bilan de saison": "Season record",
+
+  // page joueur
+  "Ce joueur n'existe pas": "No such player",
+  "Âge": "Age", "ans": "years", "Taille": "Height", "Pied fort": "Preferred foot",
+  "Gauche": "Left", "Droit": "Right", "Les deux": "Both",
+  "Buts cette saison": "Goals this season", "Valeur estimée": "Estimated value",
+  "Profil de buteur": "Scoring profile", "Quand il marque": "When he scores",
+  "Contre qui": "Against whom", "minutes": "minutes",
+  "Dont penaltys": "Of which penalties",
+  "Premier but": "First goal", "Dernier but": "Last goal",
+  "Carrière": "Career", "Date": "Date", "De": "From", "Vers": "To",
+  "Indemnité": "Fee", "Compétitions traversées": "Competitions played in",
+  "Gardien": "Goalkeeper", "Défenseur": "Defender",
+  "Défenseur central": "Centre-back", "Latéral gauche": "Left-back",
+  "Latéral droit": "Right-back", "Milieu défensif": "Defensive midfielder",
+  "Milieu": "Midfielder", "Milieu central": "Central midfielder",
+  "Milieu gauche": "Left midfielder", "Milieu droit": "Right midfielder",
+  "Milieu offensif": "Attacking midfielder", "Attaquant": "Forward",
+  "Avant-centre": "Striker", "Ailier gauche": "Left winger",
+  "Ailier droit": "Right winger",
+  "Identité, poste détaillé et valeur estimée : Sofascore. La valeur est une estimation de la source, pas un montant de transaction.":
+    "Identity, detailed position and estimated value: Sofascore. The value is the source's estimate, not a transaction amount.",
+  "Calculé par nous, à partir de la chronologie de chaque rencontre : la source ne publie que le total de buts. Ni minutes jouées, ni tirs, ni notes n'existent sur cette division — cette page n'en invente pas.":
+    "Computed by us from each match timeline: the source publishes only a goal total. No minutes played, no shots and no ratings exist for this division — this page invents none.",
+  "Les championnats où la source lui connaît des statistiques. Cela ne dit ni le nombre de matchs ni les buts hors de cette division.":
+    "The leagues where the source has statistics for him. It says nothing about appearances or goals outside this division.",
   "Attaque": "Attack", "Défense": "Defence", "Jeu": "Play", "Discipline": "Discipline",
   "Direct": "Live",
 

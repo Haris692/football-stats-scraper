@@ -83,7 +83,7 @@ function scorerTable() {
           el("tbody", {}, rows.map((r, i) => el("tr", {}, [
             el("td", { class: "rank", text: i + 1 }),
             el("td", {}, [
-              el("span", { text: r.name }),
+              el("a", { href: `joueur.html?p=${r.id}`, text: r.name }),
               r.country_code ? el("span", { style: { marginInlineStart: "var(--s-2)" } },
                                    [badge(r.country_code)]) : null,
             ]),

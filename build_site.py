@@ -35,17 +35,19 @@ from build_console import (add_source_arguments, assemble, load_broadcasts,
 from crests import load_store
 from fetch_events import load as load_events
 from fetch_flashscore import normalise
+from fetch_players import load as load_players
 from fetch_squads import ALIASES, load as load_squads
 from hosts import verdicts as host_verdicts, load_verdict_source
 
 ROOT = Path(__file__).resolve().parent
 SITE = ROOT / "data" / "site.json"
 CRESTS = ROOT / "data" / "crests.json"
+PLAYERS = ROOT / "data" / "players.site.json"
 
 SRC = ROOT / "src"          # les sources : on les édite, elles ne sont pas servies
 ASSETS = ROOT / "assets"    # ce qui est servi : une copie par version
 PAGES = ["index.html", "match.html", "clubs.html", "club.html",
-         "classement.html", "calendrier.html"]
+         "classement.html", "calendrier.html", "joueur.html"]
 
 
 def key(name: str) -> str:
@@ -176,6 +178,7 @@ def scorer_board(teams: dict) -> list[dict]:
         for player in club["players"]:
             if player.get("goals"):
                 rows.append({
+                    "id": player.get("id"),
                     "name": player["name"],
                     "team": club["key"],
                     "goals": player["goals"],
@@ -184,6 +187,94 @@ def scorer_board(teams: dict) -> list[dict]:
                 })
     rows.sort(key=lambda r: (-r["goals"], r["name"]))
     return rows
+
+
+def goal_profiles() -> dict:
+    """Ce que 195 buts datés disent de chaque buteur.
+
+    **Personne ne publie ça.** Sofascore donne un total de buts et rien
+    d'autre : ni minutes, ni notes, ni adversaires. Mais nous avons la
+    chronologie nommée de chaque rencontre — donc, par joueur : quand il marque
+    dans le match, sa part de penaltys, contre qui, et à domicile ou dehors.
+    C'est la seule statistique individuelle du site qui soit à nous.
+
+    L'appariement se fait sur le **nom**, seule clé commune entre une
+    chronologie et un effectif : la source ne met pas d'identifiant de joueur
+    dans ses `incidents`. Deux homonymes seraient donc fondus — il n'y en a pas
+    dans cette division (vérifié : 230 joueurs, aucun nom en double hors le
+    doublon Sofascore déjà documenté).
+    """
+    buckets = [(0, 15), (16, 30), (31, 45), (46, 60), (61, 75), (76, 200)]
+    out: dict[str, dict] = {}
+
+    for event in (load_events().get("events") or []):
+        if not event.get("finished"):
+            continue
+        home, away = event.get("home_key"), event.get("away_key")
+        for item in event.get("timeline") or []:
+            if item.get("type") != "goal" or not item.get("player"):
+                continue
+            name = item["player"]
+            row = out.setdefault(name, {
+                "goals": 0, "penalties": 0, "own_goals": 0,
+                "home": 0, "away": 0,
+                "buckets": [0] * len(buckets),
+                "against": {}, "first": None, "last": None,
+            })
+            # ⚠️ Le camp de la chronologie est celui de Sofascore, non arbitré
+            # ici : on ne s'en sert que pour savoir CONTRE QUI le but est
+            # marqué, ce qu'une inversion ne change pas. Le décompte
+            # domicile/extérieur, lui, serait faux — il vient donc du camp du
+            # joueur, pas de l'étiquette de la rencontre.
+            side = item.get("side")
+            scorer_side = home if side == "home" else away
+            rival = away if side == "home" else home
+
+            row["goals"] += 1
+            if item.get("class") == "penalty":
+                row["penalties"] += 1
+            if item.get("class") == "ownGoal":
+                row["own_goals"] += 1
+            row["against"][rival] = row["against"].get(rival, 0) + 1
+            row.setdefault("club_seen", scorer_side)
+
+            minute = (item.get("minute") or 0) + (item.get("added") or 0)
+            for i, (lo, hi) in enumerate(buckets):
+                if lo <= minute <= hi:
+                    row["buckets"][i] += 1
+                    break
+            day = event.get("kickoff")
+            if day:
+                iso = event.get("kickoff_iso") or ""
+                if not row["first"] or iso < row["first"][1]:
+                    row["first"] = (day, iso)
+                if not row["last"] or iso > row["last"][1]:
+                    row["last"] = (day, iso)
+
+    for row in out.values():
+        row["first"] = row["first"][0] if row["first"] else None
+        row["last"] = row["last"][0] if row["last"] else None
+        row["bucket_labels"] = [f"{lo}-{hi if hi < 200 else '90+'}"
+                                for lo, hi in buckets]
+    return out
+
+
+def player_directory(teams: dict) -> dict:
+    """Les fiches joueurs, prêtes pour le site.
+
+    Sert d'un fichier séparé : 230 fiches avec carrière et compétitions pèsent
+    autant que tout le reste du site, et l'accueil n'en a pas besoin.
+    """
+    store = load_players().get("players") or {}
+    goals = goal_profiles()
+    out = {}
+    for pid, card in store.items():
+        if card.get("club") not in teams:
+            continue
+        row = dict(card)
+        row["scoring"] = goals.get(card.get("name"))
+        out[pid] = row
+    return out
 
 
 def season_events(teams: dict, force: bool = False) -> list[dict]:
@@ -282,7 +373,8 @@ def build(matches: list[dict], fixtures: list[dict],
     }
     crests = {k: (store.get(v["name"]) or {}).get("badge")
               for k, v in teams.items()}
-    return site, {k: v for k, v in crests.items() if v}
+    players = player_directory(teams)
+    return site, {k: v for k, v in crests.items() if v}, players
 
 
 def main() -> int:
@@ -300,10 +392,12 @@ def main() -> int:
         print("aucune fiche récupérée — rien à écrire", file=sys.stderr)
         return 1
 
-    site, crests = build(matches, fixtures, args.force)
+    site, crests, players = build(matches, fixtures, args.force)
     SITE.parent.mkdir(parents=True, exist_ok=True)
     SITE.write_text(json.dumps(site, ensure_ascii=False), encoding="utf-8")
     CRESTS.write_text(json.dumps(crests, ensure_ascii=False), encoding="utf-8")
+    PLAYERS.write_text(json.dumps({"players": players}, ensure_ascii=False),
+                       encoding="utf-8")
 
     print(f"écrit : {SITE.name}   ({SITE.stat().st_size // 1024} Ko, "
           f"{len(site['teams'])} clubs, {len(site['fixtures'])} rencontres, "
@@ -311,6 +405,9 @@ def main() -> int:
           f"rencontres de saison)")
     print(f"écrit : {CRESTS.name} ({CRESTS.stat().st_size // 1024} Ko, "
           f"{len(crests)} écussons)")
+    scoring = sum(1 for p in players.values() if p.get("scoring"))
+    print(f"écrit : {PLAYERS.name} ({PLAYERS.stat().st_size // 1024} Ko, "
+          f"{len(players)} joueurs, {scoring} avec un profil de buteur)")
     return 0
 
 

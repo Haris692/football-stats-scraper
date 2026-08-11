@@ -224,3 +224,54 @@ a.hmatch:hover, a.hmatch:focus-visible {
 .row-fx__m { display: flex; align-items: center; gap: var(--s-3); flex-wrap: wrap; min-width: 0; }
 .row-fx__s { font-family: var(--display); font-size: var(--t-1); }
 .filters { display: flex; flex-wrap: wrap; gap: var(--s-2); margin-bottom: var(--s-5); }
+
+/* ------------------------------------------------------------ page joueur
+   ⚠️ Pas de radar à cinq axes ici, et ce n'est pas un oubli : aucune source ne
+   publie de note, de minutes, de passes ni de tacles sur cette division. Un
+   radar bâti sur les seuls buts serait une décoration qui ment. Ce que la page
+   montre est vrai, et une partie — le profil de buteur — est calculée par nous
+   depuis les chronologies. */
+.photo {
+  width: 44px; height: 44px; border-radius: var(--r-full); flex: none;
+  object-fit: cover; background: var(--ink-600);
+}
+.photo--lg { width: 64px; height: 64px; }
+.photo--xl { width: clamp(84px, 12vw, 128px); height: clamp(84px, 12vw, 128px); }
+.photo--sm { width: 30px; height: 30px; }
+.photo--none {
+  display: grid; place-items: center; font-family: var(--display);
+  color: var(--text-3); font-size: var(--t-0); letter-spacing: .02em;
+}
+.photo--xl.photo--none { font-size: var(--t-3); }
+
+.player__ar { font-size: var(--t-2); color: var(--text-2); margin-top: var(--s-1); }
+
+/* Un joueur d'un effectif est un lien : il mène à sa fiche. */
+a.player { transition: background var(--fast) var(--ease); border-radius: var(--r-1); }
+a.player:hover { background: var(--ink-600); color: var(--text); }
+
+/* Quand il marque : six tranches de quinze minutes. Un histogramme, pas un
+   radar — c'est une distribution, et une distribution se lit en barres. */
+.mins { display: flex; align-items: flex-end; gap: var(--s-3); height: 160px; }
+.mins__col { flex: 1; display: flex; flex-direction: column; justify-content: flex-end;
+             height: 100%; text-align: center; }
+.mins__bar {
+  background: linear-gradient(180deg, var(--flood),
+              color-mix(in srgb, var(--flood) 45%, transparent));
+  border-radius: var(--r-1) var(--r-1) 0 0; min-height: 2px; position: relative;
+}
+.mins__n {
+  position: absolute; inset-inline: 0; top: -18px;
+  font-family: var(--display); font-size: var(--t-0); color: var(--text);
+}
+.mins__l { font-family: var(--mono); font-size: 10px; color: var(--text-3);
+           margin-top: var(--s-2); }
+
+.rivals { display: grid; gap: var(--s-1); }
+.rivals__row {
+  display: flex; align-items: center; gap: var(--s-3);
+  padding: var(--s-2); border-radius: var(--r-2);
+  transition: background var(--fast) var(--ease);
+}
+.rivals__row:hover { background: var(--ink-600); color: var(--text); }
+.rivals__row b { margin-inline-start: auto; color: var(--flood); }
