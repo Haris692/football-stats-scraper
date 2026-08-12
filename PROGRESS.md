@@ -1067,6 +1067,52 @@ Vérifié en conditions réelles pendant Sahel - Al Shamiya et Khaitan - Al Jazi
 le 10/08 : deux cycles à 62 s d'intervalle, possession 70 → 71 %, tirs 5 → 6,
 aucune erreur console, bascule arrêt/reprise et persistance du refus contrôlées.
 
+### Le direct passe aussi dans le site (12/08/2026)
+
+Jusqu'ici le direct était une fonctionnalité de la **console**. Il est maintenant
+consommé par le **site** lui aussi : servi par `serve.py`, l'accueil et la fiche
+de match voient leur score et leurs statistiques bouger seuls pendant la
+rencontre. Rien de nouveau côté serveur — c'est le même `GET /api/live`, le même
+fil de fond, le même coût pour Forebet.
+
+`src/js/core/live.js` est le seul ajout. Trois décisions y sont inscrites :
+
+- **L'absence de direct n'est pas une erreur.** Sur GitHub Pages `api/live`
+  répond 404 ; on arrête définitivement le suivi et **il ne doit rien en
+  paraître** — pas de bandeau, pas de message d'échec. Un `Failed to fetch`, lui,
+  est toléré trois fois : le serveur peut redémarrer sous la page.
+- **Le chemin est relatif** (`api/live`, pas `/api/live`) : le site publié vit
+  sous `/football-stats-scraper/`, et en local les deux formes coïncident — la
+  faute ne serait apparue qu'au déploiement.
+- **On ne s'abonne pas s'il n'y a rien à suivre**, et un onglet caché suspend la
+  demande : c'est elle qui tient le collecteur éveillé (`LIVE_IDLE_STOP`, 180 s).
+
+⚠️ **Seuls deux emplacements sont redessinés** — la une de l'accueil, le tableau
+d'affichage et la carte de statistiques du match. Reconstruire la page entière
+toutes les quinze secondes ferait sauter l'onglet choisi, la position de lecture,
+la sélection de texte et le défilement des rails horizontaux, pour un chiffre qui
+bouge une fois par heure. Et on ne prévient les abonnés **que si le relevé a
+changé**.
+
+⚠️ Le marqueur rouge recouvre désormais **deux situations**, et l'infobulle est
+ce qui les sépare : sans serveur il dit « ça se joue », déduit de l'horloge ; avec
+serveur, `liveMark(true)` dit que le score est relevé chaque minute. Ne jamais
+laisser l'un porter la phrase de l'autre. La note de méthode de la carte, en
+direct, dit aussi ce que le direct **ne sait pas** : ni la minute de jeu, ni le
+statut — la source ne les publie pas.
+
+`serve.py` sert les deux façades depuis le même dossier ; `--site` ne choisit que
+la page ouverte au démarrage.
+
+### Une collecte `--club` n'écrase plus les sept autres (12/08/2026)
+
+⚠️ `fetch_players.py` repartait d'un dictionnaire vide. Une passe `--club` — ou
+une passe complète interrompue par `Flaky` — réécrivait donc `data/players.json`
+avec **le seul club collecté**. C'est arrivé le 11/08, Khaitan effacé par
+Al Jazira. On repart maintenant des fiches déjà écrites. Le revers du cumul est
+traité dans la foulée : l'effectif du jour fait foi **pour le club collecté
+seulement**, et un joueur qui n'y figure plus est retiré.
+
 ## Sofascore élargi (11/08/2026)
 
 Sondage endpoint par endpoint, pour savoir ce que cette source a vraiment sur

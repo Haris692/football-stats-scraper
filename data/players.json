@@ -1,5 +1,5 @@
 {
- "generated": "2026-08-11T15:15:52",
+ "generated": "2026-08-11T15:31:13",
  "source": "sofascore",
  "players": {
   "2072639": {
@@ -1656,6 +1656,1877 @@
     }
    ],
    "photo": true
+  },
+  "2259303": {
+   "id": 2259303,
+   "name": "Bader Al Ajmi",
+   "short_name": "B. A. Ajmi",
+   "name_ar": "بدر العجمي",
+   "position": "G",
+   "positions": [],
+   "number": 1,
+   "birth": "2003-01-01T00:00:00+00:00",
+   "age": 23,
+   "height": 185,
+   "foot": "Right",
+   "country": "Kuwait",
+   "country_code": "KW",
+   "market_value": null,
+   "market_currency": null,
+   "retired": null,
+   "club": "jazira",
+   "goals_season": 0,
+   "career": [],
+   "competitions": [],
+   "photo": true
+  },
+  "1461345": {
+   "id": 1461345,
+   "name": "Bader Al Saanoun",
+   "short_name": "B. Al-Saanoun",
+   "name_ar": "بادر السنعون",
+   "position": "G",
+   "positions": [],
+   "number": 17,
+   "birth": "1996-11-23T00:00:00+00:00",
+   "age": 29,
+   "height": null,
+   "foot": null,
+   "country": "Kuwait",
+   "country_code": "KW",
+   "market_value": 96000,
+   "market_currency": "EUR",
+   "retired": null,
+   "club": "jazira",
+   "goals_season": 0,
+   "career": [
+    {
+     "date": "01/04/2025",
+     "iso": "2025-04-01",
+     "from": "Kazma SC",
+     "to": "Al Jazeera FC Kuwait",
+     "fee": "-"
+    },
+    {
+     "date": "01/07/2023",
+     "iso": "2023-07-01",
+     "from": "Al Jahra SC",
+     "to": "Kazma SC",
+     "fee": "Unknown"
+    },
+    {
+     "date": "30/06/2022",
+     "iso": "2022-06-30",
+     "from": "Kazma SC",
+     "to": "Al Jahra SC",
+     "fee": "-"
+    },
+    {
+     "date": "30/06/2021",
+     "iso": "2021-06-30",
+     "from": "Al Salmiya SC",
+     "to": "Kazma SC",
+     "fee": "-"
+    },
+    {
+     "date": "01/01/2020",
+     "iso": "2020-01-01",
+     "from": "Al Salmiya SC U21",
+     "to": "Al Salmiya SC",
+     "fee": "-"
+    }
+   ],
+   "competitions": [
+    {
+     "competition": "Zain First Division",
+     "country": null,
+     "year": "25/26"
+    },
+    {
+     "competition": "SAFF Championship",
+     "country": null,
+     "year": "2023"
+    }
+   ],
+   "photo": true
+  },
+  "2112521": {
+   "id": 2112521,
+   "name": "Fahad Al Duajj",
+   "short_name": "F. Al-Duajj",
+   "name_ar": "فهد الدواجي",
+   "position": "G",
+   "positions": [],
+   "number": "",
+   "birth": "1988-09-03T00:00:00+00:00",
+   "age": 37,
+   "height": null,
+   "foot": null,
+   "country": "Kuwait",
+   "country_code": "KW",
+   "market_value": null,
+   "market_currency": null,
+   "retired": null,
+   "club": "jazira",
+   "goals_season": 0,
+   "career": [
+    {
+     "date": "31/03/2025",
+     "iso": "2025-03-31",
+     "from": null,
+     "to": "Al Jazeera FC Kuwait",
+     "fee": "-"
+    },
+    {
+     "date": "30/06/2024",
+     "iso": "2024-06-30",
+     "from": "Khaitan SC",
+     "to": null,
+     "fee": "-"
+    },
+    {
+     "date": "20/01/2021",
+     "iso": "2021-01-20",
+     "from": "Tadhamon SC",
+     "to": "Khaitan SC",
+     "fee": "-"
+    },
+    {
+     "date": "30/06/2019",
+     "iso": "2019-06-30",
+     "from": "Al Sahel SC",
+     "to": "Tadhamon SC",
+     "fee": "-"
+    },
+    {
+     "date": "30/06/2015",
+     "iso": "2015-06-30",
+     "from": "Al Sahel SC U21",
+     "to": "Al Sahel SC",
+     "fee": "-"
+    }
+   ],
+   "competitions": [
+    {
+     "competition": "Zain First Division",
+     "country": null,
+     "year": "25/26"
+    }
+   ],
+   "photo": true
+  },
+  "1103545": {
+   "id": 1103545,
+   "name": "Edrissa Ceesay",
+   "short_name": "E. Ceesay",
+   "name_ar": "إدريسا سيساي",
+   "position": "D",
+   "positions": [
+    "DC"
+   ],
+   "number": 25,
+   "birth": "2001-04-16T00:00:00+00:00",
+   "age": 25,
+   "height": 195,
+   "foot": "Right",
+   "country": "Gambia",
+   "country_code": "GM",
+   "market_value": 105000,
+   "market_currency": "EUR",
+   "retired": null,
+   "club": "jazira",
+   "goals_season": 1,
+   "career": [
+    {
+     "date": "02/04/2025",
+     "iso": "2025-04-02",
+     "from": "No team",
+     "to": "Al Jazeera FC Kuwait",
+     "fee": "-"
+    },
+    {
+     "date": "01/01/2025",
+     "iso": "2025-01-01",
+     "from": "FK Jedinstvo Ub",
+     "to": "No team",
+     "fee": "-"
+    },
+    {
+     "date": "16/07/2024",
+     "iso": "2024-07-16",
+     "from": null,
+     "to": "FK Jedinstvo Ub",
+     "fee": "Unknown"
+    },
+    {
+     "date": "30/06/2024",
+     "iso": "2024-06-30",
+     "from": "ASC Jaraaf",
+     "to": null,
+     "fee": "-"
+    },
+    {
+     "date": "27/09/2022",
+     "iso": "2022-09-27",
+     "from": null,
+     "to": "ASC Jaraaf",
+     "fee": "-"
+    }
+   ],
+   "competitions": [
+    {
+     "competition": "Zain First Division",
+     "country": null,
+     "year": "25/26"
+    },
+    {
+     "competition": "World Cup Qual. CAF ",
+     "country": null,
+     "year": "2025"
+    },
+    {
+     "competition": "Mozzart Bet Superliga",
+     "country": null,
+     "year": "24/25"
+    },
+    {
+     "competition": "Africa Cup of Nations Qual.",
+     "country": null,
+     "year": "2024"
+    }
+   ],
+   "photo": true
+  },
+  "2222525": {
+   "id": 2222525,
+   "name": "Abdulmajeed Al Enezi",
+   "short_name": "A. A. Enezi",
+   "name_ar": "عبدالمجيد العنزي",
+   "position": "D",
+   "positions": [],
+   "number": 12,
+   "birth": "2003-12-31T00:00:00+00:00",
+   "age": 22,
+   "height": null,
+   "foot": null,
+   "country": "Kuwait",
+   "country_code": "KW",
+   "market_value": null,
+   "market_currency": null,
+   "retired": null,
+   "club": "jazira",
+   "goals_season": 0,
+   "career": [
+    {
+     "date": "30/06/2025",
+     "iso": "2025-06-30",
+     "from": "Al Qadsia SC U21",
+     "to": "Al Jazeera FC Kuwait",
+     "fee": "-"
+    },
+    {
+     "date": "18/01/2021",
+     "iso": "2021-01-18",
+     "from": null,
+     "to": "Al Qadsia SC U21",
+     "fee": "-"
+    }
+   ],
+   "competitions": [
+    {
+     "competition": "Zain First Division",
+     "country": null,
+     "year": "25/26"
+    }
+   ],
+   "photo": true
+  },
+  "2112515": {
+   "id": 2112515,
+   "name": "Ahmad Abdullah Al Enezi",
+   "short_name": "A. Al-Enezi",
+   "name_ar": "أحمد عبدالله العنزي",
+   "position": "D",
+   "positions": [],
+   "number": 4,
+   "birth": "1990-07-19T00:00:00+00:00",
+   "age": 36,
+   "height": null,
+   "foot": null,
+   "country": "Kuwait",
+   "country_code": "KW",
+   "market_value": null,
+   "market_currency": null,
+   "retired": null,
+   "club": "jazira",
+   "goals_season": 0,
+   "career": [
+    {
+     "date": "31/03/2025",
+     "iso": "2025-03-31",
+     "from": null,
+     "to": "Al Jazeera FC Kuwait",
+     "fee": "-"
+    }
+   ],
+   "competitions": [
+    {
+     "competition": "Zain First Division",
+     "country": null,
+     "year": "25/26"
+    }
+   ],
+   "photo": true
+  },
+  "2424215": {
+   "id": 2424215,
+   "name": "Hadi Al-Ajmi",
+   "short_name": "H. Al-Ajmi",
+   "name_ar": "هادي العجمي",
+   "position": "D",
+   "positions": [],
+   "number": 2,
+   "birth": "2006-02-13T00:00:00+00:00",
+   "age": 20,
+   "height": null,
+   "foot": null,
+   "country": "Kuwait",
+   "country_code": "KW",
+   "market_value": null,
+   "market_currency": null,
+   "retired": null,
+   "club": "jazira",
+   "goals_season": 0,
+   "career": [],
+   "competitions": [],
+   "photo": true
+  },
+  "2112516": {
+   "id": 2112516,
+   "name": "Khaled Abdullah Al Mutairi",
+   "short_name": "K. A. Al-Mutairi",
+   "name_ar": "خالد عبدالله المطيري",
+   "position": "D",
+   "positions": [],
+   "number": null,
+   "birth": "1996-08-13T00:00:00+00:00",
+   "age": 29,
+   "height": null,
+   "foot": null,
+   "country": "Kuwait",
+   "country_code": "KW",
+   "market_value": null,
+   "market_currency": null,
+   "retired": null,
+   "club": "jazira",
+   "goals_season": 0,
+   "career": [
+    {
+     "date": "31/03/2025",
+     "iso": "2025-03-31",
+     "from": null,
+     "to": "Al Jazeera FC Kuwait",
+     "fee": "-"
+    }
+   ],
+   "competitions": [
+    {
+     "competition": "Zain First Division",
+     "country": null,
+     "year": "25/26"
+    }
+   ],
+   "photo": false
+  },
+  "2221670": {
+   "id": 2221670,
+   "name": "Meshal Al Enezi",
+   "short_name": "M. A. Enezi",
+   "name_ar": "مشعل العنيزي",
+   "position": "D",
+   "positions": [],
+   "number": 5,
+   "birth": "1997-02-14T00:00:00+00:00",
+   "age": 29,
+   "height": null,
+   "foot": null,
+   "country": "Kuwait",
+   "country_code": "KW",
+   "market_value": null,
+   "market_currency": null,
+   "retired": null,
+   "club": "jazira",
+   "goals_season": 0,
+   "career": [],
+   "competitions": [
+    {
+     "competition": "Zain First Division",
+     "country": null,
+     "year": "25/26"
+    }
+   ],
+   "photo": true
+  },
+  "1629418": {
+   "id": 1629418,
+   "name": "Mohammad Al Rabie",
+   "short_name": "M. Mahmoud",
+   "name_ar": "محمد الربعي",
+   "position": "D",
+   "positions": [],
+   "number": 50,
+   "birth": "1998-03-10T00:00:00+00:00",
+   "age": 28,
+   "height": null,
+   "foot": null,
+   "country": "Kuwait",
+   "country_code": "KW",
+   "market_value": null,
+   "market_currency": null,
+   "retired": null,
+   "club": "jazira",
+   "goals_season": 0,
+   "career": [
+    {
+     "date": "21/07/2026",
+     "iso": "2026-07-21",
+     "from": "Al Sahel SC",
+     "to": "Al Jazeera FC Kuwait",
+     "fee": "90k $"
+    },
+    {
+     "date": "30/06/2023",
+     "iso": "2023-06-30",
+     "from": "Al Arabi SC Kuwait",
+     "to": "Al Sahel SC",
+     "fee": "-"
+    },
+    {
+     "date": "30/06/2016",
+     "iso": "2016-06-30",
+     "from": null,
+     "to": "Al Arabi SC Kuwait",
+     "fee": "-"
+    },
+    {
+     "date": "30/06/2013",
+     "iso": "2013-06-30",
+     "from": null,
+     "to": "Al Arabi SC Kuwait U21",
+     "fee": "-"
+    }
+   ],
+   "competitions": [
+    {
+     "competition": "Zain First Division",
+     "country": null,
+     "year": "25/26"
+    }
+   ],
+   "photo": true
+  },
+  "2219540": {
+   "id": 2219540,
+   "name": "Mohammed Al Fadhli",
+   "short_name": "M. A. Fadhli",
+   "name_ar": "محمد الفاضلي",
+   "position": "D",
+   "positions": [],
+   "number": 13,
+   "birth": "1993-07-24T00:00:00+00:00",
+   "age": 33,
+   "height": null,
+   "foot": null,
+   "country": "Kuwait",
+   "country_code": "KW",
+   "market_value": null,
+   "market_currency": null,
+   "retired": null,
+   "club": "jazira",
+   "goals_season": 0,
+   "career": [
+    {
+     "date": "19/08/2025",
+     "iso": "2025-08-19",
+     "from": "Khaitan SC",
+     "to": "Al Jazeera FC Kuwait",
+     "fee": "-"
+    },
+    {
+     "date": "22/09/2022",
+     "iso": "2022-09-22",
+     "from": null,
+     "to": "Khaitan SC",
+     "fee": "-"
+    },
+    {
+     "date": "01/05/2016",
+     "iso": "2016-05-01",
+     "from": "Yarmouk SC",
+     "to": null,
+     "fee": "-"
+    },
+    {
+     "date": "09/02/2014",
+     "iso": "2014-02-09",
+     "from": "Yarmouk SC U16",
+     "to": "Yarmouk SC",
+     "fee": "-"
+    }
+   ],
+   "competitions": [
+    {
+     "competition": "Zain First Division",
+     "country": null,
+     "year": "25/26"
+    }
+   ],
+   "photo": true
+  },
+  "934868": {
+   "id": 934868,
+   "name": "Donovan Ewolo",
+   "short_name": "U. Ewolo",
+   "name_ar": "دونوفان إيوولو",
+   "position": "M",
+   "positions": [
+    "RW"
+   ],
+   "number": 7,
+   "birth": "1996-06-15T00:00:00+00:00",
+   "age": 30,
+   "height": 182,
+   "foot": null,
+   "country": "Cameroon",
+   "country_code": "CM",
+   "market_value": 385000,
+   "market_currency": "EUR",
+   "retired": null,
+   "club": "jazira",
+   "goals_season": 8,
+   "career": [
+    {
+     "date": "09/08/2024",
+     "iso": "2024-08-09",
+     "from": "Al Adalah",
+     "to": "Khaitan SC",
+     "fee": "Unknown"
+    },
+    {
+     "date": "31/01/2024",
+     "iso": "2024-01-31",
+     "from": "Zhejiang",
+     "to": "Al Adalah",
+     "fee": "Free"
+    },
+    {
+     "date": "31/12/2023",
+     "iso": "2023-12-31",
+     "from": null,
+     "to": "Zhejiang",
+     "fee": "-"
+    },
+    {
+     "date": "06/07/2023",
+     "iso": "2023-07-06",
+     "from": "Zhejiang",
+     "to": null,
+     "fee": "-"
+    },
+    {
+     "date": "15/03/2022",
+     "iso": "2022-03-15",
+     "from": "Jiangxi Dingnan United",
+     "to": "Zhejiang",
+     "fee": "995k €"
+    },
+    {
+     "date": "01/01/2021",
+     "iso": "2021-01-01",
+     "from": "MFK Vyškov",
+     "to": "Jiangxi Dingnan United",
+     "fee": "Free"
+    },
+    {
+     "date": "31/12/2020",
+     "iso": "2020-12-31",
+     "from": "Jiangxi Dingnan United",
+     "to": "MFK Vyškov",
+     "fee": "-"
+    },
+    {
+     "date": "24/09/2020",
+     "iso": "2020-09-24",
+     "from": "MFK Vyškov",
+     "to": "Jiangxi Dingnan United",
+     "fee": "-"
+    },
+    {
+     "date": "15/09/2020",
+     "iso": "2020-09-15",
+     "from": "IFK Luleå",
+     "to": "MFK Vyškov",
+     "fee": "-"
+    },
+    {
+     "date": "14/04/2020",
+     "iso": "2020-04-14",
+     "from": "MFK Vyškov",
+     "to": "IFK Luleå",
+     "fee": "-"
+    },
+    {
+     "date": "30/11/2019",
+     "iso": "2019-11-30",
+     "from": "North Carolina FC",
+     "to": "MFK Vyškov",
+     "fee": "-"
+    },
+    {
+     "date": "19/02/2018",
+     "iso": "2018-02-19",
+     "from": "MFK Vyškov",
+     "to": "North Carolina FC",
+     "fee": "-"
+    },
+    {
+     "date": "01/01/2018",
+     "iso": "2018-01-01",
+     "from": "Dragon FC Yaounde",
+     "to": "MFK Vyškov",
+     "fee": "Unknown"
+    }
+   ],
+   "competitions": [
+    {
+     "competition": "Zain First Division",
+     "country": null,
+     "year": "25/26"
+    },
+    {
+     "competition": "Chinese Super League",
+     "country": null,
+     "year": "2023"
+    },
+    {
+     "competition": "Chinese Super League",
+     "country": null,
+     "year": "2022"
+    }
+   ],
+   "photo": true
+  },
+  "1396246": {
+   "id": 1396246,
+   "name": "Hedy Chaabi",
+   "short_name": "H. Chaabi",
+   "name_ar": "هيدي شعيبي",
+   "position": "M",
+   "positions": [
+    "RW"
+   ],
+   "number": null,
+   "birth": "1995-10-30T00:00:00+00:00",
+   "age": 30,
+   "height": 180,
+   "foot": "Left",
+   "country": "Algeria",
+   "country_code": "DZ",
+   "market_value": 110000,
+   "market_currency": "EUR",
+   "retired": null,
+   "club": "jazira",
+   "goals_season": 4,
+   "career": [
+    {
+     "date": "26/01/2026",
+     "iso": "2026-01-26",
+     "from": "CR Belouizdad",
+     "to": "Al Jazeera FC Kuwait",
+     "fee": "-"
+    },
+    {
+     "date": "26/07/2024",
+     "iso": "2024-07-26",
+     "from": "Royal Francs Borains",
+     "to": "CR Belouizdad",
+     "fee": "Free"
+    },
+    {
+     "date": "14/01/2022",
+     "iso": "2022-01-14",
+     "from": "FC Rot-Weiß Erfurt",
+     "to": "Royal Francs Borains",
+     "fee": "Free"
+    },
+    {
+     "date": "28/08/2020",
+     "iso": "2020-08-28",
+     "from": "Royal Francs Borains",
+     "to": "FC Rot-Weiß Erfurt",
+     "fee": "Free"
+    },
+    {
+     "date": "19/08/2016",
+     "iso": "2016-08-19",
+     "from": "AS Saint Priest",
+     "to": "Royal Francs Borains",
+     "fee": "Free"
+    },
+    {
+     "date": "01/07/2015",
+     "iso": "2015-07-01",
+     "from": null,
+     "to": "AS Saint Priest",
+     "fee": "Free"
+    },
+    {
+     "date": "01/07/2014",
+     "iso": "2014-07-01",
+     "from": "AS Saint Priest",
+     "to": null,
+     "fee": "Free"
+    },
+    {
+     "date": "01/07/2013",
+     "iso": "2013-07-01",
+     "from": "Louhans Cuiseaux",
+     "to": "AS Saint Priest",
+     "fee": "Free"
+    }
+   ],
+   "competitions": [
+    {
+     "competition": "Zain First Division",
+     "country": null,
+     "year": "25/26"
+    },
+    {
+     "competition": "CAF Champions League",
+     "country": null,
+     "year": "24/25"
+    },
+    {
+     "competition": "Challenger Pro League",
+     "country": null,
+     "year": "23/24"
+    }
+   ],
+   "photo": true
+  },
+  "1140881": {
+   "id": 1140881,
+   "name": "Marouane Zila",
+   "short_name": "M. Zila",
+   "name_ar": "ماروان زيلا",
+   "position": "M",
+   "positions": [
+    "MR"
+   ],
+   "number": null,
+   "birth": "1997-06-12T00:00:00+00:00",
+   "age": 29,
+   "height": 183,
+   "foot": "Right",
+   "country": "Morocco",
+   "country_code": "MA",
+   "market_value": 120000,
+   "market_currency": "EUR",
+   "retired": null,
+   "club": "jazira",
+   "goals_season": 3,
+   "career": [
+    {
+     "date": "26/01/2026",
+     "iso": "2026-01-26",
+     "from": "Al Madina Tripoli SC",
+     "to": "Al Jazeera FC Kuwait",
+     "fee": "-"
+    },
+    {
+     "date": "16/12/2025",
+     "iso": "2025-12-16",
+     "from": "Raja Club Athletic",
+     "to": "Al Madina Tripoli SC",
+     "fee": "-"
+    },
+    {
+     "date": "07/09/2023",
+     "iso": "2023-09-07",
+     "from": "SC Chabab Mohammédia",
+     "to": "Raja Club Athletic",
+     "fee": "Free"
+    },
+    {
+     "date": "30/06/2022",
+     "iso": "2022-06-30",
+     "from": "Hassania d'Agadir",
+     "to": "SC Chabab Mohammédia",
+     "fee": "-"
+    },
+    {
+     "date": "24/08/2021",
+     "iso": "2021-08-24",
+     "from": "SC Chabab Mohammédia",
+     "to": "Hassania d'Agadir",
+     "fee": "-"
+    },
+    {
+     "date": "29/10/2020",
+     "iso": "2020-10-29",
+     "from": null,
+     "to": "SC Chabab Mohammédia",
+     "fee": "Free"
+    }
+   ],
+   "competitions": [
+    {
+     "competition": "Zain First Division",
+     "country": null,
+     "year": "25/26"
+    },
+    {
+     "competition": "Premier League",
+     "country": null,
+     "year": "25/26"
+    },
+    {
+     "competition": "Botola Pro",
+     "country": null,
+     "year": "24/25"
+    },
+    {
+     "competition": "Botola Pro",
+     "country": null,
+     "year": "23/24"
+    },
+    {
+     "competition": "CAF Champions League",
+     "country": null,
+     "year": "24/25"
+    }
+   ],
+   "photo": true
+  },
+  "2112511": {
+   "id": 2112511,
+   "name": "Mobarak Saeed",
+   "short_name": "M. Saeed",
+   "name_ar": "مبارك سعيد",
+   "position": "M",
+   "positions": [],
+   "number": 8,
+   "birth": "1993-07-17T00:00:00+00:00",
+   "age": 33,
+   "height": null,
+   "foot": null,
+   "country": "Kuwait",
+   "country_code": "KW",
+   "market_value": null,
+   "market_currency": null,
+   "retired": null,
+   "club": "jazira",
+   "goals_season": 3,
+   "career": [
+    {
+     "date": "31/03/2025",
+     "iso": "2025-03-31",
+     "from": null,
+     "to": "Al Jazeera FC Kuwait",
+     "fee": "-"
+    },
+    {
+     "date": "30/06/2024",
+     "iso": "2024-06-30",
+     "from": "Kazma SC",
+     "to": null,
+     "fee": "-"
+    },
+    {
+     "date": "31/12/2020",
+     "iso": "2020-12-31",
+     "from": "Al Shabab SC",
+     "to": "Kazma SC",
+     "fee": "-"
+    },
+    {
+     "date": "30/06/2019",
+     "iso": "2019-06-30",
+     "from": "Al Qadsia SC",
+     "to": "Al Shabab SC",
+     "fee": "-"
+    },
+    {
+     "date": "30/06/2012",
+     "iso": "2012-06-30",
+     "from": "Al Qadsia SC U21",
+     "to": "Al Qadsia SC",
+     "fee": "-"
+    }
+   ],
+   "competitions": [
+    {
+     "competition": "Zain First Division",
+     "country": null,
+     "year": "25/26"
+    }
+   ],
+   "photo": true
+  },
+  "368122": {
+   "id": 368122,
+   "name": "Malick Mbaye",
+   "short_name": "M. Mbaye",
+   "name_ar": "ماليك مباي",
+   "position": "M",
+   "positions": [
+    "MC",
+    "DM"
+   ],
+   "number": 24,
+   "birth": "1995-11-06T00:00:00+00:00",
+   "age": 30,
+   "height": 180,
+   "foot": "Right",
+   "country": "Senegal",
+   "country_code": "SN",
+   "market_value": 48000,
+   "market_currency": "EUR",
+   "retired": false,
+   "club": "jazira",
+   "goals_season": 2,
+   "career": [
+    {
+     "date": "08/08/2025",
+     "iso": "2025-08-08",
+     "from": "Ostiamare",
+     "to": "Al Jazeera FC Kuwait",
+     "fee": "-"
+    },
+    {
+     "date": "18/01/2025",
+     "iso": "2025-01-18",
+     "from": "Virtus Francavilla",
+     "to": "Ostiamare",
+     "fee": "Free"
+    },
+    {
+     "date": "12/07/2024",
+     "iso": "2024-07-12",
+     "from": "Khaitan SC",
+     "to": "Virtus Francavilla",
+     "fee": "Free"
+    },
+    {
+     "date": "01/07/2023",
+     "iso": "2023-07-01",
+     "from": "US Viterbese",
+     "to": "No team",
+     "fee": "-"
+    },
+    {
+     "date": "11/08/2022",
+     "iso": "2022-08-11",
+     "from": "Fermana",
+     "to": "US Viterbese",
+     "fee": "Free"
+    },
+    {
+     "date": "25/08/2021",
+     "iso": "2021-08-25",
+     "from": "Ancona",
+     "to": "Fermana",
+     "fee": "Free"
+    },
+    {
+     "date": "23/01/2021",
+     "iso": "2021-01-23",
+     "from": "Novara",
+     "to": "SS Matelica Calcio 1921",
+     "fee": "Free"
+    },
+    {
+     "date": "31/10/2020",
+     "iso": "2020-10-31",
+     "from": "No team",
+     "to": "Novara",
+     "fee": "-"
+    },
+    {
+     "date": "01/07/2020",
+     "iso": "2020-07-01",
+     "from": "Chievo Verona",
+     "to": "No team",
+     "fee": "-"
+    },
+    {
+     "date": "30/06/2019",
+     "iso": "2019-06-30",
+     "from": "Cremonese",
+     "to": "Chievo Verona",
+     "fee": "-"
+    },
+    {
+     "date": "31/01/2019",
+     "iso": "2019-01-31",
+     "from": "Chievo Verona",
+     "to": "Cremonese",
+     "fee": "-"
+    },
+    {
+     "date": "30/01/2019",
+     "iso": "2019-01-30",
+     "from": "Carpi",
+     "to": "Chievo Verona",
+     "fee": "-"
+    },
+    {
+     "date": "11/07/2016",
+     "iso": "2016-07-11",
+     "from": "Chievo Verona",
+     "to": "Carpi",
+     "fee": "-"
+    },
+    {
+     "date": "30/06/2016",
+     "iso": "2016-06-30",
+     "from": "Latina",
+     "to": "Chievo Verona",
+     "fee": "-"
+    },
+    {
+     "date": "31/08/2015",
+     "iso": "2015-08-31",
+     "from": "Chievo Verona",
+     "to": "Latina",
+     "fee": "-"
+    },
+    {
+     "date": "30/06/2015",
+     "iso": "2015-06-30",
+     "from": "Carpi",
+     "to": "Chievo Verona",
+     "fee": "-"
+    },
+    {
+     "date": "14/08/2014",
+     "iso": "2014-08-14",
+     "from": "Chievo Verona",
+     "to": "Carpi",
+     "fee": "-"
+    },
+    {
+     "date": "01/07/2013",
+     "iso": "2013-07-01",
+     "from": "Trento",
+     "to": "Chievo Verona",
+     "fee": "Free"
+    },
+    {
+     "date": "05/12/2011",
+     "iso": "2011-12-05",
+     "from": null,
+     "to": "Trento",
+     "fee": "Free"
+    }
+   ],
+   "competitions": [
+    {
+     "competition": "Zain First Division",
+     "country": null,
+     "year": "25/26"
+    },
+    {
+     "competition": "Serie C, Girone C",
+     "country": null,
+     "year": "22/23"
+    },
+    {
+     "competition": "Serie C, Girone B",
+     "country": null,
+     "year": "21/22"
+    },
+    {
+     "competition": "Serie C, Girone B",
+     "country": null,
+     "year": "20/21"
+    },
+    {
+     "competition": "Serie C, Playoffs",
+     "country": null,
+     "year": "2021"
+    },
+    {
+     "competition": "Serie C, Girone A",
+     "country": null,
+     "year": "20/21"
+    },
+    {
+     "competition": "Serie B",
+     "country": null,
+     "year": "18/19"
+    }
+   ],
+   "photo": true
+  },
+  "2112519": {
+   "id": 2112519,
+   "name": "Bader Mohammed Mutab",
+   "short_name": "B. M. Mutab",
+   "name_ar": "بدر محمد مطر",
+   "position": "M",
+   "positions": [],
+   "number": "",
+   "birth": "2003-09-25T00:00:00+00:00",
+   "age": 22,
+   "height": null,
+   "foot": null,
+   "country": "Kuwait",
+   "country_code": "KW",
+   "market_value": null,
+   "market_currency": null,
+   "retired": null,
+   "club": "jazira",
+   "goals_season": 0,
+   "career": [
+    {
+     "date": "31/03/2025",
+     "iso": "2025-03-31",
+     "from": null,
+     "to": "Al Jazeera FC Kuwait",
+     "fee": "-"
+    }
+   ],
+   "competitions": [],
+   "photo": false
+  },
+  "2075985": {
+   "id": 2075985,
+   "name": "Menwer Al Mutairi",
+   "short_name": "M. A. Mutairi",
+   "name_ar": "منور المطيري",
+   "position": "M",
+   "positions": [],
+   "number": 19,
+   "birth": "1996-01-03T00:00:00+00:00",
+   "age": 30,
+   "height": null,
+   "foot": null,
+   "country": "Kuwait",
+   "country_code": "KW",
+   "market_value": null,
+   "market_currency": null,
+   "retired": null,
+   "club": "jazira",
+   "goals_season": 0,
+   "career": [
+    {
+     "date": "31/03/2025",
+     "iso": "2025-03-31",
+     "from": null,
+     "to": "Al Jazeera FC Kuwait",
+     "fee": "-"
+    }
+   ],
+   "competitions": [],
+   "photo": true
+  },
+  "2222423": {
+   "id": 2222423,
+   "name": "Yousef Al Fajji",
+   "short_name": "Y. A. Fajji",
+   "name_ar": "يوسف الفجّي",
+   "position": "M",
+   "positions": [],
+   "number": "",
+   "birth": "2002-12-31T00:00:00+00:00",
+   "age": 23,
+   "height": null,
+   "foot": null,
+   "country": "Kuwait",
+   "country_code": "KW",
+   "market_value": null,
+   "market_currency": null,
+   "retired": null,
+   "club": "jazira",
+   "goals_season": 0,
+   "career": [],
+   "competitions": [
+    {
+     "competition": "Zain First Division",
+     "country": null,
+     "year": "25/26"
+    }
+   ],
+   "photo": true
+  },
+  "1610379": {
+   "id": 1610379,
+   "name": "Isaac James Ogiri",
+   "short_name": "I. J. Ogiri",
+   "name_ar": "إسحاق جيمس أوغيري",
+   "position": "F",
+   "positions": [
+    "ST"
+   ],
+   "number": null,
+   "birth": "2004-08-27T00:00:00+00:00",
+   "age": 21,
+   "height": null,
+   "foot": "Right",
+   "country": "Nigeria",
+   "country_code": "NG",
+   "market_value": null,
+   "market_currency": null,
+   "retired": null,
+   "club": "jazira",
+   "goals_season": 5,
+   "career": [
+    {
+     "date": "15/07/2026",
+     "iso": "2026-07-15",
+     "from": "Burgan SC",
+     "to": "Al Jazeera FC Kuwait",
+     "fee": "150k $"
+    },
+    {
+     "date": "02/01/2025",
+     "iso": "2025-01-02",
+     "from": null,
+     "to": "Burgan SC",
+     "fee": "Free"
+    },
+    {
+     "date": "08/09/2024",
+     "iso": "2024-09-08",
+     "from": "Remo Stars",
+     "to": null,
+     "fee": "Unknown"
+    },
+    {
+     "date": "22/01/2024",
+     "iso": "2024-01-22",
+     "from": "Remo Stars",
+     "to": "Feirense",
+     "fee": "Unknown"
+    },
+    {
+     "date": "07/07/2023",
+     "iso": "2023-07-07",
+     "from": "Nasarawa United",
+     "to": "Remo Stars",
+     "fee": "Unknown"
+    },
+    {
+     "date": "22/03/2023",
+     "iso": "2023-03-22",
+     "from": null,
+     "to": "Nasarawa United",
+     "fee": "Unknown"
+    }
+   ],
+   "competitions": [
+    {
+     "competition": "Zain First Division",
+     "country": null,
+     "year": "25/26"
+    },
+    {
+     "competition": "Nigeria Premier Football League",
+     "country": null,
+     "year": "23/24"
+    }
+   ],
+   "photo": true
+  },
+  "1629762": {
+   "id": 1629762,
+   "name": "Fahad Al Rajhi",
+   "short_name": "F. Al-Rajhi",
+   "name_ar": "فهد الرحي",
+   "position": "F",
+   "positions": [],
+   "number": 15,
+   "birth": "1999-02-02T00:00:00+00:00",
+   "age": 27,
+   "height": null,
+   "foot": null,
+   "country": "Kuwait",
+   "country_code": "KW",
+   "market_value": null,
+   "market_currency": null,
+   "retired": null,
+   "club": "jazira",
+   "goals_season": 3,
+   "career": [
+    {
+     "date": "30/06/2025",
+     "iso": "2025-06-30",
+     "from": null,
+     "to": "Al Jazeera FC Kuwait",
+     "fee": "-"
+    }
+   ],
+   "competitions": [
+    {
+     "competition": "Zain First Division",
+     "country": null,
+     "year": "25/26"
+    }
+   ],
+   "photo": false
+  },
+  "1404710": {
+   "id": 1404710,
+   "name": "Yao Jean Charles Olivier",
+   "short_name": "Y. J. C. Olivier",
+   "name_ar": "ياو جان تشارلز أوليفييه",
+   "position": "F",
+   "positions": [
+    "ST"
+   ],
+   "number": null,
+   "birth": "2000-12-30T00:00:00+00:00",
+   "age": 25,
+   "height": 187,
+   "foot": "Right",
+   "country": "Côte d'Ivoire",
+   "country_code": "CI",
+   "market_value": 105000,
+   "market_currency": "EUR",
+   "retired": false,
+   "club": "jazira",
+   "goals_season": 3,
+   "career": [
+    {
+     "date": "03/07/2026",
+     "iso": "2026-07-03",
+     "from": "BATE Borisov",
+     "to": "No team",
+     "fee": "-"
+    },
+    {
+     "date": "04/03/2025",
+     "iso": "2025-03-04",
+     "from": "SKA-Khabarovsk",
+     "to": "BATE Borisov",
+     "fee": "50k €"
+    },
+    {
+     "date": "03/07/2024",
+     "iso": "2024-07-03",
+     "from": "SKA-Khabarovsk",
+     "to": "Simba SC",
+     "fee": "-"
+    },
+    {
+     "date": "08/09/2022",
+     "iso": "2022-09-08",
+     "from": null,
+     "to": "SKA-Khabarovsk",
+     "fee": "Free"
+    }
+   ],
+   "competitions": [
+    {
+     "competition": "Zain First Division",
+     "country": null,
+     "year": "25/26"
+    },
+    {
+     "competition": "Vysshaya Liga",
+     "country": null,
+     "year": "2026"
+    },
+    {
+     "competition": "Vysshaya Liga",
+     "country": null,
+     "year": "2025"
+    },
+    {
+     "competition": "First League",
+     "country": null,
+     "year": "24/25"
+    },
+    {
+     "competition": "First League",
+     "country": null,
+     "year": "23/24"
+    }
+   ],
+   "photo": true
+  },
+  "1143185": {
+   "id": 1143185,
+   "name": "Matheus Vieira",
+   "short_name": "M. Vieira",
+   "name_ar": "ماثيوس فييرا",
+   "position": "F",
+   "positions": [],
+   "number": 11,
+   "birth": "1998-08-07T00:00:00+00:00",
+   "age": 28,
+   "height": 182,
+   "foot": "Right",
+   "country": "Brazil",
+   "country_code": "BR",
+   "market_value": 140000,
+   "market_currency": "EUR",
+   "retired": null,
+   "club": "jazira",
+   "goals_season": 1,
+   "career": [
+    {
+     "date": "01/08/2025",
+     "iso": "2025-08-01",
+     "from": "Étoile Carouge FC",
+     "to": "Al Jazeera FC Kuwait",
+     "fee": "-"
+    },
+    {
+     "date": "31/08/2023",
+     "iso": "2023-08-31",
+     "from": "Raufoss",
+     "to": "Étoile Carouge FC",
+     "fee": "-"
+    },
+    {
+     "date": "01/08/2023",
+     "iso": "2023-08-01",
+     "from": "Étoile Carouge FC",
+     "to": "Raufoss",
+     "fee": "-"
+    },
+    {
+     "date": "01/07/2020",
+     "iso": "2020-07-01",
+     "from": "Stade Nyonnais",
+     "to": "Étoile Carouge FC",
+     "fee": "Free"
+    },
+    {
+     "date": "01/07/2019",
+     "iso": "2019-07-01",
+     "from": null,
+     "to": "Stade Nyonnais",
+     "fee": "Free"
+    },
+    {
+     "date": "05/08/2018",
+     "iso": "2018-08-05",
+     "from": null,
+     "to": null,
+     "fee": "Free"
+    },
+    {
+     "date": "01/01/2018",
+     "iso": "2018-01-01",
+     "from": "FC Perly-Certoux",
+     "to": null,
+     "fee": "Free"
+    },
+    {
+     "date": "01/08/2017",
+     "iso": "2017-08-01",
+     "from": null,
+     "to": "FC Perly-Certoux",
+     "fee": "Free"
+    },
+    {
+     "date": "01/07/2016",
+     "iso": "2016-07-01",
+     "from": null,
+     "to": null,
+     "fee": "Free"
+    }
+   ],
+   "competitions": [
+    {
+     "competition": "Zain First Division",
+     "country": null,
+     "year": "25/26"
+    },
+    {
+     "competition": "Challenge League",
+     "country": null,
+     "year": "24/25"
+    },
+    {
+     "competition": "Norwegian 1st Division",
+     "country": null,
+     "year": "2023"
+    }
+   ],
+   "photo": true
+  },
+  "2112520": {
+   "id": 2112520,
+   "name": "Abdulmohsen Fahad Al Ajmi",
+   "short_name": "A. M. A. Ajmi",
+   "name_ar": "عبد المحسن فهد العجمي",
+   "position": "F",
+   "positions": [],
+   "number": 21,
+   "birth": "2000-06-09T00:00:00+00:00",
+   "age": 26,
+   "height": null,
+   "foot": null,
+   "country": "Kuwait",
+   "country_code": "KW",
+   "market_value": null,
+   "market_currency": null,
+   "retired": null,
+   "club": "jazira",
+   "goals_season": 0,
+   "career": [
+    {
+     "date": "31/03/2025",
+     "iso": "2025-03-31",
+     "from": null,
+     "to": "Al Jazeera FC Kuwait",
+     "fee": "-"
+    }
+   ],
+   "competitions": [
+    {
+     "competition": "Zain First Division",
+     "country": null,
+     "year": "25/26"
+    }
+   ],
+   "photo": true
+  },
+  "2063297": {
+   "id": 2063297,
+   "name": "Ali Ashkanani",
+   "short_name": "A. Ashkanani",
+   "name_ar": "علي أشكناني",
+   "position": "F",
+   "positions": [],
+   "number": "",
+   "birth": "2000-02-10T00:00:00+00:00",
+   "age": 26,
+   "height": null,
+   "foot": null,
+   "country": "Kuwait",
+   "country_code": "KW",
+   "market_value": null,
+   "market_currency": null,
+   "retired": null,
+   "club": "jazira",
+   "goals_season": 0,
+   "career": [
+    {
+     "date": "31/03/2025",
+     "iso": "2025-03-31",
+     "from": null,
+     "to": "Al Jazeera FC Kuwait",
+     "fee": "-"
+    },
+    {
+     "date": "30/06/2022",
+     "iso": "2022-06-30",
+     "from": "Al Shabab SC",
+     "to": null,
+     "fee": "-"
+    },
+    {
+     "date": "30/06/2018",
+     "iso": "2018-06-30",
+     "from": "Al Salmiya SC",
+     "to": "Al Shabab SC",
+     "fee": "-"
+    },
+    {
+     "date": "30/06/2017",
+     "iso": "2017-06-30",
+     "from": "Kazma SC",
+     "to": "Al Salmiya SC",
+     "fee": "-"
+    },
+    {
+     "date": "30/06/2015",
+     "iso": "2015-06-30",
+     "from": "Al Nasr SC Kuwait",
+     "to": "Kazma SC",
+     "fee": "-"
+    },
+    {
+     "date": "30/06/2014",
+     "iso": "2014-06-30",
+     "from": "Tadhamon SC",
+     "to": "Al Nasr SC Kuwait",
+     "fee": "-"
+    },
+    {
+     "date": "30/06/2013",
+     "iso": "2013-06-30",
+     "from": "Al Arabi SC Kuwait",
+     "to": "Tadhamon SC",
+     "fee": "-"
+    },
+    {
+     "date": "30/06/2012",
+     "iso": "2012-06-30",
+     "from": "Al Nasr SC Kuwait",
+     "to": "Al Arabi SC Kuwait",
+     "fee": "-"
+    },
+    {
+     "date": "30/06/2011",
+     "iso": "2011-06-30",
+     "from": "Al Nasr SC Kuwait U21",
+     "to": "Al Nasr SC Kuwait",
+     "fee": "-"
+    }
+   ],
+   "competitions": [],
+   "photo": true
+  },
+  "2424214": {
+   "id": 2424214,
+   "name": "Barak Jowar",
+   "short_name": "B. Jowar",
+   "name_ar": "باراك جوار",
+   "position": "F",
+   "positions": [],
+   "number": 16,
+   "birth": "2007-03-04T00:00:00+00:00",
+   "age": 19,
+   "height": null,
+   "foot": null,
+   "country": "Kuwait",
+   "country_code": "KW",
+   "market_value": null,
+   "market_currency": null,
+   "retired": null,
+   "club": "jazira",
+   "goals_season": 0,
+   "career": [],
+   "competitions": [
+    {
+     "competition": "Zain First Division",
+     "country": null,
+     "year": "25/26"
+    }
+   ],
+   "photo": true
+  },
+  "2048471": {
+   "id": 2048471,
+   "name": "Fahad Al Azmi",
+   "short_name": "F. A. Azmi",
+   "name_ar": "فهد العزمي",
+   "position": "F",
+   "positions": [],
+   "number": null,
+   "birth": "2002-01-01T00:00:00+00:00",
+   "age": 24,
+   "height": null,
+   "foot": null,
+   "country": "Kuwait",
+   "country_code": "KW",
+   "market_value": null,
+   "market_currency": null,
+   "retired": null,
+   "club": "jazira",
+   "goals_season": 0,
+   "career": [
+    {
+     "date": "01/08/2025",
+     "iso": "2025-08-01",
+     "from": "Al Arabi SC Kuwait U21",
+     "to": "Sporty FC",
+     "fee": "-"
+    }
+   ],
+   "competitions": [
+    {
+     "competition": "Zain First Division",
+     "country": null,
+     "year": "25/26"
+    }
+   ],
+   "photo": true
+  },
+  "2219539": {
+   "id": 2219539,
+   "name": "Fahad Zayid Al Fadhil",
+   "short_name": "F. Z. A. Fadhil",
+   "name_ar": "فهد زايد الفاضل",
+   "position": "F",
+   "positions": [],
+   "number": 6,
+   "birth": "2001-02-03T00:00:00+00:00",
+   "age": 25,
+   "height": null,
+   "foot": null,
+   "country": "Kuwait",
+   "country_code": "KW",
+   "market_value": null,
+   "market_currency": null,
+   "retired": null,
+   "club": "jazira",
+   "goals_season": 0,
+   "career": [
+    {
+     "date": "30/06/2025",
+     "iso": "2025-06-30",
+     "from": null,
+     "to": "Al Jazeera FC Kuwait",
+     "fee": "-"
+    }
+   ],
+   "competitions": [
+    {
+     "competition": "Zain First Division",
+     "country": null,
+     "year": "25/26"
+    }
+   ],
+   "photo": true
+  },
+  "2112512": {
+   "id": 2112512,
+   "name": "Jarrah Al Butti",
+   "short_name": "J. Al-Butti",
+   "name_ar": "جراح البطي",
+   "position": "F",
+   "positions": [],
+   "number": 18,
+   "birth": "2001-10-22T00:00:00+00:00",
+   "age": 24,
+   "height": null,
+   "foot": null,
+   "country": "Kuwait",
+   "country_code": "KW",
+   "market_value": null,
+   "market_currency": null,
+   "retired": null,
+   "club": "jazira",
+   "goals_season": 0,
+   "career": [
+    {
+     "date": "31/03/2025",
+     "iso": "2025-03-31",
+     "from": null,
+     "to": "Al Jazeera FC Kuwait",
+     "fee": "-"
+    },
+    {
+     "date": "31/12/2024",
+     "iso": "2024-12-31",
+     "from": "Khaitan SC",
+     "to": null,
+     "fee": "-"
+    },
+    {
+     "date": "30/06/2021",
+     "iso": "2021-06-30",
+     "from": "Khaitan SC U21",
+     "to": "Khaitan SC",
+     "fee": "-"
+    }
+   ],
+   "competitions": [
+    {
+     "competition": "Zain First Division",
+     "country": null,
+     "year": "25/26"
+    }
+   ],
+   "photo": true
+  },
+  "2221716": {
+   "id": 2221716,
+   "name": "Khaled Al Awadhi",
+   "short_name": "K. A. Awadhi",
+   "name_ar": "خالد العوضي",
+   "position": "F",
+   "positions": [],
+   "number": 27,
+   "birth": "1999-11-13T00:00:00+00:00",
+   "age": 26,
+   "height": null,
+   "foot": null,
+   "country": "Kuwait",
+   "country_code": "KW",
+   "market_value": null,
+   "market_currency": null,
+   "retired": null,
+   "club": "jazira",
+   "goals_season": 0,
+   "career": [],
+   "competitions": [],
+   "photo": true
+  },
+  "2112509": {
+   "id": 2112509,
+   "name": "Mohammed Ammash",
+   "short_name": "M. Ammash",
+   "name_ar": "محمد عماش",
+   "position": "F",
+   "positions": [],
+   "number": 20,
+   "birth": "1994-04-25T00:00:00+00:00",
+   "age": 32,
+   "height": null,
+   "foot": null,
+   "country": "Saudi Arabia",
+   "country_code": "SA",
+   "market_value": null,
+   "market_currency": null,
+   "retired": null,
+   "club": "jazira",
+   "goals_season": 0,
+   "career": [
+    {
+     "date": "31/03/2025",
+     "iso": "2025-03-31",
+     "from": null,
+     "to": "Al Jazeera FC Kuwait",
+     "fee": "-"
+    }
+   ],
+   "competitions": [],
+   "photo": true
+  },
+  "2112506": {
+   "id": 2112506,
+   "name": "Yousef Abdullah Al Rashidi",
+   "short_name": "Y. A. Al-Rashidi",
+   "name_ar": "يوسف عبد الله الرشيدي",
+   "position": "F",
+   "positions": [],
+   "number": 9,
+   "birth": "1997-03-27T00:00:00+00:00",
+   "age": 29,
+   "height": null,
+   "foot": null,
+   "country": "Kuwait",
+   "country_code": "KW",
+   "market_value": null,
+   "market_currency": null,
+   "retired": null,
+   "club": "jazira",
+   "goals_season": 0,
+   "career": [
+    {
+     "date": "31/03/2025",
+     "iso": "2025-03-31",
+     "from": null,
+     "to": "Al Jazeera FC Kuwait",
+     "fee": "-"
+    }
+   ],
+   "competitions": [
+    {
+     "competition": "Zain First Division",
+     "country": null,
+     "year": "25/26"
+    }
+   ],
+   "photo": false
   }
  }
 }

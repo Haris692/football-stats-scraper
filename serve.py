@@ -20,6 +20,13 @@ rester dans l'esprit de la règle : un unique fil de fond relève les seuls
 matchs en cours, une fois par minute, et s'arrête de lui-même dès que plus
 aucune page ne le demande. La page interroge ce fil, pas Forebet — le nombre
 d'onglets ouverts ne change donc rien à ce que la source encaisse.
+
+Ce même dossier contient les deux façades, servies ensemble : la **console**
+interne (`console.html`, fichier unique, générateur de brief Instagram) et le
+**site** public (`index.html` et ses cinq pages). Depuis le 11/08/2026, le site
+consomme lui aussi `/api/live` — servi ici, son score et ses statistiques se
+mettent à jour seuls pendant la rencontre ; publié sur GitHub Pages, il ne
+trouve pas ce point d'entrée et retombe sans bruit sur ses données figées.
 """
 
 from __future__ import annotations
@@ -41,6 +48,7 @@ from fetch_stats import fetch as fetch_stats
 
 ROOT = Path(__file__).resolve().parent
 PAGE = "console.html"
+SITE_PAGE = "index.html"
 
 # -- direct ------------------------------------------------------------------
 #
@@ -327,6 +335,12 @@ def main() -> int:
                              "(défaut : toutes)")
     parser.add_argument("--no-open", action="store_true",
                         help="ne pas ouvrir le navigateur au démarrage")
+    # Le site et la console sont servis tous les deux — c'est le même dossier.
+    # Ce choix ne porte que sur la page ouverte au démarrage. Le site consomme
+    # `/api/live` depuis le 11/08/2026 : servi ici, son score bouge tout seul,
+    # ce que la version publiée sur GitHub Pages ne peut pas faire.
+    parser.add_argument("--site", action="store_true",
+                        help="ouvrir le site public plutôt que la console interne")
     args = parser.parse_args()
 
     if not (ROOT / PAGE).exists():
@@ -341,13 +355,16 @@ def main() -> int:
         no_calendar=False, no_stats=False, no_hosts=False,
     )
 
-    url = f"http://127.0.0.1:{args.port}/{PAGE}"
+    page = SITE_PAGE if args.site else PAGE
+    url = f"http://127.0.0.1:{args.port}/{page}"
     server = ThreadingHTTPServer(("127.0.0.1", args.port), Handler)
-    print(f"console servie sur {url}")
-    print("le bouton « Rafraîchir » y relance une collecte complète — "
+    print(f"servi sur http://127.0.0.1:{args.port}/ — "
+          f"console : /{PAGE} · site : /{SITE_PAGE}")
+    print("dans la console, « Rafraîchir » relance une collecte complète — "
           "compter une minute.")
-    print(f"le bouton « Direct » suit les matchs en cours, relevés toutes les "
-          f"{int(LIVE_INTERVAL)} s.\nCtrl+C pour arrêter.")
+    print(f"le direct suit les matchs en cours, relevés toutes les "
+          f"{int(LIVE_INTERVAL)} s, des DEUX côtés : la console par son bouton, "
+          f"le site tout seul.\nCtrl+C pour arrêter.")
     if not args.no_open:
         webbrowser.open(url)
     try:

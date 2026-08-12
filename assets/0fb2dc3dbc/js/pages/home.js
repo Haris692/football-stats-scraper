@@ -10,6 +10,7 @@ import {
   nameOf, seasonTotals, isLive, match as matchOf,
 } from "../core/data.js";
 import { crestOf, badge, clubColor, stat, liveMark } from "../components/pieces.js";
+import { watchLive, liveBlock } from "../core/live.js";
 import { fixtureCard, clubCard, scorerCard } from "../components/cards.js";
 import { railOrGrid } from "../components/rail.js";
 
@@ -40,13 +41,20 @@ function scorerLine(f, cls) {
    cours porte le marqueur « live » JUSTE AU-DESSUS de son heure — c'est là que
    l'œil va chercher quand le match a commencé. */
 const centrePiece = (f, cls) => {
-  const score = (f.score || "").split(/\s*-\s*/);
-  if (f.score) {
-    return el("div", { class: cls.score }, [
+  // Servi par `serve.py`, le relevé du moment remplace l'heure de coup d'envoi
+  // par le score courant. Sur le site publié il n'y en a jamais, et le centre
+  // reste ce qu'il a toujours été.
+  const live = liveBlock(f.match_id);
+  const running = live && live.home?.goals != null && live.away?.goals != null;
+  const score = running ? [live.home.goals, live.away.goals]
+                        : (f.score || "").split(/\s*-\s*/);
+  if (running || f.score) {
+    const box = el("div", { class: cls.score }, [
       el("span", { text: score[0] }),
       el("span", { class: "sep", text: "–" }),
       el("span", { text: score[1] }),
     ]);
+    return running ? el("div", { class: "kick-stack" }, [liveMark(true), box]) : box;
   }
   return el("div", { class: "kick-stack" }, [
     isLive(f) ? liveMark() : null,
@@ -184,8 +192,14 @@ boot(async host => {
   const next = upcoming().slice(0, 10);
   const last = played().slice(0, 10);
 
+  // La une est le seul bloc que le direct redessine : c'est là qu'est le score.
+  // Le reste de l'accueil — classement, buteurs, clubs — ne bouge qu'à la
+  // collecte quotidienne, et le rebâtir ferait sauter les rails horizontaux à
+  // l'endroit où on les avait fait défiler.
+  const heroSlot = el("div", {}, [hero(headline())]);
+
   append(host, [
-    hero(headline()),
+    heroSlot,
     strip(),
     railOrGrid("Derniers résultats", last.map(fixtureCard),
                { more: "calendrier.html" }),
@@ -198,4 +212,7 @@ boot(async host => {
                { more: "clubs.html" }),
     miniTable(),
   ]);
+
+  watchLive(() => heroSlot.replaceChildren(hero(headline())),
+            { fixtures: headline().fixtures || [] });
 }, { rows: 4 });

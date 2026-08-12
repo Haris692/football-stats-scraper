@@ -9,6 +9,7 @@ import { t } from "../core/i18n.js";
 import { boot } from "../core/shell.js";
 import { match as matchOf, team, nameOf, fixtures, isLive } from "../core/data.js";
 import { crestOf, badge, dot, methodNote, liveMark } from "../components/pieces.js";
+import { watchLive, liveBlock, liveStamp } from "../core/live.js";
 
 const LABELS = {
   possession: "Possession", shots: "Tirs", shots_on: "Tirs cadrés",
@@ -51,18 +52,29 @@ function boardSide(m, side) {
   ]);
 }
 
-function board(m, fx) {
-  const score = (fx?.score || m.match_stats?.full_time || "").split(/\s*[-–]\s*/);
-  const centre = score.length === 2
-    ? el("div", { class: "board__score" }, [
-        el("span", { text: score[0] }), el("span", { class: "sep", text: "–" }),
-        el("span", { text: score[1] }),
-      ])
-    : el("div", { class: "kick-stack" }, [
-        fx && isLive(fx) ? liveMark() : null,
-        el("div", { class: "board__score",
-                    text: (m.kickoff || "").split(" ")[1] || "—" }),
-      ]);
+function board(m, fx, live) {
+  // Le relevé en direct passe AVANT le score figé : sur une rencontre en cours
+  // `fx.score` est vide, et sur une rencontre finie il n'y a pas de relevé.
+  const running = live && live.home?.goals != null && live.away?.goals != null;
+  const score = running
+    ? [String(live.home.goals), String(live.away.goals)]
+    : (fx?.score || m.match_stats?.full_time || "").split(/\s*[-–]\s*/);
+
+  const board__score = el("div", { class: "board__score" }, [
+    el("span", { text: score[0] }), el("span", { class: "sep", text: "–" }),
+    el("span", { text: score[1] }),
+  ]);
+  const centre = running
+    // En direct, le marqueur reste au-dessus du score : c'est lui qui dit que
+    // le chiffre du dessous va encore bouger.
+    ? el("div", { class: "kick-stack" }, [liveMark(true), board__score])
+    : score.length === 2
+      ? board__score
+      : el("div", { class: "kick-stack" }, [
+          fx && isLive(fx) ? liveMark() : null,
+          el("div", { class: "board__score",
+                      text: (m.kickoff || "").split(" ")[1] || "—" }),
+        ]);
 
   return el("div", { class: "board" }, [
     el("div", { class: "page board__in" }, [
@@ -195,8 +207,10 @@ function bars(rows, { hint } = {}) {
 
 const group = label => el("div", { class: "h2h__group", text: label });
 
-function matchStats(m) {
-  const s = m.match_stats;
+function matchStats(m, live, stamp) {
+  // Le relevé du serveur l'emporte sur celui figé dans les données : il est
+  // forcément plus récent, et sur une rencontre en cours c'est le seul.
+  const s = live || m.match_stats;
   if (!s) return null;
 
   const rows = [];
@@ -223,13 +237,25 @@ function matchStats(m) {
   return el("section", { class: "card" }, [
     el("div", { class: "card__head" }, [
       el("h2", { text: t("Statistiques du match") }),
+      live ? badge(stamp ? `${t("Direct")} · ${stamp}` : t("Direct"), "live") : null,
+      live && live.unstable ? badge(t("score incertain"), "flood") : null,
       s.half_time ? badge(`${t("Mi-temps")} ${s.half_time}`) : null,
     ]),
     poss,
     el("div", { style: { marginTop: "var(--s-5)" } }, [bars(rows)]),
-    methodNote(t("Relevé de cette rencontre, pas de la saison. Source : Forebet " +
-      "— la seule à publier possession et tirs sur cette division. Les " +
-      "rubriques absentes ne sont pas à zéro : elles ne sont pas couvertes.")),
+    live
+      // Deux choses à dire, et la seconde est la plus importante : ce relevé
+      // n'a PAS de minute de jeu. La source n'en publie pas, et laisser croire
+      // qu'un « direct » sait où en est le match serait le tromper.
+      ? methodNote(t("Relevé pendant la rencontre, une fois par minute, par le " +
+          "serveur qui sert cette page — jamais par le navigateur. La source ne " +
+          "donne ni la minute de jeu ni le statut : ces chiffres disent où en " +
+          "est le match, pas depuis combien de temps. Il arrive aussi qu'elle " +
+          "réattribue un but d'un camp à l'autre en début de rencontre, et le " +
+          "relevé est alors marqué incertain."))
+      : methodNote(t("Relevé de cette rencontre, pas de la saison. Source : Forebet " +
+          "— la seule à publier possession et tirs sur cette division. Les " +
+          "rubriques absentes ne sont pas à zéro : elles ne sont pas couvertes.")),
   ]);
 }
 
@@ -395,18 +421,35 @@ boot(async host => {
   document.title = `${nameOf(m.home_key)} – ${nameOf(m.away_key)} · ${t("Division 1 koweïtienne")}`;
 
   const line = timeline(m);
-  const stats = matchStats(m);
-  const nothing = !line && !stats ? el("div", { class: "empty" }, [
+  const nothing = () => el("div", { class: "empty" }, [
     el("h3", { text: t("Pas encore joué") }),
     el("p", { text: `${t("Journée")} ${m.round || "—"} · ${m.kickoff}` }),
-  ]) : null;
+  ]);
+
+  /* Deux emplacements que le direct redessine, et eux seuls. Re-construire la
+     page entière toutes les quinze secondes ferait sauter l'onglet choisi, la
+     position de lecture et la sélection de texte — pour un chiffre qui bouge
+     une fois par heure. */
+  const boardSlot = el("div", {}, [board(m, fx)]);
+  const statsSlot = el("div", { class: "stack" },
+    [matchStats(m) || (line ? null : nothing())].filter(Boolean));
 
   append(host, [
-    board(m, fx),
+    boardSlot,
     el("div", { class: "page section" },
       tabs({
-        match: [line, stats, motm(m), nothing],
+        match: [line, statsSlot, motm(m)],
         equipes: [compare(m), h2h(m), squads(m)],
       })),
   ]);
+
+  // Servi par `serve.py`, le score et les statistiques se mettent à jour tout
+  // seuls. Publié sur GitHub Pages, `watchLive` ne trouve pas son point
+  // d'entrée et il ne se passe simplement rien — c'est voulu.
+  watchLive(() => {
+    const live = liveBlock(m.match_id);
+    if (!live) return;
+    boardSlot.replaceChildren(board(m, fx, live));
+    statsSlot.replaceChildren(matchStats(m, live, liveStamp()));
+  }, { fixtures: fx ? [fx] : [] });
 }, { rows: 3 });

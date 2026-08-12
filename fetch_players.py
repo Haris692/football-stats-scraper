@@ -215,7 +215,12 @@ def collect(force: bool = False, only_club: str | None = None,
         if not squads:
             raise SystemExit(f"club inconnu : {only_club}")
 
-    out, shot = {}, 0
+    # ⚠️ On repart des fiches déjà écrites, on ne les remplace pas. Une collecte
+    # `--club` ne concerne qu'un club sur huit, et une passe complète peut
+    # s'arrêter en route (`Flaky`) : dans les deux cas, repartir d'un
+    # dictionnaire vide effacerait les sept autres clubs — c'est arrivé le
+    # 11/08/2026, Khaitan écrasé par Al Jazira.
+    out, shot = dict(load().get("players") or {}), 0
     with CdpBrowser() as browser:
         sid, year = season_id(browser, force)
         print(f"saison {year} (id {sid})")
@@ -223,6 +228,12 @@ def collect(force: bool = False, only_club: str | None = None,
             players = club.get("players") or []
             print(f"  · {club.get('sofascore_name') or club_key} "
                   f"({len(players)} joueurs)")
+            # Le revers du cumul : un joueur parti resterait là indéfiniment.
+            # L'effectif du jour fait foi, mais pour ce club seulement.
+            keep = {str(e.get("id")) for e in players}
+            for pid in [k for k, v in out.items()
+                        if v.get("club") == club_key and k not in keep]:
+                del out[pid]
             for entry in players:
                 pid = entry.get("id")
                 if not pid:

@@ -60,14 +60,18 @@ export const badge = (text, variant) =>
 
 /** Le marqueur « en cours », posé juste au-dessus de l'heure de coup d'envoi.
  *
- *  ⚠️ Il annonce qu'une rencontre **se joue en ce moment**, pas que son score
- *  est suivi. Le site est statique : il n'a aucun flux. L'infobulle le dit, et
- *  elle n'est pas décorative — sans elle, un rouge clignotant promet un
- *  rafraîchissement qui n'arrivera pas. */
-export function liveMark() {
+ *  ⚠️ Le même rouge clignotant recouvre deux situations très différentes, et
+ *  l'infobulle est ce qui les sépare. Sans serveur — le site publié — il annonce
+ *  qu'une rencontre **se joue en ce moment**, déduit de l'horloge, et rien de
+ *  plus : promettre un rafraîchissement qui n'arrivera pas serait un mensonge.
+ *  Avec `serve.py` derrière la page, le score EST suivi, et `tracked` le dit.
+ *  Ne jamais laisser l'un porter la phrase de l'autre. */
+export function liveMark(tracked = false) {
   return el("span", {
     class: "live-mark",
-    title: t("Rencontre en cours. Le score n'est pas suivi en direct sur cette page."),
+    title: tracked
+      ? t("Rencontre en cours, relevée toutes les minutes.")
+      : t("Rencontre en cours. Le score n'est pas suivi en direct sur cette page."),
   }, [
     el("span", { text: "live" }),
     el("span", { class: "live-mark__dot", "aria-hidden": "true" }),
