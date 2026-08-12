@@ -1,5 +1,5 @@
 {
-  "generated": "2026-08-11T10:42:42",
+  "generated": "2026-08-12T08:52:13",
   "source": "sofascore",
   "tournament": {
     "id": 20044,
@@ -610,18 +610,18 @@
           "penalties": null
         },
         {
-          "id": 1006323,
-          "name": "Faisal Ajab Al Azemi",
+          "id": 1629528,
+          "name": "Abdullah Bather",
           "position": "F",
           "number": null,
           "country": "Kuwait",
           "country_code": "KW",
-          "goals": 1,
+          "goals": null,
           "penalties": null
         },
         {
-          "id": 1629528,
-          "name": "Abdullah Bather",
+          "id": 1006323,
+          "name": "Faisal Ajab Al Azemi",
           "position": "F",
           "number": null,
           "country": "Kuwait",
@@ -668,10 +668,10 @@
       "declared_venue": "Al Sulaibikhat Stadium",
       "city": "Kuwait City",
       "season": {
-        "matches": 17,
-        "goals_scored": 33,
+        "matches": 18,
+        "goals_scored": 36,
         "goals_conceded": 15,
-        "clean_sheets": 5,
+        "clean_sheets": 6,
         "penalty_goals": 3,
         "red_cards": 2
       },
@@ -717,16 +717,6 @@
           "penalties": null
         },
         {
-          "id": 2473328,
-          "name": "Elielson Cardoso Bebê",
-          "position": "D",
-          "number": "44",
-          "country": "Brazil",
-          "country_code": "BR",
-          "goals": 1,
-          "penalties": null
-        },
-        {
           "id": 2057429,
           "name": "Abdulaziz Al Qattan",
           "position": "D",
@@ -757,6 +747,16 @@
           "penalties": null
         },
         {
+          "id": 2473328,
+          "name": "Elielson Cardoso Bebê",
+          "position": "D",
+          "number": "44",
+          "country": "Brazil",
+          "country_code": "BR",
+          "goals": null,
+          "penalties": null
+        },
+        {
           "id": 2221679,
           "name": "Khaled Al Rashidi",
           "position": "D",
@@ -783,16 +783,6 @@
           "number": "5",
           "country": "Kuwait",
           "country_code": "KW",
-          "goals": null,
-          "penalties": null
-        },
-        {
-          "id": 1397226,
-          "name": "Wilker Santos",
-          "position": "D",
-          "number": null,
-          "country": "Brazil",
-          "country_code": "BR",
           "goals": null,
           "penalties": null
         },
@@ -897,13 +887,13 @@
           "penalties": null
         },
         {
-          "id": 1090606,
-          "name": "Emmanuel Evaristus",
+          "id": 2062607,
+          "name": "Ali Salman Alaaeddine",
           "position": "F",
-          "number": null,
-          "country": "Nigeria",
-          "country_code": "NG",
-          "goals": 5,
+          "number": "93",
+          "country": "Lebanon",
+          "country_code": "LB",
+          "goals": 2,
           "penalties": null
         },
         {
@@ -913,6 +903,16 @@
           "number": "9",
           "country": "Kuwait",
           "country_code": "KW",
+          "goals": 1,
+          "penalties": null
+        },
+        {
+          "id": 218748,
+          "name": "Christian Irobiso",
+          "position": "F",
+          "number": "97",
+          "country": "Nigeria",
+          "country_code": "NG",
           "goals": 1,
           "penalties": null
         },
@@ -943,26 +943,6 @@
           "number": "10",
           "country": "Kuwait",
           "country_code": "KW",
-          "goals": null,
-          "penalties": null
-        },
-        {
-          "id": 2062607,
-          "name": "Ali Salman Alaaeddine",
-          "position": "F",
-          "number": "93",
-          "country": "Lebanon",
-          "country_code": "LB",
-          "goals": null,
-          "penalties": null
-        },
-        {
-          "id": 218748,
-          "name": "Christian Irobiso",
-          "position": "F",
-          "number": null,
-          "country": "Nigeria",
-          "country_code": "NG",
           "goals": null,
           "penalties": null
         },
@@ -1210,7 +1190,7 @@
           "number": "14",
           "country": "Kuwait",
           "country_code": "KW",
-          "goals": 1,
+          "goals": null,
           "penalties": null
         },
         {
@@ -1232,9 +1212,9 @@
       "declared_venue": "Ali Sabah Al-Salem Stadium",
       "city": "Al Farwaniyah",
       "season": {
-        "matches": 17,
-        "goals_scored": 17,
-        "goals_conceded": 24,
+        "matches": 18,
+        "goals_scored": 18,
+        "goals_conceded": 27,
         "clean_sheets": 4,
         "penalty_goals": 1,
         "red_cards": 1
@@ -1826,12 +1806,12 @@
       "declared_venue": null,
       "city": null,
       "season": {
-        "matches": 17,
+        "matches": 18,
         "goals_scored": 8,
-        "goals_conceded": 34,
+        "goals_conceded": 37,
         "clean_sheets": 1,
         "penalty_goals": 0,
-        "red_cards": 1
+        "red_cards": 2
       },
       "players": [
         {
@@ -2035,16 +2015,6 @@
           "penalties": null
         },
         {
-          "id": 2259235,
-          "name": "Abdulrahman Al Enezi",
-          "position": "F",
-          "number": null,
-          "country": "Kuwait",
-          "country_code": "KW",
-          "goals": 1,
-          "penalties": null
-        },
-        {
           "id": 2270072,
           "name": "Abdulaziz Jamal Yaser",
           "position": "F",
@@ -2057,6 +2027,16 @@
         {
           "id": 2259500,
           "name": "Abdullah Bomjdad",
+          "position": "F",
+          "number": null,
+          "country": "Kuwait",
+          "country_code": "KW",
+          "goals": null,
+          "penalties": null
+        },
+        {
+          "id": 2259235,
+          "name": "Abdulrahman Al Enezi",
           "position": "F",
           "number": null,
           "country": "Kuwait",
@@ -2103,11 +2083,11 @@
       "declared_venue": "Mishref Stadium",
       "city": "Kuwait City",
       "season": {
-        "matches": 17,
-        "goals_scored": 35,
-        "goals_conceded": 14,
+        "matches": 18,
+        "goals_scored": 38,
+        "goals_conceded": 15,
         "clean_sheets": 8,
-        "penalty_goals": 1,
+        "penalty_goals": 2,
         "red_cards": 2
       },
       "players": [
@@ -2152,16 +2132,6 @@
           "penalties": null
         },
         {
-          "id": 828510,
-          "name": "Abdullah Al Shami",
-          "position": "D",
-          "number": "5",
-          "country": "Syria",
-          "country_code": "SY",
-          "goals": 3,
-          "penalties": null
-        },
-        {
           "id": 2072645,
           "name": "Mohammad Hassan Ahmad Pour",
           "position": "D",
@@ -2169,6 +2139,16 @@
           "country": "Iran",
           "country_code": "IR",
           "goals": 2,
+          "penalties": null
+        },
+        {
+          "id": 1104798,
+          "name": "Eduardo Porto",
+          "position": "D",
+          "number": "3",
+          "country": "Brazil",
+          "country_code": "BR",
+          "goals": 1,
           "penalties": null
         },
         {
@@ -2242,20 +2222,20 @@
           "penalties": null
         },
         {
-          "id": 959716,
-          "name": "Meshari Al Azmi",
-          "position": "M",
-          "number": "8",
-          "country": "Kuwait",
-          "country_code": "KW",
-          "goals": 2,
-          "penalties": null
-        },
-        {
           "id": 1842601,
           "name": "Othman Al Dousari",
           "position": "M",
           "number": null,
+          "country": "Kuwait",
+          "country_code": "KW",
+          "goals": 3,
+          "penalties": null
+        },
+        {
+          "id": 959716,
+          "name": "Meshari Al Azmi",
+          "position": "M",
+          "number": "8",
           "country": "Kuwait",
           "country_code": "KW",
           "goals": 2,
@@ -2402,22 +2382,22 @@
           "penalties": null
         },
         {
-          "id": 1215394,
-          "name": "Abdulrahman Sherhan",
-          "position": "F",
-          "number": "19",
-          "country": "Kuwait",
-          "country_code": "KW",
-          "goals": null,
-          "penalties": null
-        },
-        {
           "id": 2048429,
           "name": "Ahmed Alaa Rasheed",
           "position": "F",
           "number": null,
           "country": "Egypt",
           "country_code": "EG",
+          "goals": 1,
+          "penalties": null
+        },
+        {
+          "id": 1215394,
+          "name": "Abdulrahman Sherhan",
+          "position": "F",
+          "number": "19",
+          "country": "Kuwait",
+          "country_code": "KW",
           "goals": null,
           "penalties": null
         },

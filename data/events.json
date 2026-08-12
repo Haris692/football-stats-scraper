@@ -1,5 +1,5 @@
 {
-  "generated": "2026-08-11T10:44:02",
+  "generated": "2026-08-12T08:52:14",
   "source": "sofascore",
   "season": 75693,
   "season_year": "25/26",
@@ -4971,9 +4971,78 @@
       "away": "Yarmouk SC",
       "home_key": "burgan",
       "away_key": "yarmouk",
-      "home_score": null,
-      "away_score": null,
-      "finished": false
+      "home_score": 1,
+      "away_score": 3,
+      "finished": true,
+      "timeline": [
+        {
+          "type": "goal",
+          "class": "regular",
+          "minute": 26,
+          "added": null,
+          "player": "Othman Al Dousari",
+          "side": "away",
+          "score": "0-1"
+        },
+        {
+          "type": "card",
+          "class": "yellow",
+          "minute": 33,
+          "added": null,
+          "player": null,
+          "side": "home",
+          "score": null
+        },
+        {
+          "type": "card",
+          "class": "yellow",
+          "minute": 40,
+          "added": null,
+          "player": null,
+          "side": "away",
+          "score": null
+        },
+        {
+          "type": "goal",
+          "class": "regular",
+          "minute": 47,
+          "added": null,
+          "player": null,
+          "side": "home",
+          "score": "1-1"
+        },
+        {
+          "type": "card",
+          "class": "yellow",
+          "minute": 56,
+          "added": null,
+          "player": null,
+          "side": "away",
+          "score": null
+        },
+        {
+          "type": "goal",
+          "class": "regular",
+          "minute": 57,
+          "added": null,
+          "player": "Ahmed Alaa Rasheed",
+          "side": "away",
+          "score": "1-2"
+        },
+        {
+          "type": "goal",
+          "class": "penalty",
+          "minute": 87,
+          "added": null,
+          "player": "Eduardo Porto",
+          "side": "away",
+          "score": "1-3"
+        }
+      ],
+      "managers": {
+        "home": null,
+        "away": "João Mota"
+      }
     },
     {
       "sofascore_id": 16271566,
@@ -4984,9 +5053,69 @@
       "away": "Al Sulaibikhat FC",
       "home_key": "sporty",
       "away_key": "sulaibikhat",
-      "home_score": null,
-      "away_score": null,
-      "finished": false
+      "home_score": 0,
+      "away_score": 3,
+      "finished": true,
+      "timeline": [
+        {
+          "type": "goal",
+          "class": "regular",
+          "minute": 26,
+          "added": null,
+          "player": "Christian Irobiso",
+          "side": "away",
+          "score": "0-1"
+        },
+        {
+          "type": "card",
+          "class": "yellow",
+          "minute": 55,
+          "added": null,
+          "player": "Welves Santos Damacena",
+          "side": "away",
+          "score": null
+        },
+        {
+          "type": "card",
+          "class": "red",
+          "minute": 74,
+          "added": null,
+          "player": "Abdullah Al Najdi",
+          "side": "home",
+          "score": null
+        },
+        {
+          "type": "goal",
+          "class": "regular",
+          "minute": 75,
+          "added": null,
+          "player": "Ali Salman Alaaeddine",
+          "side": "away",
+          "score": "0-2"
+        },
+        {
+          "type": "goal",
+          "class": "regular",
+          "minute": 83,
+          "added": null,
+          "player": "Ali Salman Alaaeddine",
+          "side": "away",
+          "score": "0-3"
+        },
+        {
+          "type": "card",
+          "class": "yellow",
+          "minute": 88,
+          "added": null,
+          "player": "Saleh Khamees Al Enezi",
+          "side": "away",
+          "score": null
+        }
+      ],
+      "managers": {
+        "home": "Ibrahim Shehab",
+        "away": "António Miranda"
+      }
     },
     {
       "sofascore_id": 16271567,

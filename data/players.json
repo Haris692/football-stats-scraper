@@ -1,5 +1,5 @@
 {
- "generated": "2026-08-11T15:31:13",
+ "generated": "2026-08-12T08:51:57",
  "source": "sofascore",
  "players": {
   "2072639": {
@@ -3527,6 +3527,2795 @@
     }
    ],
    "photo": false
+  },
+  "2064189": {
+   "id": 2064189,
+   "name": "Dhari Al Masri",
+   "short_name": "D. A. Masry",
+   "name_ar": "ذاري المصري",
+   "position": "G",
+   "positions": [],
+   "number": "",
+   "birth": "2002-05-05T00:00:00+00:00",
+   "age": 24,
+   "height": null,
+   "foot": null,
+   "country": "Kuwait",
+   "country_code": "KW",
+   "market_value": null,
+   "market_currency": null,
+   "retired": null,
+   "club": "sahel",
+   "goals_season": 0,
+   "career": [
+    {
+     "date": "30/06/2024",
+     "iso": "2024-06-30",
+     "from": null,
+     "to": "Al Sahel SC",
+     "fee": "-"
+    }
+   ],
+   "competitions": [
+    {
+     "competition": "Zain First Division",
+     "country": null,
+     "year": "25/26"
+    }
+   ],
+   "photo": true
+  },
+  "1637112": {
+   "id": 1637112,
+   "name": "Fawaz Al Dosari",
+   "short_name": "F. Al-Dosari",
+   "name_ar": "فواز الدوسري",
+   "position": "G",
+   "positions": [],
+   "number": null,
+   "birth": "1987-08-23T00:00:00+00:00",
+   "age": 38,
+   "height": null,
+   "foot": null,
+   "country": "Kuwait",
+   "country_code": "KW",
+   "market_value": null,
+   "market_currency": null,
+   "retired": null,
+   "club": "sahel",
+   "goals_season": 0,
+   "career": [
+    {
+     "date": "14/07/2026",
+     "iso": "2026-07-14",
+     "from": "Al Fahaheel SC",
+     "to": "Al Sahel SC",
+     "fee": "Unknown"
+    },
+    {
+     "date": "07/07/2023",
+     "iso": "2023-07-07",
+     "from": "Al Nasr SC Kuwait",
+     "to": "Al Fahaheel SC",
+     "fee": "Unknown"
+    },
+    {
+     "date": "01/07/2021",
+     "iso": "2021-07-01",
+     "from": "Kazma SC",
+     "to": "Al Nasr SC Kuwait",
+     "fee": "Unknown"
+    }
+   ],
+   "competitions": [
+    {
+     "competition": "Emir Cup",
+     "country": null,
+     "year": "2023"
+    }
+   ],
+   "photo": true
+  },
+  "2042317": {
+   "id": 2042317,
+   "name": "Meshal Al Rashidi",
+   "short_name": "M. A. Rashidi",
+   "name_ar": "مشعل الرشيدي",
+   "position": "G",
+   "positions": [],
+   "number": 1,
+   "birth": "2000-01-01T00:00:00+00:00",
+   "age": 26,
+   "height": null,
+   "foot": null,
+   "country": "Kuwait",
+   "country_code": "KW",
+   "market_value": null,
+   "market_currency": null,
+   "retired": null,
+   "club": "sahel",
+   "goals_season": 0,
+   "career": [
+    {
+     "date": "30/06/2024",
+     "iso": "2024-06-30",
+     "from": null,
+     "to": "Al Sahel SC",
+     "fee": "-"
+    }
+   ],
+   "competitions": [
+    {
+     "competition": "Zain First Division",
+     "country": null,
+     "year": "25/26"
+    }
+   ],
+   "photo": true
+  },
+  "975185": {
+   "id": 975185,
+   "name": "Abdulaziz Mahran",
+   "short_name": "A. Mahran",
+   "name_ar": "عبد العزيز مهران",
+   "position": "D",
+   "positions": [
+    "DC"
+   ],
+   "number": null,
+   "birth": "2001-08-19T00:00:00+00:00",
+   "age": 24,
+   "height": null,
+   "foot": null,
+   "country": "Kuwait",
+   "country_code": "KW",
+   "market_value": 270000,
+   "market_currency": "EUR",
+   "retired": null,
+   "club": "sahel",
+   "goals_season": 1,
+   "career": [
+    {
+     "date": "26/04/2025",
+     "iso": "2025-04-26",
+     "from": "Al Kuwait SC",
+     "to": "No team",
+     "fee": "-"
+    },
+    {
+     "date": "30/06/2024",
+     "iso": "2024-06-30",
+     "from": "Al Nasr SC Kuwait",
+     "to": "Al Kuwait SC",
+     "fee": "-"
+    },
+    {
+     "date": "01/07/2023",
+     "iso": "2023-07-01",
+     "from": "Al Kuwait SC",
+     "to": "Al Nasr SC Kuwait",
+     "fee": "-"
+    },
+    {
+     "date": "29/01/2023",
+     "iso": "2023-01-29",
+     "from": null,
+     "to": "Al Kuwait SC",
+     "fee": "Unknown"
+    },
+    {
+     "date": "01/07/2018",
+     "iso": "2018-07-01",
+     "from": null,
+     "to": "Al Kuwait SC",
+     "fee": "Unknown"
+    }
+   ],
+   "competitions": [
+    {
+     "competition": "Zain First Division",
+     "country": null,
+     "year": "25/26"
+    },
+    {
+     "competition": "AFC Champions League Two",
+     "country": null,
+     "year": "2022"
+    },
+    {
+     "competition": "AFC Champions League Two",
+     "country": null,
+     "year": "2021"
+    }
+   ],
+   "photo": false
+  },
+  "1526764": {
+   "id": 1526764,
+   "name": "Abdulaziz Murad",
+   "short_name": "A. Murad",
+   "name_ar": "عبد العزيز مراد",
+   "position": "D",
+   "positions": [],
+   "number": 6,
+   "birth": "2001-08-19T00:00:00+00:00",
+   "age": 24,
+   "height": null,
+   "foot": null,
+   "country": "Kuwait",
+   "country_code": "KW",
+   "market_value": null,
+   "market_currency": null,
+   "retired": null,
+   "club": "sahel",
+   "goals_season": 0,
+   "career": [],
+   "competitions": [
+    {
+     "competition": "Zain First Division",
+     "country": null,
+     "year": "25/26"
+    }
+   ],
+   "photo": true
+  },
+  "2125592": {
+   "id": 2125592,
+   "name": "Ali Ford",
+   "short_name": "A. Ford",
+   "name_ar": "علي فورد",
+   "position": "D",
+   "positions": [],
+   "number": 2,
+   "birth": "1994-12-22T00:00:00+00:00",
+   "age": 31,
+   "height": null,
+   "foot": null,
+   "country": "Kuwait",
+   "country_code": "KW",
+   "market_value": null,
+   "market_currency": null,
+   "retired": null,
+   "club": "sahel",
+   "goals_season": 0,
+   "career": [
+    {
+     "date": "31/12/2024",
+     "iso": "2024-12-31",
+     "from": "Al Shabab SC",
+     "to": "Al Sahel SC",
+     "fee": "-"
+    },
+    {
+     "date": "30/06/2022",
+     "iso": "2022-06-30",
+     "from": null,
+     "to": "Al Shabab SC",
+     "fee": "-"
+    }
+   ],
+   "competitions": [
+    {
+     "competition": "Zain First Division",
+     "country": null,
+     "year": "25/26"
+    }
+   ],
+   "photo": true
+  },
+  "1472624": {
+   "id": 1472624,
+   "name": "João Moura",
+   "short_name": "J. Moura",
+   "name_ar": "جواو مورا",
+   "position": "D",
+   "positions": [
+    "DC"
+   ],
+   "number": 33,
+   "birth": "1998-02-19T00:00:00+00:00",
+   "age": 28,
+   "height": 182,
+   "foot": "Right",
+   "country": "Brazil",
+   "country_code": "BR",
+   "market_value": 260000,
+   "market_currency": "EUR",
+   "retired": null,
+   "club": "sahel",
+   "goals_season": 0,
+   "career": [
+    {
+     "date": "19/07/2026",
+     "iso": "2026-07-19",
+     "from": "Naxxar Lions FC",
+     "to": "Al Sahel SC",
+     "fee": "Free"
+    },
+    {
+     "date": "02/01/2025",
+     "iso": "2025-01-02",
+     "from": "FC Osaka",
+     "to": "Naxxar Lions FC",
+     "fee": "Free"
+    },
+    {
+     "date": "08/07/2024",
+     "iso": "2024-07-08",
+     "from": "Naxxar Lions FC",
+     "to": "FC Osaka",
+     "fee": "Free"
+    },
+    {
+     "date": "11/09/2023",
+     "iso": "2023-09-11",
+     "from": "Vitória-ES",
+     "to": "Naxxar Lions FC",
+     "fee": "-"
+    },
+    {
+     "date": "18/08/2023",
+     "iso": "2023-08-18",
+     "from": "Vitória-ES",
+     "to": "Naxxar Lions FC",
+     "fee": "-"
+    },
+    {
+     "date": "01/11/2022",
+     "iso": "2022-11-01",
+     "from": "Atlético Itapemirim",
+     "to": "Vitória-ES",
+     "fee": "-"
+    },
+    {
+     "date": "12/08/2022",
+     "iso": "2022-08-12",
+     "from": "Vitória-ES",
+     "to": "Atlético Itapemirim",
+     "fee": "-"
+    },
+    {
+     "date": "10/01/2022",
+     "iso": "2022-01-10",
+     "from": null,
+     "to": "Vitória-ES",
+     "fee": "Free"
+    },
+    {
+     "date": "01/08/2018",
+     "iso": "2018-08-01",
+     "from": "Atlético Mineiro U20",
+     "to": "Athletic Club",
+     "fee": "Free"
+    }
+   ],
+   "competitions": [
+    {
+     "competition": "Maltese FA Trophy",
+     "country": null,
+     "year": "25/26"
+    },
+    {
+     "competition": "VBET Malta Premier",
+     "country": null,
+     "year": "25/26"
+    },
+    {
+     "competition": "VBET Malta Premier",
+     "country": null,
+     "year": "24/25"
+    },
+    {
+     "competition": "VBET Malta Premier",
+     "country": null,
+     "year": "23/24"
+    }
+   ],
+   "photo": true
+  },
+  "2048221": {
+   "id": 2048221,
+   "name": "Khaled Al Qahtani",
+   "short_name": "K. A. Qahtani",
+   "name_ar": "خالد القحطاني",
+   "position": "D",
+   "positions": [],
+   "number": "",
+   "birth": "1985-02-15T00:00:00+00:00",
+   "age": 41,
+   "height": null,
+   "foot": null,
+   "country": "Kuwait",
+   "country_code": "KW",
+   "market_value": null,
+   "market_currency": null,
+   "retired": null,
+   "club": "sahel",
+   "goals_season": 0,
+   "career": [
+    {
+     "date": "30/06/2024",
+     "iso": "2024-06-30",
+     "from": null,
+     "to": "Al Sahel SC",
+     "fee": "-"
+    }
+   ],
+   "competitions": [
+    {
+     "competition": "Zain First Division",
+     "country": null,
+     "year": "25/26"
+    }
+   ],
+   "photo": true
+  },
+  "1612382": {
+   "id": 1612382,
+   "name": "Lucas Marreta",
+   "short_name": "L. Marreta",
+   "name_ar": "لوكاس ماريتا",
+   "position": "D",
+   "positions": [
+    "DC"
+   ],
+   "number": 4,
+   "birth": "1998-01-07T00:00:00+00:00",
+   "age": 28,
+   "height": 185,
+   "foot": "Right",
+   "country": "Brazil",
+   "country_code": "BR",
+   "market_value": null,
+   "market_currency": null,
+   "retired": null,
+   "club": "sahel",
+   "goals_season": 0,
+   "career": [
+    {
+     "date": "18/07/2026",
+     "iso": "2026-07-18",
+     "from": "Sampaio Corrêa-RJ",
+     "to": "Al Sahel SC",
+     "fee": "Unknown"
+    },
+    {
+     "date": "31/12/2025",
+     "iso": "2025-12-31",
+     "from": "Cabofriense",
+     "to": "Sampaio Corrêa-RJ",
+     "fee": "-"
+    },
+    {
+     "date": "12/05/2025",
+     "iso": "2025-05-12",
+     "from": "Sampaio Corrêa-RJ",
+     "to": "Cabofriense",
+     "fee": "-"
+    },
+    {
+     "date": "01/01/2025",
+     "iso": "2025-01-01",
+     "from": null,
+     "to": "Sampaio Corrêa-RJ",
+     "fee": "Unknown"
+    },
+    {
+     "date": "01/05/2024",
+     "iso": "2024-05-01",
+     "from": "Goytacaz",
+     "to": null,
+     "fee": "Free"
+    },
+    {
+     "date": "21/03/2024",
+     "iso": "2024-03-21",
+     "from": "Bangu",
+     "to": "Goytacaz",
+     "fee": "-"
+    },
+    {
+     "date": "11/01/2024",
+     "iso": "2024-01-11",
+     "from": "Goytacaz",
+     "to": "Bangu",
+     "fee": "-"
+    },
+    {
+     "date": "01/08/2023",
+     "iso": "2023-08-01",
+     "from": "Petrópolis GFC",
+     "to": "Goytacaz",
+     "fee": "Free"
+    }
+   ],
+   "competitions": [
+    {
+     "competition": "Brasileirão Série D",
+     "country": null,
+     "year": "2026"
+    },
+    {
+     "competition": "Copa Betano do Brasil",
+     "country": null,
+     "year": "2026"
+    },
+    {
+     "competition": "Carioca",
+     "country": null,
+     "year": "2026"
+    },
+    {
+     "competition": "Carioca",
+     "country": null,
+     "year": "2025"
+    },
+    {
+     "competition": "Carioca",
+     "country": null,
+     "year": "2024"
+    }
+   ],
+   "photo": true
+  },
+  "368906": {
+   "id": 368906,
+   "name": "Mauricio",
+   "short_name": "Mauricio",
+   "name_ar": "ماوريسيو",
+   "position": "D",
+   "positions": [
+    "DC"
+   ],
+   "number": null,
+   "birth": "1994-02-04T00:00:00+00:00",
+   "age": 32,
+   "height": 184,
+   "foot": "Left",
+   "country": "Brazil",
+   "country_code": "BR",
+   "market_value": 110000,
+   "market_currency": "EUR",
+   "retired": null,
+   "club": "sahel",
+   "goals_season": 0,
+   "career": [
+    {
+     "date": "18/07/2026",
+     "iso": "2026-07-18",
+     "from": "Shan United",
+     "to": "Al Sahel SC",
+     "fee": "Free"
+    },
+    {
+     "date": "09/05/2025",
+     "iso": "2025-05-09",
+     "from": "Portuguesa",
+     "to": "Shan United",
+     "fee": "Free"
+    },
+    {
+     "date": "23/08/2024",
+     "iso": "2024-08-23",
+     "from": "Grêmio Esportivo Brasil",
+     "to": "Portuguesa",
+     "fee": "Unknown"
+    },
+    {
+     "date": "13/06/2024",
+     "iso": "2024-06-13",
+     "from": "Juazeirense",
+     "to": "Grêmio Esportivo Brasil",
+     "fee": "Free"
+    },
+    {
+     "date": "01/01/2024",
+     "iso": "2024-01-01",
+     "from": "No team",
+     "to": "Juazeirense",
+     "fee": "-"
+    },
+    {
+     "date": "05/06/2023",
+     "iso": "2023-06-05",
+     "from": "Manaus",
+     "to": "No team",
+     "fee": "-"
+    },
+    {
+     "date": "13/01/2023",
+     "iso": "2023-01-13",
+     "from": "CN Marcílio Dias",
+     "to": "Manaus",
+     "fee": "Unknown"
+    },
+    {
+     "date": "14/04/2022",
+     "iso": "2022-04-14",
+     "from": "Juventus-SP",
+     "to": "CN Marcílio Dias",
+     "fee": "Free"
+    },
+    {
+     "date": "24/01/2022",
+     "iso": "2022-01-24",
+     "from": "GE Juventus",
+     "to": "Juventus-SP",
+     "fee": "Free"
+    },
+    {
+     "date": "02/06/2021",
+     "iso": "2021-06-02",
+     "from": "EC Pelotas",
+     "to": "GE Juventus",
+     "fee": "Free"
+    },
+    {
+     "date": "18/02/2021",
+     "iso": "2021-02-18",
+     "from": "Ferroviária",
+     "to": "EC Pelotas",
+     "fee": "Free"
+    },
+    {
+     "date": "27/10/2020",
+     "iso": "2020-10-27",
+     "from": "Taubaté",
+     "to": "Ferroviária",
+     "fee": "Free"
+    },
+    {
+     "date": "14/08/2020",
+     "iso": "2020-08-14",
+     "from": "Ferroviária",
+     "to": "Taubaté",
+     "fee": "Free"
+    },
+    {
+     "date": "27/08/2019",
+     "iso": "2019-08-27",
+     "from": "União Recreativa dos Trabalhadores",
+     "to": "Ferroviária",
+     "fee": "Free"
+    },
+    {
+     "date": "15/02/2019",
+     "iso": "2019-02-15",
+     "from": "América-RN",
+     "to": "União Recreativa dos Trabalhadores",
+     "fee": "Unknown"
+    },
+    {
+     "date": "07/01/2019",
+     "iso": "2019-01-07",
+     "from": "Audax-SP",
+     "to": "América-RN",
+     "fee": "Free"
+    },
+    {
+     "date": "30/11/2016",
+     "iso": "2016-11-30",
+     "from": "Osasco Sporting",
+     "to": "Audax-SP",
+     "fee": "-"
+    },
+    {
+     "date": "19/05/2016",
+     "iso": "2016-05-19",
+     "from": "Audax-SP",
+     "to": "Osasco Sporting",
+     "fee": "-"
+    },
+    {
+     "date": "01/05/2015",
+     "iso": "2015-05-01",
+     "from": "Grêmio Osasco",
+     "to": "Audax-SP",
+     "fee": "-"
+    },
+    {
+     "date": "01/01/2015",
+     "iso": "2015-01-01",
+     "from": "Audax-SP",
+     "to": "Grêmio Osasco",
+     "fee": "-"
+    },
+    {
+     "date": "01/07/2014",
+     "iso": "2014-07-01",
+     "from": null,
+     "to": "Audax-SP",
+     "fee": "-"
+    }
+   ],
+   "competitions": [
+    {
+     "competition": "Paulista Série A1",
+     "country": null,
+     "year": "2025"
+    },
+    {
+     "competition": "Baianão Mansão Green 2026",
+     "country": null,
+     "year": "2024"
+    },
+    {
+     "competition": "Copa do Nordeste",
+     "country": null,
+     "year": "2024"
+    },
+    {
+     "competition": "Paulista, Série A2",
+     "country": null,
+     "year": "2022"
+    }
+   ],
+   "photo": true
+  },
+  "2042316": {
+   "id": 2042316,
+   "name": "Meshari Al Kandari",
+   "short_name": "M. A. Kandari",
+   "name_ar": "مشاري الكندري",
+   "position": "D",
+   "positions": [],
+   "number": "",
+   "birth": "1991-12-31T00:00:00+00:00",
+   "age": 34,
+   "height": null,
+   "foot": null,
+   "country": "Kuwait",
+   "country_code": "KW",
+   "market_value": null,
+   "market_currency": null,
+   "retired": null,
+   "club": "sahel",
+   "goals_season": 0,
+   "career": [
+    {
+     "date": "30/06/2024",
+     "iso": "2024-06-30",
+     "from": "Al Fahaheel SC",
+     "to": "Al Sahel SC",
+     "fee": "-"
+    }
+   ],
+   "competitions": [],
+   "photo": true
+  },
+  "2139482": {
+   "id": 2139482,
+   "name": "Saad Al Azmi",
+   "short_name": "S. A. Azmi",
+   "name_ar": "سعد العزمي",
+   "position": "D",
+   "positions": [],
+   "number": "",
+   "birth": "2005-11-03T00:00:00+00:00",
+   "age": 20,
+   "height": null,
+   "foot": null,
+   "country": "Kuwait",
+   "country_code": "KW",
+   "market_value": null,
+   "market_currency": null,
+   "retired": null,
+   "club": "sahel",
+   "goals_season": 0,
+   "career": [
+    {
+     "date": "30/06/2024",
+     "iso": "2024-06-30",
+     "from": null,
+     "to": "Al Sahel SC",
+     "fee": "-"
+    }
+   ],
+   "competitions": [],
+   "photo": false
+  },
+  "974440": {
+   "id": 974440,
+   "name": "Victor Lisboa",
+   "short_name": "Vitão",
+   "name_ar": "فيكتور ليشبوا",
+   "position": "D",
+   "positions": [
+    "DC"
+   ],
+   "number": 30,
+   "birth": "1993-09-22T00:00:00+00:00",
+   "age": 32,
+   "height": 187,
+   "foot": "Right",
+   "country": "Brazil",
+   "country_code": "BR",
+   "market_value": 0,
+   "market_currency": "EUR",
+   "retired": null,
+   "club": "sahel",
+   "goals_season": 0,
+   "career": [
+    {
+     "date": "20/07/2024",
+     "iso": "2024-07-20",
+     "from": "Khaitan SC",
+     "to": "Al Sahel SC",
+     "fee": "Free"
+    },
+    {
+     "date": "19/05/2024",
+     "iso": "2024-05-19",
+     "from": "Khaitan SC",
+     "to": "No team",
+     "fee": "-"
+    },
+    {
+     "date": "01/01/2024",
+     "iso": "2024-01-01",
+     "from": "CN Marcílio Dias",
+     "to": "No team",
+     "fee": "-"
+    },
+    {
+     "date": "10/01/2023",
+     "iso": "2023-01-10",
+     "from": null,
+     "to": "CN Marcílio Dias",
+     "fee": "Free"
+    },
+    {
+     "date": "01/07/2022",
+     "iso": "2022-07-01",
+     "from": "Al-Sahel",
+     "to": null,
+     "fee": "Unknown"
+    },
+    {
+     "date": "30/08/2021",
+     "iso": "2021-08-30",
+     "from": "Osasco Sporting",
+     "to": "No team",
+     "fee": "-"
+    },
+    {
+     "date": "29/10/2020",
+     "iso": "2020-10-29",
+     "from": "Criciúma",
+     "to": "Osasco Sporting",
+     "fee": "Unknown"
+    },
+    {
+     "date": "28/02/2020",
+     "iso": "2020-02-28",
+     "from": "EC Pelotas",
+     "to": "Criciúma",
+     "fee": "Free"
+    },
+    {
+     "date": "06/01/2020",
+     "iso": "2020-01-06",
+     "from": "Santa Cruz",
+     "to": "EC Pelotas",
+     "fee": "Free"
+    },
+    {
+     "date": "03/12/2018",
+     "iso": "2018-12-03",
+     "from": "Central SC",
+     "to": "Santa Cruz",
+     "fee": "Unknown"
+    },
+    {
+     "date": "01/10/2018",
+     "iso": "2018-10-01",
+     "from": "Salgueiro",
+     "to": "Central SC",
+     "fee": "-"
+    },
+    {
+     "date": "04/06/2018",
+     "iso": "2018-06-04",
+     "from": "Central SC",
+     "to": "Salgueiro",
+     "fee": "-"
+    }
+   ],
+   "competitions": [
+    {
+     "competition": "Zain First Division",
+     "country": null,
+     "year": "25/26"
+    },
+    {
+     "competition": "Catarinense",
+     "country": null,
+     "year": "2023"
+    },
+    {
+     "competition": "Brasileirão Série B",
+     "country": null,
+     "year": "2020"
+    }
+   ],
+   "photo": true
+  },
+  "1618276": {
+   "id": 1618276,
+   "name": "Christian Alex",
+   "short_name": "C. Alex",
+   "name_ar": "كريستيان أليكس",
+   "position": "M",
+   "positions": [
+    "RW"
+   ],
+   "number": 33,
+   "birth": "2004-02-22T00:00:00+00:00",
+   "age": 22,
+   "height": null,
+   "foot": "Left",
+   "country": "Nigeria",
+   "country_code": "NG",
+   "market_value": 220000,
+   "market_currency": "EUR",
+   "retired": null,
+   "club": "sahel",
+   "goals_season": 2,
+   "career": [
+    {
+     "date": "01/07/2025",
+     "iso": "2025-07-01",
+     "from": "Keçiörengücü",
+     "to": "Al Sahel SC",
+     "fee": "-"
+    },
+    {
+     "date": "30/06/2025",
+     "iso": "2025-06-30",
+     "from": "Burgan SC",
+     "to": "Keçiörengücü",
+     "fee": "-"
+    },
+    {
+     "date": "19/07/2024",
+     "iso": "2024-07-19",
+     "from": "Keçiörengücü",
+     "to": "Burgan SC",
+     "fee": "-"
+    },
+    {
+     "date": "30/06/2024",
+     "iso": "2024-06-30",
+     "from": "KF Liria",
+     "to": "Keçiörengücü",
+     "fee": "-"
+    },
+    {
+     "date": "31/01/2024",
+     "iso": "2024-01-31",
+     "from": "Keçiörengücü",
+     "to": "KF Liria",
+     "fee": "-"
+    },
+    {
+     "date": "13/01/2023",
+     "iso": "2023-01-13",
+     "from": null,
+     "to": "Keçiörengücü",
+     "fee": "-"
+    }
+   ],
+   "competitions": [
+    {
+     "competition": "Zain First Division",
+     "country": null,
+     "year": "25/26"
+    },
+    {
+     "competition": "Trendyol 1.Lig",
+     "country": null,
+     "year": "23/24"
+    },
+    {
+     "competition": "Trendyol 1.Lig",
+     "country": null,
+     "year": "22/23"
+    }
+   ],
+   "photo": true
+  },
+  "985082": {
+   "id": 985082,
+   "name": "Lucas Lucena",
+   "short_name": "L. Lucena",
+   "name_ar": "لوكاس لوسينا",
+   "position": "M",
+   "positions": [
+    "MC"
+   ],
+   "number": 8,
+   "birth": "1996-03-07T00:00:00+00:00",
+   "age": 30,
+   "height": 183,
+   "foot": "Both",
+   "country": "Brazil",
+   "country_code": "BR",
+   "market_value": null,
+   "market_currency": null,
+   "retired": null,
+   "club": "sahel",
+   "goals_season": 2,
+   "career": [
+    {
+     "date": "16/04/2025",
+     "iso": "2025-04-16",
+     "from": "Atlético Alagoinhas",
+     "to": "Grêmio Esportivo Brasil",
+     "fee": "Unknown"
+    },
+    {
+     "date": "01/01/2025",
+     "iso": "2025-01-01",
+     "from": "Juventus-SP",
+     "to": "Atlético Alagoinhas",
+     "fee": "Free"
+    },
+    {
+     "date": "03/07/2024",
+     "iso": "2024-07-03",
+     "from": "EC Avenida",
+     "to": "Juventus-SP",
+     "fee": "Free"
+    },
+    {
+     "date": "01/01/2024",
+     "iso": "2024-01-01",
+     "from": "Comercial-SP U23",
+     "to": "EC Avenida",
+     "fee": "Free"
+    },
+    {
+     "date": "29/06/2023",
+     "iso": "2023-06-29",
+     "from": "Boavista",
+     "to": "Comercial-SP U23",
+     "fee": "Free"
+    },
+    {
+     "date": "03/01/2023",
+     "iso": "2023-01-03",
+     "from": "Itumbiara EC",
+     "to": "Boavista",
+     "fee": "Free"
+    },
+    {
+     "date": "04/08/2022",
+     "iso": "2022-08-04",
+     "from": null,
+     "to": "Itumbiara EC",
+     "fee": "Free"
+    },
+    {
+     "date": "01/02/2022",
+     "iso": "2022-02-01",
+     "from": "No team",
+     "to": null,
+     "fee": "Free"
+    },
+    {
+     "date": "31/05/2021",
+     "iso": "2021-05-31",
+     "from": "Bangu",
+     "to": "No team",
+     "fee": "-"
+    },
+    {
+     "date": "23/02/2021",
+     "iso": "2021-02-23",
+     "from": "Goiânia",
+     "to": "Bangu",
+     "fee": "Free"
+    },
+    {
+     "date": "24/01/2020",
+     "iso": "2020-01-24",
+     "from": "Sampaio Corrêa",
+     "to": "Goiânia",
+     "fee": "-"
+    },
+    {
+     "date": "03/07/2019",
+     "iso": "2019-07-03",
+     "from": "Sampaio Corrêa",
+     "to": null,
+     "fee": "-"
+    },
+    {
+     "date": "26/04/2019",
+     "iso": "2019-04-26",
+     "from": null,
+     "to": "Sampaio Corrêa",
+     "fee": "-"
+    }
+   ],
+   "competitions": [
+    {
+     "competition": "Zain First Division",
+     "country": null,
+     "year": "25/26"
+    },
+    {
+     "competition": "Brasileirão Série D",
+     "country": null,
+     "year": "2025"
+    },
+    {
+     "competition": "Baianão Mansão Green 2026",
+     "country": null,
+     "year": "2025"
+    },
+    {
+     "competition": "Gaúcho",
+     "country": null,
+     "year": "2024"
+    },
+    {
+     "competition": "Carioca",
+     "country": null,
+     "year": "2023"
+    }
+   ],
+   "photo": true
+  },
+  "1650820": {
+   "id": 1650820,
+   "name": "Aiman Al Hagri",
+   "short_name": "A. A. Hagri",
+   "name_ar": "أيمان الحاجري",
+   "position": "M",
+   "positions": [],
+   "number": null,
+   "birth": "1992-11-07T00:00:00+00:00",
+   "age": 33,
+   "height": null,
+   "foot": null,
+   "country": "Kuwait",
+   "country_code": "KW",
+   "market_value": null,
+   "market_currency": null,
+   "retired": null,
+   "club": "sahel",
+   "goals_season": 0,
+   "career": [],
+   "competitions": [],
+   "photo": false
+  },
+  "2442947": {
+   "id": 2442947,
+   "name": "Ali Jawhar",
+   "short_name": "A. Jawhar",
+   "name_ar": "علي جوهر",
+   "position": "M",
+   "positions": [],
+   "number": 21,
+   "birth": "1992-12-22T00:00:00+00:00",
+   "age": 33,
+   "height": null,
+   "foot": null,
+   "country": "Kuwait",
+   "country_code": "KW",
+   "market_value": null,
+   "market_currency": null,
+   "retired": null,
+   "club": "sahel",
+   "goals_season": 0,
+   "career": [],
+   "competitions": [
+    {
+     "competition": "Zain First Division",
+     "country": null,
+     "year": "25/26"
+    }
+   ],
+   "photo": true
+  },
+  "2042323": {
+   "id": 2042323,
+   "name": "Leonardo Silva",
+   "short_name": "L. Silva",
+   "name_ar": "ليوناردو سيلفا",
+   "position": "M",
+   "positions": [],
+   "number": 16,
+   "birth": "1991-12-31T00:00:00+00:00",
+   "age": 34,
+   "height": null,
+   "foot": null,
+   "country": "Brazil",
+   "country_code": "BR",
+   "market_value": null,
+   "market_currency": null,
+   "retired": null,
+   "club": "sahel",
+   "goals_season": 0,
+   "career": [],
+   "competitions": [],
+   "photo": true
+  },
+  "2139483": {
+   "id": 2139483,
+   "name": "Meshari Fayad",
+   "short_name": "M. Fayad",
+   "name_ar": "مشاري فياض",
+   "position": "M",
+   "positions": [],
+   "number": 21,
+   "birth": "1991-03-21T00:00:00+00:00",
+   "age": 35,
+   "height": null,
+   "foot": null,
+   "country": "Kuwait",
+   "country_code": "KW",
+   "market_value": null,
+   "market_currency": null,
+   "retired": null,
+   "club": "sahel",
+   "goals_season": 0,
+   "career": [],
+   "competitions": [],
+   "photo": false
+  },
+  "1862954": {
+   "id": 1862954,
+   "name": "Mohammed Zenefer Al Dawsari",
+   "short_name": "M. Zenefer",
+   "name_ar": "محمد زينفر الدوسري",
+   "position": "M",
+   "positions": [],
+   "number": 7,
+   "birth": "1995-05-23T00:00:00+00:00",
+   "age": 31,
+   "height": null,
+   "foot": null,
+   "country": "Kuwait",
+   "country_code": "KW",
+   "market_value": null,
+   "market_currency": null,
+   "retired": null,
+   "club": "sahel",
+   "goals_season": 0,
+   "career": [
+    {
+     "date": "01/09/2025",
+     "iso": "2025-09-01",
+     "from": "Al Shabab SC",
+     "to": "Al Sahel SC",
+     "fee": "-"
+    },
+    {
+     "date": "30/06/2024",
+     "iso": "2024-06-30",
+     "from": null,
+     "to": "Al Shabab SC",
+     "fee": "-"
+    }
+   ],
+   "competitions": [],
+   "photo": false
+  },
+  "2015155": {
+   "id": 2015155,
+   "name": "Nasser Al Qahtani",
+   "short_name": "N. Al-Enezi",
+   "name_ar": "ناصر القحطاني",
+   "position": "M",
+   "positions": [],
+   "number": 5,
+   "birth": "1994-01-17T00:00:00+00:00",
+   "age": 32,
+   "height": null,
+   "foot": null,
+   "country": "Kuwait",
+   "country_code": "KW",
+   "market_value": null,
+   "market_currency": null,
+   "retired": null,
+   "club": "sahel",
+   "goals_season": 0,
+   "career": [],
+   "competitions": [
+    {
+     "competition": "Zain First Division",
+     "country": null,
+     "year": "25/26"
+    }
+   ],
+   "photo": true
+  },
+  "809496": {
+   "id": 809496,
+   "name": "Shaheen Alkhamees",
+   "short_name": "S. Alkhamees",
+   "name_ar": "شاهين الخميس",
+   "position": "M",
+   "positions": [
+    "MR"
+   ],
+   "number": 72,
+   "birth": "1993-07-08T00:00:00+00:00",
+   "age": 33,
+   "height": null,
+   "foot": null,
+   "country": "Kuwait",
+   "country_code": "KW",
+   "market_value": null,
+   "market_currency": null,
+   "retired": null,
+   "club": "sahel",
+   "goals_season": 0,
+   "career": [
+    {
+     "date": "25/06/2025",
+     "iso": "2025-06-25",
+     "from": "Al Sahel SC",
+     "to": "Al Shabab SC",
+     "fee": "-"
+    },
+    {
+     "date": "22/07/2024",
+     "iso": "2024-07-22",
+     "from": "Al Kuwait SC",
+     "to": "Al Sahel SC",
+     "fee": "Unknown"
+    },
+    {
+     "date": "02/01/2019",
+     "iso": "2019-01-02",
+     "from": "Al Salmiya SC",
+     "to": "Al Kuwait SC",
+     "fee": "Unknown"
+    },
+    {
+     "date": "01/07/2017",
+     "iso": "2017-07-01",
+     "from": "Al Kuwait SC",
+     "to": "Al Salmiya SC",
+     "fee": "Unknown"
+    },
+    {
+     "date": "01/01/2014",
+     "iso": "2014-01-01",
+     "from": null,
+     "to": "Al Kuwait SC",
+     "fee": "Unknown"
+    }
+   ],
+   "competitions": [
+    {
+     "competition": "AFC Champions League Two",
+     "country": null,
+     "year": "2021"
+    },
+    {
+     "competition": "AFC Champions League Two",
+     "country": null,
+     "year": "2019"
+    },
+    {
+     "competition": "AFC Champions League Two",
+     "country": null,
+     "year": "2015"
+    }
+   ],
+   "photo": true
+  },
+  "1609808": {
+   "id": 1609808,
+   "name": "Allan Paulista",
+   "short_name": "A. Paulista",
+   "name_ar": "ألان باوليستا",
+   "position": "F",
+   "positions": [
+    "ST"
+   ],
+   "number": 29,
+   "birth": "1999-07-07T00:00:00+00:00",
+   "age": 27,
+   "height": 183,
+   "foot": "Both",
+   "country": "Brazil",
+   "country_code": "BR",
+   "market_value": 205000,
+   "market_currency": "EUR",
+   "retired": false,
+   "club": "sahel",
+   "goals_season": 11,
+   "career": [
+    {
+     "date": "30/06/2025",
+     "iso": "2025-06-30",
+     "from": "Sporting Delhi",
+     "to": "Al Sahel SC",
+     "fee": "-"
+    },
+    {
+     "date": "24/09/2024",
+     "iso": "2024-09-24",
+     "from": "Jiangxi Dingnan United",
+     "to": "Sporting Delhi",
+     "fee": "Unknown"
+    },
+    {
+     "date": "28/02/2024",
+     "iso": "2024-02-28",
+     "from": "Iporá",
+     "to": "Jiangxi Dingnan United",
+     "fee": "Free"
+    },
+    {
+     "date": "12/01/2024",
+     "iso": "2024-01-12",
+     "from": "Real Noroeste",
+     "to": "Iporá",
+     "fee": "Unknown"
+    },
+    {
+     "date": "10/03/2023",
+     "iso": "2023-03-10",
+     "from": "Inhumas",
+     "to": "Real Noroeste",
+     "fee": "Unknown"
+    }
+   ],
+   "competitions": [
+    {
+     "competition": "Zain First Division",
+     "country": null,
+     "year": "25/26"
+    },
+    {
+     "competition": "Super Cup India",
+     "country": null,
+     "year": "2025"
+    },
+    {
+     "competition": "Indian Super League",
+     "country": null,
+     "year": "24/25"
+    },
+    {
+     "competition": "Chinese League 1",
+     "country": null,
+     "year": "2024"
+    },
+    {
+     "competition": "Goiano",
+     "country": null,
+     "year": "2024"
+    },
+    {
+     "competition": "Goiano",
+     "country": null,
+     "year": "2023"
+    }
+   ],
+   "photo": true
+  },
+  "1119953": {
+   "id": 1119953,
+   "name": "Birahim Gaye",
+   "short_name": "B. Gaye",
+   "name_ar": "بيراهيم غاي",
+   "position": "F",
+   "positions": [
+    "ST"
+   ],
+   "number": 99,
+   "birth": "1994-02-27T00:00:00+00:00",
+   "age": 32,
+   "height": 173,
+   "foot": "Right",
+   "country": "Senegal",
+   "country_code": "SN",
+   "market_value": 120000,
+   "market_currency": "EUR",
+   "retired": null,
+   "club": "sahel",
+   "goals_season": 10,
+   "career": [
+    {
+     "date": "05/04/2025",
+     "iso": "2025-04-05",
+     "from": "Al-Shahaniya",
+     "to": "Al Sahel SC",
+     "fee": "-"
+    },
+    {
+     "date": "01/08/2022",
+     "iso": "2022-08-01",
+     "from": "Hassania d'Agadir",
+     "to": "Al-Shahaniya",
+     "fee": "Free"
+    },
+    {
+     "date": "01/09/2021",
+     "iso": "2021-09-01",
+     "from": "Al-Shahaniya",
+     "to": "Hassania d'Agadir",
+     "fee": "Free"
+    },
+    {
+     "date": "01/08/2020",
+     "iso": "2020-08-01",
+     "from": "Al Shabab SC",
+     "to": "Al-Shahaniya",
+     "fee": "Unknown"
+    },
+    {
+     "date": "01/07/2019",
+     "iso": "2019-07-01",
+     "from": "ASC Diambars",
+     "to": "Al Shabab SC",
+     "fee": "Unknown"
+    },
+    {
+     "date": "01/01/2013",
+     "iso": "2013-01-01",
+     "from": null,
+     "to": "ASC Diambars",
+     "fee": "Unknown"
+    }
+   ],
+   "competitions": [
+    {
+     "competition": "Zain First Division",
+     "country": null,
+     "year": "25/26"
+    }
+   ],
+   "photo": true
+  },
+  "1539316": {
+   "id": 1539316,
+   "name": "Cleiton Padilha",
+   "short_name": "C. Padilha",
+   "name_ar": "كليتون باديلها",
+   "position": "F",
+   "positions": [
+    "ST"
+   ],
+   "number": 27,
+   "birth": "1996-01-03T00:00:00+00:00",
+   "age": 30,
+   "height": 175,
+   "foot": "Right",
+   "country": "Brazil",
+   "country_code": "BR",
+   "market_value": 360000,
+   "market_currency": "EUR",
+   "retired": null,
+   "club": "sahel",
+   "goals_season": 3,
+   "career": [
+    {
+     "date": "19/07/2026",
+     "iso": "2026-07-19",
+     "from": "Hibernians",
+     "to": "Al Sahel SC",
+     "fee": "Free"
+    },
+    {
+     "date": "13/07/2025",
+     "iso": "2025-07-13",
+     "from": "AA Altos",
+     "to": "Hibernians",
+     "fee": "Free"
+    },
+    {
+     "date": "17/01/2025",
+     "iso": "2025-01-17",
+     "from": "Força e Luz",
+     "to": "AA Altos",
+     "fee": "Unknown"
+    },
+    {
+     "date": "10/01/2025",
+     "iso": "2025-01-10",
+     "from": "GE Juventus",
+     "to": "Força e Luz",
+     "fee": "Unknown"
+    },
+    {
+     "date": "10/07/2024",
+     "iso": "2024-07-10",
+     "from": "Moto Club",
+     "to": "GE Juventus",
+     "fee": "Free"
+    },
+    {
+     "date": "01/05/2024",
+     "iso": "2024-05-01",
+     "from": null,
+     "to": "Moto Club",
+     "fee": "Free"
+    },
+    {
+     "date": "01/01/2024",
+     "iso": "2024-01-01",
+     "from": null,
+     "to": null,
+     "fee": "Free"
+    },
+    {
+     "date": "01/01/2023",
+     "iso": "2023-01-01",
+     "from": null,
+     "to": null,
+     "fee": "Free"
+    },
+    {
+     "date": "01/08/2022",
+     "iso": "2022-08-01",
+     "from": null,
+     "to": null,
+     "fee": "Free"
+    },
+    {
+     "date": "01/07/2022",
+     "iso": "2022-07-01",
+     "from": null,
+     "to": null,
+     "fee": "Free"
+    }
+   ],
+   "competitions": [
+    {
+     "competition": "Zain First Division",
+     "country": null,
+     "year": "25/26"
+    },
+    {
+     "competition": "Maltese FA Trophy",
+     "country": null,
+     "year": "25/26"
+    },
+    {
+     "competition": "VBET Malta Premier",
+     "country": null,
+     "year": "25/26"
+    },
+    {
+     "competition": "Brasileirão Série D",
+     "country": null,
+     "year": "2025"
+    },
+    {
+     "competition": "Copa Betano do Brasil",
+     "country": null,
+     "year": "2025"
+    },
+    {
+     "competition": "Copa do Nordeste",
+     "country": null,
+     "year": "2025"
+    }
+   ],
+   "photo": true
+  },
+  "1629528": {
+   "id": 1629528,
+   "name": "Abdullah Bather",
+   "short_name": "A. Al-Dhafeeri",
+   "name_ar": "عبد الله باثر",
+   "position": "F",
+   "positions": [],
+   "number": "",
+   "birth": "1987-11-19T00:00:00+00:00",
+   "age": 38,
+   "height": null,
+   "foot": null,
+   "country": "Kuwait",
+   "country_code": "KW",
+   "market_value": null,
+   "market_currency": null,
+   "retired": null,
+   "club": "sahel",
+   "goals_season": 0,
+   "career": [],
+   "competitions": [],
+   "photo": false
+  },
+  "1006323": {
+   "id": 1006323,
+   "name": "Faisal Ajab Al Azemi",
+   "short_name": "F. A. A. Azemi",
+   "name_ar": "آل أزيمي، فيصل أجب",
+   "position": "F",
+   "positions": [],
+   "number": null,
+   "birth": "1993-01-23T00:00:00+00:00",
+   "age": 33,
+   "height": 169,
+   "foot": "Right",
+   "country": "Kuwait",
+   "country_code": "KW",
+   "market_value": null,
+   "market_currency": null,
+   "retired": null,
+   "club": "sahel",
+   "goals_season": 0,
+   "career": [
+    {
+     "date": "16/01/2021",
+     "iso": "2021-01-16",
+     "from": "Tadhamon SC",
+     "to": "Al Sahel SC",
+     "fee": "-"
+    },
+    {
+     "date": "02/02/2020",
+     "iso": "2020-02-02",
+     "from": "Al Arabi SC Kuwait",
+     "to": "Tadhamon SC",
+     "fee": "Free"
+    },
+    {
+     "date": "01/07/2019",
+     "iso": "2019-07-01",
+     "from": "Tadhamon SC",
+     "to": "Al Arabi SC Kuwait",
+     "fee": "Unknown"
+    },
+    {
+     "date": "01/01/2019",
+     "iso": "2019-01-01",
+     "from": "Al Markhiya",
+     "to": "Tadhamon SC",
+     "fee": "Unknown"
+    },
+    {
+     "date": "01/07/2018",
+     "iso": "2018-07-01",
+     "from": "Tadhamon SC",
+     "to": "Al Markhiya",
+     "fee": "Unknown"
+    },
+    {
+     "date": "01/07/2017",
+     "iso": "2017-07-01",
+     "from": "Al Qadsia SC",
+     "to": "Tadhamon SC",
+     "fee": "Unknown"
+    },
+    {
+     "date": "01/01/2015",
+     "iso": "2015-01-01",
+     "from": null,
+     "to": "Al Qadsia SC",
+     "fee": "Unknown"
+    }
+   ],
+   "competitions": [
+    {
+     "competition": "Zain First Division",
+     "country": null,
+     "year": "25/26"
+    },
+    {
+     "competition": "AFC Champions League Two",
+     "country": null,
+     "year": "2015"
+    }
+   ],
+   "photo": true
+  },
+  "2042318": {
+   "id": 2042318,
+   "name": "Farhan Saad",
+   "short_name": "F. Saad",
+   "name_ar": "فرحان سعد",
+   "position": "F",
+   "positions": [],
+   "number": 20,
+   "birth": "1992-12-30T00:00:00+00:00",
+   "age": 33,
+   "height": null,
+   "foot": null,
+   "country": "Kuwait",
+   "country_code": "KW",
+   "market_value": null,
+   "market_currency": null,
+   "retired": null,
+   "club": "sahel",
+   "goals_season": 0,
+   "career": [],
+   "competitions": [],
+   "photo": true
+  },
+  "1004419": {
+   "id": 1004419,
+   "name": "Malick Cisse",
+   "short_name": "M. Cisse",
+   "name_ar": "ماليك سيسه",
+   "position": "F",
+   "positions": [
+    "AM",
+    "RW"
+   ],
+   "number": null,
+   "birth": "1994-06-04T00:00:00+00:00",
+   "age": 32,
+   "height": 170,
+   "foot": "Right",
+   "country": "Senegal",
+   "country_code": "SN",
+   "market_value": 270000,
+   "market_currency": "EUR",
+   "retired": null,
+   "club": "sahel",
+   "goals_season": 0,
+   "career": [
+    {
+     "date": "30/06/2024",
+     "iso": "2024-06-30",
+     "from": "Burgan SC",
+     "to": "Al Sahel SC",
+     "fee": "-"
+    },
+    {
+     "date": "30/06/2023",
+     "iso": "2023-06-30",
+     "from": null,
+     "to": "Burgan SC",
+     "fee": "-"
+    },
+    {
+     "date": "01/08/2022",
+     "iso": "2022-08-01",
+     "from": "Hassania d'Agadir",
+     "to": "No team",
+     "fee": "Unknown"
+    },
+    {
+     "date": "01/07/2019",
+     "iso": "2019-07-01",
+     "from": "Académie Génération Foot",
+     "to": "Hassania d'Agadir",
+     "fee": "Unknown"
+    }
+   ],
+   "competitions": [
+    {
+     "competition": "CAF Confederations Cup",
+     "country": null,
+     "year": "19/20"
+    }
+   ],
+   "photo": true
+  },
+  "2011095": {
+   "id": 2011095,
+   "name": "Mohammed Al Aladhi",
+   "short_name": "M. A. Aladhi",
+   "name_ar": "محمد العلادي",
+   "position": "F",
+   "positions": [],
+   "number": 17,
+   "birth": "1995-12-31T00:00:00+00:00",
+   "age": 30,
+   "height": null,
+   "foot": "Right",
+   "country": "Kuwait",
+   "country_code": "KW",
+   "market_value": null,
+   "market_currency": null,
+   "retired": null,
+   "club": "sahel",
+   "goals_season": 0,
+   "career": [
+    {
+     "date": "30/06/2025",
+     "iso": "2025-06-30",
+     "from": "Khaitan SC",
+     "to": "Al Sahel SC",
+     "fee": "-"
+    }
+   ],
+   "competitions": [
+    {
+     "competition": "Zain First Division",
+     "country": null,
+     "year": "25/26"
+    }
+   ],
+   "photo": true
+  },
+  "2277148": {
+   "id": 2277148,
+   "name": "Abdullah Al Fadhli",
+   "short_name": "A. Al-Fadhli",
+   "name_ar": "عبد الله الفاضلي",
+   "position": "G",
+   "positions": [],
+   "number": 39,
+   "birth": "2001-03-30T00:00:00+00:00",
+   "age": 25,
+   "height": null,
+   "foot": null,
+   "country": "Kuwait",
+   "country_code": "KW",
+   "market_value": null,
+   "market_currency": null,
+   "retired": null,
+   "club": "shamiya",
+   "goals_season": 0,
+   "career": [
+    {
+     "date": "01/09/2025",
+     "iso": "2025-09-01",
+     "from": null,
+     "to": "Al-Shamiya FC",
+     "fee": "-"
+    }
+   ],
+   "competitions": [
+    {
+     "competition": "Zain First Division",
+     "country": null,
+     "year": "25/26"
+    }
+   ],
+   "photo": true
+  },
+  "2277146": {
+   "id": 2277146,
+   "name": "Abdulrahman Baron",
+   "short_name": "A. Baron",
+   "name_ar": "عبد الرحمن بارون",
+   "position": "G",
+   "positions": [],
+   "number": 22,
+   "birth": "2004-09-17T00:00:00+00:00",
+   "age": 21,
+   "height": null,
+   "foot": null,
+   "country": "Kuwait",
+   "country_code": "KW",
+   "market_value": null,
+   "market_currency": null,
+   "retired": null,
+   "club": "shamiya",
+   "goals_season": 0,
+   "career": [
+    {
+     "date": "01/09/2025",
+     "iso": "2025-09-01",
+     "from": null,
+     "to": "Al-Shamiya FC",
+     "fee": "-"
+    }
+   ],
+   "competitions": [],
+   "photo": false
+  },
+  "2112507": {
+   "id": 2112507,
+   "name": "Jamal Mahmoud Jamal",
+   "short_name": "J. Mahmoud",
+   "name_ar": "جمال محمود جمال",
+   "position": "G",
+   "positions": [],
+   "number": 1,
+   "birth": "2002-08-28T00:00:00+00:00",
+   "age": 23,
+   "height": null,
+   "foot": null,
+   "country": "Kuwait",
+   "country_code": "KW",
+   "market_value": null,
+   "market_currency": null,
+   "retired": null,
+   "club": "shamiya",
+   "goals_season": 0,
+   "career": [
+    {
+     "date": "01/08/2025",
+     "iso": "2025-08-01",
+     "from": "Al Jazeera FC Kuwait",
+     "to": "Al-Shamiya FC",
+     "fee": "-"
+    },
+    {
+     "date": "31/03/2025",
+     "iso": "2025-03-31",
+     "from": null,
+     "to": "Al Jazeera FC Kuwait",
+     "fee": "-"
+    },
+    {
+     "date": "01/06/2023",
+     "iso": "2023-06-01",
+     "from": null,
+     "to": "Al Salmiya SC U21",
+     "fee": "-"
+    }
+   ],
+   "competitions": [],
+   "photo": true
+  },
+  "919610": {
+   "id": 919610,
+   "name": "Abdelhakim Bassaine",
+   "short_name": "A. Bassaine",
+   "name_ar": "عبد الحكيم بسين",
+   "position": "D",
+   "positions": [
+    "DR"
+   ],
+   "number": 23,
+   "birth": "1994-08-20T00:00:00+00:00",
+   "age": 31,
+   "height": 170,
+   "foot": null,
+   "country": "Morocco",
+   "country_code": "MA",
+   "market_value": 215000,
+   "market_currency": "EUR",
+   "retired": null,
+   "club": "shamiya",
+   "goals_season": 0,
+   "career": [
+    {
+     "date": "02/01/2026",
+     "iso": "2026-01-02",
+     "from": "Zemamra Espoir",
+     "to": "Al-Shamiya FC",
+     "fee": "-"
+    },
+    {
+     "date": "17/01/2022",
+     "iso": "2022-01-17",
+     "from": "Rapide Oued Zem",
+     "to": null,
+     "fee": "Free"
+    },
+    {
+     "date": "12/08/2021",
+     "iso": "2021-08-12",
+     "from": "Hassania d'Agadir",
+     "to": "Rapide Oued Zem",
+     "fee": "Free"
+    },
+    {
+     "date": "01/07/2018",
+     "iso": "2018-07-01",
+     "from": "Rapide Oued Zem",
+     "to": "Hassania d'Agadir",
+     "fee": "Unknown"
+    },
+    {
+     "date": "15/08/2017",
+     "iso": "2017-08-15",
+     "from": "Chabab Atlas Khénifra",
+     "to": "Rapide Oued Zem",
+     "fee": "Unknown"
+    }
+   ],
+   "competitions": [
+    {
+     "competition": "Zain First Division",
+     "country": null,
+     "year": "25/26"
+    },
+    {
+     "competition": "CAF Confederations Cup",
+     "country": null,
+     "year": "19/20"
+    }
+   ],
+   "photo": true
+  },
+  "2278916": {
+   "id": 2278916,
+   "name": "Abdulhazeem Yaseen",
+   "short_name": "A. Yaseen",
+   "name_ar": "عبد الحزيم ياسين",
+   "position": "D",
+   "positions": [],
+   "number": 23,
+   "birth": "2000-01-01T00:00:00+00:00",
+   "age": 26,
+   "height": null,
+   "foot": null,
+   "country": "Kuwait",
+   "country_code": "KW",
+   "market_value": null,
+   "market_currency": null,
+   "retired": null,
+   "club": "shamiya",
+   "goals_season": 0,
+   "career": [
+    {
+     "date": "01/09/2025",
+     "iso": "2025-09-01",
+     "from": null,
+     "to": "Al-Shamiya FC",
+     "fee": "-"
+    }
+   ],
+   "competitions": [
+    {
+     "competition": "Zain First Division",
+     "country": null,
+     "year": "25/26"
+    }
+   ],
+   "photo": true
+  },
+  "2277145": {
+   "id": 2277145,
+   "name": "Dhari Al Marzouq",
+   "short_name": "D. Al-Marzouq",
+   "name_ar": "ذاري المرزوق",
+   "position": "D",
+   "positions": [],
+   "number": 17,
+   "birth": "2005-11-25T00:00:00+00:00",
+   "age": 20,
+   "height": null,
+   "foot": null,
+   "country": "Kuwait",
+   "country_code": "KW",
+   "market_value": null,
+   "market_currency": null,
+   "retired": null,
+   "club": "shamiya",
+   "goals_season": 0,
+   "career": [
+    {
+     "date": "01/09/2025",
+     "iso": "2025-09-01",
+     "from": null,
+     "to": "Al-Shamiya FC",
+     "fee": "-"
+    }
+   ],
+   "competitions": [
+    {
+     "competition": "Zain First Division",
+     "country": null,
+     "year": "25/26"
+    }
+   ],
+   "photo": true
+  },
+  "2269789": {
+   "id": 2269789,
+   "name": "Khaled Al Dousari",
+   "short_name": "K. Al-Dousari",
+   "name_ar": "خالد الدوسري",
+   "position": "D",
+   "positions": [],
+   "number": 2,
+   "birth": "1992-08-10T00:00:00+00:00",
+   "age": 34,
+   "height": null,
+   "foot": null,
+   "country": "Kuwait",
+   "country_code": "KW",
+   "market_value": null,
+   "market_currency": null,
+   "retired": null,
+   "club": "shamiya",
+   "goals_season": 0,
+   "career": [
+    {
+     "date": "01/09/2025",
+     "iso": "2025-09-01",
+     "from": null,
+     "to": "Al-Shamiya FC",
+     "fee": "-"
+    }
+   ],
+   "competitions": [
+    {
+     "competition": "Zain First Division",
+     "country": null,
+     "year": "25/26"
+    }
+   ],
+   "photo": true
+  },
+  "2277151": {
+   "id": 2277151,
+   "name": "Mishal Edilem",
+   "short_name": "M. Edilem",
+   "name_ar": "مشعل إيديلم",
+   "position": "D",
+   "positions": [],
+   "number": 3,
+   "birth": "1996-11-18T00:00:00+00:00",
+   "age": 29,
+   "height": null,
+   "foot": null,
+   "country": "Kuwait",
+   "country_code": "KW",
+   "market_value": null,
+   "market_currency": null,
+   "retired": null,
+   "club": "shamiya",
+   "goals_season": 0,
+   "career": [
+    {
+     "date": "01/09/2025",
+     "iso": "2025-09-01",
+     "from": null,
+     "to": "Al-Shamiya FC",
+     "fee": "-"
+    },
+    {
+     "date": "18/06/2023",
+     "iso": "2023-06-18",
+     "from": "Tadhamon SC",
+     "to": null,
+     "fee": "-"
+    },
+    {
+     "date": "01/09/2018",
+     "iso": "2018-09-01",
+     "from": null,
+     "to": "Tadhamon SC",
+     "fee": "-"
+    }
+   ],
+   "competitions": [
+    {
+     "competition": "Zain First Division",
+     "country": null,
+     "year": "25/26"
+    }
+   ],
+   "photo": true
+  },
+  "2277144": {
+   "id": 2277144,
+   "name": "Mohammad Al Ali",
+   "short_name": "M. Al-Ali",
+   "name_ar": "محمد العلي",
+   "position": "D",
+   "positions": [],
+   "number": 31,
+   "birth": "2002-01-02T00:00:00+00:00",
+   "age": 24,
+   "height": null,
+   "foot": null,
+   "country": "Kuwait",
+   "country_code": "KW",
+   "market_value": null,
+   "market_currency": null,
+   "retired": null,
+   "club": "shamiya",
+   "goals_season": 0,
+   "career": [
+    {
+     "date": "01/09/2025",
+     "iso": "2025-09-01",
+     "from": null,
+     "to": "Al-Shamiya FC",
+     "fee": "-"
+    }
+   ],
+   "competitions": [
+    {
+     "competition": "Zain First Division",
+     "country": null,
+     "year": "25/26"
+    }
+   ],
+   "photo": true
+  },
+  "2269958": {
+   "id": 2269958,
+   "name": "Mohammed Al Kandari",
+   "short_name": "M. A. Kandari",
+   "name_ar": "محمد الكندري",
+   "position": "D",
+   "positions": [],
+   "number": 20,
+   "birth": "2002-07-31T00:00:00+00:00",
+   "age": 24,
+   "height": null,
+   "foot": null,
+   "country": "Kuwait",
+   "country_code": "KW",
+   "market_value": null,
+   "market_currency": null,
+   "retired": null,
+   "club": "shamiya",
+   "goals_season": 0,
+   "career": [
+    {
+     "date": "01/09/2025",
+     "iso": "2025-09-01",
+     "from": null,
+     "to": "Al-Shamiya FC",
+     "fee": "-"
+    }
+   ],
+   "competitions": [
+    {
+     "competition": "Zain First Division",
+     "country": null,
+     "year": "25/26"
+    }
+   ],
+   "photo": true
+  },
+  "2295484": {
+   "id": 2295484,
+   "name": "Abdulaziz Al Sabri",
+   "short_name": "A. A. Sabri",
+   "name_ar": "عبد العزيز الصبري",
+   "position": "M",
+   "positions": [],
+   "number": 27,
+   "birth": "1998-01-01T00:00:00+00:00",
+   "age": 28,
+   "height": null,
+   "foot": null,
+   "country": "Kuwait",
+   "country_code": "KW",
+   "market_value": null,
+   "market_currency": null,
+   "retired": null,
+   "club": "shamiya",
+   "goals_season": 0,
+   "career": [],
+   "competitions": [],
+   "photo": true
+  },
+  "2278920": {
+   "id": 2278920,
+   "name": "Adnan Al Saleh",
+   "short_name": "A. A. Saleh",
+   "name_ar": "عدنان الصالح",
+   "position": "M",
+   "positions": [],
+   "number": 15,
+   "birth": "2000-01-01T00:00:00+00:00",
+   "age": 26,
+   "height": null,
+   "foot": null,
+   "country": "Kuwait",
+   "country_code": "KW",
+   "market_value": null,
+   "market_currency": null,
+   "retired": null,
+   "club": "shamiya",
+   "goals_season": 0,
+   "career": [
+    {
+     "date": "01/09/2025",
+     "iso": "2025-09-01",
+     "from": null,
+     "to": "Al-Shamiya FC",
+     "fee": "-"
+    }
+   ],
+   "competitions": [
+    {
+     "competition": "Zain First Division",
+     "country": null,
+     "year": "25/26"
+    }
+   ],
+   "photo": true
+  },
+  "2269786": {
+   "id": 2269786,
+   "name": "Fawaz Al Shammari",
+   "short_name": "F. Al-Shammari",
+   "name_ar": "فواز الشمري",
+   "position": "M",
+   "positions": [],
+   "number": 21,
+   "birth": "1997-01-03T00:00:00+00:00",
+   "age": 29,
+   "height": null,
+   "foot": null,
+   "country": "Kuwait",
+   "country_code": "KW",
+   "market_value": null,
+   "market_currency": null,
+   "retired": null,
+   "club": "shamiya",
+   "goals_season": 0,
+   "career": [
+    {
+     "date": "01/09/2025",
+     "iso": "2025-09-01",
+     "from": null,
+     "to": "Al-Shamiya FC",
+     "fee": "-"
+    }
+   ],
+   "competitions": [
+    {
+     "competition": "Zain First Division",
+     "country": null,
+     "year": "25/26"
+    }
+   ],
+   "photo": true
+  },
+  "2277149": {
+   "id": 2277149,
+   "name": "Jamel Belkhir",
+   "short_name": "J. Belkhir",
+   "name_ar": "جمال بلخير",
+   "position": "M",
+   "positions": [],
+   "number": "",
+   "birth": "1998-02-22T00:00:00+00:00",
+   "age": 28,
+   "height": null,
+   "foot": null,
+   "country": "Kuwait",
+   "country_code": "KW",
+   "market_value": null,
+   "market_currency": null,
+   "retired": null,
+   "club": "shamiya",
+   "goals_season": 0,
+   "career": [
+    {
+     "date": "01/09/2025",
+     "iso": "2025-09-01",
+     "from": null,
+     "to": "Al-Shamiya FC",
+     "fee": "-"
+    }
+   ],
+   "competitions": [],
+   "photo": false
+  },
+  "2048466": {
+   "id": 2048466,
+   "name": "Khaled Al Hajji",
+   "short_name": "K. A. Hajji",
+   "name_ar": "خالد الحجي",
+   "position": "M",
+   "positions": [],
+   "number": 44,
+   "birth": "2003-04-30T00:00:00+00:00",
+   "age": 23,
+   "height": null,
+   "foot": null,
+   "country": "Kuwait",
+   "country_code": "KW",
+   "market_value": null,
+   "market_currency": null,
+   "retired": null,
+   "club": "shamiya",
+   "goals_season": 0,
+   "career": [],
+   "competitions": [
+    {
+     "competition": "Zain First Division",
+     "country": null,
+     "year": "25/26"
+    }
+   ],
+   "photo": true
+  },
+  "2278940": {
+   "id": 2278940,
+   "name": "Meshari Ahmad",
+   "short_name": "M. Ahmad",
+   "name_ar": "مشاري أحمد",
+   "position": "M",
+   "positions": [],
+   "number": 16,
+   "birth": "1995-01-01T00:00:00+00:00",
+   "age": 31,
+   "height": null,
+   "foot": null,
+   "country": "Syria",
+   "country_code": "SY",
+   "market_value": null,
+   "market_currency": null,
+   "retired": null,
+   "club": "shamiya",
+   "goals_season": 0,
+   "career": [
+    {
+     "date": "01/09/2025",
+     "iso": "2025-09-01",
+     "from": null,
+     "to": "Al-Shamiya FC",
+     "fee": "-"
+    }
+   ],
+   "competitions": [
+    {
+     "competition": "Zain First Division",
+     "country": null,
+     "year": "25/26"
+    }
+   ],
+   "photo": true
+  },
+  "1004525": {
+   "id": 1004525,
+   "name": "Mohamed Rouhi",
+   "short_name": "M. Rouhi",
+   "name_ar": "روحي، محمد",
+   "position": "M",
+   "positions": [
+    "MC",
+    "AM"
+   ],
+   "number": 99,
+   "birth": "1996-01-01T00:00:00+00:00",
+   "age": 30,
+   "height": 176,
+   "foot": "Right",
+   "country": "Morocco",
+   "country_code": "MA",
+   "market_value": 160000,
+   "market_currency": "EUR",
+   "retired": null,
+   "club": "shamiya",
+   "goals_season": 0,
+   "career": [
+    {
+     "date": "01/09/2025",
+     "iso": "2025-09-01",
+     "from": null,
+     "to": "Al-Shamiya FC",
+     "fee": "-"
+    },
+    {
+     "date": "15/01/2025",
+     "iso": "2025-01-15",
+     "from": "Kawkab Athletic Club Marrakech",
+     "to": "Rapide Oued Zem",
+     "fee": "Unknown"
+    },
+    {
+     "date": "22/01/2024",
+     "iso": "2024-01-22",
+     "from": "Olympic Safi",
+     "to": "Kawkab Athletic Club Marrakech",
+     "fee": "Unknown"
+    },
+    {
+     "date": "26/01/2022",
+     "iso": "2022-01-26",
+     "from": "Rapide Oued Zem",
+     "to": "Hassania d'Agadir",
+     "fee": "Unknown"
+    },
+    {
+     "date": "01/08/2019",
+     "iso": "2019-08-01",
+     "from": null,
+     "to": "Rapide Oued Zem",
+     "fee": "-"
+    },
+    {
+     "date": "21/07/2017",
+     "iso": "2017-07-21",
+     "from": "Kawkab Athletic Club Marrakech",
+     "to": null,
+     "fee": "-"
+    }
+   ],
+   "competitions": [
+    {
+     "competition": "Zain First Division",
+     "country": null,
+     "year": "25/26"
+    },
+    {
+     "competition": "Botola Pro",
+     "country": null,
+     "year": "23/24"
+    }
+   ],
+   "photo": true
+  },
+  "2476532": {
+   "id": 2476532,
+   "name": "Munawwar Al-Mutairi",
+   "short_name": "M. Al-Mutairi",
+   "name_ar": "منور المطيري",
+   "position": "M",
+   "positions": [],
+   "number": 93,
+   "birth": "2003-08-13T00:00:00+00:00",
+   "age": 22,
+   "height": null,
+   "foot": null,
+   "country": "Kuwait",
+   "country_code": "KW",
+   "market_value": null,
+   "market_currency": null,
+   "retired": null,
+   "club": "shamiya",
+   "goals_season": 0,
+   "career": [
+    {
+     "date": "01/01/2026",
+     "iso": "2026-01-01",
+     "from": null,
+     "to": "Al-Shamiya FC",
+     "fee": "-"
+    }
+   ],
+   "competitions": [
+    {
+     "competition": "Zain First Division",
+     "country": null,
+     "year": "25/26"
+    }
+   ],
+   "photo": true
+  },
+  "2277147": {
+   "id": 2277147,
+   "name": "Yahya Mustafa Al Agha",
+   "short_name": "Y. Al-Agha",
+   "name_ar": "يحيى مصطفى الآغا",
+   "position": "M",
+   "positions": [],
+   "number": 8,
+   "birth": "2001-04-16T00:00:00+00:00",
+   "age": 25,
+   "height": null,
+   "foot": null,
+   "country": "Kuwait",
+   "country_code": "KW",
+   "market_value": null,
+   "market_currency": null,
+   "retired": null,
+   "club": "shamiya",
+   "goals_season": 0,
+   "career": [
+    {
+     "date": "01/09/2025",
+     "iso": "2025-09-01",
+     "from": null,
+     "to": "Al-Shamiya FC",
+     "fee": "-"
+    }
+   ],
+   "competitions": [
+    {
+     "competition": "Zain First Division",
+     "country": null,
+     "year": "25/26"
+    }
+   ],
+   "photo": true
+  },
+  "2269788": {
+   "id": 2269788,
+   "name": "Ali Wali",
+   "short_name": "A. Wali",
+   "name_ar": "علي والي",
+   "position": "F",
+   "positions": [],
+   "number": 9,
+   "birth": "2000-10-31T00:00:00+00:00",
+   "age": 25,
+   "height": null,
+   "foot": null,
+   "country": "Kuwait",
+   "country_code": "KW",
+   "market_value": null,
+   "market_currency": null,
+   "retired": null,
+   "club": "shamiya",
+   "goals_season": 5,
+   "career": [
+    {
+     "date": "01/09/2025",
+     "iso": "2025-09-01",
+     "from": null,
+     "to": "Al-Shamiya FC",
+     "fee": "-"
+    }
+   ],
+   "competitions": [
+    {
+     "competition": "Zain First Division",
+     "country": null,
+     "year": "25/26"
+    }
+   ],
+   "photo": true
+  },
+  "2112514": {
+   "id": 2112514,
+   "name": "Ahmed Al Shammari",
+   "short_name": "A. A. Shammari",
+   "name_ar": "أحمد الشمري",
+   "position": "F",
+   "positions": [],
+   "number": 14,
+   "birth": "1987-01-12T00:00:00+00:00",
+   "age": 39,
+   "height": null,
+   "foot": null,
+   "country": "Kuwait",
+   "country_code": "KW",
+   "market_value": null,
+   "market_currency": null,
+   "retired": null,
+   "club": "shamiya",
+   "goals_season": 0,
+   "career": [
+    {
+     "date": "31/08/2025",
+     "iso": "2025-08-31",
+     "from": "Al Jazeera FC Kuwait",
+     "to": "Al-Shamiya FC",
+     "fee": "-"
+    },
+    {
+     "date": "31/03/2025",
+     "iso": "2025-03-31",
+     "from": null,
+     "to": "Al Jazeera FC Kuwait",
+     "fee": "-"
+    }
+   ],
+   "competitions": [
+    {
+     "competition": "Zain First Division",
+     "country": null,
+     "year": "25/26"
+    }
+   ],
+   "photo": true
+  },
+  "2277150": {
+   "id": 2277150,
+   "name": "Omar Al Maimouni",
+   "short_name": "O. Al-Maimouni",
+   "name_ar": "عمر الميموني",
+   "position": "F",
+   "positions": [],
+   "number": 7,
+   "birth": "1997-01-25T00:00:00+00:00",
+   "age": 29,
+   "height": null,
+   "foot": null,
+   "country": "Kuwait",
+   "country_code": "KW",
+   "market_value": null,
+   "market_currency": null,
+   "retired": null,
+   "club": "shamiya",
+   "goals_season": 0,
+   "career": [
+    {
+     "date": "01/09/2025",
+     "iso": "2025-09-01",
+     "from": null,
+     "to": "Al-Shamiya FC",
+     "fee": "-"
+    }
+   ],
+   "competitions": [
+    {
+     "competition": "Zain First Division",
+     "country": null,
+     "year": "25/26"
+    }
+   ],
+   "photo": true
   }
  }
 }
