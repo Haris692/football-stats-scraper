@@ -40,15 +40,19 @@ LOG = ROOT / "daily.log"
 # servis sous une empreinte de contenu, et réécrit les pages pour la pointer.
 # Une modification de `src/` non commitée à la main serait sinon perdue.
 PUBLISHED = ["data/site.json", "data/crests.json", "data/events.json",
-             "data/squads.json", "assets",
+             "data/squads.json", "data/scorers.json", "assets",
              "index.html", "match.html", "clubs.html", "club.html",
              "classement.html", "calendrier.html", "joueur.html",
              "data/players.site.json", "data/players.json", "data/photos"]
 
 STEPS = [
-    # Les effectifs bougent peu, mais le classement des buteurs change à chaque
-    # journée — et c'est lui qui alimente les buts par joueur.
-    (["fetch_squads.py"], "effectifs et buteurs"),
+    # Les effectifs bougent peu, mais les buts accrochés à chaque joueur
+    # changent à chaque journée — ils alimentent la fiche de club.
+    (["fetch_squads.py"], "effectifs"),
+    # Le classement des buteurs, à sa source. Une seule requête, et il ne
+    # dérive plus des effectifs : c'est ce qui l'empêche de perdre un joueur
+    # parti en cours de saison (voir `fetch_scorers`).
+    (["fetch_scorers.py"], "classement des buteurs"),
     # Les journées passées sortent du cache ; seules la journée courante et les
     # suivantes repartent sur le réseau.
     (["fetch_events.py"], "rencontres, chronologies et journées"),

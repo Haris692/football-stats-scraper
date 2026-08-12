@@ -1,0 +1,643 @@
+{
+  "generated": "2026-08-12T15:11:27",
+  "source": "sofascore",
+  "tournament": {
+    "id": 20044,
+    "season_id": 75693,
+    "season": "25/26"
+  },
+  "scorers": [
+    {
+      "id": 1018621,
+      "name": "Lucas Shallon",
+      "team": "sulaibikhat",
+      "team_name": "Al Sulaibikhat FC",
+      "goals": 12,
+      "penalties": 3
+    },
+    {
+      "id": 1609808,
+      "name": "Allan Paulista",
+      "team": "sahel",
+      "team_name": "Al Sahel SC",
+      "goals": 11,
+      "penalties": 1
+    },
+    {
+      "id": 1119953,
+      "name": "Birahim Gaye",
+      "team": "sahel",
+      "team_name": "Al Sahel SC",
+      "goals": 10,
+      "penalties": 1
+    },
+    {
+      "id": 934868,
+      "name": "Donovan Ewolo",
+      "team": "jazira",
+      "team_name": "Al Jazeera FC Kuwait",
+      "goals": 8,
+      "penalties": null
+    },
+    {
+      "id": 359380,
+      "name": "Hazem Haj Hassen",
+      "team": "yarmouk",
+      "team_name": "Yarmouk SC",
+      "goals": 7,
+      "penalties": null
+    },
+    {
+      "id": 2289921,
+      "name": "Hamoud Al-Hazmi",
+      "team": "burgan",
+      "team_name": "Burgan SC",
+      "goals": 6,
+      "penalties": null
+    },
+    {
+      "id": 1610379,
+      "name": "Isaac James Ogiri",
+      "team": "jazira",
+      "team_name": "Al Jazeera FC Kuwait",
+      "goals": 5,
+      "penalties": null
+    },
+    {
+      "id": 1634405,
+      "name": "Michel Potiguar",
+      "team": "sulaibikhat",
+      "team_name": "Al Sulaibikhat FC",
+      "goals": 5,
+      "penalties": null
+    },
+    {
+      "id": 1090606,
+      "name": "Emmanuel Evaristus",
+      "team": "burgan",
+      "team_name": "Burgan SC",
+      "goals": 5,
+      "penalties": null
+    },
+    {
+      "id": 2269788,
+      "name": "Ali Wali",
+      "team": "shamiya",
+      "team_name": "Al-Shamiya FC",
+      "goals": 5,
+      "penalties": 1
+    },
+    {
+      "id": 1218986,
+      "name": "Aqeel Al Hazeem",
+      "team": "yarmouk",
+      "team_name": "Yarmouk SC",
+      "goals": 5,
+      "penalties": null
+    },
+    {
+      "id": 1396246,
+      "name": "Hedy Chaabi",
+      "team": "jazira",
+      "team_name": "Al Jazeera FC Kuwait",
+      "goals": 4,
+      "penalties": null
+    },
+    {
+      "id": 904049,
+      "name": "Pablo Vinicius de Moraes Ferreira",
+      "team": "khaitan",
+      "team_name": "Khaitan SC",
+      "goals": 4,
+      "penalties": 1
+    },
+    {
+      "id": 975189,
+      "name": "Othman Al Failakawi",
+      "team": "sulaibikhat",
+      "team_name": "Al Sulaibikhat FC",
+      "goals": 4,
+      "penalties": null
+    },
+    {
+      "id": 1539098,
+      "name": "Hamad Al Taweel",
+      "team": "khaitan",
+      "team_name": "Khaitan SC",
+      "goals": 4,
+      "penalties": null
+    },
+    {
+      "id": 828510,
+      "name": "Abdullah Al Shami",
+      "team": "yarmouk",
+      "team_name": "Yarmouk SC",
+      "goals": 3,
+      "penalties": null
+    },
+    {
+      "id": 1140881,
+      "name": "Marouane Zila",
+      "team": "jazira",
+      "team_name": "Al Jazeera FC Kuwait",
+      "goals": 3,
+      "penalties": null
+    },
+    {
+      "id": 1404710,
+      "name": "Yao Jean Charles Olivier",
+      "team": "jazira",
+      "team_name": "Al Jazeera FC Kuwait",
+      "goals": 3,
+      "penalties": null
+    },
+    {
+      "id": 1539316,
+      "name": "Cleiton Padilha",
+      "team": "sahel",
+      "team_name": "Al Sahel SC",
+      "goals": 3,
+      "penalties": null
+    },
+    {
+      "id": 1860351,
+      "name": "Nando Welter",
+      "team": "jazira",
+      "team_name": "Al Jazeera FC Kuwait",
+      "goals": 3,
+      "penalties": null
+    },
+    {
+      "id": 1842601,
+      "name": "Othman Al Dousari",
+      "team": "yarmouk",
+      "team_name": "Yarmouk SC",
+      "goals": 3,
+      "penalties": null
+    },
+    {
+      "id": 1952629,
+      "name": "Bruno Domingues",
+      "team": "sulaibikhat",
+      "team_name": "Al Sulaibikhat FC",
+      "goals": 3,
+      "penalties": null
+    },
+    {
+      "id": 1629762,
+      "name": "Fahad Al Rajhi",
+      "team": "jazira",
+      "team_name": "Al Jazeera FC Kuwait",
+      "goals": 3,
+      "penalties": null
+    },
+    {
+      "id": 2112511,
+      "name": "Mobarak Saeed",
+      "team": "jazira",
+      "team_name": "Al Jazeera FC Kuwait",
+      "goals": 3,
+      "penalties": null
+    },
+    {
+      "id": 2278147,
+      "name": "Hameed Al-Hussain",
+      "team": "khaitan",
+      "team_name": "Khaitan SC",
+      "goals": 3,
+      "penalties": null
+    },
+    {
+      "id": 880237,
+      "name": "Joao Vitor",
+      "team": "yarmouk",
+      "team_name": "Yarmouk SC",
+      "goals": 3,
+      "penalties": null
+    },
+    {
+      "id": 789000,
+      "name": "Isaac Mbenza",
+      "team": "yarmouk",
+      "team_name": "Yarmouk SC",
+      "goals": 2,
+      "penalties": null
+    },
+    {
+      "id": 368122,
+      "name": "Malick Mbaye",
+      "team": "jazira",
+      "team_name": "Al Jazeera FC Kuwait",
+      "goals": 2,
+      "penalties": null
+    },
+    {
+      "id": 1013885,
+      "name": "Oussema Ben Ayed",
+      "team": "khaitan",
+      "team_name": "Khaitan SC",
+      "goals": 2,
+      "penalties": null
+    },
+    {
+      "id": 1618276,
+      "name": "Christian Alex",
+      "team": "sahel",
+      "team_name": "Al Sahel SC",
+      "goals": 2,
+      "penalties": null
+    },
+    {
+      "id": 985082,
+      "name": "Lucas Lucena",
+      "team": "sahel",
+      "team_name": "Al Sahel SC",
+      "goals": 2,
+      "penalties": null
+    },
+    {
+      "id": 2072645,
+      "name": "Mohammad Hassan Ahmad Pour",
+      "team": "yarmouk",
+      "team_name": "Yarmouk SC",
+      "goals": 2,
+      "penalties": null
+    },
+    {
+      "id": 1948368,
+      "name": "Miracle Nwoagu",
+      "team": "sporty",
+      "team_name": "Sporty FC",
+      "goals": 2,
+      "penalties": null
+    },
+    {
+      "id": 2062607,
+      "name": "Ali Salman Alaaeddine",
+      "team": "sulaibikhat",
+      "team_name": "Al Sulaibikhat FC",
+      "goals": 2,
+      "penalties": null
+    },
+    {
+      "id": 2290248,
+      "name": "Mahmoud Oklah",
+      "team": "sporty",
+      "team_name": "Sporty FC",
+      "goals": 2,
+      "penalties": null
+    },
+    {
+      "id": 2441845,
+      "name": "Saleh Khamees Al Enezi",
+      "team": "sulaibikhat",
+      "team_name": "Al Sulaibikhat FC",
+      "goals": 2,
+      "penalties": null
+    },
+    {
+      "id": 959716,
+      "name": "Meshari Al Azmi",
+      "team": "yarmouk",
+      "team_name": "Yarmouk SC",
+      "goals": 2,
+      "penalties": 1
+    },
+    {
+      "id": 1103545,
+      "name": "Edrissa Ceesay",
+      "team": "jazira",
+      "team_name": "Al Jazeera FC Kuwait",
+      "goals": 1,
+      "penalties": null
+    },
+    {
+      "id": 1023489,
+      "name": "Issad Lakdja",
+      "team": "yarmouk",
+      "team_name": "Yarmouk SC",
+      "goals": 1,
+      "penalties": null
+    },
+    {
+      "id": 218748,
+      "name": "Christian Irobiso",
+      "team": "sulaibikhat",
+      "team_name": "Al Sulaibikhat FC",
+      "goals": 1,
+      "penalties": null
+    },
+    {
+      "id": 1104798,
+      "name": "Eduardo Porto",
+      "team": "yarmouk",
+      "team_name": "Yarmouk SC",
+      "goals": 1,
+      "penalties": 1
+    },
+    {
+      "id": 1457870,
+      "name": "Moriba Diarra",
+      "team": "yarmouk",
+      "team_name": "Yarmouk SC",
+      "goals": 1,
+      "penalties": null
+    },
+    {
+      "id": 2048429,
+      "name": "Ahmed Alaa Rasheed",
+      "team": "yarmouk",
+      "team_name": "Yarmouk SC",
+      "goals": 1,
+      "penalties": null
+    },
+    {
+      "id": 1143185,
+      "name": "Matheus Vieira",
+      "team": "jazira",
+      "team_name": "Al Jazeera FC Kuwait",
+      "goals": 1,
+      "penalties": null
+    },
+    {
+      "id": 1118330,
+      "name": "Daniel Silva Santos",
+      "team": "sulaibikhat",
+      "team_name": "Al Sulaibikhat FC",
+      "goals": 1,
+      "penalties": null
+    },
+    {
+      "id": 2028165,
+      "name": "Sávio Maciel",
+      "team": "burgan",
+      "team_name": "Burgan SC",
+      "goals": 1,
+      "penalties": null
+    },
+    {
+      "id": 975185,
+      "name": "Abdulaziz Mahran",
+      "team": "sahel",
+      "team_name": "Al Sahel SC",
+      "goals": 1,
+      "penalties": null
+    },
+    {
+      "id": 1636485,
+      "name": "Mohammed Abdul Hadi",
+      "team": "yarmouk",
+      "team_name": "Yarmouk SC",
+      "goals": 1,
+      "penalties": null
+    },
+    {
+      "id": 2072656,
+      "name": "Nasser Al Faylakawi",
+      "team": "sulaibikhat",
+      "team_name": "Al Sulaibikhat FC",
+      "goals": 1,
+      "penalties": null
+    },
+    {
+      "id": 2130188,
+      "name": "Abdulaziz Al Beshar",
+      "team": "sulaibikhat",
+      "team_name": "Al Sulaibikhat FC",
+      "goals": 1,
+      "penalties": null
+    },
+    {
+      "id": 1006323,
+      "name": "Faisal Ajab Al Azemi",
+      "team": "sahel",
+      "team_name": "Al Sahel SC",
+      "goals": 1,
+      "penalties": null
+    },
+    {
+      "id": 2112514,
+      "name": "Ahmed Al Shammari",
+      "team": "shamiya",
+      "team_name": "Al-Shamiya FC",
+      "goals": 1,
+      "penalties": null
+    },
+    {
+      "id": 2259235,
+      "name": "Abdulrahman Al Enezi",
+      "team": "sporty",
+      "team_name": "Sporty FC",
+      "goals": 1,
+      "penalties": null
+    },
+    {
+      "id": 2473328,
+      "name": "Elielson Cardoso Bebê",
+      "team": "sulaibikhat",
+      "team_name": "Al Sulaibikhat FC",
+      "goals": 1,
+      "penalties": null
+    },
+    {
+      "id": 799165,
+      "name": "Otavio Silva",
+      "team": "burgan",
+      "team_name": "Burgan SC",
+      "goals": 1,
+      "penalties": null
+    },
+    {
+      "id": 1647394,
+      "name": "Fahad Al Houli",
+      "team": "sulaibikhat",
+      "team_name": "Al Sulaibikhat FC",
+      "goals": 1,
+      "penalties": null
+    },
+    {
+      "id": 2057429,
+      "name": "Abdulaziz Al Qattan",
+      "team": "sulaibikhat",
+      "team_name": "Al Sulaibikhat FC",
+      "goals": 1,
+      "penalties": null
+    },
+    {
+      "id": 2112521,
+      "name": "Fahad Al Duajj",
+      "team": "jazira",
+      "team_name": "Al Jazeera FC Kuwait",
+      "goals": 1,
+      "penalties": null
+    },
+    {
+      "id": 2222525,
+      "name": "Abdulmajeed Al Enezi",
+      "team": "jazira",
+      "team_name": "Al Jazeera FC Kuwait",
+      "goals": 1,
+      "penalties": null
+    },
+    {
+      "id": 2476533,
+      "name": "Cheikh Mohammed Traoré",
+      "team": "burgan",
+      "team_name": "Burgan SC",
+      "goals": 1,
+      "penalties": null
+    },
+    {
+      "id": 2048471,
+      "name": "Fahad Al Azmi",
+      "team": "jazira",
+      "team_name": "Al Jazeera FC Kuwait",
+      "goals": 1,
+      "penalties": null
+    },
+    {
+      "id": 2072643,
+      "name": "Bader Saleem",
+      "team": "yarmouk",
+      "team_name": "Yarmouk SC",
+      "goals": 1,
+      "penalties": null
+    },
+    {
+      "id": 2219540,
+      "name": "Mohammed Al Fadhli",
+      "team": "jazira",
+      "team_name": "Al Jazeera FC Kuwait",
+      "goals": 1,
+      "penalties": null
+    },
+    {
+      "id": 2221670,
+      "name": "Meshal Al Enezi",
+      "team": "jazira",
+      "team_name": "Al Jazeera FC Kuwait",
+      "goals": 1,
+      "penalties": null
+    },
+    {
+      "id": 2259310,
+      "name": "Yousef Al Mweil",
+      "team": "sporty",
+      "team_name": "Sporty FC",
+      "goals": 1,
+      "penalties": null
+    },
+    {
+      "id": 2260803,
+      "name": "Ibrahim Al Tamimi",
+      "team": "sporty",
+      "team_name": "Sporty FC",
+      "goals": 1,
+      "penalties": null
+    },
+    {
+      "id": 2269786,
+      "name": "Fawaz Al Shammari",
+      "team": "shamiya",
+      "team_name": "Al-Shamiya FC",
+      "goals": 1,
+      "penalties": null
+    },
+    {
+      "id": 2269958,
+      "name": "Mohammed Al Kandari",
+      "team": "shamiya",
+      "team_name": "Al-Shamiya FC",
+      "goals": 1,
+      "penalties": null
+    },
+    {
+      "id": 2277150,
+      "name": "Omar Al Maimouni",
+      "team": "shamiya",
+      "team_name": "Al-Shamiya FC",
+      "goals": 1,
+      "penalties": null
+    },
+    {
+      "id": 2294534,
+      "name": "Ibrahim Zahwa",
+      "team": "burgan",
+      "team_name": "Burgan SC",
+      "goals": 1,
+      "penalties": null
+    },
+    {
+      "id": 1629418,
+      "name": "Mohammad Al Rabie",
+      "team": "jazira",
+      "team_name": "Al Jazeera FC Kuwait",
+      "goals": 1,
+      "penalties": null
+    },
+    {
+      "id": 1839124,
+      "name": "Mohammad Al Enezi",
+      "team": "khaitan",
+      "team_name": "Khaitan SC",
+      "goals": 1,
+      "penalties": null
+    },
+    {
+      "id": 2011095,
+      "name": "Mohammed Al Aladhi",
+      "team": "sahel",
+      "team_name": "Al Sahel SC",
+      "goals": 1,
+      "penalties": 1
+    },
+    {
+      "id": 2040609,
+      "name": "Haider Theyab",
+      "team": "burgan",
+      "team_name": "Burgan SC",
+      "goals": 1,
+      "penalties": null
+    },
+    {
+      "id": 2112516,
+      "name": "Khaled Abdullah Al Mutairi",
+      "team": "jazira",
+      "team_name": "Al Jazeera FC Kuwait",
+      "goals": 1,
+      "penalties": null
+    },
+    {
+      "id": 2270086,
+      "name": "Mohammed Al Adwani",
+      "team": "yarmouk",
+      "team_name": "Yarmouk SC",
+      "goals": 1,
+      "penalties": null
+    },
+    {
+      "id": 2294531,
+      "name": "Khaled Al Otaibi",
+      "team": "burgan",
+      "team_name": "Burgan SC",
+      "goals": 1,
+      "penalties": 1
+    },
+    {
+      "id": 2331810,
+      "name": "Jaber Al-Fadhli",
+      "team": "burgan",
+      "team_name": "Burgan SC",
+      "goals": 1,
+      "penalties": null
+    },
+    {
+      "id": 2476532,
+      "name": "Munawwar Al-Mutairi",
+      "team": "shamiya",
+      "team_name": "Al-Shamiya FC",
+      "goals": 1,
+      "penalties": null
+    }
+  ]
+}

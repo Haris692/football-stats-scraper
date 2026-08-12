@@ -36,6 +36,7 @@ from crests import load_store
 from fetch_events import load as load_events
 from fetch_flashscore import normalise
 from fetch_players import load as load_players
+from fetch_scorers import load as load_scorers
 from fetch_squads import ALIASES, load as load_squads
 from hosts import verdicts as host_verdicts, load_verdict_source
 
@@ -184,25 +185,47 @@ def team_directory(matches: list[dict], fixtures: list[dict]) -> dict:
     return out
 
 
-def scorer_board(teams: dict) -> list[dict]:
-    """Le classement des buteurs, reconstruit depuis les effectifs.
+def scorer_board(teams: dict, cards: dict) -> list[dict]:
+    """Le classement des buteurs, tel que la compétition le publie.
 
-    Sofascore ne publie que les 50 premiers ; les buts sont déjà accrochés à
-    chaque joueur par `fetch_squads`, il suffit de les remettre à plat.
+    ⚠️ **Il était faux jusqu'au 12/08/2026, et voici pourquoi.** Il était
+    *reconstruit* : on remettait à plat les buts accrochés à chaque joueur des
+    effectifs. Un classement dérivé d'un effectif ne peut contenir que les
+    joueurs encore inscrits — les huit qui ont quitté leur club en cours de
+    saison en tombaient, avec leurs 33 buts, **dont le meilleur buteur de la
+    division** (Lucas Shallon, 12 buts). Le site affichait donc un premier qui
+    n'en était pas un.
+
+    L'autorité est maintenant `fetch_scorers`, qui interroge le classement de
+    la compétition : il ne dépend d'aucun effectif. Les effectifs ne servent
+    plus qu'à *décorer* la ligne — poste, nationalité — quand le joueur y est
+    encore.
+
+    ⚠️ `id` n'est renseigné que si une fiche existe : un buteur parti n'en a
+    pas, et un lien vers `joueur.html` ouvrirait une page vide. Les vues savent
+    retomber sur le club (voir `scorerCard`).
     """
-    rows = []
+    known = {}
     for club in teams.values():
         for player in club["players"]:
-            if player.get("goals"):
-                rows.append({
-                    "id": player.get("id"),
-                    "name": player["name"],
-                    "team": club["key"],
-                    "goals": player["goals"],
-                    "position": player.get("position"),
-                    "country_code": player.get("country_code"),
-                })
-    rows.sort(key=lambda r: (-r["goals"], r["name"]))
+            if player.get("id"):
+                known[player["id"]] = player
+
+    rows = []
+    for row in (load_scorers().get("scorers") or []):
+        if row.get("team") not in teams:
+            continue
+        player = known.get(row["id"]) or {}
+        rows.append({
+            "id": row["id"] if str(row["id"]) in cards else None,
+            "name": row.get("name"),
+            "team": row["team"],
+            "goals": row["goals"],
+            "penalties": row.get("penalties"),
+            "position": player.get("position"),
+            "country_code": player.get("country_code"),
+        })
+    rows.sort(key=lambda r: (-r["goals"], r["name"] or ""))
     return rows
 
 
@@ -380,6 +403,9 @@ def build(matches: list[dict], fixtures: list[dict],
         detail[str(match["match_id"])] = match
 
     events = load_events()
+    # Avant la charge utile : le classement des buteurs a besoin de savoir
+    # quelles fiches existent pour ne lier que vers des pages qui s'ouvrent.
+    players = player_directory(teams)
     site = {
         "generated": now.strftime("%d/%m/%Y à %H:%M"),
         "generated_iso": now.isoformat(timespec="minutes"),
@@ -392,12 +418,11 @@ def build(matches: list[dict], fixtures: list[dict],
         "fixtures": fixtures,
         "matches": detail,
         "standings": freshest_standings(matches),
-        "scorers": scorer_board(teams),
+        "scorers": scorer_board(teams, players),
         "season_events": season_events(teams, force),
     }
     crests = {k: (store.get(v["name"]) or {}).get("badge")
               for k, v in teams.items()}
-    players = player_directory(teams)
     return site, {k: v for k, v in crests.items() if v}, players
 
 

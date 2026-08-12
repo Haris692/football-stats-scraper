@@ -82,6 +82,7 @@ match déjà en cache.
 | `fetch_squads.py` | effectifs des 8 clubs et bilans de saison, via Sofascore |
 | `fetch_events.py` | rencontres Sofascore : journées, buteurs nommés, entraîneurs |
 | `fetch_players.py` | fiches joueurs : identité, valeur marchande, carrière, photo |
+| `fetch_scorers.py` | classement des buteurs, à sa source — jamais dérivé des effectifs |
 | `build_site.py` | assemble `data/site.json` et `data/crests.json`, les données du site |
 | `daily.py` | rafraîchissement de 8 h : collecte, régénère, commite, pousse |
 | `crests.py` | écussons des clubs et couleurs dominantes qu'on en extrait |

@@ -72,7 +72,11 @@ function scorerTable() {
     el("h2", { text: t("Meilleurs buteurs") }),
     methodNote(t("Les buts sont la seule statistique individuelle publiée sur " +
       "cette division : ni passes décisives, ni minutes jouées, ni notes. " +
-      "Source : Sofascore.")),
+      "Source : Sofascore.") + " " +
+      t("Ce classement est celui de la compétition, pas la somme des " +
+        "effectifs : un joueur qui a quitté son club en cours de saison y " +
+        "garde ses buts. Un nom sans lien est un joueur dont la fiche " +
+        "n'existe pas.")),
     el("div", { class: "card", style: { marginTop: "var(--s-4)" } }, [
       el("div", { class: "table__wrap" }, [
         el("table", { class: "table" }, [
@@ -83,7 +87,10 @@ function scorerTable() {
           el("tbody", {}, rows.map((r, i) => el("tr", {}, [
             el("td", { class: "rank", text: i + 1 }),
             el("td", {}, [
-              el("a", { href: `joueur.html?p=${r.id}`, text: r.name }),
+              // Pas de fiche, pas de lien : `id` n'est renseigné que si la
+              // page du joueur existe (voir `scorer_board`).
+              r.id ? el("a", { href: `joueur.html?p=${r.id}`, text: r.name })
+                   : el("span", { text: r.name }),
               r.country_code ? el("span", { style: { marginInlineStart: "var(--s-2)" } },
                                    [badge(r.country_code)]) : null,
             ]),

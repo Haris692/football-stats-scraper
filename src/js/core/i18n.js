@@ -135,6 +135,8 @@ const EN = {
     "Season squad, not a line-up: no source publishes team sheets for this division. Goals are the only individual statistic that exists — no minutes, no assists, no ratings. Source: Sofascore.",
   "Les buts sont la seule statistique individuelle publiée sur cette division : ni passes décisives, ni minutes jouées, ni notes. Source : Sofascore.":
     "Goals are the only individual statistic published for this division: no assists, no minutes played, no ratings. Source: Sofascore.",
+  "Ce classement est celui de la compétition, pas la somme des effectifs : un joueur qui a quitté son club en cours de saison y garde ses buts. Un nom sans lien est un joueur dont la fiche n'existe pas.":
+    "This is the competition's own ranking, not the sum of the squads: a player who left his club mid-season keeps his goals here. A name without a link is a player with no profile page.",
   "Bilans de saison agrégés par Sofascore. Ce sont les seules statistiques par club qu'aucune autre source ne donne : matchs sans encaisser, buts sur penalty, cartons rouges. Ni tirs ni possession — cette source ne les a nulle part sur cette division.":
     "Season records aggregated by Sofascore. These are the only per-club figures no other source provides: clean sheets, penalty goals, red cards. No shots and no possession — this source has neither anywhere in this division.",
   "La saison entière vient de Sofascore ; la fenêtre récente est complétée par Forebet et Flashscore, qui apportent la fiche détaillée. Les rencontres marquées « ? » n'ont pas d'hôte arbitré : les sources se contredisent sur qui reçoit, et on ne tranche pas sans une deuxième qui confirme.":

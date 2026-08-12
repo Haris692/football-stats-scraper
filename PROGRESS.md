@@ -1630,6 +1630,71 @@ La carte « Effectifs » change de note quand une composition existe : dire
 « aucune source ne publie de feuille de match » sous une feuille affichée se
 contredirait.
 
+## ⚠️ Le classement des buteurs était faux (12/08/2026)
+
+**Le site donnait Allan Paulista (11 buts) meilleur buteur de la division. Le
+meilleur buteur est Lucas Shallon, 12 buts, Al Sulaibikhat — il n'apparaissait
+nulle part.**
+
+### La cause : un classement dérivé
+
+`scorer_board()` ne collectait rien. Il *remettait à plat* les effectifs :
+`fetch_squads` accroche à chaque joueur d'un club ses buts de la saison, et le
+build parcourait les huit effectifs pour en tirer un classement.
+
+Un classement dérivé d'un effectif ne peut contenir que **les joueurs encore
+inscrits**. Celui qui a changé de club en cours de saison n'est plus dans aucun
+effectif de la division — donc ni lui ni ses buts n'existaient. Huit joueurs
+étaient dans ce cas, **33 buts**, dont le premier et le cinquième de la
+division :
+
+| joueur | buts | club |
+|---|---|---|
+| Lucas Shallon | 12 | Al Sulaibikhat |
+| Hazem Haj Hassen | 7 | Yarmouk |
+| Michel Potiguar | 5 | Al Sulaibikhat |
+| Abdullah Al Shami | 3 | Yarmouk |
+| Nando Welter | 3 | Al Jazira |
+| Issad Lakdja, Moriba Diarra, Sávio Maciel | 1 chacun | Yarmouk, Yarmouk, Burgan |
+
+⚠️ **C'est le pire genre de faux : crédible.** Rien n'était vide, rien n'était
+en erreur, le tableau était plein et bien classé — il lui manquait seulement le
+premier. Une donnée absente se voit ; une donnée absente *qui laisse un
+classement cohérent derrière elle*, non.
+
+### Le correctif : `fetch_scorers.py`
+
+L'autorité est le classement que publie la compétition elle-même :
+
+    /unique-tournament/20044/season/{sid}/statistics?order=-goals&accumulation=total
+
+Il ne dépend d'aucun effectif : il énumère tous ceux qui ont joué dans la
+saison, avec leur club **au moment où ils ont marqué**, et il donne les
+penaltys. 79 buteurs, 192 buts, les 8 clubs rapprochés sans orphelin. Trié par
+buts décroissants, donc on s'arrête au premier joueur à zéro — une page de 100
+suffit largement pour cette division. Ajouté à `daily.py` : une seule requête.
+
+`scorer_board()` ne fait plus que *décorer* ces lignes — poste et nationalité —
+avec l'effectif, quand le joueur y est encore.
+
+⚠️ **L'endpoint accepte `fields=assists,appearances,minutesPlayed` et renvoie
+ces clés à `null`** sur cette division (vérifié le 12/08). Ne pas se laisser
+prendre : il n'y a toujours ni passe décisive, ni match joué, ni minute. Les
+deux seuls chiffres réels sont `goals` et `penaltyGoals`. Ne pas re-sonder.
+
+### Ce que la page dit maintenant
+
+⚠️ **Un buteur parti n'a pas de fiche joueur**, et 43 des 79 n'en ont pas du
+tout (`fetch_players` n'a été passé que sur une partie des clubs). `id` n'est
+donc renseigné **que si la fiche existe** : sans quoi le lien ouvrait une page
+vide. Le tableau du classement rend alors un `<span>` au lieu d'un `<a>`, et
+`scorerCard` retombait déjà sur le club.
+
+La note de méthode l'écrit en deux temps — d'abord que le classement est celui
+de la compétition et non la somme des effectifs, ensuite qu'un nom sans lien est
+un joueur sans fiche. Elle ne dit pas « joueur parti » devant chaque nom non
+cliquable : ce serait faux pour les 35 autres.
+
 ## Reste à faire
 
 Les trois points de la session du 06/08 sont soldés : `build_json.py`,
@@ -1647,13 +1712,17 @@ Ce qui reste ouvert, par ordre d'intérêt :
    l'arbitrage ne couvre pas : les bilans domicile/extérieur calculés par
    Forebet, et le fait qu'une rencontre inconnue de Flashscore garde
    l'étiquette Forebet faute d'arbitre.
-4. **Le flux SSE `/glvs/`** reste débranché. Il apporterait ce que le mode
+4. ~~Le classement des buteurs est faux~~ — **corrigé le 12/08** par
+   `fetch_scorers.py`, voir la section dédiée. Reste, en plus petit : les 43
+   buteurs sans fiche joueur, que seul un passage complet de `fetch_players.py`
+   comblerait.
+5. **Le flux SSE `/glvs/`** reste débranché. Il apporterait ce que le mode
    direct ne peut pas montrer : la **minute de jeu** et le temps additionnel,
    absents de `gmc=1`. À faire consommer par `serve.py`, comme le collecteur —
    pas par la page, qui n'a pas accès à Forebet.
-5. **Diffuseurs** : `data/broadcasts.json` a quatre cases vides.
+6. **Diffuseurs** : `data/broadcasts.json` a quatre cases vides.
    Sofascore ne les a pas non plus (`odds` et `tv` : 404, vérifié le 11/08).
-6. **`shoot.py` n'est documenté nulle part ici.** L'outil (captures d'écran
+7. **`shoot.py` n'est documenté nulle part ici.** L'outil (captures d'écran
    d'une page web, nettoyage des bandeaux, `--login`) a été écrit le 10/08 en
    9 commits et n'a pas de section dans ce fichier. Il est autonome et sans
    rapport avec la collecte, mais l'absence de trace est un trou de suivi.
