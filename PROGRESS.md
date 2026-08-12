@@ -1584,6 +1584,40 @@ Abdullah Al Najdi (n°16), absent du onze *et* du banc publiés. Les deux source
 sont conservées telles quelles. Corriger l'une par l'autre sans élément nouveau
 serait un arbitrage au jugé.
 
+### Le terrain (12/08/2026) — ce qu'un dessin a le droit de dire
+
+Le onze n'est plus une liste, c'est un **terrain** (`src/js/components/pitch.js`).
+Il montre une chose que personne ne publie et qu'une énumération cache :
+**Sulaibikhat a commencé avec cinq défenseurs**, `1-5-2-3`.
+
+⚠️ **Un terrain ressemble à une mesure**, et c'est exactement le risque contre
+lequel tout ce composant est écrit. Trois choses n'existent pas dans la donnée
+et ne doivent pas être inventées par le dessin :
+
+- **Le rôle du jour.** Le poste vient de la fiche *générale* du joueur chez
+  Sofascore. Cinq « défenseurs » peuvent être une défense à trois avec deux
+  pistons. La note dit « range par poste », jamais « dispositif ».
+- **Le côté.** Rien ne dit qui jouait à gauche. L'ordre horizontal est celui de
+  la feuille du club, arbitraire, et la note l'écrit.
+- **Le poste des inconnus.** Les quatre Sporty sans fiche ne sont pas placés au
+  jugé : ils vont dans une bande en pointillés sous le terrain, « 4 sans poste
+  connu ». Sept joueurs placés et quatre à côté a l'air incomplet — ça l'est.
+
+⚠️ **`shapeOf()` rend `null` dès qu'un seul poste manque.** Sporty n'affiche
+donc aucune suite de lignes : un « 1-2-2-2 » à sept joueurs serait faux deux
+fois, et se lirait quand même comme un dispositif.
+
+ℹ️ **Le raccourcissement des noms a dû être refait.** Garder les deux derniers
+mots donnait deux pastilles « Al Enezi » dans le même onze — les noms de famille
+se répètent beaucoup ici. La règle retenue : initiale du prénom, puis la partie
+qui identifie (à partir du « Al » s'il y en a un, le dernier mot sinon), d'où
+« S. Al Enezi » et « M. Al Enezi ».
+
+ℹ️ Trois jetons ajoutés à `tokens.css` (`--pitch-far`, `--pitch-near`,
+`--pitch-line`) : la pelouse est un dégradé et les lignes blanches un
+`background-image`, aucune n'est un élément du DOM. Elle reste **plus sombre
+qu'une carte** — un terrain plus clair volerait la hiérarchie de la page.
+
 ### La limite, écrite sur la page
 
 **Ces visuels sont publiés AVANT le coup d'envoi.** Ils donnent le onze et le

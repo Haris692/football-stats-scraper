@@ -42,6 +42,17 @@
   --bad: #ff6b5e;
   --live: #ff4438;
 
+  /* --- la pelouse -------------------------------------------------------
+     Le même vert de nuit que le fond, éclairci juste assez pour qu'un nom
+     blanc s'y lise. Elle reste SOUS les surfaces `--ink-` : un terrain plus
+     clair qu'une carte volerait la hiérarchie de la page à un élément qui
+     n'est qu'un support de lecture. Le dégradé va du fond du terrain (loin,
+     plus sombre) vers le but (près, plus clair) — c'est ainsi qu'un stade
+     est éclairé, et ça donne le sens de lecture sans une flèche. */
+  --pitch-far: #0e1a14;
+  --pitch-near: #16261d;
+  --pitch-line: rgba(233, 239, 234, 0.09);
+
   /* --- lettre -----------------------------------------------------------
      Bahnschrift est le DIN livré avec Windows : la lettre des panneaux de
      signalisation et des tableaux de stade, disponible sans rien télécharger.

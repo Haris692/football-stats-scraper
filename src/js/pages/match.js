@@ -10,6 +10,7 @@ import { boot } from "../core/shell.js";
 import { match as matchOf, team, nameOf, fixtures, isLive } from "../core/data.js";
 import { crestOf, badge, dot, methodNote, liveMark } from "../components/pieces.js";
 import { watchLive, liveBlock, liveStamp } from "../core/live.js";
+import { pitch, shapeOf } from "../components/pitch.js";
 
 const LABELS = {
   possession: "Possession", shots: "Tirs", shots_on: "Tirs cadrés",
@@ -403,15 +404,20 @@ function sheetLine(p) {
 function sheetCol(side, sheet, titled) {
   const starters = sheet.starters || [], subs = sheet.subs || [];
   if (!starters.length && !subs.length) return null;
+  const shape = shapeOf(starters);
   return el("div", {}, [
     titled ? el("div", { style: { display: "flex", gap: "var(--s-2)", alignItems: "center",
                          marginBottom: "var(--s-3)" } }, [
       crestOf(sheet.club, "sm"), el("b", { text: nameOf(sheet.club) }),
     ]) : null,
-    starters.length ? el("div", { class: "squad__grp", text: t("Titulaires") }) : null,
-    // L'ordre est celui du visuel du club, gardien d'abord : c'est ainsi qu'une
-    // feuille se lit. Ne pas re-trier par poste, on perdrait l'information.
-    ...starters.map(sheetLine),
+    // Le onze va sur le terrain, pas dans une liste : cinq défenseurs se
+    // voient d'un coup d'œil là où une énumération les cache. La suite des
+    // lignes n'est affichée que si TOUS les postes sont connus — voir
+    // `shapeOf`.
+    starters.length ? el("div", { class: "squad__grp" }, [
+      t("Titulaires"), shape ? ` · ${shape}` : "",
+    ]) : null,
+    starters.length ? pitch(starters) : null,
     subs.length ? el("div", { class: "squad__grp", style: { marginTop: "var(--s-4)" },
                               text: t("Remplaçants") }) : null,
     ...subs.map(sheetLine),
@@ -446,6 +452,12 @@ function lineups(m) {
            "visuel d'avant-match du club, lu et apparié à la main.")}` +
       ` ${t("Il donne donc le onze et le banc, jamais les changements — on " +
             "n'en tire aucune minute jouée.")}` +
+      // ⚠️ Sans cette phrase, le terrain devient un dispositif tactique aux
+      // yeux du lecteur, et la page affirmerait deux choses qu'elle ignore.
+      ` ${t("Le terrain range les joueurs par poste, il ne montre pas un " +
+            "dispositif : le poste vient de la fiche générale du joueur, pas " +
+            "de son rôle ce soir-là, et rien n'indique qui jouait à gauche ou " +
+            "à droite — la place dans une ligne est celle de la feuille.")}` +
       (media ? ` ${t("Support")} : ${media}.` : "") +
       (unmatched ? ` ${unmatched} ${t("joueur(s) n'ont pas de fiche : la " +
         "source ne les connaît pas, ils sont nommés sans lien.")}` : "")),

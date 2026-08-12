@@ -207,6 +207,61 @@ a.hmatch:hover, a.hmatch:focus-visible {
 .player__n { flex: 1; min-width: 0; }
 .player__g { font-family: var(--display); color: var(--flood); }
 
+/* ---------------------------------------------------------------- terrain */
+/* La pelouse est un dégradé, pas une image : le site reste autonome, et la
+   couleur vient des jetons — c'est le même vert de nuit que le fond de page,
+   éclairci juste assez pour lire dessus. Les lignes blanches sont dessinées
+   en `background-image`, aucune n'est un élément : un rond central en DOM
+   serait un nœud de plus à ne jamais styler. */
+.pitch__field {
+  display: flex; flex-direction: column; justify-content: space-between;
+  gap: var(--s-3); padding: var(--s-4) var(--s-2);
+  min-height: 340px; border-radius: var(--r-2);
+  border: 1px solid var(--line);
+  background:
+    /* le rond central */
+    radial-gradient(circle at 50% 50%, transparent 46px,
+                    var(--pitch-line) 46px 47px, transparent 47px),
+    /* la ligne médiane */
+    linear-gradient(var(--pitch-line), var(--pitch-line)) 50% 50% / 100% 1px no-repeat,
+    /* la pelouse */
+    linear-gradient(180deg, var(--pitch-far), var(--pitch-near));
+}
+.pitch__line {
+  display: flex; justify-content: space-evenly; align-items: flex-start;
+  gap: var(--s-2); flex-wrap: wrap;
+}
+.pitch__p {
+  display: flex; flex-direction: column; align-items: center; gap: 2px;
+  min-width: 0; max-width: 5.5rem; text-align: center; color: var(--text);
+}
+.pitch__p--flat { cursor: default; }
+.pitch__no {
+  font-family: var(--display); font-size: var(--t--1);
+  width: 1.9rem; height: 1.9rem; border-radius: 50%;
+  display: grid; place-items: center;
+  background: var(--ink-800); border: 1px solid var(--line-strong);
+}
+.pitch__name {
+  font-size: 10px; line-height: 1.2; max-width: 100%;
+  overflow: hidden; text-overflow: ellipsis; white-space: nowrap;
+}
+.pitch__c {
+  font-family: var(--mono); font-size: 8px; line-height: 1;
+  padding: 2px 3px; border-radius: 2px;
+  background: var(--flood); color: var(--flood-ink);
+}
+/* Les joueurs sans poste, sous le terrain et non dessus. La bordure en
+   pointillés dit « on ne sait pas où les mettre » sans avoir à l'écrire. */
+.pitch__off {
+  margin-top: var(--s-3); padding: var(--s-3);
+  border: 1px dashed var(--line-strong); border-radius: var(--r-2);
+}
+.pitch__off-label {
+  font-family: var(--mono); font-size: 10px; letter-spacing: .12em;
+  text-transform: uppercase; color: var(--text-3); margin-bottom: var(--s-3);
+}
+
 /* Feuille de match. Un joueur que la source ne connaît pas n'a pas de fiche :
    il garde exactement la même ligne, sans l'affordance du lien — rien ne doit
    suggérer qu'il y a quelque chose à cliquer. */

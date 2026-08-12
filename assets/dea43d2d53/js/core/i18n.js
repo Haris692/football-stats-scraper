@@ -37,6 +37,9 @@ const EN = {
     "player(s) have no profile: the source does not know them, so they are named without a link.",
   "Effectifs de la saison, pas la composition du jour — celle-ci est plus haut, telle que le club l'a publiée.":
     "Season squads, not the day's line-up — that is above, as the club published it.",
+  "sans poste connu": "with no known position",
+  "Le terrain range les joueurs par poste, il ne montre pas un dispositif : le poste vient de la fiche générale du joueur, pas de son rôle ce soir-là, et rien n'indique qui jouait à gauche ou à droite — la place dans une ligne est celle de la feuille.":
+    "The pitch groups players by position, it does not show a formation: the position comes from the player's general profile, not from his role that night, and nothing says who played left or right — the place within a line is the one on the team sheet.",
   "Derniers résultats": "Latest results", "Les clubs": "The clubs",
   "Meilleurs buteurs": "Top scorers", "Tout voir": "See all",
   "Voir la rencontre": "View match", "Voir le club": "View club",
