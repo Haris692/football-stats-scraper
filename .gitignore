@@ -23,3 +23,9 @@ captures/
 # Journal du rafraîchissement de 8 h : une trace d'exécution locale, qui
 # grossirait d'une dizaine de lignes par jour dans l'historique pour rien.
 daily.log
+
+# Captures des compositions envoyées par les clubs : pièces justificatives,
+# pas de la donnée. Ce qui compte est extrait dans data/lineups.json, qui
+# porte la provenance. Le LISEZ-MOI du dossier, lui, est versionné.
+data/lineups/inbox/*
+!data/lineups/inbox/LISEZ-MOI.txt

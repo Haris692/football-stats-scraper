@@ -23,6 +23,20 @@ const EN = {
   "Rencontre en cours, relevée toutes les minutes.":
     "Match in progress, recorded every minute.",
   "score incertain": "score uncertain",
+  "Composition": "Line-up", "Titulaires": "Starting XI",
+  "Remplaçants": "Substitutes", "Capitaine": "Captain", "Gardien": "Goalkeeper",
+  "Support": "Published on",
+  "Publié par le club comme": "Published by the club as",
+  "Ce joueur ne figure dans aucune fiche : la source ne l'a pas.":
+    "This player has no profile: the source does not list him.",
+  "Fournie par le club, pas relevée : aucune source automatique ne publie de feuille de match sur cette division. Ce document est le visuel d'avant-match du club, lu et apparié à la main.":
+    "Supplied by the club, not recorded: no automatic source publishes team sheets for this division. This is the club's pre-match graphic, read and matched by hand.",
+  "Il donne donc le onze et le banc, jamais les changements — on n'en tire aucune minute jouée.":
+    "It therefore gives the eleven and the bench, never the substitutions — no minutes played can be derived from it.",
+  "joueur(s) n'ont pas de fiche : la source ne les connaît pas, ils sont nommés sans lien.":
+    "player(s) have no profile: the source does not know them, so they are named without a link.",
+  "Effectifs de la saison, pas la composition du jour — celle-ci est plus haut, telle que le club l'a publiée.":
+    "Season squads, not the day's line-up — that is above, as the club published it.",
   "Derniers résultats": "Latest results", "Les clubs": "The clubs",
   "Meilleurs buteurs": "Top scorers", "Tout voir": "See all",
   "Voir la rencontre": "View match", "Voir le club": "View club",

@@ -1509,6 +1509,59 @@ chacun) et non des `data:` URI : 230 dans un JSON feraient plusieurs mégaoctets
 à charger pour en afficher un. Les fiches elles-mêmes vivent dans
 `data/players.site.json`, chargé **à la demande** — l'accueil n'en a pas besoin.
 
+## Compositions fournies par les clubs (12/08/2026)
+
+**Le premier trou comblé par une source humaine.** Aucun service ne publie de
+feuille de match sur cette division — Sofascore répond 404 sur `lineups`, c'est
+vérifié et définitif. Mais **les clubs, eux, publient leur onze sur Instagram**.
+D'où une voie qui n'existait pas : la donnée entre à la main, avec sa
+provenance, et le site la distingue de tout ce qui est collecté.
+
+Le circuit : le visuel est déposé dans `data/lineups/inbox/` (ignoré par git —
+c'est une pièce justificative, pas de la donnée), lu, apparié à l'effectif
+Sofascore, puis écrit dans **`data/lineups.json`**, versionné. `build_site.py`
+l'attache à la fiche du match sous la clé `lineups`, et `match.js` en fait une
+carte **Composition**, placée avant les effectifs de saison.
+
+### Ce que l'appariement a appris
+
+⚠️ **Le numéro de maillot ne suffit pas** : seuls **152 des 228 joueurs** en ont
+un chez Sofascore, et Burgan (9/31) comme Sporty (12/26) sont à peine couverts.
+L'appariement se fait donc sur numéro **puis** nom, et chaque joueur porte dans
+le JSON **comment** il a été rapproché (`number+name`, `number`, `name`, `none`).
+
+⚠️ **Le club nomme le père, Sofascore la famille.** `Musaed Trad` = `Musaed Al
+Enezi` (n°5), `Khaled Eid` = `Khaled Al Rashidi` (n°7). Ce n'est pas une faute
+de frappe, c'est une convention de nommage — et elle reviendra à chaque feuille.
+
+⚠️ **`match: "none"` n'est pas une erreur à corriger en devinant.** Mohammed
+Ruwaee est sur le banc de Sulaibikhat et n'existe dans aucune des 29 fiches du
+club. Il est publié par son nom, sans lien. L'apparier à « Mohammed Safar » ou
+« Mohammed Hamdan » sur le seul prénom fabriquerait une information fausse.
+
+ℹ️ **Une erreur du club est conservée telle quelle** : le visuel de Sulaibikhat
+annonce « SULAIBIKHAT | BURGAN » alors qu'il s'agit de la rencontre contre
+Sporty. La correction est dans `source.note`, la capture n'est pas retouchée.
+Recoupement qui a permis de trancher : les quatre joueurs nommés dans la
+chronologie du match contre Sporty (Irobiso 26', Damacena 55', Alaaeddine 75' et
+83', Saleh Khamees 88') figurent tous sur ce visuel.
+
+ℹ️ **Sofascore se trompe de prénom sur le n°25 de Sulaibikhat** : « Nasser Al
+Faylakawi » là où le club écrit « Nawaf ». Arbitré en faveur du club le
+12/08/2026. Le site affiche donc ici un nom qui diffère de la source.
+
+### La limite, écrite sur la page
+
+**Ces visuels sont publiés AVANT le coup d'envoi.** Ils donnent le onze et le
+banc, **jamais les changements** — donc aucune minute jouée ne peut en être
+tirée, et la note de méthode le dit. Si un club publie aussi un visuel de fin de
+match, c'est celui-là qui vaut le plus : il débloquerait les minutes, et avec
+elles tout ce qui se ramène au temps de jeu.
+
+La carte « Effectifs » change de note quand une composition existe : dire
+« aucune source ne publie de feuille de match » sous une feuille affichée se
+contredirait.
+
 ## Reste à faire
 
 Les trois points de la session du 06/08 sont soldés : `build_json.py`,

@@ -354,10 +354,101 @@ function squadCol(key) {
 function squads(m) {
   const cols = [squadCol(m.home_key), squadCol(m.away_key)].filter(Boolean);
   if (!cols.length) return null;
+  // La note change de sens dès qu'un club a fourni sa feuille : dire « aucune
+  // source ne publie de composition » sous une composition affichée plus haut
+  // se contredirait. Ce qui reste vrai dans les deux cas, c'est que CETTE
+  // carte-ci montre la saison, pas le jour.
+  const sheet = m.lineups && (m.lineups.home || m.lineups.away);
   return el("section", { class: "card" }, [
     el("div", { class: "card__head" }, [el("h2", { text: t("Effectifs") })]),
-    methodNote(t("Effectifs de la saison, pas les compositions du jour : aucune " +
-      "source ne publie de feuille de match pour ce championnat.")),
+    methodNote(sheet
+      ? t("Effectifs de la saison, pas la composition du jour — celle-ci est " +
+          "plus haut, telle que le club l'a publiée.")
+      : t("Effectifs de la saison, pas les compositions du jour : aucune " +
+          "source ne publie de feuille de match pour ce championnat.")),
+    el("div", { class: "squad", style: { marginTop: "var(--s-5)" } }, cols),
+  ]);
+}
+
+/* ---------------------------------------------------- compositions du jour */
+
+/* Une ligne de feuille de match. Le nom affiché est celui du site — pour qu'un
+   joueur porte le même nom partout — mais quand le club l'écrit autrement,
+   l'infobulle garde sa version : c'est SA feuille.
+
+   ⚠️ Un joueur sans `id` n'est pas une erreur d'appariement à corriger : il
+   peut manquer chez Sofascore. Il s'affiche alors sans lien, jamais rapproché
+   d'un homonyme au jugé. */
+function sheetLine(p) {
+  const inner = [
+    el("span", { class: "player__no", text: p.number || "—" }),
+    el("span", { class: "player__n truncate", text: p.name }),
+    p.captain ? el("span", { class: "sheet__mark", text: "C",
+                             title: t("Capitaine") }) : null,
+    p.position === "G" ? el("span", { class: "sheet__mark", text: "G",
+                                      title: t("Gardien") }) : null,
+  ];
+  const title = p.as_published && p.as_published !== p.name
+    ? `${t("Publié par le club comme")} : ${p.as_published}` : null;
+  return p.id
+    ? el("a", { class: "player", href: `joueur.html?p=${p.id}`, title }, inner)
+    : el("span", { class: "player player--flat", title:
+        title || t("Ce joueur ne figure dans aucune fiche : la source ne l'a pas.") },
+        inner);
+}
+
+/* `titled` : l'en-tête de colonne ne sert qu'à séparer deux feuilles. Quand un
+   seul club a fourni la sienne, le badge de la carte le nomme déjà, et répéter
+   l'écusson trois centimètres plus bas ne dit rien de neuf. */
+function sheetCol(side, sheet, titled) {
+  const starters = sheet.starters || [], subs = sheet.subs || [];
+  if (!starters.length && !subs.length) return null;
+  return el("div", {}, [
+    titled ? el("div", { style: { display: "flex", gap: "var(--s-2)", alignItems: "center",
+                         marginBottom: "var(--s-3)" } }, [
+      crestOf(sheet.club, "sm"), el("b", { text: nameOf(sheet.club) }),
+    ]) : null,
+    starters.length ? el("div", { class: "squad__grp", text: t("Titulaires") }) : null,
+    // L'ordre est celui du visuel du club, gardien d'abord : c'est ainsi qu'une
+    // feuille se lit. Ne pas re-trier par poste, on perdrait l'information.
+    ...starters.map(sheetLine),
+    subs.length ? el("div", { class: "squad__grp", style: { marginTop: "var(--s-4)" },
+                              text: t("Remplaçants") }) : null,
+    ...subs.map(sheetLine),
+  ]);
+}
+
+function lineups(m) {
+  const sheets = m.lineups || {};
+  const sides = ["home", "away"].filter(s => sheets[s]);
+  const cols = sides
+    .map(s => sheetCol(s, sheets[s], sides.length > 1)).filter(Boolean);
+  if (!cols.length) return null;
+
+  // La provenance n'est pas un ornement : c'est la seule chose qui distingue
+  // une feuille de match d'une liste inventée. Elle nomme le club, le support,
+  // et elle dit ce que le document NE contient pas.
+  const src = ["home", "away"].map(s => sheets[s]?.source).filter(Boolean);
+  const who = [...new Set(src.map(o => o.by).filter(Boolean))].join(" · ");
+  const media = [...new Set(src.map(o => o.medium).filter(Boolean))].join(" · ");
+  const unmatched = ["home", "away"].flatMap(s =>
+    [...(sheets[s]?.starters || []), ...(sheets[s]?.subs || [])])
+    .filter(p => !p.id).length;
+
+  return el("section", { class: "card" }, [
+    el("div", { class: "card__head" }, [
+      el("h2", { text: t("Composition") }),
+      who ? badge(who, "club") : null,
+    ]),
+    methodNote(
+      `${t("Fournie par le club, pas relevée : aucune source automatique ne " +
+           "publie de feuille de match sur cette division. Ce document est le " +
+           "visuel d'avant-match du club, lu et apparié à la main.")}` +
+      ` ${t("Il donne donc le onze et le banc, jamais les changements — on " +
+            "n'en tire aucune minute jouée.")}` +
+      (media ? ` ${t("Support")} : ${media}.` : "") +
+      (unmatched ? ` ${unmatched} ${t("joueur(s) n'ont pas de fiche : la " +
+        "source ne les connaît pas, ils sont nommés sans lien.")}` : "")),
     el("div", { class: "squad", style: { marginTop: "var(--s-5)" } }, cols),
   ]);
 }
@@ -439,7 +530,9 @@ boot(async host => {
     el("div", { class: "page section" },
       tabs({
         match: [line, statsSlot, motm(m)],
-        equipes: [compare(m), h2h(m), squads(m)],
+        // La composition passe devant les effectifs de saison : quand elle
+        // existe, c'est elle qu'on vient chercher.
+        equipes: [lineups(m), compare(m), h2h(m), squads(m)],
       })),
   ]);
 

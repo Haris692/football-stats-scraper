@@ -133,6 +133,9 @@ select.btn { padding-inline-end: var(--s-3); }
   padding: 2px var(--s-2); white-space: nowrap;
 }
 .badge--flood { color: var(--flood); border-color: var(--flood); }
+/* Donnée venue du club lui-même, pas d'une source collectée. Discret : c'est
+   une mention d'origine, pas une distinction. */
+.badge--club { color: var(--text-2); border-color: var(--line); }
 .badge--live { color: var(--live); border-color: var(--live); }
 .badge--live::before {
   content: ""; width: 6px; height: 6px; border-radius: 50%;

@@ -1,0 +1,86 @@
+{
+  "_lisez_moi": [
+    "Compositions de match, fournies par les clubs eux-mêmes.",
+    "",
+    "AUCUNE source automatique ne publie de feuille de match sur cette",
+    "division (vérifié endpoint par endpoint, voir PROGRESS.md : Sofascore",
+    "`lineups` répond 404). Ce fichier est donc la SEULE origine possible,",
+    "et elle est humaine : un visuel publié par le club sur Instagram, lu à",
+    "la main, apparié à l'effectif Sofascore.",
+    "",
+    "La provenance est obligatoire et voyage jusqu'à la page : `source` dit",
+    "qui a publié, quand, et sur quel support. Une composition sans source",
+    "n'a rien à faire ici — elle serait indistinguable d'une invention.",
+    "",
+    "APPARIEMENT. Chaque joueur porte :",
+    "  · `as_published` — le nom TEL QUE le club l'écrit, jamais réécrit ;",
+    "  · `name` / `id`  — la fiche Sofascore correspondante, si elle existe ;",
+    "  · `match`        — comment le rapprochement a été fait :",
+    "        `number+name` le numéro ET le nom concordent (le cas sûr),",
+    "        `number`     le numéro concorde, le nom diffère (voir `note`),",
+    "        `name`       le nom seul, à une variante d'orthographe près,",
+    "        `none`       aucune fiche : le joueur reste nommé, sans id.",
+    "",
+    "⚠️ `none` n'est PAS une erreur à corriger en devinant. Un joueur peut",
+    "manquer chez Sofascore. Le site l'affiche par son nom, sans lien.",
+    "",
+    "⚠️ LES MINUTES NE SONT PAS ICI. Ces visuels sont publiés AVANT le coup",
+    "d'envoi : ils donnent le onze et le banc, jamais les changements. On ne",
+    "peut donc pas en tirer de minutes jouées, et rien dans ce fichier ne",
+    "doit laisser croire le contraire.",
+    "",
+    "Format : identifiant du match (celui de l'URL Forebet) -> { home, away }."
+  ],
+
+  "matches": {
+    "2487394": {
+      "home": {
+        "club": "sulaibikhat",
+        "source": {
+          "by": "Al Sulaibikhat FC",
+          "medium": "Instagram",
+          "kind": "Full lineup, publié avant la rencontre",
+          "evidence": "data/lineups/inbox/compo sulaibikhat.png",
+          "note": [
+            "⚠️ Le visuel annonce « SULAIBIKHAT | BURGAN ». C'est une erreur du",
+            "club : il s'agit bien de la rencontre contre Sporty, confirmée par",
+            "Haris et recoupée par la chronologie du match — Irobiso (26', but),",
+            "Damacena (55', jaune), Alaaeddine (75' et 83', buts) et Saleh",
+            "Khamees (88', jaune) figurent tous sur ce visuel.",
+            "Ne pas « corriger » la capture : elle dit Burgan, et c'est ainsi."
+          ]
+        },
+        "formation": null,
+        "starters": [
+          { "number": "22", "as_published": "Abdulrahman Sharifi", "name": "Abdulrahman Al Sharifi", "id": 1629413, "position": "G", "match": "number+name" },
+          { "number": "2",  "as_published": "Saleh Khamees",       "name": "Saleh Khamees Al Enezi", "id": 2441845, "position": "D", "match": "number+name", "captain": true },
+          { "number": "44", "as_published": "Elielson Bebê",       "name": "Elielson Cardoso Bebê",  "id": 2473328, "position": "D", "match": "number+name" },
+          { "number": "4",  "as_published": "Ali Al Mousawi",      "name": "Ali Al Mousawy",         "id": 2057430, "position": "D", "match": "number+name" },
+          { "number": "5",  "as_published": "Musaed Trad",         "name": "Musaed Al Enezi",        "id": 809504,  "position": "D", "match": "number",
+            "note": "Le club nomme le père (Trad), Sofascore la famille (Al Enezi). Même n°5, même prénom, aucun autre Musaed dans l'effectif." },
+          { "number": "19", "as_published": "Fahad Zuwaid",        "name": "Fahad Zuwaid",           "id": 2040639, "position": "F", "match": "number+name" },
+          { "number": "55", "as_published": "Bruno Domingos",      "name": "Bruno Domingues",        "id": 1952629, "position": "M", "match": "number+name" },
+          { "number": "25", "as_published": "Nawaf Al Faylakawi",  "name": "Nawaf Al Faylakawi",     "id": 2072656, "position": "M", "match": "number",
+            "note": "⚠️ Sofascore l'appelle « Nasser Al Faylakawi ». C'est la source qui se trompe de prénom : Haris a tranché le 12/08/2026, le n°25 est Nawaf. Le nom retenu est celui du club." },
+          { "number": "20", "as_published": "Welves Damacena",     "name": "Welves Santos Damacena", "id": 2443037, "position": "F", "match": "number+name" },
+          { "number": "97", "as_published": "Christian Irobiso",   "name": "Christian Irobiso",      "id": 218748,  "position": "F", "match": "number+name" },
+          { "number": "7",  "as_published": "Khaled Eid",          "name": "Khaled Al Rashidi",      "id": 2221679, "position": "D", "match": "number",
+            "note": "Même remarque que le n°5 : le club nomme le père (Eid), Sofascore la famille (Al Rashidi)." }
+        ],
+        "subs": [
+          { "number": "13", "as_published": "Ahmed Al Fahad",      "name": "Ahmad Al Fahad",         "id": 2057427, "position": "D", "match": "name" },
+          { "number": "14", "as_published": "Yasser Dashti",       "name": "Yaser Dashti",           "id": 2333131, "position": "M", "match": "name" },
+          { "number": "1",  "as_published": "Abdullah Abbas",      "name": "Abdullah Abbas",         "id": 2057428, "position": "G", "match": "name", "goalkeeper_marked": true },
+          { "number": "8",  "as_published": "Nawaf Al Shaibani",   "name": "Nawaf Al Shaibani",      "id": 2476918, "position": "M", "match": "name" },
+          { "number": "11", "as_published": "Othman Al Failakawi", "name": "Othman Al Failakawi",    "id": 975189,  "position": "M", "match": "name" },
+          { "number": "6",  "as_published": "Fahad Al Houli",      "name": "Fahad Al Houli",         "id": 1647394, "position": "M", "match": "name" },
+          { "number": "93", "as_published": "Ali Alaaedeen",       "name": "Ali Salman Alaaeddine",  "id": 2062607, "position": "F", "match": "name",
+            "note": "Rapprochement confirmé par la rencontre elle-même : entré en jeu, il marque à la 75e et à la 83e." },
+          { "number": null, "as_published": "Mohammed Ruwaee",     "name": "Mohammed Ruwaee",        "id": null,    "position": null, "match": "none",
+            "note": "Absent des 29 joueurs de Sulaibikhat chez Sofascore. Ce n'est pas une erreur du club : c'est un manque de la source. Ne pas l'apparier à Mohammed Safar ni à Mohammed Hamdan sur le seul prénom." },
+          { "number": "36", "as_published": "Abdullah Eissa",      "name": "Abdullah Eissa",         "id": 2447227, "position": "G", "match": "name", "goalkeeper_marked": true }
+        ]
+      }
+    }
+  }
+}

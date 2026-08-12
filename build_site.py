@@ -43,6 +43,23 @@ ROOT = Path(__file__).resolve().parent
 SITE = ROOT / "data" / "site.json"
 CRESTS = ROOT / "data" / "crests.json"
 PLAYERS = ROOT / "data" / "players.site.json"
+LINEUPS = ROOT / "data" / "lineups.json"
+
+
+def load_lineups() -> dict:
+    """Compositions fournies par les clubs (voir `data/lineups.json`).
+
+    ⚠️ C'est la seule origine possible : Sofascore répond 404 sur `lineups`
+    pour cette division, et personne d'autre ne publie de feuille de match.
+    La donnée est donc saisie à la main depuis un visuel du club, et elle
+    voyage avec sa provenance — sans quoi rien ne la distinguerait d'une
+    invention. Un fichier absent n'est pas une erreur : la quasi-totalité des
+    rencontres n'a pas de composition, et c'est l'état normal.
+    """
+    if not LINEUPS.exists():
+        return {}
+    data = json.loads(LINEUPS.read_text(encoding="utf-8"))
+    return {str(k): v for k, v in (data.get("matches") or {}).items() if v}
 
 SRC = ROOT / "src"          # les sources : on les édite, elles ne sont pas servies
 ASSETS = ROOT / "assets"    # ce qui est servi : une copie par version
@@ -344,11 +361,18 @@ def build(matches: list[dict], fixtures: list[dict],
         fixture["home_key"] = key(fixture.get("home", ""))
         fixture["away_key"] = key(fixture.get("away", ""))
 
+    lineups = load_lineups()
+
     detail = {}
     for match in matches:
         match = dict(match)
         match["home_key"] = key(match.get("home", ""))
         match["away_key"] = key(match.get("away", ""))
+        # La composition, quand un club l'a fournie. Elle n'est jamais déduite :
+        # aucune source automatique n'en publie sur cette division.
+        sheet = lineups.get(str(match.get("match_id")))
+        if sheet:
+            match["lineups"] = sheet
         # Les effectifs vivent maintenant dans l'annuaire : les répéter dans
         # chaque fiche pesait deux fois pour rien.
         match.pop("squads", None)
