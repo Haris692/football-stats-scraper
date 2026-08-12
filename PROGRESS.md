@@ -1517,11 +1517,17 @@ vérifié et définitif. Mais **les clubs, eux, publient leur onze sur Instagram
 D'où une voie qui n'existait pas : la donnée entre à la main, avec sa
 provenance, et le site la distingue de tout ce qui est collecté.
 
-Le circuit : le visuel est déposé dans `data/lineups/inbox/` (ignoré par git —
-c'est une pièce justificative, pas de la donnée), lu, apparié à l'effectif
-Sofascore, puis écrit dans **`data/lineups.json`**, versionné. `build_site.py`
-l'attache à la fiche du match sous la clé `lineups`, et `match.js` en fait une
-carte **Composition**, placée avant les effectifs de saison.
+Le circuit : les visuels sont déposés dans **`data/inbox/<match_id>/`** — un
+dossier par rencontre, ignoré par git, ce sont des pièces justificatives et pas
+de la donnée. Ils sont lus, appariés à l'effectif Sofascore, puis écrits dans
+**`data/lineups.json`**, versionné. `build_site.py` l'attache à la fiche du
+match sous la clé `lineups`, et `match.js` en fait une carte **Composition**,
+placée avant les effectifs de saison.
+
+Le dossier par rencontre est une idée de Haris, et elle est meilleure qu'une
+boîte à plat : une rencontre produit plusieurs visuels (`compo-`, `changements-`,
+`buts-`, `fin-`) et deux clubs les publient chacun de leur côté. `LISEZ-MOI.txt`
+y est versionné — c'est le mode d'emploi, il doit suivre le dépôt.
 
 ### Ce que l'appariement a appris
 
@@ -1549,6 +1555,34 @@ chronologie du match contre Sporty (Irobiso 26', Damacena 55', Alaaeddine 75' et
 ℹ️ **Sofascore se trompe de prénom sur le n°25 de Sulaibikhat** : « Nasser Al
 Faylakawi » là où le club écrit « Nawaf ». Arbitré en faveur du club le
 12/08/2026. Le site affiche donc ici un nom qui diffère de la source.
+
+### Sporty : ce que révèle une feuille quand la source a vieilli
+
+La deuxième feuille de la même rencontre est bien plus dure que la première, et
+c'est elle qui donne la mesure du problème. **Quatre titulaires sur onze
+n'existent dans aucune des 26 fiches Sporty de Sofascore** — Ahmed Fahad (n°5),
+Sulaiman Al-Ali (40), Omar Almutairi (49), Abdullah Saad (8). Ce n'est pas un
+échec d'appariement : c'est un effectif de source périmé, et la feuille du club
+est la seule chose qui le prouve.
+
+⚠️ **Un banc en initiale + nom n'est pas appariable.** Sporty publie
+« A. Marzouq », « S. Al-Kandari ». Sur douze, aucun n'a été rapproché. Le seul
+qui aurait été tentant — « S. Al-Kandari » contre « Musab Al Kandari » — a
+l'initiale contre lui. Les douze sont publiés par leur nom, sans lien.
+
+**Deux gains inattendus**, tranchés par Haris le 12/08 :
+
+- ✅ **Le doublon de Sporty est enfin départagé.** « Metab Fahad Al Salamah »
+  existait sous deux identifiants (1647399 en n°7, 1629417 sans numéro) et on ne
+  savait pas distinguer doublon et homonyme. La feuille lui donne le **brassard**
+  en n°7 : la fiche vivante est celle du n°7.
+- ✅ **Yousef Tarek Al Madi a changé de numéro** — 98 chez Sofascore, 11 chez le
+  club. Le numéro retenu est celui du club.
+
+ℹ️ **Une contradiction assumée** : Sofascore attribue le rouge de la 74e à
+Abdullah Al Najdi (n°16), absent du onze *et* du banc publiés. Les deux sources
+sont conservées telles quelles. Corriger l'une par l'autre sans élément nouveau
+serait un arbitrage au jugé.
 
 ### La limite, écrite sur la page
 

@@ -40,7 +40,7 @@
           "by": "Al Sulaibikhat FC",
           "medium": "Instagram",
           "kind": "Full lineup, publié avant la rencontre",
-          "evidence": "data/lineups/inbox/compo sulaibikhat.png",
+          "evidence": "data/inbox/2487394/compo-sulaibikhat.png",
           "note": [
             "⚠️ Le visuel annonce « SULAIBIKHAT | BURGAN ». C'est une erreur du",
             "club : il s'agit bien de la rencontre contre Sporty, confirmée par",
@@ -79,6 +79,73 @@
           { "number": null, "as_published": "Mohammed Ruwaee",     "name": "Mohammed Ruwaee",        "id": null,    "position": null, "match": "none",
             "note": "Absent des 29 joueurs de Sulaibikhat chez Sofascore. Ce n'est pas une erreur du club : c'est un manque de la source. Ne pas l'apparier à Mohammed Safar ni à Mohammed Hamdan sur le seul prénom." },
           { "number": "36", "as_published": "Abdullah Eissa",      "name": "Abdullah Eissa",         "id": 2447227, "position": "G", "match": "name", "goalkeeper_marked": true }
+        ]
+      },
+
+      "away": {
+        "club": "sporty",
+        "source": {
+          "by": "Sporty FC",
+          "medium": "Instagram",
+          "kind": "Starting XI, publié avant la rencontre",
+          "evidence": "data/inbox/2487394/compo-sporty.png",
+          "note": [
+            "⚠️ Quatre titulaires sur onze n'existent dans AUCUNE des 26 fiches",
+            "de Sporty chez Sofascore : Ahmed Fahad (n°5), Sulaiman Al-Ali (40),",
+            "Omar Almutairi (49) et Abdullah Saad (8). Ce n'est pas un échec",
+            "d'appariement, c'est un effectif de source périmé. Ils sont publiés",
+            "par leur nom, sans lien.",
+            "",
+            "⚠️ Le banc est donné en INITIALE + nom (« A. Marzouq »). Une",
+            "initiale ne suffit pas à désigner quelqu'un : sur les douze, un",
+            "seul rapprochement aurait été tentant (« S. Al-Kandari » contre",
+            "« Musab Al Kandari »), et l'initiale ne concorde même pas. Aucun",
+            "n'est apparié. Il faudra les noms complets pour aller plus loin.",
+            "",
+            "⚠️ Sofascore attribue le carton rouge de la 74e à Abdullah Al Najdi",
+            "(n°16), qui ne figure ni dans ce onze ni sur ce banc. Les deux",
+            "sources sont conservées telles quelles : la chronologie garde son",
+            "carton, la feuille garde ses noms. Arbitrer sans élément nouveau",
+            "reviendrait à corriger une source par l'autre au jugé."
+          ]
+        },
+        "formation": null,
+        "starters": [
+          { "number": "1",  "as_published": "Abdullah Bahman",     "name": "Abdullah Bahman",        "id": 2664713, "position": "G", "match": "name" },
+          { "number": "22", "as_published": "Ibrahim Altamimi",    "name": "Ibrahim Al Tamimi",      "id": 2260803, "position": "D", "match": "number+name" },
+          { "number": "5",  "as_published": "Ahmed Fahad",         "name": "Ahmed Fahad",            "id": null,    "position": null, "match": "none",
+            "note": "Aucun Ahmed Fahad dans l'effectif Sofascore de Sporty. Ne pas l'apparier à « Metab Fahad Al Salamah » : seul le mot « Fahad » est commun, et c'est un prénom répandu." },
+          { "number": "40", "as_published": "Sulaiman Al-Ali",     "name": "Sulaiman Al-Ali",        "id": null,    "position": null, "match": "none",
+            "note": "Aucun Sulaiman dans l'effectif Sofascore de Sporty." },
+          { "number": "25", "as_published": "Omar Al-Enezi",       "name": "Omar Al Enezi",          "id": 2259242, "position": "D", "match": "number+name" },
+          { "number": "4",  "as_published": "Salem Alhouli",       "name": "Salem Al Houli",         "id": 2072649, "position": "M", "match": "number+name",
+            "note": "Le club colle l'article (« Alhouli »), Sofascore le sépare (« Al Houli »). Même convention que Altamimi / Al Tamimi." },
+          { "number": "49", "as_published": "Omar Almutairi",      "name": "Omar Almutairi",         "id": null,    "position": null, "match": "none",
+            "note": "Aucun Al Mutairi dans l'effectif Sofascore de Sporty. Ne pas l'apparier à Omar Al Enezi sur le seul prénom." },
+          { "number": "8",  "as_published": "Abdullah Saad",       "name": "Abdullah Saad",          "id": null,    "position": null, "match": "none",
+            "note": "Aucun Saad dans l'effectif Sofascore de Sporty. Quatre Abdullah y figurent : le prénom ne désigne personne." },
+          { "number": "11", "as_published": "Yousef Madi",         "name": "Yousef Tarek Al Madi",   "id": 2259236, "position": "F", "match": "name",
+            "note": "Sofascore le donne en n°98, le club en n°11. Même joueur, numéro changé — tranché par Haris le 12/08/2026. Le numéro retenu est celui du club." },
+          { "number": "10", "as_published": "Abdullah Bou Majdad", "name": "Abdullah Bomjdad",       "id": 2259500, "position": "F", "match": "name",
+            "note": "Même nom, deux découpages (« Bou Majdad » / « Bomjdad »). Sofascore ne lui donne aucun numéro et attribue le n°10 à Hussain Hajiah : c'est la source qui est en retard, l'appariement se fait sur le nom." },
+          { "number": "7",  "as_published": "Mutaib Alsalama",     "name": "Metab Fahad Al Salamah", "id": 1647399, "position": "M", "match": "number+name", "captain": true,
+            "note": "Tranché par Haris le 12/08/2026 : même joueur, deux translittérations (Mutaib/Metab, Alsalama/Al Salamah). ⚠️ Ce joueur est le doublon connu de Sporty, présent sous deux identifiants (1647399 en n°7, 1629417 sans numéro). Le brassard tranche enfin : la fiche vivante est celle du n°7." }
+        ],
+        "subs": [
+          { "number": null, "as_published": "Mohammed Hadi",  "name": "Mohammed Hadi",  "id": null, "position": null, "match": "none" },
+          { "number": null, "as_published": "A. Azaz",        "name": "A. Azaz",        "id": null, "position": null, "match": "none" },
+          { "number": null, "as_published": "M. Al-Owaihan",  "name": "M. Al-Owaihan",  "id": null, "position": null, "match": "none" },
+          { "number": null, "as_published": "A. Marzouq",     "name": "A. Marzouq",     "id": null, "position": null, "match": "none" },
+          { "number": null, "as_published": "A. Al-Tulaihi",  "name": "A. Al-Tulaihi",  "id": null, "position": null, "match": "none",
+            "note": "Ressemble à « Abdulrahman Al Tuhaili » (gardien, id 2288821), mais Tulaihi/Tuhaili n'est pas la même suite de lettres et l'initiale seule ne prouve rien. Laissé non apparié." },
+          { "number": null, "as_published": "A. Jassim",      "name": "A. Jassim",      "id": null, "position": null, "match": "none" },
+          { "number": null, "as_published": "S. Al-Kandari",  "name": "S. Al-Kandari",  "id": null, "position": null, "match": "none",
+            "note": "Le seul Al Kandari de l'effectif est « Musab » — initiale M, pas S. Laissé non apparié." },
+          { "number": null, "as_published": "B. Al-Mutairi",  "name": "B. Al-Mutairi",  "id": null, "position": null, "match": "none" },
+          { "number": null, "as_published": "A. Al-Ashqar",   "name": "A. Al-Ashqar",   "id": null, "position": null, "match": "none" },
+          { "number": null, "as_published": "N. Al-Sahli",    "name": "N. Al-Sahli",    "id": null, "position": null, "match": "none" },
+          { "number": null, "as_published": "A. Awadhi",      "name": "A. Awadhi",      "id": null, "position": null, "match": "none" },
+          { "number": null, "as_published": "O. Farhan",      "name": "O. Farhan",      "id": null, "position": null, "match": "none" }
         ]
       }
     }

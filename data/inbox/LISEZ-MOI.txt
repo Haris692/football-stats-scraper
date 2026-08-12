@@ -1,0 +1,42 @@
+Ce que les clubs publient, et que personne d'autre ne publie.
+=============================================================
+
+UN DOSSIER PAR RENCONTRE, nommé par l'identifiant du match (celui de
+l'URL Forebet, le même que dans data/site.json) :
+
+    data/inbox/2487394/
+        compo-sulaibikhat.png
+        compo-sporty.png
+        changements-sulaibikhat.png
+        buts.png
+        ...
+
+Si tu ne connais pas l'identifiant, crée le dossier avec ce que tu as —
+`sulaibikhat-sporty-11-08/` — je le renommerai. Mieux vaut un dossier
+mal nommé qu'une capture perdue.
+
+NOMMAGE DES FICHIERS. Libre, mais deux mots aident beaucoup : ce que
+montre l'image, et de quel club elle vient.
+
+    compo-        le onze de départ (publié AVANT le coup d'envoi)
+    changements-  les entrées et sorties, avec leurs minutes
+    buts-         buteurs et passeurs
+    fin-          le visuel de fin de match, s'il y en a un
+
+⚠️ LE PLUS UTILE N'EST PAS LA COMPO. Un onze d'avant-match donne qui a
+commencé et qui gardait les buts — déjà beaucoup, personne ne le publie
+ailleurs. Mais ce sont les CHANGEMENTS qui débloquent les minutes
+jouées, et sans minutes aucune statistique par joueur n'est comparable.
+Si un club poste un visuel de fin de match, c'est celui-là qu'il faut
+prendre en priorité.
+
+CE DOSSIER N'EST PAS VERSIONNÉ (voir .gitignore). Ce sont des pièces
+justificatives : elles servent à vérifier, pas à publier. Ce qui est
+publié, c'est ce qu'on en extrait — data/lineups.json — et chaque
+entrée dit de quel club elle vient et sur quel support.
+
+⚠️ ON NE RETOUCHE JAMAIS UNE CAPTURE, même quand elle se trompe. Le
+visuel de Sulaibikhat du 11/08 annonce « BURGAN » alors que la
+rencontre était contre Sporty : l'erreur est notée dans la provenance,
+l'image reste telle quelle. Une pièce justificative corrigée ne prouve
+plus rien.
