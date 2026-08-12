@@ -52,9 +52,22 @@ STEPS = [
     # Les journées passées sortent du cache ; seules la journée courante et les
     # suivantes repartent sur le réseau.
     (["fetch_events.py"], "rencontres, chronologies et journées"),
-    # Les profils sont mis en cache 30 jours : après la première passe,
-    # cette étape ne coûte presque rien.
-    (["fetch_players.py"], "fiches joueurs"),
+    # ⚠️ `fetch_players.py` N'EST PAS ICI, et retiré volontairement le
+    # 12/08/2026. Ce que ce script doit publier chaque matin, c'est le
+    # résultat des matchs de la veille et leur détail — pas la date de
+    # naissance des joueurs, qui ne change jamais d'un jour à l'autre.
+    #
+    # L'étape coûtait 230 requêtes et des dizaines de minutes, et comme toute
+    # étape en échec annule la publication (voir `main`), sa fragilité
+    # emportait des données qui n'avaient rien à voir : le 12/08 les
+    # rencontres du 11 étaient collectées à 08:33 et ne sont jamais arrivées
+    # sur le site, parce que les fiches joueurs ont expiré après.
+    #
+    # Les fiches se collectent donc à la main, quand un effectif a bougé :
+    #     python fetch_players.py --club yarmouk
+    # Elles restent publiées (`PUBLISHED` les emporte) : le lendemain d'une
+    # collecte manuelle, le rafraîchissement les pousse avec le reste.
+    #
     # ⚠️ `build_site.py`, pas `build_console.py` : depuis le passage au site
     # multi-pages, `index.html` est une page statique versionnée qu'aucune
     # collecte ne réécrit. Ce sont les JSON de `data/` qui changent.

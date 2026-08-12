@@ -20,9 +20,11 @@ from pathlib import Path
 
 from bs4 import BeautifulSoup
 
-from browser import ForebetBrowser, cache_path
+from browser import ForebetBrowser
 
 LEAGUE_URL = "https://www.forebet.com/fr/predictions-kuwait/1st-division"
+# Plus court que les six heures par défaut : c'est la page qui porte les scores.
+LEAGUE_MAX_AGE_HOURS = 1.0
 MATCH_ID_RE = re.compile(r"/matches/(?P<slug>.+?)-(?P<id>\d+)(?:$|[/?#])")
 
 
@@ -78,10 +80,21 @@ def to_iso(kickoff: str | None) -> str | None:
 
 
 def load_league_html(force: bool = False) -> str:
-    cached = cache_path(LEAGUE_URL)
-    if cached.exists() and not force:
-        return cached.read_text(encoding="utf-8", errors="replace")
-    with ForebetBrowser() as browser:
+    """La page ligue, du cache si elle est encore fraîche.
+
+    ⚠️ **Cette page est la seule à porter `score` et `played`** pour tout le
+    calendrier — les fiches de match détaillées ont leur `full_time`, mais rien
+    ne le remonte dans la liste. Un cache périmé ici, et le site affiche « à
+    venir » une rencontre jouée la veille, alors même que sa fiche en connaît le
+    score. C'est arrivé le 12/08/2026 : la page datait du 11 à 08:16, dix heures
+    avant le coup d'envoi, et le calendrier est resté bloqué là.
+
+    La cause était que ce cache **n'avait aucune limite d'âge** : le seul
+    `exists()` suffisait, ce que `browser.get()` ne fait jamais. Une heure est
+    court par rapport aux six heures par défaut, et c'est voulu : cette page-là
+    change plusieurs fois par jour, et elle ne coûte qu'une requête.
+    """
+    with ForebetBrowser(max_age_hours=LEAGUE_MAX_AGE_HOURS) as browser:
         return browser.get(LEAGUE_URL, wait_for="div.rcnt", force=force)
 
 

@@ -1186,6 +1186,52 @@ Journal dans `daily.log`. À la main : `Start-ScheduledTask -TaskName
 FootballStatsScraper-Daily`, ou `python daily.py --dry-run` pour voir ce qu'il
 ferait.
 
+### ⚠️ Le cache de la page ligue n'avait pas d'âge (12/08/2026)
+
+**Le bug qui gelait les résultats**, et il aurait survécu à la correction
+ci-dessous. `fetch_fixtures.load_league_html()` rendait le fichier de cache dès
+qu'il **existait** — sans jamais regarder sa date, contrairement à
+`browser.get()` qui applique `max_age_hours`. Une fois la page écrite, plus
+rien ne la rafraîchissait sauf `--force`, que `daily.py` ne passe pas.
+
+Ce qui rend la panne difficile à voir : **cette page est la seule à porter
+`score` et `played`** pour le calendrier. Les fiches détaillées ont leur
+`full_time`, mais rien ne le remonte dans la liste. Le 12/08 le site affichait
+donc « à venir » deux rencontres jouées la veille, **alors que leur fiche
+connaissait le score** — 3-1 et 3-0, avec possession, tirs et chronologie
+nommée. Symptôme trompeur : la donnée avait l'air manquante, elle était juste
+invisible depuis la liste.
+
+Corrigé en donnant à cette page son propre âge, plus court que le défaut :
+`LEAGUE_MAX_AGE_HOURS = 1.0`. Elle change plusieurs fois par jour et ne coûte
+qu'une requête. Le `cache_path` importé ne sert plus.
+
+⚠️ Règle à retenir : **un cache sans date n'est pas un cache, c'est un gel.**
+Si un jour un autre chargeur court-circuite `browser.get()`, il refera ce bug.
+
+### ⚠️ Les fiches joueurs sont sorties du quotidien (12/08/2026)
+
+**Le rafraîchissement publie le résultat des matchs de la veille et leur
+détail. Rien d'autre.** `fetch_players.py` en a été retiré : 230 requêtes et des
+dizaines de minutes pour des dates de naissance qui ne changent jamais d'un jour
+à l'autre.
+
+Ce n'est pas une optimisation, c'est une correction. Le garde-fou « la première
+étape en échec arrête tout » est juste, mais il transforme la fragilité de
+n'importe quelle étape en panne de publication **pour tout le reste**. Cas réel
+du 12/08 : les rencontres du 11 étaient collectées à 08:33, les fiches joueurs
+ont expiré à 08:44 (`Page.goto: Timeout`), et le site est resté figé — deux
+rencontres affichées « à venir » le lendemain de leur coup d'envoi. La veille,
+même chose depuis `fetch_squads.py` (`Failed to fetch`, Cloudflare).
+
+La règle qui en sort : **ne mettre dans le quotidien que ce qui change
+quotidiennement.** Une étape lente et faillible qui garde une donnée figée n'a
+rien à faire devant celle qui porte les scores.
+
+Les fiches se collectent donc à la main, quand un effectif bouge :
+`python fetch_players.py --club yarmouk`. Elles restent dans `PUBLISHED` — le
+rafraîchissement du lendemain les pousse avec le reste.
+
 ## Refonte de l'interface (11/08/2026)
 
 Le problème n'était pas le manque de données, c'était de ne rien y retrouver :
