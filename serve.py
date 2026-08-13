@@ -27,6 +27,24 @@ interne (`console.html`, fichier unique, générateur de brief Instagram) et le
 consomme lui aussi `/api/live` — servi ici, son score et ses statistiques se
 mettent à jour seuls pendant la rencontre ; publié sur GitHub Pages, il ne
 trouve pas ce point d'entrée et retombe sans bruit sur ses données figées.
+
+## Le port public, pour l'auto-hébergement
+
+`--public-port` ouvre un **second écouteur** dans le même processus :
+
+    python serve.py --public-port 8801   # 8800 local complet, 8801 exposable
+
+Il ne sert que ce que le site demande vraiment (voir `PUBLIC_PAGES`), en lecture
+seule, sans `/api/refresh` et sans listing de dossier. C'est lui que le
+Cloudflare Tunnel doit viser, **jamais 8800** : le port local sert aussi la
+console interne, le code, `PROGRESS.md`, `.git/`, `data/inbox/` et le profil
+Chrome — donc ses cookies de session.
+
+Deux écouteurs mais **un seul processus**, à dessein : ils partagent
+`Handler.lock` et l'unique `LiveCollector`, sinon deux Chrome se disputeraient
+le port CDP 9333. Et la séparation est celle du réseau, pas celle d'un en-tête
+`CF-Connecting-IP` — qu'on ne peut de toute façon pas croire tant qu'on n'a pas
+vérifié d'où vient la connexion.
 """
 
 from __future__ import annotations
@@ -37,10 +55,12 @@ import sys
 import threading
 import time
 import webbrowser
+from collections import deque
 from datetime import datetime, timedelta
 from http.server import SimpleHTTPRequestHandler, ThreadingHTTPServer
 from pathlib import Path
 from types import SimpleNamespace
+from urllib.parse import unquote
 
 from browser import CdpBrowser
 from build_console import assemble, build, data_file_for, make_payload
@@ -65,6 +85,22 @@ LIVE_INTERVAL = 60.0
 # l'onglet doit suffire à ne plus solliciter Forebet — sinon un `serve.py`
 # oublié le sonderait toute la soirée.
 LIVE_IDLE_STOP = 180.0
+
+
+def live_data_file() -> Path:
+    """Le fichier où le collecteur lit les rencontres à suivre.
+
+    `console.data.json` d'abord : c'est lui que « Rafraîchir » réécrit, donc le
+    plus frais quand la console tourne. À défaut `data/site.json`, qui porte les
+    mêmes `match_id` et `kickoff_iso` et qui, lui, est versionné.
+
+    Sans ce repli, un poste qui ne sert que le site public n'aurait aucune
+    rencontre à suivre : il attendrait un fichier que seul l'outil interne
+    produit, et que `.gitignore` écarte du dépôt. Le choix est refait à chaque
+    démarrage du collecteur, pas figé au lancement du serveur.
+    """
+    console = data_file_for(ROOT / PAGE)
+    return console if console.exists() else ROOT / "data" / "site.json"
 
 
 def _kickoff(fixture: dict) -> datetime | None:
@@ -264,7 +300,7 @@ class Handler(SimpleHTTPRequestHandler):
         """
         with cls.collector_lock:
             if cls.collector is None or not cls.collector.is_alive():
-                cls.collector = LiveCollector(data_file_for(ROOT / PAGE))
+                cls.collector = LiveCollector(live_data_file())
                 cls.collector.start()
                 print("  direct : collecteur démarré", flush=True)
             cls.collector.touch()
@@ -325,6 +361,222 @@ class Handler(SimpleHTTPRequestHandler):
         super().end_headers()
 
 
+# -- façade publique ---------------------------------------------------------
+#
+# Ce que le site demande vraiment, relevé fichier par fichier dans
+# `src/js/core/data.js` (les trois JSON, les portraits) et `live.js` (le direct).
+# Tout ce qui n'est pas dans cette liste est refusé : c'est une **liste
+# blanche**, pas une liste noire. Un fichier ajouté au dépôt n'est donc jamais
+# exposé par mégarde — il faut venir l'écrire ici.
+PUBLIC_PAGES = frozenset({
+    "index.html", "calendrier.html", "classement.html",
+    "club.html", "clubs.html", "joueur.html", "match.html",
+})
+PUBLIC_DATA = frozenset({
+    "data/site.json", "data/crests.json", "data/players.site.json",
+})
+
+# Quotas par client, sur une fenêtre glissante. Le site charge une page en une
+# rafale (modules, JSON, portraits) puis se tait : le quota statique est large.
+# Le direct, lui, est demandé toutes les 15 s par onglet — 12 par minute laisse
+# la place à deux ou trois onglets sans ouvrir la porte au martèlement.
+PUBLIC_QUOTA_FILES = (240, 60.0)
+PUBLIC_QUOTA_LIVE = (12, 60.0)
+
+
+class RateLimit:
+    """Compte les demandes par client sur une fenêtre glissante."""
+
+    def __init__(self, quota: int, window: float):
+        self.quota = quota
+        self.window = window
+        self._seen: dict[str, deque] = {}
+        self._lock = threading.Lock()
+
+    def allow(self, who: str) -> bool:
+        now = time.time()
+        with self._lock:
+            # Purge : sans elle, un point d'entrée public accumulerait une
+            # entrée par adresse vue depuis le démarrage.
+            if len(self._seen) > 1024:
+                for key in [k for k, v in self._seen.items()
+                            if not v or now - v[-1] > self.window]:
+                    del self._seen[key]
+            hits = self._seen.setdefault(who, deque())
+            while hits and now - hits[0] > self.window:
+                hits.popleft()
+            if len(hits) >= self.quota:
+                return False
+            hits.append(now)
+            return True
+
+
+class PublicHandler(SimpleHTTPRequestHandler):
+    """Le site et le direct, rien d'autre, en lecture seule.
+
+    Volontairement séparé de `Handler` plutôt que dérivé : hériter aurait fait
+    porter à cette classe tout ce que l'autre sait servir, et une liste blanche
+    qui hérite d'un « sert tout » finit toujours par fuir. Ici, la seule façon
+    d'exposer un fichier est de l'inscrire dans `PUBLIC_PAGES`.
+    """
+
+    files = RateLimit(*PUBLIC_QUOTA_FILES)
+    live = RateLimit(*PUBLIC_QUOTA_LIVE)
+
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, directory=str(ROOT), **kwargs)
+
+    def log_request(self, code="-", size="-"):
+        """Une ligne par refus, rien pour le reste.
+
+        C'est ce qu'on relit après une nuit d'exposition. Tracer les succès
+        noierait le fichier : une page tire ses modules, ses trois JSON et
+        jusqu'à vingt-cinq portraits, et le direct revient toutes les quinze
+        secondes par onglet.
+        """
+        if isinstance(code, int) and code >= 400:
+            # Le chemin vient du dehors : on le borne et on retire les sauts de
+            # ligne, sinon une URL choisie écrirait de fausses lignes de trace.
+            demande = (self.path or "")[:120].replace("\r", "").replace("\n", "")
+            print(f"  public : {code} {self.command} {demande} "
+                  f"({self._who()})", flush=True)
+
+    def log_message(self, fmt, *args):
+        pass
+
+    # -- identité du demandeur --------------------------------------------
+    def _who(self) -> str:
+        """L'adresse du client.
+
+        Derrière un tunnel, la connexion vient toujours de 127.0.0.1 : sans
+        `CF-Connecting-IP`, tout le monde partagerait le même quota. Cloudflare
+        réécrit cet en-tête à chaque passage, un client ne peut pas le choisir —
+        mais il n'est digne de foi que **parce que** ce port n'est atteignable
+        que par le tunnel. Exposer 8801 en direct invaliderait ce raisonnement.
+        """
+        forwarded = self.headers.get("CF-Connecting-IP")
+        if forwarded:
+            return forwarded.split(",")[0].strip()[:45]
+        return self.client_address[0]
+
+    # -- ce qui est servi --------------------------------------------------
+    def _relative(self) -> str | None:
+        """Le chemin demandé ramené à une clé simple, ou `None` s'il est louche."""
+        path = unquote(self.path.split("?")[0].split("#")[0])
+        # `::` vise les flux ADS de NTFS (`page.html::$DATA` rend la source),
+        # `\` est un séparateur sous Windows là où l'URL n'en connaît qu'un.
+        if "\\" in path or "::" in path or "\x00" in path:
+            return None
+        parts = []
+        for seg in path.split("/"):
+            if seg in ("", "."):
+                continue
+            # Windows ignore les points et espaces finaux : `index.html.` ouvre
+            # le même fichier en manquant la comparaison exacte.
+            if seg == ".." or seg != seg.rstrip(". "):
+                return None
+            parts.append(seg)
+        return "/".join(parts) or "index.html"
+
+    @staticmethod
+    def _allowed(rel: str) -> bool:
+        if rel in PUBLIC_PAGES or rel in PUBLIC_DATA:
+            return True
+        # Sous-arbres : l'empreinte de contenu d'`assets/` change à chaque
+        # build, on ne peut pas l'énumérer. L'extension borne ce qu'on y sert.
+        if rel.startswith("assets/") and rel.endswith((".css", ".js")):
+            return True
+        if rel.startswith("data/photos/") and rel.endswith(".webp"):
+            return True
+        # Aucun dossier ne peut correspondre : le listing est donc impossible,
+        # sans avoir à désarmer `list_directory`.
+        return False
+
+    def _deny(self, status: int) -> None:
+        """Refuse sans rien apprendre au demandeur.
+
+        Toujours le même corps : distinguer « interdit » de « absent »
+        dessinerait la carte de ce qui existe.
+        """
+        body = json.dumps({"error": "introuvable"}).encode("utf-8")
+        self.send_response(status)
+        self.send_header("Content-Type", "application/json; charset=utf-8")
+        self.send_header("Content-Length", str(len(body)))
+        self.end_headers()
+        if self.command != "HEAD":
+            self.wfile.write(body)
+
+    # -- verbes ------------------------------------------------------------
+    def do_GET(self):
+        rel = self._relative()
+        if rel is None:
+            self._deny(404)
+            return
+        if rel == "api/live":
+            if not self.live.allow(self._who()):
+                self._deny(429)
+                return
+            self._json_live()
+            return
+        # Le quota se prend avant la liste blanche : un scanner qui tape mille
+        # chemins absents doit être freiné comme les autres.
+        if not self.files.allow(self._who()):
+            self._deny(429)
+            return
+        if not self._allowed(rel):
+            self._deny(404)
+            return
+        super().do_GET()
+
+    def do_HEAD(self):
+        rel = self._relative()
+        if rel is None or rel == "api/live" or not self._allowed(rel):
+            self._deny(404)
+            return
+        super().do_HEAD()
+
+    def do_POST(self):
+        # `/api/refresh` n'existe pas ici : une collecte complète lance Chrome
+        # pour une minute et sollicite Forebet. C'est la règle « à la main,
+        # jamais périodique » — elle ne survivrait pas à une boucle anonyme.
+        self._deny(405)
+
+    def _json_live(self) -> None:
+        snapshot = Handler.live_collector().snapshot()
+        state = snapshot.get("state") or ""
+        # `state` porte `str(exc)` en cas de panne : chemins et internes.
+        # Dehors, on dit qu'on ne sait pas, et la trace reste dans la console.
+        if state.startswith("indisponible"):
+            state = "indisponible"
+        body = json.dumps({
+            "state": state,
+            "live": snapshot.get("live") or {},
+            "watching": snapshot.get("watching") or [],
+            "collected": snapshot.get("collected"),
+            "now_iso": datetime.now().isoformat(timespec="seconds"),
+            "interval": LIVE_INTERVAL,
+        }, ensure_ascii=False).encode("utf-8")
+        self.send_response(200)
+        self.send_header("Content-Type", "application/json; charset=utf-8")
+        self.send_header("Content-Length", str(len(body)))
+        self.send_header("Cache-Control", "no-store")
+        self.end_headers()
+        self.wfile.write(body)
+
+    def end_headers(self):
+        self.send_header("X-Content-Type-Options", "nosniff")
+        self.send_header("Referrer-Policy", "no-referrer")
+        # Le site ne charge que ses propres fichiers : les écussons et les
+        # portraits sont servis d'ici, pas cherchés chez la source.
+        self.send_header("Content-Security-Policy",
+                         "default-src 'self'; img-src 'self' data:; "
+                         "style-src 'self'; script-src 'self'; frame-ancestors 'none'")
+        if self.command in ("GET", "HEAD") and self.path.split("?")[0].endswith(
+                (".html", ".json")):
+            self.send_header("Cache-Control", "no-store")
+        super().end_headers()
+
+
 def main() -> int:
     parser = argparse.ArgumentParser(
         description="Sert la console en local, avec un bouton « Rafraîchir » qui collecte.")
@@ -341,12 +593,29 @@ def main() -> int:
     # ce que la version publiée sur GitHub Pages ne peut pas faire.
     parser.add_argument("--site", action="store_true",
                         help="ouvrir le site public plutôt que la console interne")
+    parser.add_argument("--public-port", type=int, default=None,
+                        help="ouvrir en plus un port exposable : le site et le "
+                             "direct seuls, en lecture seule. C'est celui-ci "
+                             "que le tunnel doit viser, jamais --port.")
     args = parser.parse_args()
 
-    if not (ROOT / PAGE).exists():
-        print(f"{PAGE} n'existe pas encore — lance d'abord "
-              f"`python build_console.py --fixtures --scope all`.", file=sys.stderr)
+    if args.public_port == args.port:
+        print("--public-port doit différer de --port : le port exposé ne sert "
+              "ni la console, ni le code, ni /api/refresh.", file=sys.stderr)
         return 1
+
+    if not (ROOT / PAGE).exists():
+        # Le port public ne sert jamais la console : refuser de démarrer sans
+        # elle condamnerait l'auto-hébergement à dépendre d'un fichier que
+        # `.gitignore` écarte, donc absent d'un clone frais.
+        if not args.public_port:
+            print(f"{PAGE} n'existe pas encore — lance d'abord "
+                  f"`python build_console.py --fixtures --scope all`.",
+                  file=sys.stderr)
+            return 1
+        print(f"{PAGE} n'existe pas : la console ne sera pas servie. "
+              f"Le site et le direct, si.", file=sys.stderr)
+        args.site = True
 
     # Les options que `assemble()` attend. `force=True` : cliquer sur
     # « Rafraîchir » veut dire « va rechercher », pas « ressers-moi le cache ».
@@ -364,7 +633,21 @@ def main() -> int:
           "compter une minute.")
     print(f"le direct suit les matchs en cours, relevés toutes les "
           f"{int(LIVE_INTERVAL)} s, des DEUX côtés : la console par son bouton, "
-          f"le site tout seul.\nCtrl+C pour arrêter.")
+          f"le site tout seul.")
+
+    # Le port public vit dans un fil : le collecteur et le verrou de collecte
+    # sont des attributs de classe, les deux écouteurs les partagent donc sans
+    # rien avoir à se dire.
+    public = None
+    if args.public_port:
+        public = ThreadingHTTPServer(("127.0.0.1", args.public_port), PublicHandler)
+        threading.Thread(target=public.serve_forever, daemon=True,
+                         name="public").start()
+        print(f"port public sur http://127.0.0.1:{args.public_port}/ — "
+              f"site et direct seuls, lecture seule. C'est CE port que le "
+              f"tunnel doit viser.")
+    print("Ctrl+C pour arrêter.")
+
     if not args.no_open:
         webbrowser.open(url)
     try:
@@ -373,6 +656,9 @@ def main() -> int:
         print("\narrêt.")
     finally:
         server.server_close()
+        if public is not None:
+            public.shutdown()
+            public.server_close()
     return 0
 
 
