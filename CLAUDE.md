@@ -18,7 +18,7 @@ brief Instagram) et **`output/`** (JSON par match).
 Objectif énoncé : **présenter le projet à des clubs koweïtiens**, et produire du
 contenu Instagram.
 
-## ⚠️ Les cinq règles à ne jamais enfreindre
+## ⚠️ Les six règles à ne jamais enfreindre
 
 1. **On édite `src/`, JAMAIS `assets/`.** `build_site.py` recopie `src/` sous
    `assets/<empreinte-de-contenu>/` et réécrit les pages. Un navigateur cache
@@ -45,13 +45,29 @@ contenu Instagram.
    modifications. Les commits sont en français, style
    `feat(portée): description`.
 
+6. **Ce qu'on expose passe par `--public-port`, jamais par `--port`.** Le port
+   local sert la racine du dépôt : la console interne, le code, `PROGRESS.md`,
+   `.git/`, `data/inbox/` et `.chrome-profile/` — donc les cookies de session du
+   Chrome de collecte. Le port public ne sert qu'une **liste blanche**
+   (`PUBLIC_PAGES`, `PUBLIC_DATA` dans `serve.py`). N'y ajouter un fichier
+   qu'en sachant qu'il devient public, et faire passer `test_public.py`.
+
 ## Commandes
 
 ```bash
 python daily.py                              # rafraîchissement quotidien complet
 python build_site.py --fixtures --scope all  # régénère site.json + assets + pages
 python serve.py                              # sert le site sur :8800, + /api/live
+python serve.py --public-port 8801           # + une façade exposable (voir plus bas)
 python fetch_players.py --club yarmouk       # fiches d'un club (hors daily.py)
+python test_public.py                        # ce que la façade publique refuse
+```
+
+Auto-hébergement, côté Windows :
+
+```powershell
+powershell -ExecutionPolicy Bypass -File serve_247.ps1 -Register   # serveur + tunnel à l'ouverture de session
+powershell -ExecutionPolicy Bypass -File schedule_daily.ps1        # daily.py à 8 h
 ```
 
 Clés de club : `yarmouk`, `sulaibikhat`, `sahel`, `jazira`, `khaitan`,
@@ -169,8 +185,32 @@ Machine sous Windows, donc **aucun portage** : `schedule_daily.ps1` et le
 lancement Chrome fonctionnent tels quels. Ne pas proposer systemd, cron ni
 Chromium ARM.
 
-**Reste à faire avant la mise en ligne** : une revue de sécurité de `serve.py`
-(c'est un `SimpleHTTPRequestHandler` écrit pour localhost), puis le tunnel.
+**Fait le 13/08/2026** — la revue de sécurité de `serve.py` et le tunnel de
+test. Le détail est dans `PROGRESS.md` ; ici, ce qui ne se devine pas :
+
+- `--public-port` ouvre un **second écouteur dans le même processus**. Un seul,
+  parce que les deux façades partagent `Handler.lock` et l'unique
+  `LiveCollector` : deux processus se disputeraient le port CDP 9333.
+- **`/api/refresh` n'existe pas sur le port public.** Une collecte lance Chrome
+  pour une minute — la règle « à la main, jamais périodique » ne survivrait pas
+  à une boucle anonyme.
+- Le collecteur lit ses rencontres dans `console.data.json`, **ou dans
+  `data/site.json`** si l'outil interne n'a jamais tourné ici. Sans ce repli, un
+  poste qui ne sert que le site public n'aurait aucun match à suivre.
+- `serve_247.ps1` tient le serveur et le tunnel, et écrit l'adresse dans
+  `tunnel.url` — **elle change à chaque relance**, c'est la limite d'un tunnel
+  de test.
+
+⚠️ **Rien ne démarre tant que personne n'est connecté.** Les deux tâches sont en
+`LogonType Interactive`, à dessein : la collecte pilote un vrai Chrome, il lui
+faut un bureau. Un tunnel nommé, sur un domaine Cloudflare, lèverait cette
+contrainte et donnerait une URL stable.
+
+⚠️ **Ne pas partir en chasse sur deux faux signaux.** Le préflight de
+`cloudflared` annonce des « critical failures » sur `region2` alors que le
+tunnel s'établit par `region1`. Et `Invoke-WebRequest` expire sur l'URL du
+tunnel là où `curl.exe` répond en une seconde : vérifier avec `curl.exe` avant
+de conclure à une panne.
 
 ## Points ouverts
 
@@ -181,3 +221,5 @@ Chromium ARM.
 4. Les buteurs sans fiche joueur (`fetch_players.py --club` sur sulaibikhat,
    burgan, sporty).
 5. **`shoot.py` n'est documenté nulle part** — trou de suivi connu.
+6. **Le tunnel nommé** : il faut un domaine sur Cloudflare. C'est ce qui manque
+   pour une URL stable et un démarrage indépendant de la session ouverte.

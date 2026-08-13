@@ -1778,6 +1778,113 @@ publiés par leur nom, sans lien, `match: "none"`.
 ⚠️ **Toujours aucun visuel de changements.** Ces trois feuilles sont
 d'avant-match : elles ne donnent pas une seule minute jouée.
 
+## Auto-hébergement : le port public et le tunnel (13/08/2026)
+
+Le poste doit servir le site **et** l'API en continu. La revue de sécurité de
+`serve.py` annoncée comme prérequis a été faite avant d'exposer quoi que ce
+soit — et elle n'était pas une formalité.
+
+### Ce que `serve.py` servait, et qu'il ne fallait surtout pas publier
+
+`SimpleHTTPRequestHandler(directory=ROOT)` sert **la racine du dépôt**. Derrière
+un tunnel, ça aurait publié, par ordre de gravité :
+
+- **`.chrome-profile/`** — les cookies de session du Chrome de collecte, dont la
+  clearance Cloudflare. Le profil qui coûte un challenge à reconstruire aurait
+  été téléchargeable.
+- **`data/inbox/`** — les captures envoyées par les clubs, écartées du dépôt
+  précisément parce que ce sont des pièces justificatives.
+- `.git/`, `console.html` (l'outil interne et son générateur de brief),
+  `PROGRESS.md`, `daily.log`, et tout le code.
+
+Le listing de dossier de la stdlib rendait l'ensemble navigable à la main : il
+n'y avait même pas à deviner les noms.
+
+Deux autres trous. **`POST /api/refresh` n'était pas authentifié** : une boucle
+anonyme aurait tenu Chrome allumé et fait marteler Forebet — exactement ce que
+la règle « à la main, jamais périodique » interdit. Et une panne renvoyait
+`str(exc)` au demandeur, chemins compris.
+
+Rien à redire, en revanche, sur trois points déjà justes : l'écoute sur
+`127.0.0.1`, la traversée `../` neutralisée par `translate_path`, et surtout le
+fait que **le serveur décide seul quels matchs relever** — une page ne peut pas
+lui faire sonder un identifiant arbitraire.
+
+### La réponse : deux écouteurs, un seul processus
+
+`--public-port` ouvre une seconde façade qui ne sert qu'une **liste blanche**,
+relevée fichier par fichier dans `src/js/core/data.js` et `live.js` : les sept
+pages, `assets/**.{css,js}`, les trois JSON publiés, `data/photos/**.webp`, et
+`/api/live`. Une liste blanche, pas une liste noire : un fichier ajouté au dépôt
+n'est jamais exposé par mégarde. Aucun dossier ne pouvant correspondre à une
+entrée, le listing devient impossible sans avoir à le désarmer.
+
+**Un seul processus**, à dessein : les deux écouteurs partagent `Handler.lock` et
+l'unique `LiveCollector`, sinon deux Chrome se disputeraient le port CDP 9333.
+Et la séparation est celle du **réseau** — on a écarté l'idée de distinguer
+public et local par l'en-tête `CF-Connecting-IP`, qui se forge.
+
+Le reste : quota par client sur fenêtre glissante (12/min sur le direct,
+240/min sur les fichiers), `state` réduit à `"indisponible"` en cas de panne,
+en-têtes CSP et `nosniff`, rejet des flux ADS de NTFS (`page.html::$DATA` rend
+la source) et des points ou espaces finaux que Windows ignore. Le journal ne
+trace que les refus : une page tire ses modules, ses trois JSON et jusqu'à
+vingt-cinq portraits, et le direct revient toutes les quinze secondes par onglet.
+
+`test_public.py` fige tout ça en 47 cas. Ce sont des cas de sécurité : un
+`PUBLIC_PAGES` élargi par mégarde doit les faire échouer, pas fuiter en silence.
+
+### ⚠️ Les pièges rencontrés
+
+**`serve.py` ne démarrait pas sur un clone frais.** Il exigeait `console.html`,
+que `.gitignore` écarte — le poste ne pouvait donc pas servir le site public
+sans avoir d'abord lancé l'outil interne. Pire, le collecteur lisait ses
+rencontres dans `console.data.json`, absent lui aussi. Il retombe désormais sur
+`data/site.json`, versionné et porteur des mêmes `match_id` et `kickoff_iso`.
+
+**`schedule_daily.ps1` inscrivait le mauvais interpréteur.**
+`(Get-Command python).Source` vise le stub du Microsoft Store sur un poste où
+seul le venv porte les dépendances. La tâche serait partie à 8 h pour ne rien
+faire, **sans rien signaler** — la panne silencieuse, encore.
+
+**PowerShell 5.1 relit un `.ps1` sans BOM en ANSI.** Les commentaires accentués
+deviennent illisibles. Les deux scripts portent maintenant une nomenclature
+d'octets UTF-8.
+
+**Un venv Windows montre deux `python.exe`, ce n'est pas un doublon.**
+`.venv\Scripts\python.exe` est un lanceur qui exécute l'interpréteur réel comme
+processus enfant et l'attend. Seul l'enfant détient les sockets. La supervision
+peut donc surveiller le lanceur sans rien manquer.
+
+**Le préflight de `cloudflared` annonce des échecs sans conséquence.** Ici,
+`region2` en TCP et QUIC échoue et le résumé dit « critical failures » ; le
+tunnel s'établit quand même par `region1`. Ne pas partir en chasse.
+
+**`Invoke-WebRequest` n'est pas un bon témoin.** Sur PowerShell 5.1 il expirait
+sur l'URL du tunnel, sans réponse, alors que `curl.exe` répondait en 1,2 s sur
+la même adresse. Vérifier avec `curl.exe` avant de conclure à une panne réseau.
+
+### Ce qui a été vérifié pour de bon
+
+La chaîne **Chrome → CDP → Forebet n'avait jamais tourné sur ce poste** : c'était
+le vrai inconnu, `.chrome-profile/` n'existant pas. Essai à blanc sur la
+rencontre 2487395 (Sahel - Al Shamiya du 10/08) : challenge franchi, statistiques
+rendues en 16 s à froid — 3-0, 61 % de possession, 16 tirs. Conforme au score
+connu.
+
+L'auto-réparation du superviseur est testée, pas supposée : `serve.py` tué à la
+main, relancé avec son tunnel en moins de 50 s.
+
+### Ce qui reste fragile
+
+`serve_247.ps1` inscrit le superviseur **à l'ouverture de session**, comme
+`schedule_daily.ps1` et pour la même raison : le direct pilote un vrai Chrome, il
+lui faut un bureau. **Rien ne démarre tant que personne n'est connecté.**
+
+Et l'adresse d'un tunnel de test change à chaque relance — d'où `tunnel.url`,
+que le superviseur réécrit. Un domaine sur Cloudflare donnerait un tunnel nommé,
+donc une URL stable et un démarrage en service, indépendant de la session.
+
 ## Reste à faire
 
 Les trois points de la session du 06/08 sont soldés : `build_json.py`,
@@ -1815,3 +1922,9 @@ Ce qui reste ouvert, par ordre d'intérêt :
    vers les minutes jouées, donc vers des statistiques par joueur comparables.
    Les feuilles d'avant-match, elles, sont maintenant collectées pour 4 des 4
    rencontres de la J18. Les dossiers de la J19 attendent dans `data/inbox/`.
+9. **Un tunnel nommé** — malgré son rang, c'est le prochain pas concret de
+   l'auto-hébergement. Le tunnel de test rend une adresse neuve à chaque
+   relance, et le superviseur ne démarre qu'à l'ouverture de session. Un domaine
+   sur Cloudflare donnerait les deux qui manquent : une URL stable, et un
+   démarrage en service Windows indépendant de la session. ~~Revue de sécurité
+   de `serve.py`~~ — **faite le 13/08**, voir la section dédiée.
