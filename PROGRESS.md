@@ -1517,9 +1517,12 @@ vérifié et définitif. Mais **les clubs, eux, publient leur onze sur Instagram
 D'où une voie qui n'existait pas : la donnée entre à la main, avec sa
 provenance, et le site la distingue de tout ce qui est collecté.
 
-Le circuit : les visuels sont déposés dans **`data/inbox/<match_id>/`** — un
-dossier par rencontre, ignoré par git, ce sont des pièces justificatives et pas
-de la donnée. Ils sont lus, appariés à l'effectif Sofascore, puis écrits dans
+Le circuit : les visuels sont déposés dans
+**`data/inbox/<match_id>-<domicile>-<extérieur>-<jj>-<mm>/`** — un dossier par
+rencontre, ignoré par git, ce sont des pièces justificatives et pas de la
+donnée. Seul l'identifiant de tête relie le dossier à la rencontre ; le reste du
+nom est là pour l'œil humain, qui ne reconnaît pas `2487398` mais reconnaît
+`yarmouk-sulaibikhat-14-08`. Ils sont lus, appariés à l'effectif Sofascore, puis écrits dans
 **`data/lineups.json`**, versionné. `build_site.py` l'attache à la fiche du
 match sous la clé `lineups`, et `match.js` en fait une carte **Composition**,
 placée avant les effectifs de saison.
@@ -1695,6 +1698,86 @@ de la compétition et non la somme des effectifs, ensuite qu'un nom sans lien es
 un joueur sans fiche. Elle ne dit pas « joueur parti » devant chaque nom non
 cliquable : ce serait faux pour les 35 autres.
 
+## Trois feuilles de la J18, publiées en arabe (13/08/2026)
+
+Sahel, Yarmouk et Al Jazira ont publié leur onze pour la 18e journée. Leur
+adversaire du jour — Al Shamiya, Burgan, Khaitan — n'a rien publié. **Ce vide
+est une donnée**, pas un dépouillement inachevé : le côté vaut `null` dans
+`data/lineups.json` et le mode d'emploi du fichier le dit désormais.
+Un match absent du fichier, lui, n'a pas été dépouillé — les deux ne se
+confondent pas.
+
+Le dossier de dépôt est passé de `<match_id>/` à
+`<match_id>-<domicile>-<extérieur>-<jj>-<mm>/`. L'identifiant reste en tête,
+c'est lui qui relie le dossier à la rencontre ; deux équipes se rencontrant
+deux fois dans la saison, la date seule ne suffirait pas.
+
+### ⚠️ Le premier corpus en arabe, et ce qu'il coûte
+
+Les trois visuels sont **en arabe**, là où Sulaibikhat et Sporty publiaient en
+caractères latins. Trois conséquences durables :
+
+- **`as_published` garde l'arabe**, sans exception. `name` porte la fiche
+  Sofascore quand elle existe, et sinon une **romanisation de lecture**, qui ne
+  vaut pas identification et que la note de chaque feuille signale comme telle.
+  Le site affiche `name` et met `as_published` en infobulle : la page reste
+  lisible sans que la source soit réécrite.
+- **⚠️ `name_ar` de Sofascore n'est PAS une clé d'appariement fiable.** Le champ
+  existe sur les 142 fiches, ce qui le rend tentant, mais c'est une
+  translittération automatique : le club écrit `العنزي` là où Sofascore écrit
+  `العنيزي`, `الفضلي` contre `الفاضلي`. Pire, **« Abdulrahman Sherhan » y porte
+  `دانيال لوغو`** — le nom arabe d'un autre joueur (Daniel Lugo). S'en servir
+  comme indice, jamais comme autorité. Ne pas rebâtir un appariement dessus.
+- **La résolution des captures est une limite dure.** Le banc d'Al Jazira est
+  en texte blanc fin sur fond clair : agrandi ×10 au filtre Lanczos, il reste
+  illisible. Aucun remplaçant n'est saisi pour ce match. Les numéros de Yarmouk,
+  en typographie décorative rouge, sont dans le même cas — **un numéro deviné
+  est pire qu'un numéro absent**. Ne pas retenter le zoom : le grossissement ne
+  crée pas d'information.
+
+### La chronologie tranche ce que le nom seul ne tranche pas
+
+Sahel publie six titulaires en **un seul mot** (`فواز`, `لوكاس`, `حمزة`), sans
+aucun numéro. « لوكاس » avait deux candidats, Lucas Marreta et Lucas Lucena.
+Ce qui a tranché n'est pas une intuition sur l'orthographe, c'est un
+raisonnement sur les faits : **Lucas Lucena a marqué à la 89e, et aucun Lucas ne
+figure parmi les onze remplaçants nommés** — un buteur absent du banc était sur
+le terrain au coup d'envoi. Le même banc confirme le gardien : Meshal Al Rashidi
+y est assis, donc le « فواز » aligné est Fawaz Al Dosari.
+
+Recoupement utilisé cinq fois au total (Cleiton 27e, Al Aladhi 60e pén.,
+Eduardo Porto 87e pén., Othman Al Dousari 26e, Ahmed Alaa 57e). **C'est la
+méthode à reprendre** : une feuille d'avant-match plus une chronologie
+d'après-match se valident l'une l'autre.
+
+### Les doublons Sofascore, découverts à cette occasion
+
+Yarmouk a **deux fiches pour le même gardien** — 809501 « Al Hesainan » et
+2072650 « Al Husainan », toutes deux n°34, même nom arabe, nées à **quatre jours
+d'écart** (18 et 22 août 1992). Et **deux João Vitor** brésiliens. Départagés
+par la fiche, pas au jugé : 2072650 est la seule inscrite en Zain First Division
+25/26 ; Joao Vitor (880237) porte exactement le nom arabe publié et compte 3
+buts, l'autre s'écrit `جواو فيتور غويز مونتيرو` et n'a joué qu'en U20.
+
+⚠️ Ces deux doublons n'étaient **pas visibles avant** de collecter les fiches :
+`fetch_players.py --club yarmouk` a été lancé pour ça. Un effectif seul ne
+suffit pas à lever une ambiguïté d'homonymie — il faut les dates de naissance et
+les compétitions.
+
+### Le bilan, franchement
+
+**33 titulaires lus, 22 appariés.** Onze joueurs alignés ne figurent dans
+**aucun** effectif Sofascore : cinq chez Sahel, quatre chez Yarmouk, deux chez
+Al Jazira. Ce n'est pas un échec de méthode, c'est la même vérité que Sporty
+avait déjà montrée — **l'effectif de source est en retard sur le terrain**. Le
+cas d'Al Jazira le prouve : les n°2 et 15 publiés sont pris, chez Sofascore, par
+Hadi Al-Ajmi et Fahad Al Rajhi — et Fahad Al Rajhi a marqué à la 87e, donc il a
+bien joué ce match, sous un autre numéro ou en cours de jeu. Tous restent
+publiés par leur nom, sans lien, `match: "none"`.
+
+⚠️ **Toujours aucun visuel de changements.** Ces trois feuilles sont
+d'avant-match : elles ne donnent pas une seule minute jouée.
+
 ## Reste à faire
 
 Les trois points de la session du 06/08 sont soldés : `build_json.py`,
@@ -1713,9 +1796,11 @@ Ce qui reste ouvert, par ordre d'intérêt :
    Forebet, et le fait qu'une rencontre inconnue de Flashscore garde
    l'étiquette Forebet faute d'arbitre.
 4. ~~Le classement des buteurs est faux~~ — **corrigé le 12/08** par
-   `fetch_scorers.py`, voir la section dédiée. Reste, en plus petit : les 43
+   `fetch_scorers.py`, voir la section dédiée. Reste, en plus petit : les
    buteurs sans fiche joueur, que seul un passage complet de `fetch_players.py`
-   comblerait.
+   comblerait. Yarmouk a été fait le 13/08 (33 fiches, 142 en tout) : restent
+   jazira, sahel, khaitan et shamiya déjà collectés, soit sulaibikhat, burgan
+   et sporty à passer.
 5. **Le flux SSE `/glvs/`** reste débranché. Il apporterait ce que le mode
    direct ne peut pas montrer : la **minute de jeu** et le temps additionnel,
    absents de `gmc=1`. À faire consommer par `serve.py`, comme le collecteur —
@@ -1726,3 +1811,7 @@ Ce qui reste ouvert, par ordre d'intérêt :
    d'une page web, nettoyage des bandeaux, `--login`) a été écrit le 10/08 en
    9 commits et n'a pas de section dans ce fichier. Il est autonome et sans
    rapport avec la collecte, mais l'absence de trace est un trou de suivi.
+8. **Les visuels de CHANGEMENTS**, toujours aucun. C'est le seul chemin connu
+   vers les minutes jouées, donc vers des statistiques par joueur comparables.
+   Les feuilles d'avant-match, elles, sont maintenant collectées pour 4 des 4
+   rencontres de la J18. Les dossiers de la J19 attendent dans `data/inbox/`.

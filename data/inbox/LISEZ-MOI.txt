@@ -1,15 +1,20 @@
 Ce que les clubs publient, et que personne d'autre ne publie.
 =============================================================
 
-UN DOSSIER PAR RENCONTRE, nommé par l'identifiant du match (celui de
-l'URL Forebet, le même que dans data/site.json) :
+UN DOSSIER PAR RENCONTRE, nommé identifiant-domicile-exterieur-jour-mois.
+L'identifiant est celui de l'URL Forebet, le même que `match_id` dans
+data/site.json ; les deux clubs sont dans l'ordre domicile puis
+extérieur, avec leur clé courte (celle des liens du site) :
 
-    data/inbox/2487394/
+    data/inbox/2487394-sulaibikhat-sporty-11-08/
         compo-sulaibikhat.png
         compo-sporty.png
         changements-sulaibikhat.png
         buts.png
         ...
+
+L'identifiant en tête est ce qui relie le dossier à la rencontre ; le
+reste est là pour que tu retrouves le bon dossier sans ouvrir le site.
 
 Si tu ne connais pas l'identifiant, crée le dossier avec ce que tu as —
 `sulaibikhat-sporty-11-08/` — je le renommerai. Mieux vaut un dossier

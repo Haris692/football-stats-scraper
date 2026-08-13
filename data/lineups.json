@@ -29,9 +29,13 @@
     "peut donc pas en tirer de minutes jouées, et rien dans ce fichier ne",
     "doit laisser croire le contraire.",
     "",
+    "⚠️ UN CÔTÉ À `null` EST UNE INFORMATION, pas un trou : le club n'a",
+    "rien publié pour cette rencontre. Tous les clubs ne communiquent pas,",
+    "et ceux qui le font ne le font pas à chaque journée. Ne pas confondre",
+    "avec un match absent du fichier, qui n'a simplement pas été dépouillé.",
+    "",
     "Format : identifiant du match (celui de l'URL Forebet) -> { home, away }."
   ],
-
   "matches": {
     "2487394": {
       "home": {
@@ -40,7 +44,7 @@
           "by": "Al Sulaibikhat FC",
           "medium": "Instagram",
           "kind": "Full lineup, publié avant la rencontre",
-          "evidence": "data/inbox/2487394/compo-sulaibikhat.png",
+          "evidence": "data/inbox/2487394-sulaibikhat-sporty-11-08/compo-sulaibikhat.png",
           "note": [
             "⚠️ Le visuel annonce « SULAIBIKHAT | BURGAN ». C'est une erreur du",
             "club : il s'agit bien de la rencontre contre Sporty, confirmée par",
@@ -52,43 +56,185 @@
         },
         "formation": null,
         "starters": [
-          { "number": "22", "as_published": "Abdulrahman Sharifi", "name": "Abdulrahman Al Sharifi", "id": 1629413, "position": "G", "match": "number+name" },
-          { "number": "2",  "as_published": "Saleh Khamees",       "name": "Saleh Khamees Al Enezi", "id": 2441845, "position": "D", "match": "number+name", "captain": true },
-          { "number": "44", "as_published": "Elielson Bebê",       "name": "Elielson Cardoso Bebê",  "id": 2473328, "position": "D", "match": "number+name" },
-          { "number": "4",  "as_published": "Ali Al Mousawi",      "name": "Ali Al Mousawy",         "id": 2057430, "position": "D", "match": "number+name" },
-          { "number": "5",  "as_published": "Musaed Trad",         "name": "Musaed Al Enezi",        "id": 809504,  "position": "D", "match": "number",
-            "note": "Le club nomme le père (Trad), Sofascore la famille (Al Enezi). Même n°5, même prénom, aucun autre Musaed dans l'effectif." },
-          { "number": "19", "as_published": "Fahad Zuwaid",        "name": "Fahad Zuwaid",           "id": 2040639, "position": "F", "match": "number+name" },
-          { "number": "55", "as_published": "Bruno Domingos",      "name": "Bruno Domingues",        "id": 1952629, "position": "M", "match": "number+name" },
-          { "number": "25", "as_published": "Nawaf Al Faylakawi",  "name": "Nawaf Al Faylakawi",     "id": 2072656, "position": "M", "match": "number",
-            "note": "⚠️ Sofascore l'appelle « Nasser Al Faylakawi ». C'est la source qui se trompe de prénom : Haris a tranché le 12/08/2026, le n°25 est Nawaf. Le nom retenu est celui du club." },
-          { "number": "20", "as_published": "Welves Damacena",     "name": "Welves Santos Damacena", "id": 2443037, "position": "F", "match": "number+name" },
-          { "number": "97", "as_published": "Christian Irobiso",   "name": "Christian Irobiso",      "id": 218748,  "position": "F", "match": "number+name" },
-          { "number": "7",  "as_published": "Khaled Eid",          "name": "Khaled Al Rashidi",      "id": 2221679, "position": "D", "match": "number",
-            "note": "Même remarque que le n°5 : le club nomme le père (Eid), Sofascore la famille (Al Rashidi)." }
+          {
+            "number": "22",
+            "as_published": "Abdulrahman Sharifi",
+            "name": "Abdulrahman Al Sharifi",
+            "id": 1629413,
+            "position": "G",
+            "match": "number+name"
+          },
+          {
+            "number": "2",
+            "as_published": "Saleh Khamees",
+            "name": "Saleh Khamees Al Enezi",
+            "id": 2441845,
+            "position": "D",
+            "match": "number+name",
+            "captain": true
+          },
+          {
+            "number": "44",
+            "as_published": "Elielson Bebê",
+            "name": "Elielson Cardoso Bebê",
+            "id": 2473328,
+            "position": "D",
+            "match": "number+name"
+          },
+          {
+            "number": "4",
+            "as_published": "Ali Al Mousawi",
+            "name": "Ali Al Mousawy",
+            "id": 2057430,
+            "position": "D",
+            "match": "number+name"
+          },
+          {
+            "number": "5",
+            "as_published": "Musaed Trad",
+            "name": "Musaed Al Enezi",
+            "id": 809504,
+            "position": "D",
+            "match": "number",
+            "note": "Le club nomme le père (Trad), Sofascore la famille (Al Enezi). Même n°5, même prénom, aucun autre Musaed dans l'effectif."
+          },
+          {
+            "number": "19",
+            "as_published": "Fahad Zuwaid",
+            "name": "Fahad Zuwaid",
+            "id": 2040639,
+            "position": "F",
+            "match": "number+name"
+          },
+          {
+            "number": "55",
+            "as_published": "Bruno Domingos",
+            "name": "Bruno Domingues",
+            "id": 1952629,
+            "position": "M",
+            "match": "number+name"
+          },
+          {
+            "number": "25",
+            "as_published": "Nawaf Al Faylakawi",
+            "name": "Nawaf Al Faylakawi",
+            "id": 2072656,
+            "position": "M",
+            "match": "number",
+            "note": "⚠️ Sofascore l'appelle « Nasser Al Faylakawi ». C'est la source qui se trompe de prénom : Haris a tranché le 12/08/2026, le n°25 est Nawaf. Le nom retenu est celui du club."
+          },
+          {
+            "number": "20",
+            "as_published": "Welves Damacena",
+            "name": "Welves Santos Damacena",
+            "id": 2443037,
+            "position": "F",
+            "match": "number+name"
+          },
+          {
+            "number": "97",
+            "as_published": "Christian Irobiso",
+            "name": "Christian Irobiso",
+            "id": 218748,
+            "position": "F",
+            "match": "number+name"
+          },
+          {
+            "number": "7",
+            "as_published": "Khaled Eid",
+            "name": "Khaled Al Rashidi",
+            "id": 2221679,
+            "position": "D",
+            "match": "number",
+            "note": "Même remarque que le n°5 : le club nomme le père (Eid), Sofascore la famille (Al Rashidi)."
+          }
         ],
         "subs": [
-          { "number": "13", "as_published": "Ahmed Al Fahad",      "name": "Ahmad Al Fahad",         "id": 2057427, "position": "D", "match": "name" },
-          { "number": "14", "as_published": "Yasser Dashti",       "name": "Yaser Dashti",           "id": 2333131, "position": "M", "match": "name" },
-          { "number": "1",  "as_published": "Abdullah Abbas",      "name": "Abdullah Abbas",         "id": 2057428, "position": "G", "match": "name", "goalkeeper_marked": true },
-          { "number": "8",  "as_published": "Nawaf Al Shaibani",   "name": "Nawaf Al Shaibani",      "id": 2476918, "position": "M", "match": "name" },
-          { "number": "11", "as_published": "Othman Al Failakawi", "name": "Othman Al Failakawi",    "id": 975189,  "position": "M", "match": "name" },
-          { "number": "6",  "as_published": "Fahad Al Houli",      "name": "Fahad Al Houli",         "id": 1647394, "position": "M", "match": "name" },
-          { "number": "93", "as_published": "Ali Alaaedeen",       "name": "Ali Salman Alaaeddine",  "id": 2062607, "position": "F", "match": "name",
-            "note": "Rapprochement confirmé par la rencontre elle-même : entré en jeu, il marque à la 75e et à la 83e." },
-          { "number": null, "as_published": "Mohammed Ruwaee",     "name": "Mohammed Ruwaee",        "id": null,    "position": null, "match": "none",
-            "note": "Absent des 29 joueurs de Sulaibikhat chez Sofascore. Ce n'est pas une erreur du club : c'est un manque de la source. Ne pas l'apparier à Mohammed Safar ni à Mohammed Hamdan sur le seul prénom." },
-          { "number": "36", "as_published": "Abdullah Eissa",      "name": "Abdullah Eissa",         "id": 2447227, "position": "G", "match": "name", "goalkeeper_marked": true }
+          {
+            "number": "13",
+            "as_published": "Ahmed Al Fahad",
+            "name": "Ahmad Al Fahad",
+            "id": 2057427,
+            "position": "D",
+            "match": "name"
+          },
+          {
+            "number": "14",
+            "as_published": "Yasser Dashti",
+            "name": "Yaser Dashti",
+            "id": 2333131,
+            "position": "M",
+            "match": "name"
+          },
+          {
+            "number": "1",
+            "as_published": "Abdullah Abbas",
+            "name": "Abdullah Abbas",
+            "id": 2057428,
+            "position": "G",
+            "match": "name",
+            "goalkeeper_marked": true
+          },
+          {
+            "number": "8",
+            "as_published": "Nawaf Al Shaibani",
+            "name": "Nawaf Al Shaibani",
+            "id": 2476918,
+            "position": "M",
+            "match": "name"
+          },
+          {
+            "number": "11",
+            "as_published": "Othman Al Failakawi",
+            "name": "Othman Al Failakawi",
+            "id": 975189,
+            "position": "M",
+            "match": "name"
+          },
+          {
+            "number": "6",
+            "as_published": "Fahad Al Houli",
+            "name": "Fahad Al Houli",
+            "id": 1647394,
+            "position": "M",
+            "match": "name"
+          },
+          {
+            "number": "93",
+            "as_published": "Ali Alaaedeen",
+            "name": "Ali Salman Alaaeddine",
+            "id": 2062607,
+            "position": "F",
+            "match": "name",
+            "note": "Rapprochement confirmé par la rencontre elle-même : entré en jeu, il marque à la 75e et à la 83e."
+          },
+          {
+            "number": null,
+            "as_published": "Mohammed Ruwaee",
+            "name": "Mohammed Ruwaee",
+            "id": null,
+            "position": null,
+            "match": "none",
+            "note": "Absent des 29 joueurs de Sulaibikhat chez Sofascore. Ce n'est pas une erreur du club : c'est un manque de la source. Ne pas l'apparier à Mohammed Safar ni à Mohammed Hamdan sur le seul prénom."
+          },
+          {
+            "number": "36",
+            "as_published": "Abdullah Eissa",
+            "name": "Abdullah Eissa",
+            "id": 2447227,
+            "position": "G",
+            "match": "name",
+            "goalkeeper_marked": true
+          }
         ]
       },
-
       "away": {
         "club": "sporty",
         "source": {
           "by": "Sporty FC",
           "medium": "Instagram",
           "kind": "Starting XI, publié avant la rencontre",
-          "evidence": "data/inbox/2487394/compo-sporty.png",
+          "evidence": "data/inbox/2487394-sulaibikhat-sporty-11-08/compo-sporty.png",
           "note": [
             "⚠️ Quatre titulaires sur onze n'existent dans AUCUNE des 26 fiches",
             "de Sporty chez Sofascore : Ahmed Fahad (n°5), Sulaiman Al-Ali (40),",
@@ -111,42 +257,789 @@
         },
         "formation": null,
         "starters": [
-          { "number": "1",  "as_published": "Abdullah Bahman",     "name": "Abdullah Bahman",        "id": 2664713, "position": "G", "match": "name" },
-          { "number": "22", "as_published": "Ibrahim Altamimi",    "name": "Ibrahim Al Tamimi",      "id": 2260803, "position": "D", "match": "number+name" },
-          { "number": "5",  "as_published": "Ahmed Fahad",         "name": "Ahmed Fahad",            "id": null,    "position": null, "match": "none",
-            "note": "Aucun Ahmed Fahad dans l'effectif Sofascore de Sporty. Ne pas l'apparier à « Metab Fahad Al Salamah » : seul le mot « Fahad » est commun, et c'est un prénom répandu." },
-          { "number": "40", "as_published": "Sulaiman Al-Ali",     "name": "Sulaiman Al-Ali",        "id": null,    "position": null, "match": "none",
-            "note": "Aucun Sulaiman dans l'effectif Sofascore de Sporty." },
-          { "number": "25", "as_published": "Omar Al-Enezi",       "name": "Omar Al Enezi",          "id": 2259242, "position": "D", "match": "number+name" },
-          { "number": "4",  "as_published": "Salem Alhouli",       "name": "Salem Al Houli",         "id": 2072649, "position": "M", "match": "number+name",
-            "note": "Le club colle l'article (« Alhouli »), Sofascore le sépare (« Al Houli »). Même convention que Altamimi / Al Tamimi." },
-          { "number": "49", "as_published": "Omar Almutairi",      "name": "Omar Almutairi",         "id": null,    "position": null, "match": "none",
-            "note": "Aucun Al Mutairi dans l'effectif Sofascore de Sporty. Ne pas l'apparier à Omar Al Enezi sur le seul prénom." },
-          { "number": "8",  "as_published": "Abdullah Saad",       "name": "Abdullah Saad",          "id": null,    "position": null, "match": "none",
-            "note": "Aucun Saad dans l'effectif Sofascore de Sporty. Quatre Abdullah y figurent : le prénom ne désigne personne." },
-          { "number": "11", "as_published": "Yousef Madi",         "name": "Yousef Tarek Al Madi",   "id": 2259236, "position": "F", "match": "name",
-            "note": "Sofascore le donne en n°98, le club en n°11. Même joueur, numéro changé — tranché par Haris le 12/08/2026. Le numéro retenu est celui du club." },
-          { "number": "10", "as_published": "Abdullah Bou Majdad", "name": "Abdullah Bomjdad",       "id": 2259500, "position": "F", "match": "name",
-            "note": "Même nom, deux découpages (« Bou Majdad » / « Bomjdad »). Sofascore ne lui donne aucun numéro et attribue le n°10 à Hussain Hajiah : c'est la source qui est en retard, l'appariement se fait sur le nom." },
-          { "number": "7",  "as_published": "Mutaib Alsalama",     "name": "Metab Fahad Al Salamah", "id": 1647399, "position": "M", "match": "number+name", "captain": true,
-            "note": "Tranché par Haris le 12/08/2026 : même joueur, deux translittérations (Mutaib/Metab, Alsalama/Al Salamah). ⚠️ Ce joueur est le doublon connu de Sporty, présent sous deux identifiants (1647399 en n°7, 1629417 sans numéro). Le brassard tranche enfin : la fiche vivante est celle du n°7." }
+          {
+            "number": "1",
+            "as_published": "Abdullah Bahman",
+            "name": "Abdullah Bahman",
+            "id": 2664713,
+            "position": "G",
+            "match": "name"
+          },
+          {
+            "number": "22",
+            "as_published": "Ibrahim Altamimi",
+            "name": "Ibrahim Al Tamimi",
+            "id": 2260803,
+            "position": "D",
+            "match": "number+name"
+          },
+          {
+            "number": "5",
+            "as_published": "Ahmed Fahad",
+            "name": "Ahmed Fahad",
+            "id": null,
+            "position": null,
+            "match": "none",
+            "note": "Aucun Ahmed Fahad dans l'effectif Sofascore de Sporty. Ne pas l'apparier à « Metab Fahad Al Salamah » : seul le mot « Fahad » est commun, et c'est un prénom répandu."
+          },
+          {
+            "number": "40",
+            "as_published": "Sulaiman Al-Ali",
+            "name": "Sulaiman Al-Ali",
+            "id": null,
+            "position": null,
+            "match": "none",
+            "note": "Aucun Sulaiman dans l'effectif Sofascore de Sporty."
+          },
+          {
+            "number": "25",
+            "as_published": "Omar Al-Enezi",
+            "name": "Omar Al Enezi",
+            "id": 2259242,
+            "position": "D",
+            "match": "number+name"
+          },
+          {
+            "number": "4",
+            "as_published": "Salem Alhouli",
+            "name": "Salem Al Houli",
+            "id": 2072649,
+            "position": "M",
+            "match": "number+name",
+            "note": "Le club colle l'article (« Alhouli »), Sofascore le sépare (« Al Houli »). Même convention que Altamimi / Al Tamimi."
+          },
+          {
+            "number": "49",
+            "as_published": "Omar Almutairi",
+            "name": "Omar Almutairi",
+            "id": null,
+            "position": null,
+            "match": "none",
+            "note": "Aucun Al Mutairi dans l'effectif Sofascore de Sporty. Ne pas l'apparier à Omar Al Enezi sur le seul prénom."
+          },
+          {
+            "number": "8",
+            "as_published": "Abdullah Saad",
+            "name": "Abdullah Saad",
+            "id": null,
+            "position": null,
+            "match": "none",
+            "note": "Aucun Saad dans l'effectif Sofascore de Sporty. Quatre Abdullah y figurent : le prénom ne désigne personne."
+          },
+          {
+            "number": "11",
+            "as_published": "Yousef Madi",
+            "name": "Yousef Tarek Al Madi",
+            "id": 2259236,
+            "position": "F",
+            "match": "name",
+            "note": "Sofascore le donne en n°98, le club en n°11. Même joueur, numéro changé — tranché par Haris le 12/08/2026. Le numéro retenu est celui du club."
+          },
+          {
+            "number": "10",
+            "as_published": "Abdullah Bou Majdad",
+            "name": "Abdullah Bomjdad",
+            "id": 2259500,
+            "position": "F",
+            "match": "name",
+            "note": "Même nom, deux découpages (« Bou Majdad » / « Bomjdad »). Sofascore ne lui donne aucun numéro et attribue le n°10 à Hussain Hajiah : c'est la source qui est en retard, l'appariement se fait sur le nom."
+          },
+          {
+            "number": "7",
+            "as_published": "Mutaib Alsalama",
+            "name": "Metab Fahad Al Salamah",
+            "id": 1647399,
+            "position": "M",
+            "match": "number+name",
+            "captain": true,
+            "note": "Tranché par Haris le 12/08/2026 : même joueur, deux translittérations (Mutaib/Metab, Alsalama/Al Salamah). ⚠️ Ce joueur est le doublon connu de Sporty, présent sous deux identifiants (1647399 en n°7, 1629417 sans numéro). Le brassard tranche enfin : la fiche vivante est celle du n°7."
+          }
         ],
         "subs": [
-          { "number": null, "as_published": "Mohammed Hadi",  "name": "Mohammed Hadi",  "id": null, "position": null, "match": "none" },
-          { "number": null, "as_published": "A. Azaz",        "name": "A. Azaz",        "id": null, "position": null, "match": "none" },
-          { "number": null, "as_published": "M. Al-Owaihan",  "name": "M. Al-Owaihan",  "id": null, "position": null, "match": "none" },
-          { "number": null, "as_published": "A. Marzouq",     "name": "A. Marzouq",     "id": null, "position": null, "match": "none" },
-          { "number": null, "as_published": "A. Al-Tulaihi",  "name": "A. Al-Tulaihi",  "id": null, "position": null, "match": "none",
-            "note": "Ressemble à « Abdulrahman Al Tuhaili » (gardien, id 2288821), mais Tulaihi/Tuhaili n'est pas la même suite de lettres et l'initiale seule ne prouve rien. Laissé non apparié." },
-          { "number": null, "as_published": "A. Jassim",      "name": "A. Jassim",      "id": null, "position": null, "match": "none" },
-          { "number": null, "as_published": "S. Al-Kandari",  "name": "S. Al-Kandari",  "id": null, "position": null, "match": "none",
-            "note": "Le seul Al Kandari de l'effectif est « Musab » — initiale M, pas S. Laissé non apparié." },
-          { "number": null, "as_published": "B. Al-Mutairi",  "name": "B. Al-Mutairi",  "id": null, "position": null, "match": "none" },
-          { "number": null, "as_published": "A. Al-Ashqar",   "name": "A. Al-Ashqar",   "id": null, "position": null, "match": "none" },
-          { "number": null, "as_published": "N. Al-Sahli",    "name": "N. Al-Sahli",    "id": null, "position": null, "match": "none" },
-          { "number": null, "as_published": "A. Awadhi",      "name": "A. Awadhi",      "id": null, "position": null, "match": "none" },
-          { "number": null, "as_published": "O. Farhan",      "name": "O. Farhan",      "id": null, "position": null, "match": "none" }
+          {
+            "number": null,
+            "as_published": "Mohammed Hadi",
+            "name": "Mohammed Hadi",
+            "id": null,
+            "position": null,
+            "match": "none"
+          },
+          {
+            "number": null,
+            "as_published": "A. Azaz",
+            "name": "A. Azaz",
+            "id": null,
+            "position": null,
+            "match": "none"
+          },
+          {
+            "number": null,
+            "as_published": "M. Al-Owaihan",
+            "name": "M. Al-Owaihan",
+            "id": null,
+            "position": null,
+            "match": "none"
+          },
+          {
+            "number": null,
+            "as_published": "A. Marzouq",
+            "name": "A. Marzouq",
+            "id": null,
+            "position": null,
+            "match": "none"
+          },
+          {
+            "number": null,
+            "as_published": "A. Al-Tulaihi",
+            "name": "A. Al-Tulaihi",
+            "id": null,
+            "position": null,
+            "match": "none",
+            "note": "Ressemble à « Abdulrahman Al Tuhaili » (gardien, id 2288821), mais Tulaihi/Tuhaili n'est pas la même suite de lettres et l'initiale seule ne prouve rien. Laissé non apparié."
+          },
+          {
+            "number": null,
+            "as_published": "A. Jassim",
+            "name": "A. Jassim",
+            "id": null,
+            "position": null,
+            "match": "none"
+          },
+          {
+            "number": null,
+            "as_published": "S. Al-Kandari",
+            "name": "S. Al-Kandari",
+            "id": null,
+            "position": null,
+            "match": "none",
+            "note": "Le seul Al Kandari de l'effectif est « Musab » — initiale M, pas S. Laissé non apparié."
+          },
+          {
+            "number": null,
+            "as_published": "B. Al-Mutairi",
+            "name": "B. Al-Mutairi",
+            "id": null,
+            "position": null,
+            "match": "none"
+          },
+          {
+            "number": null,
+            "as_published": "A. Al-Ashqar",
+            "name": "A. Al-Ashqar",
+            "id": null,
+            "position": null,
+            "match": "none"
+          },
+          {
+            "number": null,
+            "as_published": "N. Al-Sahli",
+            "name": "N. Al-Sahli",
+            "id": null,
+            "position": null,
+            "match": "none"
+          },
+          {
+            "number": null,
+            "as_published": "A. Awadhi",
+            "name": "A. Awadhi",
+            "id": null,
+            "position": null,
+            "match": "none"
+          },
+          {
+            "number": null,
+            "as_published": "O. Farhan",
+            "name": "O. Farhan",
+            "id": null,
+            "position": null,
+            "match": "none"
+          }
         ]
+      }
+    },
+    "2487395": {
+      "home": {
+        "club": "sahel",
+        "source": {
+          "by": "Al Sahel SC",
+          "medium": "Instagram",
+          "kind": "Starting XI et banc, publiés avant la rencontre",
+          "evidence": "data/inbox/2487395-sahel-shamiya-10-08/sahel.png",
+          "note": [
+            "⚠️ Le club publie en ARABE. `as_published` garde la graphie du club ; `name` porte la fiche Sofascore quand elle existe, et sinon une simple romanisation de lecture — qui ne vaut pas identification.",
+            "",
+            "⚠️ Le visuel ne porte AUCUN numéro pour les titulaires, et six des",
+            "onze sont donnés par un seul mot (« فواز », « لوكاس », « حمزة »).",
+            "L'appariement repose donc sur l'unicité du prénom dans l'effectif,",
+            "et sur ce que la chronologie du match permet de recouper.",
+            "",
+            "⚠️ « لوكاس » avait DEUX candidats, Lucas Marreta et Lucas Lucena.",
+            "Tranché par recoupement : Lucas Lucena a marqué à la 89e, et aucun",
+            "Lucas ne figure parmi les onze remplaçants nommés. Un buteur qui",
+            "n'est pas sur le banc était sur le terrain au coup d'envoi.",
+            "",
+            "Le banc confirme le gardien : Meshal Al Rashidi (n°1) y est assis,",
+            "donc le « فواز » aligné est bien Fawaz Al Dosari.",
+            "",
+            "⚠️ Cinq titulaires ne figurent dans aucune des 30 fiches du club :",
+            "حمزة, غازي, احمد غازي, جابر العجاجي, محمد جمال. Publiés par leur",
+            "nom, sans lien. L'effectif de source est incomplet, pas la feuille.",
+            "",
+            "⚠️ Les numéros 1 à 11 du banc sont des NUMÉROS DE LISTE, pas des",
+            "numéros de maillot : ils ne servent à rien pour apparier."
+          ]
+        },
+        "formation": null,
+        "starters": [
+          {
+            "number": null,
+            "as_published": "فواز",
+            "name": "Fawaz Al Dosari",
+            "id": 1637112,
+            "position": "G",
+            "match": "name",
+            "note": "Seul Fawaz de l'effectif, et le gardien remplaçant Meshal Al Rashidi figure sur le banc."
+          },
+          {
+            "number": null,
+            "as_published": "علي جوهر",
+            "name": "Ali Jawhar",
+            "id": 2442947,
+            "position": "M",
+            "match": "name"
+          },
+          {
+            "number": null,
+            "as_published": "لوكاس",
+            "name": "Lucas Lucena",
+            "id": 985082,
+            "position": "M",
+            "match": "name",
+            "note": "Deux Lucas dans l'effectif. Retenu Lucena : buteur à la 89e et absent du banc, il a donc commencé. Voir la note de la feuille."
+          },
+          {
+            "number": null,
+            "as_published": "ماوريسيو",
+            "name": "Mauricio",
+            "id": 368906,
+            "position": "D",
+            "match": "name"
+          },
+          {
+            "number": null,
+            "as_published": "حمزة",
+            "name": "Hamza",
+            "id": null,
+            "position": null,
+            "match": "none",
+            "note": "Aucun Hamza dans les 30 fiches du club."
+          },
+          {
+            "number": null,
+            "as_published": "سيلتون",
+            "name": "Cleiton Padilha",
+            "id": 1539316,
+            "position": "F",
+            "match": "name",
+            "note": "Buteur à la 27e : présence confirmée par la chronologie."
+          },
+          {
+            "number": null,
+            "as_published": "جواو",
+            "name": "João Moura",
+            "id": 1472624,
+            "position": "D",
+            "match": "name",
+            "note": "Seul João de l'effectif."
+          },
+          {
+            "number": null,
+            "as_published": "غازي",
+            "name": "Ghazi",
+            "id": null,
+            "position": null,
+            "match": "none",
+            "note": "Aucun Ghazi dans l'effectif."
+          },
+          {
+            "number": null,
+            "as_published": "احمد غازي",
+            "name": "Ahmed Ghazi",
+            "id": null,
+            "position": null,
+            "match": "none",
+            "note": "Aucun Ahmed Ghazi dans l'effectif."
+          },
+          {
+            "number": null,
+            "as_published": "جابر العجاجي",
+            "name": "Jaber Al Ajaji",
+            "id": null,
+            "position": null,
+            "match": "none",
+            "note": "Aucun Jaber Al Ajaji dans l'effectif."
+          },
+          {
+            "number": null,
+            "as_published": "محمد جمال",
+            "name": "Mohammed Jamal",
+            "id": null,
+            "position": null,
+            "match": "none",
+            "note": "Aucun Mohammed Jamal dans l'effectif — le patronyme Jamal y est pourtant présent sur le banc (عبدالرحمن جمال), lui aussi non apparié."
+          }
+        ],
+        "subs": [
+          {
+            "number": null,
+            "as_published": "عبدالرحمن الديحاني",
+            "name": "Abdulrahman Al Daihani",
+            "id": null,
+            "position": null,
+            "match": "none"
+          },
+          {
+            "number": null,
+            "as_published": "فيصل المكيمي",
+            "name": "Faisal Al Mukaimi",
+            "id": null,
+            "position": null,
+            "match": "none"
+          },
+          {
+            "number": null,
+            "as_published": "مشعل الرشيدي",
+            "name": "Meshal Al Rashidi",
+            "id": 2042317,
+            "position": "G",
+            "match": "name"
+          },
+          {
+            "number": null,
+            "as_published": "عبدالرحمن جمال",
+            "name": "Abdulrahman Jamal",
+            "id": null,
+            "position": null,
+            "match": "none"
+          },
+          {
+            "number": null,
+            "as_published": "أحمد الجريوي",
+            "name": "Ahmed Al Jariwi",
+            "id": null,
+            "position": null,
+            "match": "none"
+          },
+          {
+            "number": null,
+            "as_published": "محمد العلاطي",
+            "name": "Mohammed Al Aladhi",
+            "id": 2011095,
+            "position": "F",
+            "match": "name",
+            "note": "Buteur sur penalty à la 60e : entré en jeu, présence confirmée."
+          },
+          {
+            "number": null,
+            "as_published": "يوسف بادي",
+            "name": "Yousef Badi",
+            "id": null,
+            "position": null,
+            "match": "none"
+          },
+          {
+            "number": null,
+            "as_published": "عمر العنزي",
+            "name": "Omar Al Enezi",
+            "id": null,
+            "position": null,
+            "match": "none"
+          },
+          {
+            "number": null,
+            "as_published": "فيصل عجب",
+            "name": "Faisal Ajab Al Azemi",
+            "id": 1006323,
+            "position": "F",
+            "match": "name"
+          },
+          {
+            "number": null,
+            "as_published": "عبدالعزيز العنزي",
+            "name": "Abdulaziz Al Enezi",
+            "id": null,
+            "position": null,
+            "match": "none"
+          },
+          {
+            "number": null,
+            "as_published": "بدر المطيري",
+            "name": "Badr Al Mutairi",
+            "id": null,
+            "position": null,
+            "match": "none"
+          }
+        ]
+      },
+      "away": null
+    },
+    "2487396": {
+      "home": {
+        "club": "yarmouk",
+        "source": {
+          "by": "Yarmouk Club",
+          "medium": "Instagram",
+          "kind": "Starting XI et banc, publiés avant la rencontre",
+          "evidence": "data/inbox/2487396-yarmouk-burgan-11-08/Yamouk.png",
+          "note": [
+            "⚠️ Le club publie en ARABE. `as_published` garde la graphie du club ; `name` porte la fiche Sofascore quand elle existe, et sinon une simple romanisation de lecture — qui ne vaut pas identification.",
+            "",
+            "⚠️ Le visuel porte des numéros, mais dans une typographie décorative",
+            "rouge illisible à cette résolution. Ils n'ont pas été relevés : un",
+            "numéro deviné est pire qu'un numéro absent.",
+            "",
+            "⚠️ Sofascore a DEUX fiches pour le gardien عبدالرحمن الحسينان, toutes",
+            "deux n°34, même nom arabe, nées à quatre jours d'écart (18 et 22 août",
+            "1992). C'est la même personne, dédoublée à la source. Retenu 2072650,",
+            "la seule des deux inscrite en Zain First Division 25/26 ; l'autre",
+            "(809501) n'a que des traces anciennes, dont l'AFC Champions League",
+            "2015. Le doublon est un défaut de Sofascore, pas du club.",
+            "",
+            "⚠️ Même piège pour « جواو فيتور » : deux Brésiliens de ce nom à",
+            "Yarmouk. Retenu Joao Vitor (880237), dont le nom arabe est exactement",
+            "celui publié et qui compte 3 buts cette saison — l'autre, João Vitor",
+            "Góes Monteiro, s'écrit جواو فيتور غويز مونتيرو et n'a joué qu'en U20.",
+            "",
+            "⚠️ « فرانك لاندري » est apparié à Franck Ellé, seul Franck de",
+            "l'effectif. Le club nomme Landry là où Sofascore nomme Ellé : même",
+            "convention que Musaed Trad / Musaed Al Enezi, le club citant un autre",
+            "élément du nom complet. Décision assumée, pas une certitude.",
+            "",
+            "⚠️ Quatre titulaires ne figurent dans aucune des 33 fiches du club :",
+            "ماجد العنزي, عبدالرحمن الحربي, ميكوس دوز, عبدالرحمن فيصل.",
+            "",
+            "Le banc est recoupé par la chronologie : Othman Al Dousari (26e) et",
+            "Ahmed Alaa Rasheed (57e) y figurent et ont marqué — ils sont donc",
+            "bien entrés en jeu."
+          ]
+        },
+        "formation": null,
+        "starters": [
+          {
+            "number": null,
+            "as_published": "عبدالرحمن الحسينان",
+            "name": "Abdulrahman Al Husainan",
+            "id": 2072650,
+            "position": "G",
+            "match": "name",
+            "note": "Doublon Sofascore (voir la note de la feuille) : 2072650 retenu contre 809501, comme seule fiche inscrite en 25/26."
+          },
+          {
+            "number": null,
+            "as_published": "حسين ماتقي",
+            "name": "Hussain Al Mataqi",
+            "id": 2072655,
+            "position": "F",
+            "match": "name"
+          },
+          {
+            "number": null,
+            "as_published": "ادواردو",
+            "name": "Eduardo Porto",
+            "id": 1104798,
+            "position": "D",
+            "match": "name",
+            "note": "Buteur sur penalty à la 87e : présence confirmée par la chronologie."
+          },
+          {
+            "number": null,
+            "as_published": "ماجد العنزي",
+            "name": "Majed Al Enezi",
+            "id": null,
+            "position": null,
+            "match": "none",
+            "note": "Aucun Majed Al Enezi dans les 33 fiches du club."
+          },
+          {
+            "number": null,
+            "as_published": "عبدالرحمن الحربي",
+            "name": "Abdulrahman Al Harbi",
+            "id": null,
+            "position": null,
+            "match": "none",
+            "note": "Aucun Abdulrahman Al Harbi dans l'effectif."
+          },
+          {
+            "number": null,
+            "as_published": "جواو فيتور",
+            "name": "Joao Vitor",
+            "id": 880237,
+            "position": "M",
+            "match": "name",
+            "note": "Deux João Vitor à Yarmouk ; retenu celui dont le nom arabe est exactement celui publié. Voir la note de la feuille."
+          },
+          {
+            "number": null,
+            "as_published": "ميكوس دوز",
+            "name": "Mikos Doz",
+            "id": null,
+            "position": null,
+            "match": "none",
+            "note": "Aucune correspondance dans l'effectif ; romanisation de lecture."
+          },
+          {
+            "number": null,
+            "as_published": "عبدالرحمن فيصل",
+            "name": "Abdulrahman Faisal",
+            "id": null,
+            "position": null,
+            "match": "none",
+            "note": "Aucun Abdulrahman Faisal dans l'effectif."
+          },
+          {
+            "number": null,
+            "as_published": "مشاري العازمي",
+            "name": "Meshari Al Azmi",
+            "id": 959716,
+            "position": "M",
+            "match": "name"
+          },
+          {
+            "number": null,
+            "as_published": "فرانك لاندري",
+            "name": "Franck Ellé",
+            "id": 1168080,
+            "position": "M",
+            "match": "name",
+            "note": "Le club nomme Landry, Sofascore nomme Ellé. Seul Franck de l'effectif, milieu défensif. Voir la note de la feuille."
+          },
+          {
+            "number": null,
+            "as_published": "ايزاك مبيناز",
+            "name": "Isaac Mbenza",
+            "id": 789000,
+            "position": "F",
+            "match": "name"
+          }
+        ],
+        "subs": [
+          {
+            "number": null,
+            "as_published": "محمد المرشاد",
+            "name": "Mohammed Al Murshad",
+            "id": null,
+            "position": null,
+            "match": "none"
+          },
+          {
+            "number": null,
+            "as_published": "خالد الخزام",
+            "name": "Khaled Al Khazam",
+            "id": null,
+            "position": null,
+            "match": "none",
+            "note": "L'effectif porte Khazam Al Khazam (n°23) ; le prénom diffère, on n'apparie pas."
+          },
+          {
+            "number": null,
+            "as_published": "عبدالعزيز كابلي",
+            "name": "Abdulaziz Kabli",
+            "id": null,
+            "position": null,
+            "match": "none"
+          },
+          {
+            "number": null,
+            "as_published": "عبدالرحمن المجدلي",
+            "name": "Abdulrahman Al Majdali",
+            "id": null,
+            "position": null,
+            "match": "none"
+          },
+          {
+            "number": null,
+            "as_published": "محمد الهبيدة",
+            "name": "Mohammed Al Hubaida",
+            "id": null,
+            "position": null,
+            "match": "none"
+          },
+          {
+            "number": null,
+            "as_published": "محمدحسن",
+            "name": "Mohammed Hassan",
+            "id": null,
+            "position": null,
+            "match": "none",
+            "note": "L'effectif porte Mohammad Hassan Ahmad Pour ; un nom tronqué à ce point ne suffit pas à désigner quelqu'un."
+          },
+          {
+            "number": null,
+            "as_published": "عثمان الدوسري",
+            "name": "Othman Al Dousari",
+            "id": 1842601,
+            "position": "M",
+            "match": "name",
+            "note": "Buteur à la 26e : entré en jeu, présence confirmée."
+          },
+          {
+            "number": null,
+            "as_published": "احمد علاء",
+            "name": "Ahmed Alaa Rasheed",
+            "id": 2048429,
+            "position": "F",
+            "match": "name",
+            "note": "Buteur à la 57e : entré en jeu, présence confirmée."
+          },
+          {
+            "number": null,
+            "as_published": "محمد الصريعي",
+            "name": "Mohammed Al Suraiei",
+            "id": null,
+            "position": null,
+            "match": "none"
+          },
+          {
+            "number": null,
+            "as_published": "عثمان العثمان",
+            "name": "Othman Al Othman",
+            "id": null,
+            "position": null,
+            "match": "none"
+          }
+        ]
+      },
+      "away": null
+    },
+    "2487397": {
+      "home": null,
+      "away": {
+        "club": "jazira",
+        "source": {
+          "by": "Al Jazeera FC Kuwait",
+          "medium": "Instagram",
+          "kind": "Starting XI, publié avant la rencontre",
+          "evidence": "data/inbox/2487397-khaitan-jazira-10-08/jazeera.png",
+          "note": [
+            "⚠️ Le club publie en ARABE. `as_published` garde la graphie du club ; `name` porte la fiche Sofascore quand elle existe, et sinon une simple romanisation de lecture — qui ne vaut pas identification.",
+            "",
+            "Le visuel donne les NUMÉROS, ce qui en fait la feuille la mieux",
+            "appariée des trois : neuf titulaires sur onze rapprochés.",
+            "",
+            "⚠️ Le gardien est publié « بدر بن صعنون » avec le n°37, quand",
+            "Sofascore donne Bader Al Saanoun en n°17. Le nom est unique dans",
+            "l'effectif, le numéro non : apparié sur le nom, écart assumé.",
+            "",
+            "⚠️ Deux titulaires n'existent dans aucune des 32 fiches du club :",
+            "علي حسين (n°2) et ناصر مبارك (n°15). Leurs numéros sont pourtant",
+            "pris chez Sofascore, par Hadi Al-Ajmi et Fahad Al Rajhi. Or Fahad",
+            "Al Rajhi a marqué à la 87e : il a donc joué, sans doute entré en",
+            "cours de jeu. On ne tranche pas — l'effectif de source est",
+            "simplement en retard sur le terrain.",
+            "",
+            "⚠️ Le BANC est illisible sur la capture : texte blanc fin sur fond",
+            "clair, à la limite de résolution de l'image. Agrandi ×10 sans",
+            "résultat. Aucun remplaçant n'est saisi ; ce n'est pas un oubli."
+          ]
+        },
+        "formation": null,
+        "starters": [
+          {
+            "number": "37",
+            "as_published": "بدر بن صعنون",
+            "name": "Bader Al Saanoun",
+            "id": 1461345,
+            "position": "G",
+            "match": "name",
+            "note": "Le club affiche le n°37, Sofascore le n°17. Nom distinctif et unique dans l'effectif : l'appariement tient sur le nom seul."
+          },
+          {
+            "number": "5",
+            "as_published": "مشعل العنزي",
+            "name": "Meshal Al Enezi",
+            "id": 2221670,
+            "position": "D",
+            "match": "number+name"
+          },
+          {
+            "number": "2",
+            "as_published": "علي حسين",
+            "name": "Ali Hussein",
+            "id": null,
+            "position": null,
+            "match": "none",
+            "note": "Aucun Ali Hussein dans les 32 fiches du club. Le n°2 y est porté par Hadi Al-Ajmi, qui n'est pas ce nom."
+          },
+          {
+            "number": "13",
+            "as_published": "محمد الفضلي",
+            "name": "Mohammed Al Fadhli",
+            "id": 2219540,
+            "position": "D",
+            "match": "number+name"
+          },
+          {
+            "number": "8",
+            "as_published": "مبارك سعيد",
+            "name": "Mobarak Saeed",
+            "id": 2112511,
+            "position": "M",
+            "match": "number+name"
+          },
+          {
+            "number": "15",
+            "as_published": "ناصر مبارك",
+            "name": "Nasser Mubarak",
+            "id": null,
+            "position": null,
+            "match": "none",
+            "note": "Aucun Nasser Mubarak dans l'effectif. Le n°15 y est celui de Fahad Al Rajhi, buteur à la 87e — donc présent, mais pas sous ce nom."
+          },
+          {
+            "number": "9",
+            "as_published": "هادي شعبي",
+            "name": "Hedy Chaabi",
+            "id": 1396246,
+            "position": "M",
+            "match": "name",
+            "note": "Sans numéro chez Sofascore ; le n°9 y appartient à Yousef Al Rashidi. Apparié sur le nom (هيدي شعيبي côté Sofascore)."
+          },
+          {
+            "number": "25",
+            "as_published": "إدريسا سيساي",
+            "name": "Edrissa Ceesay",
+            "id": 1103545,
+            "position": "D",
+            "match": "number+name"
+          },
+          {
+            "number": "10",
+            "as_published": "مروان زيلا",
+            "name": "Marouane Zila",
+            "id": 1140881,
+            "position": "M",
+            "match": "name",
+            "note": "Sans numéro chez Sofascore. Buteur à la 90e : présence confirmée par la chronologie."
+          },
+          {
+            "number": "14",
+            "as_published": "ايساك جيمز",
+            "name": "Isaac James Ogiri",
+            "id": 1610379,
+            "position": "F",
+            "match": "name",
+            "note": "Sans numéro chez Sofascore. Averti à la 45e : présence confirmée par la chronologie."
+          },
+          {
+            "number": "29",
+            "as_published": "تشارلز ياو",
+            "name": "Yao Jean Charles Olivier",
+            "id": 1404710,
+            "position": "F",
+            "match": "name"
+          }
+        ],
+        "subs": []
       }
     }
   }
