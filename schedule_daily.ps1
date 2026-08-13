@@ -1,4 +1,4 @@
-# Inscrit `daily.py` au planificateur de tâches Windows, tous les jours à 8 h.
+﻿# Inscrit `daily.py` au planificateur de tâches Windows, tous les jours à 8 h.
 #
 # Pourquoi ici et pas dans le cloud : la collecte a besoin du Chrome de cette
 # machine et de la clearance Cloudflare gardée dans `.chrome-profile/`. Une
@@ -32,8 +32,14 @@ if ($Remove) {
     exit 0
 }
 
-$python = (Get-Command python).Source
-if (-not $python) { throw "python introuvable dans le PATH" }
+# Le venv d'abord. Sur un poste neuf, `python` tout court vise le stub du
+# Microsoft Store : la tâche partirait à l'heure dite et ne collecterait rien.
+# Une panne silencieuse, la pire espèce pour un rafraîchissement quotidien.
+$python = Join-Path $root ".venv\Scripts\python.exe"
+if (-not (Test-Path $python)) {
+    $python = (Get-Command python -ErrorAction SilentlyContinue).Source
+}
+if (-not $python) { throw "python introuvable : ni .venv, ni le PATH" }
 
 $action = New-ScheduledTaskAction -Execute $python `
     -Argument "daily.py" -WorkingDirectory $root

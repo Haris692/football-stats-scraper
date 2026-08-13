@@ -24,6 +24,15 @@ captures/
 # grossirait d'une dizaine de lignes par jour dans l'historique pour rien.
 daily.log
 
+# Journaux et adresse du tunnel, tenus par serve_247.ps1. Des traces
+# d'exécution locales, et une URL de tunnel de test qui change à chaque
+# démarrage : rien de tout ça ne décrit le projet.
+serve.log
+serve.log.err
+tunnel.log
+tunnel.log.out
+tunnel.url
+
 # Captures envoyées par les clubs (un dossier par rencontre) : pièces
 # justificatives, pas de la donnée. Ce qui compte est extrait dans
 # data/lineups.json, qui porte la provenance. Le LISEZ-MOI, lui, est versionné —
