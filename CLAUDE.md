@@ -201,6 +201,15 @@ test. Le détail est dans `PROGRESS.md` ; ici, ce qui ne se devine pas :
   `tunnel.url` — **elle change à chaque relance**, c'est la limite d'un tunnel
   de test.
 
+**Répéter le direct sans match en cours** (fait le 14/08/2026, avant la J19) :
+avancer le `kickoff_iso` d'une rencontre **déjà jouée** dans `data/site.json`, le
+collecteur la croit en cours et son score connu sert de témoin. Sauvegarder le
+fichier — il est versionné et public — et **comparer l'empreinte au retour**.
+Laisser d'abord le collecteur s'éteindre (180 s sans demande) pour vider sa
+mémoire des matchs clos. Mesuré : quatre rencontres simultanées coûtent **13 s**
+dans un cycle de 60 s, le lancement de Chrome dominant. Un collecteur mort
+repart au premier spectateur (`is_alive()`), le direct ne reste pas muet.
+
 ⚠️ **Rien ne démarre tant que personne n'est connecté.** Les deux tâches sont en
 `LogonType Interactive`, à dessein : la collecte pilote un vrai Chrome, il lui
 faut un bureau. Un tunnel nommé, sur un domaine Cloudflare, lèverait cette

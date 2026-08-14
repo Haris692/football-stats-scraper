@@ -1885,6 +1885,57 @@ Et l'adresse d'un tunnel de test change à chaque relance — d'où `tunnel.url`
 que le superviseur réécrit. Un domaine sur Cloudflare donnerait un tunnel nommé,
 donc une URL stable et un démarrage en service, indépendant de la session.
 
+## Répétition du direct avant la J19 (14/08/2026)
+
+La J19 met **les quatre rencontres à la même minute**, 19:25. Deux choses
+n'avaient jamais tourné : le direct derrière le tunnel, dans le `serve.py` lancé
+par le superviseur et non à la main ; et **quatre matchs suivis en même temps**,
+la J18 ayant été étalée sur deux soirs, deux rencontres chacun. Attendre 19:25
+pour le découvrir, c'était garder la panne pour le seul moment où elle coûte.
+
+### Comment on répète sans match en cours
+
+Le collecteur ne relève que ce qui tombe dans sa fenêtre autour du coup d'envoi,
+et il lit ses rencontres dans `data/site.json`. Il suffit donc d'y avancer le
+`kickoff_iso` d'une rencontre **déjà jouée** pour qu'il la croie en cours : la
+collecte est réelle, et le résultat connu sert de témoin. `data/site.json` est
+versionné et servi publiquement : on le sauvegarde, on le restaure aussitôt, et
+on **vérifie l'empreinte SHA-256 au retour** plutôt que de le supposer.
+
+Le collecteur garde en mémoire les matchs clos (`_finished`) : pour retrouver
+l'état exact de 19:20, on le laisse d'abord s'éteindre faute de demandes
+(`LIVE_IDLE_STOP`, 180 s). `live_collector()` teste `is_alive()` et en démarre
+un neuf — **un collecteur mort ne laisse donc pas le direct muet**, il repart au
+premier spectateur.
+
+### Ce que ça a donné
+
+D'abord une rencontre seule (2487395), puis les quatre de la J18 ensemble :
+
+| | seule | les quatre |
+|---|---|---|
+| démarrage à froid → instantané publié | 74 s (dont ~60 s d'attente de cycle) | **13 s** |
+| Chrome de collecte au repos, après | 0 | 0 |
+
+Les quatre relevés sont conformes aux scores connus — 3-0, 3-0, 3-1, 2-2, avec
+possessions et tirs. **Quatre rencontres coûtent 13 s dans un cycle de 60 s** :
+le lancement de Chrome domine, les relevés suivants partagent le même onglet.
+La simultanéité de la J19 n'est pas un sujet.
+
+Côté façade publique, `/api/live` répond par le tunnel en 0,28 s, et le quota
+tombe **exactement** à la 13ᵉ requête (12 puis 429), comme `test_public.py` le
+fige. Une page qui interroge toutes les quinze secondes en consomme quatre.
+
+### Ce qu'on retient de la méthode
+
+**Une répétition qui ne restaure pas n'est pas une répétition.** Empreinte
+relevée avant, comparée après, arbre git vérifié propre : sans ça on publie un
+faux coup d'envoi et on ne le sait pas.
+
+Et le témoin doit être **une donnée connue**. Un relevé qui « répond » ne prouve
+rien ; un relevé qui rend 3-0, 61 % et 16 tirs sur la rencontre dont on a le
+score prouve toute la chaîne, du challenge Forebet au parseur.
+
 ## Reste à faire
 
 Les trois points de la session du 06/08 sont soldés : `build_json.py`,
