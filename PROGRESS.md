@@ -1936,6 +1936,63 @@ Et le témoin doit être **une donnée connue**. Un relevé qui « répond » ne
 rien ; un relevé qui rend 3-0, 61 % et 16 tirs sur la rencontre dont on a le
 score prouve toute la chaîne, du challenge Forebet au parseur.
 
+## Le terrain suit le club, quand le club le dit (14/08/2026)
+
+Haris a transmis le onze de Sulaibikhat pour la J19 **avec les rôles** : GK, RB,
+CB, CB, LB, CM, CM, CAM, LW, ST, RW. C'est une première. Les trois feuilles de
+la J18 ne donnaient que des noms et des numéros, et `pitch.js` s'ouvrait sur
+l'avertissement que le rôle du jour et le côté **n'existent pas dans la
+donnée**. Ils existent maintenant, pour cette feuille-là.
+
+### Pourquoi il fallait faire quelque chose
+
+Sans rien changer, la page aurait affiché **1-4-2-4**. `shapeOf()` comptait les
+postes **généraux** de Sofascore, qui classe Fahad Zuwaid et Ali Alaaeddine
+attaquants ; le club, lui, les aligne l'un au milieu, l'autre à l'aile d'un
+4-2-3-1. On aurait donc publié un dispositif que **notre propre source
+contredisait** — le faux crédible, encore, dans sa forme la plus bête.
+
+### Ce qui a été fait
+
+`pitch.js` connaît désormais deux qualités de feuille. Quand tous les titulaires
+portent un rôle reconnu, le terrain place par rôle, côtés compris, et la suite
+affichée est celle du club, sans le gardien : « 4-2-3-1 ». Sinon, rien ne bouge
+— postes de fiche, gardien compris, « 1-5-2-3 », et la bande des sans-poste.
+
+Une table explicite (`ROLES`) associe chaque rôle à une ligne et à une abscisse,
+de la gauche vers la droite de l'écran. Jamais d'analyse de la chaîne : un
+`startsWith("L")` complaisant apparierait un rôle inconnu au lieu de le
+signaler.
+
+⚠️ **Le basculement est tout ou rien.** Un seul titulaire sans rôle reconnu et
+la feuille entière retombe sur les postes Sofascore. Un onze à moitié disposé
+par le club et à moitié par la fiche n'aurait aucune lecture.
+
+### La note de méthode devait suivre
+
+Elle affirmait « le terrain ne montre pas un dispositif […] rien n'indique qui
+jouait à gauche ou à droite ». Servie au-dessus d'un onze que le club a
+lui-même disposé, la phrase **nie sa feuille**. Elle a donc trois versions
+maintenant, choisies sur le dessin et non sur la donnée : les deux clubs ont
+publié leurs rôles, un seul des deux, ou aucun. Une note qui contredit le
+dessin trois centimètres plus haut est pire que pas de note.
+
+Ce qui ne change pas : ces visuels restent des **avant-match**. Le dispositif
+vaut pour le coup d'envoi, et la note le dit — aucune minute jouée n'en sort.
+
+### La feuille elle-même
+
+Onze appariés sur onze, aucun `none` — c'est la première fois. Trois variantes
+d'orthographe (`Mousawi`/`Mousawy`, `Dominigues`/`Domingues`,
+`Alaaedeen`/`Alaaeddine`) et « Khaled Eid », que le fichier avait **déjà
+tranché le 12/08** : le club nomme le père, Sofascore la famille.
+
+⚠️ Deux faiblesses assumées, écrites dans la provenance. Le onze est arrivé
+**en texte**, sans capture : les autres feuilles pointent une pièce dans
+`data/inbox/`, celle-ci repose sur la seule parole de Haris. Et **aucun numéro**
+n'a été publié — les pastilles affichent « — ». Les numéros de Sofascore ne les
+combleront pas : ils diraient « publié par le club » à tort.
+
 ## Reste à faire
 
 Les trois points de la session du 06/08 sont soldés : `build_json.py`,

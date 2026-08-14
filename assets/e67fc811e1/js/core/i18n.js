@@ -40,6 +40,10 @@ const EN = {
   "sans poste connu": "with no known position",
   "Le terrain range les joueurs par poste, il ne montre pas un dispositif : le poste vient de la fiche générale du joueur, pas de son rôle ce soir-là, et rien n'indique qui jouait à gauche ou à droite — la place dans une ligne est celle de la feuille.":
     "The pitch groups players by position, it does not show a formation: the position comes from the player's general profile, not from his role that night, and nothing says who played left or right — the place within a line is the one on the team sheet.",
+  "Le club publie les rôles : le dispositif et les côtés sont les siens, pas une déduction de la page. Ils valent pour le coup d'envoi — rien ici ne dit comment l'équipe s'est replacée ensuite.":
+    "The club publishes the roles: the formation and the flanks are its own, not something this page inferred. They describe the kick-off — nothing here says how the side shifted afterwards.",
+  "Un seul des deux clubs publie les rôles de ses joueurs : de ce côté-là le dispositif et les côtés sont les siens, au coup d'envoi. En face, le terrain range simplement par poste de fiche et ne dit ni le rôle du soir, ni qui jouait à gauche.":
+    "Only one of the two clubs publishes its players' roles: on that side the formation and the flanks are the club's own, at kick-off. Opposite, the pitch merely groups players by profile position and says neither the night's role nor who played left.",
   "Derniers résultats": "Latest results", "Les clubs": "The clubs",
   "Meilleurs buteurs": "Top scorers", "Tout voir": "See all",
   "Voir la rencontre": "View match", "Voir le club": "View club",

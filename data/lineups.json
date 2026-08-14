@@ -1041,6 +1041,134 @@
         ],
         "subs": []
       }
+    },
+    "2487398": {
+      "home": null,
+      "away": {
+        "club": "sulaibikhat",
+        "source": {
+          "by": "Al Sulaibikhat SC",
+          "medium": "transmis par Haris",
+          "kind": "Starting XI, publié avant la rencontre",
+          "evidence": null,
+          "note": [
+            "⚠️ AUCUNE PIÈCE JUSTIFICATIVE. Les autres feuilles de ce fichier pointent une capture dans `data/inbox/` ; celle-ci a été transmise en texte le 14/08/2026, saisie à la main. La provenance repose donc sur la seule parole de Haris. Déposer le visuel du club dans `data/inbox/2487398-yarmouk-sulaibikhat-14-08/` la rétablirait.",
+            "",
+            "⚠️ AUCUN NUMÉRO n'a été publié avec ce onze : l'appariement tient sur le nom seul, contre les 29 fiches Sofascore du club. Les onze sont sans ambiguïté — aucun homonyme, aucune fiche concurrente. Ne pas combler les numéros avec ceux de Sofascore : ils diraient « publié par le club » à tort.",
+            "",
+            "PREMIÈRE FEUILLE QUI DONNE LES RÔLES DU JOUR (GK, RB, CB, LB, CM, CAM, LW, ST, RW), et donc les CÔTÉS. Jusqu'ici aucune source ne les publiait — voir l'avertissement en tête de `src/js/components/pitch.js`. Ils sont conservés dans `role`, et le terrain ne s'en sert pas encore : il place toujours par le poste général Sofascore.",
+            "",
+            "⚠️ Les rôles contredisent la ligne calculée. Sofascore classe Fahad Zuwaid et Ali Alaaeddine ATTAQUANTS, d'où un « 1-4-2-4 » dérivé, quand le club aligne un 4-2-3-1. C'est la limite du poste de fiche, connue et documentée dans `pitch.js`."
+          ]
+        },
+        "formation": "4-2-3-1",
+        "starters": [
+          {
+            "number": null,
+            "as_published": "Sharifi",
+            "name": "Abdulrahman Al Sharifi",
+            "id": 1629413,
+            "position": "G",
+            "role": "GK",
+            "match": "name"
+          },
+          {
+            "number": null,
+            "as_published": "Khamees",
+            "name": "Saleh Khamees Al Enezi",
+            "id": 2441845,
+            "position": "D",
+            "role": "RB",
+            "match": "name"
+          },
+          {
+            "number": null,
+            "as_published": "Bebê",
+            "name": "Elielson Cardoso Bebê",
+            "id": 2473328,
+            "position": "D",
+            "role": "CB",
+            "match": "name"
+          },
+          {
+            "number": null,
+            "as_published": "Mousawi",
+            "name": "Ali Al Mousawy",
+            "id": 2057430,
+            "position": "D",
+            "role": "CB",
+            "match": "name",
+            "note": "Le club écrit « Mousawi », Sofascore « Mousawy ». Seul Mousaw* de l'effectif."
+          },
+          {
+            "number": null,
+            "as_published": "Khaled Eid",
+            "name": "Khaled Al Rashidi",
+            "id": 2221679,
+            "position": "D",
+            "role": "LB",
+            "match": "name",
+            "note": "Le club nomme le père (Eid), Sofascore la famille (Al Rashidi). Déjà tranché le 12/08/2026 sur la J18, où le club publiait le n°7."
+          },
+          {
+            "number": null,
+            "as_published": "F. Zuwaid",
+            "name": "Fahad Zuwaid",
+            "id": 2040639,
+            "position": "F",
+            "role": "CM",
+            "match": "name",
+            "note": "⚠️ Sofascore le classe ATTAQUANT ; le club l'aligne au milieu. C'est le poste de la fiche qui est large, pas le rôle qui est douteux."
+          },
+          {
+            "number": null,
+            "as_published": "B. Dominigues",
+            "name": "Bruno Domingues",
+            "id": 1952629,
+            "position": "M",
+            "role": "CM",
+            "match": "name",
+            "note": "Le club écrit « Dominigues », Sofascore « Domingues ». Seul Brésilien de ce nom dans l'effectif ; le club avait écrit « Domingos » en J18."
+          },
+          {
+            "number": null,
+            "as_published": "F. Al Houli",
+            "name": "Fahad Al Houli",
+            "id": 1647394,
+            "position": "M",
+            "role": "CAM",
+            "match": "name"
+          },
+          {
+            "number": null,
+            "as_published": "Ali Alaaedeen",
+            "name": "Ali Salman Alaaeddine",
+            "id": 2062607,
+            "position": "F",
+            "role": "LW",
+            "match": "name",
+            "note": "Le club écrit « Alaaedeen », Sofascore « Alaaeddine ». Unique dans l'effectif."
+          },
+          {
+            "number": null,
+            "as_published": "C. Irobiso",
+            "name": "Christian Irobiso",
+            "id": 218748,
+            "position": "F",
+            "role": "ST",
+            "match": "name"
+          },
+          {
+            "number": null,
+            "as_published": "Damacena",
+            "name": "Welves Santos Damacena",
+            "id": 2443037,
+            "position": "F",
+            "role": "RW",
+            "match": "name"
+          }
+        ]
+      }
     }
   }
 }

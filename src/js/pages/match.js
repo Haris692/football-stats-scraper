@@ -10,7 +10,7 @@ import { boot } from "../core/shell.js";
 import { match as matchOf, team, nameOf, fixtures, isLive } from "../core/data.js";
 import { crestOf, badge, dot, methodNote, liveMark } from "../components/pieces.js";
 import { watchLive, liveBlock, liveStamp } from "../core/live.js";
-import { pitch, shapeOf } from "../components/pitch.js";
+import { pitch, shapeOf, hasRoles } from "../components/pitch.js";
 
 const LABELS = {
   possession: "Possession", shots: "Tirs", shots_on: "Tirs cadrés",
@@ -441,6 +441,15 @@ function lineups(m) {
     [...(sheets[s]?.starters || []), ...(sheets[s]?.subs || [])])
     .filter(p => !p.id).length;
 
+  // Deux feuilles peuvent être de qualité différente — un club publie ses
+  // rôles, l'autre non — et la note doit alors couvrir les deux terrains,
+  // sinon elle dément l'un des deux.
+  const xis = ["home", "away"].map(s => sheets[s])
+    .filter(sh => (sh?.starters || []).length);
+  const withRoles = xis.filter(sh => hasRoles(sh.starters));
+  const roles = xis.length > 0 && withRoles.length === xis.length;
+  const mixed = withRoles.length > 0 && !roles;
+
   return el("section", { class: "card" }, [
     el("div", { class: "card__head" }, [
       el("h2", { text: t("Composition") }),
@@ -452,9 +461,20 @@ function lineups(m) {
            "visuel d'avant-match du club, lu et apparié à la main.")}` +
       ` ${t("Il donne donc le onze et le banc, jamais les changements — on " +
             "n'en tire aucune minute jouée.")}` +
-      // ⚠️ Sans cette phrase, le terrain devient un dispositif tactique aux
-      // yeux du lecteur, et la page affirmerait deux choses qu'elle ignore.
-      ` ${t("Le terrain range les joueurs par poste, il ne montre pas un " +
+      // ⚠️ Les deux phrases s'excluent, et le choix suit le DESSIN. Sans la
+      // seconde, le terrain devient un dispositif tactique aux yeux du
+      // lecteur et la page affirme deux choses qu'elle ignore ; mais la servir
+      // au-dessus d'un onze que le club a lui-même disposé nierait sa feuille.
+      ` ${roles
+        ? t("Le club publie les rôles : le dispositif et les côtés sont les " +
+            "siens, pas une déduction de la page. Ils valent pour le coup " +
+            "d'envoi — rien ici ne dit comment l'équipe s'est replacée ensuite.")
+        : mixed
+        ? t("Un seul des deux clubs publie les rôles de ses joueurs : de ce " +
+            "côté-là le dispositif et les côtés sont les siens, au coup " +
+            "d'envoi. En face, le terrain range simplement par poste de " +
+            "fiche et ne dit ni le rôle du soir, ni qui jouait à gauche.")
+        : t("Le terrain range les joueurs par poste, il ne montre pas un " +
             "dispositif : le poste vient de la fiche générale du joueur, pas " +
             "de son rôle ce soir-là, et rien n'indique qui jouait à gauche ou " +
             "à droite — la place dans une ligne est celle de la feuille.")}` +

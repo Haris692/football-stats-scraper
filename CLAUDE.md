@@ -120,6 +120,16 @@ régénère et propose le push.
 - **Un dossier vide, ou un seul club sur deux, signifie que le club n'a rien
   publié.** L'absence est une donnée : le côté vaut `null`. Ne pas relancer
   Haris pour « compléter ».
+- **Si la feuille porte les rôles** (`GK`, `RB`, `CAM`, `LW`…), les mettre dans
+  `role` : le terrain place alors par rôle, côtés compris, et affiche le
+  dispositif du club (« 4-2-3-1 »). Le basculement est **tout ou rien** — un
+  seul titulaire sans rôle reconnu et la feuille entière retombe sur les postes
+  Sofascore. Ajouter tout rôle nouveau à la table `ROLES` de `pitch.js`, jamais
+  le deviner à la lecture de la chaîne. Et la note de méthode suit le dessin :
+  trois versions dans `match.js`, sans quoi la page nie sa propre feuille.
+- **Ne pas combler les numéros avec ceux de Sofascore** quand le club n'en
+  publie pas : ils passeraient pour publiés. Les pastilles affichent « — »,
+  c'est correct.
 - Le numéro ne suffit pas : 152 joueurs sur 228 seulement en portent un.
 - **Le club nomme souvent le père, Sofascore la famille** (`Musaed Trad` =
   `Musaed Al Enezi`). C'est une convention, pas une faute de frappe.
