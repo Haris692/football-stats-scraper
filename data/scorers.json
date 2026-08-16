@@ -1,5 +1,5 @@
 {
-  "generated": "2026-08-13T08:13:19",
+  "generated": "2026-08-16T05:05:01",
   "source": "sofascore",
   "tournament": {
     "id": 20044,
@@ -8,20 +8,20 @@
   },
   "scorers": [
     {
+      "id": 1609808,
+      "name": "Allan Paulista",
+      "team": "sahel",
+      "team_name": "Al Sahel SC",
+      "goals": 12,
+      "penalties": 2
+    },
+    {
       "id": 1018621,
       "name": "Lucas Shallon",
       "team": "sulaibikhat",
       "team_name": "Al Sulaibikhat FC",
       "goals": 12,
       "penalties": 3
-    },
-    {
-      "id": 1609808,
-      "name": "Allan Paulista",
-      "team": "sahel",
-      "team_name": "Al Sahel SC",
-      "goals": 11,
-      "penalties": 1
     },
     {
       "id": 1119953,
@@ -168,6 +168,14 @@
       "penalties": null
     },
     {
+      "id": 2072645,
+      "name": "Mohammad Hassan Ahmad Pour",
+      "team": "yarmouk",
+      "team_name": "Yarmouk SC",
+      "goals": 3,
+      "penalties": null
+    },
+    {
       "id": 1842601,
       "name": "Othman Al Dousari",
       "team": "yarmouk",
@@ -180,6 +188,14 @@
       "name": "Bruno Domingues",
       "team": "sulaibikhat",
       "team_name": "Al Sulaibikhat FC",
+      "goals": 3,
+      "penalties": null
+    },
+    {
+      "id": 880237,
+      "name": "Joao Vitor",
+      "team": "yarmouk",
+      "team_name": "Yarmouk SC",
       "goals": 3,
       "penalties": null
     },
@@ -204,14 +220,6 @@
       "name": "Hameed Al-Hussain",
       "team": "khaitan",
       "team_name": "Khaitan SC",
-      "goals": 3,
-      "penalties": null
-    },
-    {
-      "id": 880237,
-      "name": "Joao Vitor",
-      "team": "yarmouk",
-      "team_name": "Yarmouk SC",
       "goals": 3,
       "penalties": null
     },
@@ -252,14 +260,6 @@
       "name": "Lucas Lucena",
       "team": "sahel",
       "team_name": "Al Sahel SC",
-      "goals": 2,
-      "penalties": null
-    },
-    {
-      "id": 2072645,
-      "name": "Mohammad Hassan Ahmad Pour",
-      "team": "yarmouk",
-      "team_name": "Yarmouk SC",
       "goals": 2,
       "penalties": null
     },
@@ -480,6 +480,14 @@
       "penalties": null
     },
     {
+      "id": 2443037,
+      "name": "Welves Santos Damacena",
+      "team": "sulaibikhat",
+      "team_name": "Al Sulaibikhat FC",
+      "goals": 1,
+      "penalties": null
+    },
+    {
       "id": 2476533,
       "name": "Cheikh Mohammed Traoré",
       "team": "burgan",
@@ -564,6 +572,14 @@
       "name": "Ibrahim Zahwa",
       "team": "burgan",
       "team_name": "Burgan SC",
+      "goals": 1,
+      "penalties": null
+    },
+    {
+      "id": 2694859,
+      "name": "Ghazi Al Otaibi",
+      "team": "sahel",
+      "team_name": "Al Sahel SC",
       "goals": 1,
       "penalties": null
     },

@@ -1,5 +1,5 @@
 {
-  "generated": "2026-08-13T08:13:13",
+  "generated": "2026-08-16T05:04:58",
   "source": "sofascore",
   "tournament": {
     "id": 20044,
@@ -14,12 +14,12 @@
       "declared_venue": "Kuwait Oil Company Stadium",
       "city": "Al Ahmadi",
       "season": {
-        "matches": 18,
+        "matches": 19,
         "goals_scored": 39,
-        "goals_conceded": 21,
+        "goals_conceded": 23,
         "clean_sheets": 8,
         "penalty_goals": 0,
-        "red_cards": 1
+        "red_cards": 2
       },
       "players": [
         {
@@ -351,12 +351,12 @@
       "declared_venue": "Abu Halifa City Stadium",
       "city": "Kuwait City",
       "season": {
-        "matches": 18,
-        "goals_scored": 31,
+        "matches": 19,
+        "goals_scored": 33,
         "goals_conceded": 13,
-        "clean_sheets": 10,
-        "penalty_goals": 3,
-        "red_cards": 0
+        "clean_sheets": 11,
+        "penalty_goals": 4,
+        "red_cards": 2
       },
       "players": [
         {
@@ -530,6 +530,16 @@
           "penalties": null
         },
         {
+          "id": 2694859,
+          "name": "Ghazi Al Otaibi",
+          "position": "M",
+          "number": "5",
+          "country": "Kuwait",
+          "country_code": "KW",
+          "goals": null,
+          "penalties": null
+        },
+        {
           "id": 2042323,
           "name": "Leonardo Silva",
           "position": "M",
@@ -586,7 +596,7 @@
           "number": "29",
           "country": "Brazil",
           "country_code": "BR",
-          "goals": 11,
+          "goals": 12,
           "penalties": null
         },
         {
@@ -668,9 +678,9 @@
       "declared_venue": "Al Sulaibikhat Stadium",
       "city": "Kuwait City",
       "season": {
-        "matches": 18,
-        "goals_scored": 36,
-        "goals_conceded": 15,
+        "matches": 19,
+        "goals_scored": 37,
+        "goals_conceded": 16,
         "clean_sheets": 6,
         "penalty_goals": 3,
         "red_cards": 2
@@ -747,6 +757,16 @@
           "penalties": null
         },
         {
+          "id": 1109324,
+          "name": "Elielson",
+          "position": "D",
+          "number": null,
+          "country": "Brazil",
+          "country_code": "BR",
+          "goals": null,
+          "penalties": null
+        },
+        {
           "id": 2473328,
           "name": "Elielson Cardoso Bebê",
           "position": "D",
@@ -781,16 +801,6 @@
           "name": "Musaed Al Enezi",
           "position": "D",
           "number": "5",
-          "country": "Kuwait",
-          "country_code": "KW",
-          "goals": null,
-          "penalties": null
-        },
-        {
-          "id": 1629209,
-          "name": "Yousef Matar",
-          "position": "D",
-          "number": null,
           "country": "Kuwait",
           "country_code": "KW",
           "goals": null,
@@ -957,6 +967,16 @@
           "penalties": null
         },
         {
+          "id": 992582,
+          "name": "Welves",
+          "position": "F",
+          "number": "20",
+          "country": "Brazil",
+          "country_code": "BR",
+          "goals": null,
+          "penalties": null
+        },
+        {
           "id": 2443037,
           "name": "Welves Santos Damacena",
           "position": "F",
@@ -975,9 +995,9 @@
       "declared_venue": "Jaber Training Stadium 1",
       "city": "Ardiya",
       "season": {
-        "matches": 18,
-        "goals_scored": 15,
-        "goals_conceded": 54,
+        "matches": 19,
+        "goals_scored": 18,
+        "goals_conceded": 58,
         "clean_sheets": 1,
         "penalty_goals": 1,
         "red_cards": 2
@@ -1212,10 +1232,10 @@
       "declared_venue": "Ali Sabah Al-Salem Stadium",
       "city": "Al Farwaniyah",
       "season": {
-        "matches": 18,
+        "matches": 19,
         "goals_scored": 18,
         "goals_conceded": 27,
-        "clean_sheets": 4,
+        "clean_sheets": 5,
         "penalty_goals": 1,
         "red_cards": 1
       },
@@ -1539,14 +1559,24 @@
       "declared_venue": "Khaitan Stadium",
       "city": "Kuwait City",
       "season": {
-        "matches": 18,
+        "matches": 19,
         "goals_scored": 17,
         "goals_conceded": 20,
-        "clean_sheets": 6,
+        "clean_sheets": 7,
         "penalty_goals": 1,
         "red_cards": 2
       },
       "players": [
+        {
+          "id": 1598570,
+          "name": "Abdulredha Shehab",
+          "position": "G",
+          "number": null,
+          "country": "Kuwait",
+          "country_code": "KW",
+          "goals": null,
+          "penalties": null
+        },
         {
           "id": 2072639,
           "name": "Ahmad Al Dousari",
@@ -1806,9 +1836,9 @@
       "declared_venue": null,
       "city": null,
       "season": {
-        "matches": 18,
-        "goals_scored": 8,
-        "goals_conceded": 37,
+        "matches": 19,
+        "goals_scored": 12,
+        "goals_conceded": 40,
         "clean_sheets": 1,
         "penalty_goals": 0,
         "red_cards": 2
@@ -1818,7 +1848,7 @@
           "id": 2664713,
           "name": "Abdullah Bahman",
           "position": "G",
-          "number": null,
+          "number": "22",
           "country": "Kuwait",
           "country_code": "KW",
           "goals": null,
@@ -2083,14 +2113,24 @@
       "declared_venue": "Mishref Stadium",
       "city": "Kuwait City",
       "season": {
-        "matches": 18,
-        "goals_scored": 38,
-        "goals_conceded": 15,
+        "matches": 19,
+        "goals_scored": 39,
+        "goals_conceded": 16,
         "clean_sheets": 8,
         "penalty_goals": 2,
         "red_cards": 2
       },
       "players": [
+        {
+          "id": 1500629,
+          "name": "Abdul Rahman Al-Majdali",
+          "position": "G",
+          "number": "23",
+          "country": "Kuwait",
+          "country_code": "KW",
+          "goals": null,
+          "penalties": null
+        },
         {
           "id": 809501,
           "name": "Abdulrahman Al Hesainan",
@@ -2138,7 +2178,7 @@
           "number": "26",
           "country": "Iran",
           "country_code": "IR",
-          "goals": 2,
+          "goals": 3,
           "penalties": null
         },
         {
