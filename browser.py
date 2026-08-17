@@ -23,6 +23,7 @@ import subprocess
 import sys
 import time
 from pathlib import Path
+from urllib.parse import urlsplit
 
 # La console Windows est en cp1252 par défaut : sans ça, le moindre accent ou
 # flèche dans un message de log fait planter le script.
@@ -337,15 +338,24 @@ class CdpBrowser:
         return False
 
     def _land_on_forebet(self, referer: str | None = None) -> None:
-        """Amène la page sur forebet.com, challenge résolu.
+        """Amène la page sur l'origine visée, challenge résolu.
 
         Indispensable avant tout `fetch()` : sur une page encore bloquée sur
         « Un instant… », la requête part sans le cookie de clearance et revient
         en 403 — ce qui ressemble à tort à un endpoint interdit.
+
+        ⚠️ On compare l'origine à **celle du `referer`**, pas à forebet.com.
+        Comparer à forebet valait tant qu'un `CdpBrowser` ne servait qu'une
+        source à la fois : un appel Sofascore émis depuis une page restée sur
+        Forebet passait le test, sautait la navigation, et son `fetch()`
+        cross-origin revenait en « Failed to fetch ». C'est exactement ce qui
+        arrive au collecteur du direct, qui enchaîne les deux (constaté le
+        17/08/2026 en branchant l'horloge de repli).
         """
         page = self._ensure_page()
         target = referer or "https://www.forebet.com/"
-        if "forebet.com" not in (page.url or "") or not self._wait_challenge(page, 3):
+        origin = urlsplit(target).netloc
+        if origin not in (page.url or "") or not self._wait_challenge(page, 3):
             page.goto(target, wait_until="domcontentloaded", timeout=60000)
             if not self._wait_challenge(page):
                 raise RuntimeError(
