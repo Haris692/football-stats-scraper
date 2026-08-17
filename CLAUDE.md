@@ -41,8 +41,14 @@ contenu Instagram.
    notée dans la provenance, l'image reste telle quelle. Une pièce
    justificative corrigée ne prouve plus rien.
 
-5. **Toujours demander confirmation avant `git push`**, en résumant les
-   modifications. Les commits sont en français, style
+5. **Commiter et pousser directement, sans demander — mais rien ne part sans
+   vérification.** Consigne donnée le 17/08/2026, en remplacement de l'ancienne
+   (« toujours demander confirmation avant `git push` ») : ce qui se contrôle,
+   ce n'est pas le moment du push, c'est ce qui part. Donc : tests passés **et**
+   la chose éprouvée en fonctionnement — pas seulement relue — puis commit,
+   push, et le compte rendu ensuite. On ne redemande que si la vérification
+   échoue ou est impossible, ou pour ce qui va au-delà d'un push : réécriture
+   d'historique, `--force`, suppression. Les commits sont en français, style
    `feat(portée): description`.
 
 6. **Ce qu'on expose passe par `--public-port`, jamais par `--port`.** Le port
