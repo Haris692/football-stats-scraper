@@ -29,8 +29,11 @@ daily.log
 # démarrage : rien de tout ça ne décrit le projet.
 serve.log
 serve.log.err
+superviseur.log
 tunnel.log
 tunnel.log.out
+tunnel-*.log
+tunnel-*.log.out
 tunnel.url
 
 # Captures envoyées par les clubs (un dossier par rencontre) : pièces

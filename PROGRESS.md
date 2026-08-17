@@ -2050,6 +2050,77 @@ Rien n'a été publié — l'arrêt à la première étape ratée a fait son tra
 projet a un `.venv`, et `sys.executable` propage l'interpréteur aux étapes :
 c'est le lancement, et lui seul, qui doit viser le bon.
 
+## Le superviseur qui ne surveillait plus rien (17/08/2026)
+
+Avant la J20, vérification de routine du 24/7 : serveur debout, tunnel debout,
+`/api/live` qui répond. Tout allait bien. Deux détails ne collaient pas.
+
+**`tunnel.url` datait de la veille.** Il annonçait
+`graham-eos-alleged-parliament`, quand le tunnel du matin s'appelait
+`barcelona-womens-descriptions-bent`. L'adresse publique du projet pointait
+dans le vide, et rien ne le disait.
+
+**La tâche planifiée était en `Ready`, pas en `Running`.** Or son script boucle
+sans fin : `Ready` veut dire qu'il s'est terminé. `LastTaskResult` valait 0, un
+succès. Les enfants — `serve.py`, `cloudflared` — avaient survécu à leur
+parent, détachés. **Le service tournait, mais plus personne ne le surveillait
+depuis 06:44.** Un plantage de `serve.py` en plein match n'aurait été rattrapé
+par rien.
+
+### La cause, reproduite
+
+Aucun journal : le superviseur n'écrivait que par `Write-Host`, et sous une
+tâche planifiée cela ne va nulle part. Il a fallu le relancer à la main sur des
+ports séparés, sortie capturée, pour le voir mourir en trois secondes :
+
+```
+Set-Content : Le processus ne peut pas accéder au fichier 'tunnel.log',
+car il est en cours d'utilisation par un autre processus.
+serve_247.ps1:114
+```
+
+`Lance-Tunnel` vidait `tunnel.log` avant de lancer `cloudflared`. Quand un
+`cloudflared` tient encore le fichier, l'écriture échoue — et avec
+`$ErrorActionPreference = "Stop"`, **cette seule ligne emporte tout le
+superviseur**.
+
+Une première correction lisait le journal à partir de sa taille d'avant le
+lancement, pour ne plus jamais y écrire. Le test l'a démentie : deux
+`cloudflared` partageant le fichier, l'un le tronque pendant que l'autre écrit
+à son propre offset, et l'URL du tunnel neuf tombe dans un trou. **Ce n'est pas
+l'écriture qu'il fallait contourner, c'est le partage qu'il fallait supprimer.**
+
+### Ce qui a été fait
+
+- **Un journal par lancement** (`tunnel-<horodatage>.log`) : personne d'autre
+  n'y écrit, rien à vider, aucun offset à tenir. Purge au-delà de 7 jours.
+- **`superviseur.log`** : le superviseur écrit enfin ce qu'il fait. C'est son
+  absence qui a rendu la panne invisible pendant trois heures.
+- **La boucle de surveillance est sous `try`** : un journal verrouillé, un
+  `Get-NetTCPConnection` qui tousse, ne doivent jamais tuer le veilleur. Le
+  symptôme d'un superviseur mort est indiscernable d'un superviseur en bonne
+  santé — tout marche, jusqu'au jour où quelque chose tombe.
+- **Refus de doubler le serveur** : si le port écoute déjà, on ne lance pas un
+  second `serve.py`. Deux instances ne donneraient pas deux serveurs mais deux
+  collecteurs se disputant le Chrome du port CDP 9333.
+
+### Éprouvé, pas relu
+
+Sur des ports séparés (8802/8803), pendant que la production tournait :
+
+| Cas | Avant | Après |
+|---|---|---|
+| lancement avec un `cloudflared` tenant l'ancien journal | mort en 3 s | vivant, URL en 6 s |
+| URL écrite dans `tunnel.url` | non | oui |
+| serveur tué en cours de route | rien | détecté et relancé en 1 s |
+
+Puis bascule de la production : la tâche est passée de `Ready` à **`Running`**,
+et `test_public.py` repasse — 47 cas, 0 erreur.
+
+⚠️ **`Ready` sur une tâche censée boucler est un signal de panne**, pas un état
+de repos. C'est le seul indicateur qui trahissait quelque chose, et il ne
+ressemble pas à une alerte.
+
 ## Reste à faire
 
 Les trois points de la session du 06/08 sont soldés : `build_json.py`,

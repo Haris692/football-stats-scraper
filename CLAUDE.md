@@ -210,6 +210,16 @@ test. Le détail est dans `PROGRESS.md` ; ici, ce qui ne se devine pas :
 - `serve_247.ps1` tient le serveur et le tunnel, et écrit l'adresse dans
   `tunnel.url` — **elle change à chaque relance**, c'est la limite d'un tunnel
   de test.
+- **Vérifier l'état de la tâche, pas seulement que « ça répond ».**
+  `FootballStatsScraper-Serve` doit être en **`Running`** : son script boucle
+  sans fin, donc `Ready` signifie que le superviseur est mort — or `serve.py`
+  et `cloudflared`, détachés, lui survivent et continuent de servir. Tout a
+  l'air normal, mais plus rien ne relance quoi que ce soit (constaté le
+  17/08). Le journal à lire est `superviseur.log`.
+- **Chaque tunnel écrit dans son propre `tunnel-<horodatage>.log`.** Ne pas
+  revenir à un journal unique qu'on vide avant de lancer : un `cloudflared`
+  encore vivant le verrouille, et sous `ErrorActionPreference = "Stop"` cette
+  ligne tue le superviseur.
 
 **Répéter le direct sans match en cours** (fait le 14/08/2026, avant la J19) :
 avancer le `kickoff_iso` d'une rencontre **déjà jouée** dans `data/site.json`, le
