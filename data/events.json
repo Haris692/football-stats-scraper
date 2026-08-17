@@ -1,5 +1,5 @@
 {
-  "generated": "2026-08-17T22:46:11",
+  "generated": "2026-08-17T22:47:49",
   "source": "sofascore",
   "season": 75693,
   "season_year": "25/26",
@@ -5484,6 +5484,15 @@
           "player": null,
           "side": "away",
           "score": "0-4"
+        },
+        {
+          "type": "goal",
+          "class": "regular",
+          "minute": 82,
+          "added": null,
+          "player": null,
+          "side": "home",
+          "score": "1-4"
         }
       ],
       "managers": {
@@ -5591,9 +5600,18 @@
           "class": "regular",
           "minute": 68,
           "added": null,
-          "player": null,
+          "player": "Marouane Zila",
           "side": "away",
           "score": "0-1"
+        },
+        {
+          "type": "goal",
+          "class": "regular",
+          "minute": 90,
+          "added": 9,
+          "player": "Mohammad Al Rabie",
+          "side": "away",
+          "score": "0-2"
         }
       ],
       "managers": {
