@@ -220,6 +220,17 @@ mémoire des matchs clos. Mesuré : quatre rencontres simultanées coûtent **13
 dans un cycle de 60 s, le lancement de Chrome dominant. Un collecteur mort
 repart au premier spectateur (`is_alive()`), le direct ne reste pas muet.
 
+⚠️ **Deux postes publient** (le portable et le Dell), donc `daily.py` se
+resynchronise sur `origin/main` **avant de collecter** — le seul moment où
+l'arbre est propre. En retard : `merge --ff-only`. **En divergence : il
+s'arrête et ne collecte rien**, à trancher à la main. Ne pas lui faire résoudre
+ça tout seul : `-X ours` emporterait aussi du code poussé d'ailleurs. Et un
+push refusé rend maintenant un code de sortie non nul — avant, la tâche
+planifiée voyait un succès.
+
+⚠️ **Lancer le projet avec `.venv/Scripts/python.exe`**, jamais le Python
+global : il n'a aucune dépendance installée.
+
 ⚠️ **Rien ne démarre tant que personne n'est connecté.** Les deux tâches sont en
 `LogonType Interactive`, à dessein : la collecte pilote un vrai Chrome, il lui
 faut un bureau. Un tunnel nommé, sur un domaine Cloudflare, lèverait cette

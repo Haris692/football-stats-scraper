@@ -107,11 +107,61 @@ def git(*args: str) -> subprocess.CompletedProcess:
                           text=True, encoding="utf-8", errors="replace")
 
 
-def publish(dry: bool, push: bool) -> None:
+def resynchroniser(dry: bool) -> bool:
+    """Aligner l'arbre sur `origin/main` AVANT de collecter.
+
+    Deux postes publient désormais (le portable et le Dell en 24/7). Le 17/08,
+    le daily du portable a été refusé parce que le Dell avait poussé le sien du
+    14/08 : la collecte avait tourné, le commit était écrit, et rien n'est
+    parti. Se remettre à jour d'abord évite le refus au lieu de le constater.
+
+    ⚠️ **Ici et pas dans `publish()`** : à ce moment l'arbre est propre. Après
+    la collecte, `data/*.json` est modifié, et un `merge` qui touche ces mêmes
+    fichiers refuserait d'écraser le travail en cours.
+
+    Une divergence — les deux postes ont commité — n'est pas résolue ici. La
+    trancher demande de savoir laquelle des deux collectes fait foi, et `-X
+    ours` appliqué à l'aveugle emporterait aussi du code poussé d'ailleurs.
+    """
+    if dry:
+        log("(à blanc) resynchronisation sautée")
+        return True
+
+    if git("fetch", "origin").returncode:
+        # Pas de réseau : la collecte reste utile pour le site servi en local
+        # et pour `/api/live`. On continue, et le push dira ce qu'il en est.
+        log("fetch impossible — on collecte quand même, sans garantie de push")
+        return True
+
+    compte = git("rev-list", "--left-right", "--count", "origin/main...HEAD")
+    if compte.returncode:
+        log(f"état git illisible : {(compte.stderr or '').strip()[:200]}")
+        return True
+    retard, avance = (int(n) for n in compte.stdout.split())
+
+    if not retard:
+        return True
+    if avance:
+        log(f"divergence : {avance} commit(s) ici, {retard} sur origin/main")
+        log("à trancher à la main (l'autre poste a publié) — rien n'est collecté")
+        return False
+
+    done = git("merge", "--ff-only", "origin/main")
+    if done.returncode:
+        log(f"resynchronisation refusée : {(done.stderr or done.stdout).strip()[:200]}")
+        return False
+    log(f"resynchronisé sur origin/main ({retard} commit(s) repris)")
+    return True
+
+
+def publish(dry: bool, push: bool) -> bool:
     """Commite ce qui a bougé, et rien s'il n'a rien bougé.
 
     Une collecte qui ne change rien — pas de match depuis la veille — ne doit
     pas laisser un commit vide par jour dans l'historique.
+
+    Rend False si la publication a échoué, pour que le planificateur voie
+    autre chose qu'un succès.
     """
     existing = [p for p in PUBLISHED if (ROOT / p).exists()]
     changed = git("diff", "--name-only", "--", *existing).stdout.split()
@@ -121,11 +171,11 @@ def publish(dry: bool, push: bool) -> None:
 
     if not touched:
         log("rien de nouveau : aucun commit")
-        return
+        return True
     log(f"modifié : {', '.join(touched)}")
     if dry:
         log("(à blanc) commit et push sautés")
-        return
+        return True
 
     git("add", "--", *touched)
     stamp = datetime.now().strftime("%d/%m/%Y")
@@ -136,17 +186,18 @@ def publish(dry: bool, push: bool) -> None:
     done = git("commit", "-m", message)
     if done.returncode:
         log(f"commit refusé : {(done.stderr or done.stdout).strip()[:200]}")
-        return
+        return False
     log("commit écrit")
 
     if not push:
         log("push non demandé — le commit reste local")
-        return
+        return True
     done = git("push", "origin", "main")
     if done.returncode:
         log(f"push refusé : {(done.stderr or done.stdout).strip()[:200]}")
-        return
+        return False
     log("poussé sur origin/main")
+    return True
 
 
 def main() -> int:
@@ -158,6 +209,8 @@ def main() -> int:
     args = parser.parse_args()
 
     log("— rafraîchissement quotidien —")
+    if not args.no_push and not resynchroniser(args.dry_run):
+        return 1
     for command, label in STEPS:
         log(f"· {label}")
         if not run([sys.executable, *command], args.dry_run):
@@ -167,9 +220,9 @@ def main() -> int:
             log("étape en échec — on n'ira pas plus loin, rien n'est publié")
             return 1
 
-    publish(args.dry_run, push=not args.no_push)
+    publie = publish(args.dry_run, push=not args.no_push)
     log("terminé")
-    return 0
+    return 0 if publie else 1
 
 
 if __name__ == "__main__":

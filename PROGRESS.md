@@ -1993,6 +1993,63 @@ tranché le 12/08** : le club nomme le père, Sofascore la famille.
 n'a été publié — les pastilles affichent « — ». Les numéros de Sofascore ne les
 combleront pas : ils diraient « publié par le club » à tort.
 
+## Deux postes publient, et le daily l'ignorait (17/08/2026)
+
+Le rafraîchissement du 17/08 a collecté, régénéré, commité — et n'a rien
+publié. `git push` a répondu `! [rejected] main -> main (fetch first)` : le
+Dell avait poussé son daily du 14/08 pendant que le portable travaillait de son
+côté. Les deux postes tournent depuis l'auto-hébergement du 13/08, et rien
+n'avait été prévu pour ça.
+
+**Le pire n'était pas le refus, c'est qu'il ne se voyait pas.** `publish()`
+logguait « push refusé », `main()` enchaînait sur « terminé » et rendait **0**.
+Pour le planificateur Windows, le daily du 17/08 était un succès. Sans le hasard
+d'une session ouverte le matin même, l'écart aurait grandi un jour de plus à
+chaque collecte, et le site public serait resté figé au 14/08 en annonçant tout
+va bien.
+
+### Ce qui a été fait
+
+`resynchroniser()` est appelée **avant les étapes de collecte**, pas dans
+`publish()`. C'est le seul moment où l'arbre est propre : après la collecte,
+`data/*.json` est modifié et un merge qui touche ces fichiers refuserait
+d'écraser le travail en cours. Trois issues :
+
+| Situation | Ce qui se passe |
+|---|---|
+| à jour | rien, on collecte |
+| en retard (l'autre poste a publié) | `merge --ff-only`, puis on collecte |
+| divergence (les deux ont commité) | **on s'arrête, rien n'est collecté** |
+
+⚠️ **La divergence n'est pas résolue automatiquement.** La trancher demande de
+savoir laquelle des deux collectes fait foi, et le `-X ours` employé à la main
+ce matin — les données du 17 contre celles du 14 — emporterait aussi bien du
+**code** poussé depuis l'autre poste s'il s'en trouvait. Un daily que personne
+ne regarde n'a pas à prendre cette décision.
+
+Et `publish()` rend désormais un booléen que `main()` transforme en code de
+sortie : un push refusé fait échouer la tâche planifiée, au lieu de passer pour
+un succès.
+
+Un `fetch` impossible, lui, ne bloque pas : la collecte reste utile au site
+servi en local et à `/api/live`. On le dit dans le journal et on continue.
+
+### Éprouvé sur des dépôts jetables
+
+Les trois branches sont testées pour de vrai, pas relues : un dépôt nu qui joue
+`origin`, deux clones qui jouent les deux postes, et `daily.ROOT` détourné vers
+le clone jetable le temps de l'appel. Le cas « en retard » vérifie que le commit
+de l'autre poste est bien repris ; le cas « divergence » vérifie qu'**aucune
+fusion n'est tentée** et que l'arbre local reste intact.
+
+### Au passage, une erreur de méthode
+
+Le premier lancement de la journée a échoué sur `ModuleNotFoundError: bs4` :
+`python daily.py` avec le Python global au lieu de `.venv/Scripts/python.exe`.
+Rien n'a été publié — l'arrêt à la première étape ratée a fait son travail. Le
+projet a un `.venv`, et `sys.executable` propage l'interpréteur aux étapes :
+c'est le lancement, et lui seul, qui doit viser le bon.
+
 ## Reste à faire
 
 Les trois points de la session du 06/08 sont soldés : `build_json.py`,
