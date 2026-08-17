@@ -403,9 +403,16 @@ class CdpBrowser:
 
         self._throttle()
         self._log(f"  réseau {url}")
+        # ⚠️ `cache: "no-store"` — sans quoi Chrome ressert sa propre copie.
+        # `force` ne contourne que le cache disque du projet ; le navigateur, lui,
+        # a le sien, et sur une donnée en direct il rendait des relevés vieux de
+        # dix minutes (constaté le 17/08/2026 : l'horloge Sofascore annonçait
+        # « Halftime » sur des rencontres jouant leur 65e minute, et un 0-4 n'avait
+        # qu'un but dans son fil). On ne s'en apercevait pas avant : jusqu'ici,
+        # chaque URL n'était demandée qu'une fois par collecte.
         script = """async (u) => {
             try {
-                const res = await fetch(u, { credentials: "include" });
+                const res = await fetch(u, { credentials: "include", cache: "no-store" });
                 const text = await res.text();
                 return { status: res.status, text };
             } catch (e) {
