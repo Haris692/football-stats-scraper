@@ -119,6 +119,7 @@ print("— la fusion dans le collecteur —")
 # ne peut l'éprouver en vrai que pendant un match, d'où ce montage à sources
 # factices — c'est le seul endroit où une erreur ne se verrait qu'un soir de
 # journée de championnat, une fois tout le monde en train de regarder.
+import copy
 import json
 import tempfile
 from datetime import datetime
@@ -143,8 +144,25 @@ CLOCKS = {
     2487404: {"minute": 12, "status": "en_cours", "label": "12"},  # suivie, pas relevée
     2487405: {"minute": None, "status": "reporte", "label": "Postp."},
 }
-serve.fetch_stats = lambda ids, browser=None, force=False: dict(STATS)
+# La seconde source d'horloge, celle qui comble les trous de la première.
+SOFA = {2487403: {"minute": 22, "status": "en_cours", "label": "22",
+                  "source": "sofascore"}}
+demandes = []
+
+
+def repli(fixtures, browser=None):
+    demandes.append(sorted(f["match_id"] for f in fixtures))
+    return {f["match_id"]: SOFA[f["match_id"]]
+            for f in fixtures if f["match_id"] in SOFA}
+
+
+# ⚠️ Copie profonde : `_cycle` pose `clock` DANS le bloc de statistiques. Avec
+# une copie de surface, la clé restait collée d'un cycle sur l'autre et un
+# relevé sans horloge semblait en garder une — la vraie `fetch_stats` rend un
+# bloc neuf à chaque appel.
+serve.fetch_stats = lambda ids, browser=None, force=False: copy.deepcopy(STATS)
 serve.fetch_clock = lambda browser=None: dict(CLOCKS)
+serve.fetch_clock_sofa = repli
 serve.CdpBrowser = lambda **k: "faux-chrome"
 
 collecteur = serve.LiveCollector(fichier)
@@ -157,8 +175,10 @@ verifie("l'horloge se pose sur les statistiques",
         live["2487402"]["clock"]["minute"], 37)
 verifie("les statistiques survivent à la fusion",
         live["2487402"]["home"]["goals"], 1)
-verifie("relevée sans horloge : pas de clé `clock`",
-        "clock" in live["2487403"], False)
+verifie("l'horloge de repli comble le trou de la première source",
+        live["2487403"]["clock"]["minute"], 22)
+verifie("le repli n'est demandé QUE pour ce qui manque — sinon on solliciterait "
+        "une seconde source pour rien", demandes, [[2487403]])
 verifie("suivie sans relevé : un bloc quand même",
         live["2487404"]["clock"]["minute"], 12)
 verifie("et ce bloc n'a AUCUNE statistique — sans quoi la page dessinerait "
@@ -171,6 +191,14 @@ STATS[2487402]["full_time"] = "2-0"
 collecteur._cycle(collecteur.live_ids(), None)
 verifie("la rencontre finie sort du suivi",
         collecteur.live_ids(), [2487403, 2487404])
+
+# Ni l'une ni l'autre source ne la connaît : le bloc existe (il a des
+# statistiques) mais il n'a pas d'horloge. Une minute inventée serait pire que
+# pas de minute du tout.
+SOFA.clear()
+collecteur._cycle(collecteur.live_ids(), None)
+verifie("sans horloge nulle part, aucune n'est fabriquée",
+        "clock" in collecteur.snapshot()["live"]["2487403"], False)
 
 print(f"\n{erreurs} erreur(s)")
 sys.exit(1 if erreurs else 0)

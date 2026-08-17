@@ -71,6 +71,7 @@ from urllib.parse import unquote
 from browser import CdpBrowser
 from build_console import assemble, build, data_file_for, make_payload
 from fetch_clock import fetch as fetch_clock
+from fetch_clock_sofa import fetch as fetch_clock_sofa
 from fetch_stats import fetch as fetch_stats
 
 ROOT = Path(__file__).resolve().parent
@@ -180,6 +181,16 @@ class LiveCollector(threading.Thread):
             self._fixtures_mtime = mtime
         return self._fixtures
 
+    def watched(self, ids: list[int]) -> list[dict]:
+        """Nos propres rencontres, pour celles de ces identifiants.
+
+        L'horloge de repli travaille sur des affiches (jour, paire d'équipes) et
+        non sur des identifiants Forebet, que Sofascore ignore.
+        """
+        wanted = {int(mid) for mid in ids}
+        return [f for f in self.fixtures()
+                if f.get("match_id") and int(f["match_id"]) in wanted]
+
     def live_ids(self) -> list[int]:
         now = datetime.now()
         out = []
@@ -227,6 +238,15 @@ class LiveCollector(threading.Thread):
             # statistiques fait que la minute continue de tourner même si
             # `get_evs_n` tousse. Elle ne lève rien — au pire elle rend {}.
             clocks = fetch_clock(browser=browser)
+            # Forebet ne met dans son relevé que ce qu'il suit : sur cette
+            # division, environ une rencontre sur deux. Celles qui y manquent
+            # prennent l'horloge de Sofascore, qui les avait toutes les quatre
+            # le 17/08/2026 quand Forebet n'en avait que deux. Une requête, et
+            # seulement s'il reste des rencontres sans minute.
+            missing = [mid for mid in ids if mid not in clocks]
+            if missing:
+                clocks.update(fetch_clock_sofa(self.watched(missing),
+                                               browser=browser))
             # `force` : un relevé en direct qu'on servirait depuis le cache
             # n'aurait aucun intérêt.
             stats = fetch_stats(ids, browser=browser, force=True)

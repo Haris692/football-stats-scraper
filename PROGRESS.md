@@ -2232,6 +2232,81 @@ Pas de match avant 19 h 15, donc rien n'a pu être vu en vrai. À défaut :
 Reste à voir ce soir, et ce soir seulement : **une minute qui avance** sur une
 rencontre en cours.
 
+## La minute vue en vrai, et l'horloge de repli (17/08/2026, soir)
+
+La J20 s'est jouée à 19 h 15, quatre rencontres en même temps : la première
+occasion de regarder le direct pendant un match plutôt qu'en répétition.
+
+**Ce qui a marché du premier coup.** La minute avance, relevé après relevé, sur
+le port public comme en local — 27' puis 29' puis 31' à mesure des cycles. Le
+tunnel la sert aussi. Rien à corriger de ce côté.
+
+### Le trou de couverture n'en était pas un : c'est un retard au coup d'envoi
+
+À 19 h 25, `/gsv/` ne portait que **deux** des quatre rencontres. Les deux
+autres n'avaient ni minute ni statistiques : sur la page, un marqueur « live »
+muet au-dessus de l'heure de coup d'envoi. À 19 h 42, Forebet les avait
+**toutes les quatre**, statistiques comprises.
+
+⚠️ **Ce n'est donc pas « un match sur deux », comme on l'avait écrit à partir
+des statistiques.** C'est un retard d'une vingtaine de minutes après le coup
+d'envoi. La conclusion pratique change : le trou tombe exactement sur le début
+de match, le moment où quelqu'un ouvre la page pour voir si ça a commencé.
+
+### Ce qui a été fait : `fetch_clock_sofa.py`
+
+Une seconde horloge, chez Sofascore, appelée **seulement pour les rencontres
+que Forebet n'a pas** — et pas du tout quand il les a toutes. Relevé du 17/08 à
+19 h 36 : quatre rencontres sur quatre, là où Forebet en avait deux.
+
+- **Une requête par journée**, pas une par match : le point d'entrée
+  `events/round/<n>` rend toute la journée. La journée est lue dans
+  `data/events.json`, déjà collecté chaque matin, pour ne pas payer en plus la
+  saison et la journée courante à chaque relevé.
+- **Le rapprochement se fait sur (jour, paire d'équipes)**, jamais sur l'hôte :
+  Sofascore inverse domicile et extérieur sur 61 des 70 rencontres (voir
+  `hosts.py`). Le score est réorienté sur notre hôte à nous, permuté avec sa
+  mi-temps.
+- ⚠️ **La minute est calculée, pas lue.** La source ne publie pas de compteur :
+  elle donne `currentPeriodStartTimestamp`, et c'est l'horloge du poste qui
+  fait la soustraction. `initial` porte ce qui était déjà joué au début de la
+  période (2700 s en seconde mi-temps), `max` sa fin réglementaire — au-delà,
+  la minute se fige et le surplus devient le temps additionnel. Un repère de
+  temps qui traîne de plus de trente minutes est écarté : mieux vaut pas de
+  minute qu'une 240e.
+
+### ⚠️ Le piège : `_land_on_forebet` comparait à forebet.com, quel que soit le referer
+
+Il vérifiait `"forebet.com" not in page.url` avant de naviguer. Tant qu'un
+`CdpBrowser` ne servait qu'une source à la fois, c'était sans conséquence.
+Le collecteur, lui, enchaîne désormais les deux : l'appel Sofascore partait
+d'une page restée sur Forebet, passait le test, sautait la navigation, et son
+`fetch()` cross-origin revenait en `TypeError: Failed to fetch` — trois fois de
+suite, puisque chaque tentative refaisait le même raisonnement. La comparaison
+porte maintenant sur l'origine du `referer` demandé.
+
+### ⚠️ Ne pas sonder pendant que le collecteur tourne
+
+Les deux s'attachent au même Chrome sur le port CDP 9333 et se partagent
+l'onglet. Une sonde lancée en parallèle navigue sous les pieds du collecteur :
+le `fetch()` de l'autre part pendant une navigation et rend `Failed to fetch` —
+qui ressemble à s'y méprendre au bug ci-dessus. Pire, refermer le `CdpBrowser`
+de la sonde ferme le Chrome du collecteur (« Chrome est parti »). Attendre les
+180 s de `LIVE_IDLE_STOP`, ou lire `/api/live` plutôt que de sonder.
+
+### Éprouvé
+
+| Ce qui est éprouvé | Comment |
+|---|---|
+| la minute calculée, cas par cas | `test_clock_sofa.py`, sur les rencontres réellement servies à 19 h 36 |
+| le rapprochement des noms des huit clubs | `test_clock_sofa.py` : les quatre affiches du soir, dans les deux orientations |
+| le repli n'est demandé que pour ce qui manque | `test_clock.py`, sources factices |
+| aucune horloge n'est fabriquée quand les deux sources se taisent | `test_clock.py` |
+| le câblage complet, réseau compris | `python fetch_clock_sofa.py` pendant les matchs : 4 sur 4, minutes justes |
+| l'enchaînement Forebet → Sofascore dans un même Chrome | sonde dédiée, après le correctif de `_land_on_forebet` |
+| la minute qui avance en vrai | `/api/live` suivi sur plusieurs cycles, 27' → 29' → 31' |
+| la façade publique | `test_public.py`, 47 cas, 0 erreur |
+
 ## Reste à faire
 
 Les trois points de la session du 06/08 sont soldés : `build_json.py`,
