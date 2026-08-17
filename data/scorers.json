@@ -1,5 +1,5 @@
 {
-  "generated": "2026-08-17T08:00:03",
+  "generated": "2026-08-17T22:45:53",
   "source": "sofascore",
   "tournament": {
     "id": 20044,
@@ -96,6 +96,14 @@
       "penalties": null
     },
     {
+      "id": 1140881,
+      "name": "Marouane Zila",
+      "team": "jazira",
+      "team_name": "Al Jazeera FC Kuwait",
+      "goals": 4,
+      "penalties": null
+    },
+    {
       "id": 1396246,
       "name": "Hedy Chaabi",
       "team": "jazira",
@@ -132,14 +140,6 @@
       "name": "Abdullah Al Shami",
       "team": "yarmouk",
       "team_name": "Yarmouk SC",
-      "goals": 3,
-      "penalties": null
-    },
-    {
-      "id": 1140881,
-      "name": "Marouane Zila",
-      "team": "jazira",
-      "team_name": "Al Jazeera FC Kuwait",
       "goals": 3,
       "penalties": null
     },
@@ -296,6 +296,14 @@
       "penalties": null
     },
     {
+      "id": 1629418,
+      "name": "Mohammad Al Rabie",
+      "team": "jazira",
+      "team_name": "Al Jazeera FC Kuwait",
+      "goals": 2,
+      "penalties": null
+    },
+    {
       "id": 959716,
       "name": "Meshari Al Azmi",
       "team": "yarmouk",
@@ -352,6 +360,14 @@
       "penalties": null
     },
     {
+      "id": 992582,
+      "name": "Welves",
+      "team": "sulaibikhat",
+      "team_name": "Al Sulaibikhat FC",
+      "goals": 1,
+      "penalties": null
+    },
+    {
       "id": 1143185,
       "name": "Matheus Vieira",
       "team": "jazira",
@@ -400,14 +416,6 @@
       "penalties": null
     },
     {
-      "id": 2130188,
-      "name": "Abdulaziz Al Beshar",
-      "team": "sulaibikhat",
-      "team_name": "Al Sulaibikhat FC",
-      "goals": 1,
-      "penalties": null
-    },
-    {
       "id": 1006323,
       "name": "Faisal Ajab Al Azemi",
       "team": "sahel",
@@ -420,6 +428,14 @@
       "name": "Ahmed Al Shammari",
       "team": "shamiya",
       "team_name": "Al-Shamiya FC",
+      "goals": 1,
+      "penalties": null
+    },
+    {
+      "id": 2130188,
+      "name": "Abdulaziz Al Beshar",
+      "team": "sulaibikhat",
+      "team_name": "Al Sulaibikhat FC",
       "goals": 1,
       "penalties": null
     },
@@ -476,14 +492,6 @@
       "name": "Abdulmajeed Al Enezi",
       "team": "jazira",
       "team_name": "Al Jazeera FC Kuwait",
-      "goals": 1,
-      "penalties": null
-    },
-    {
-      "id": 2443037,
-      "name": "Welves Santos Damacena",
-      "team": "sulaibikhat",
-      "team_name": "Al Sulaibikhat FC",
       "goals": 1,
       "penalties": null
     },
@@ -568,6 +576,14 @@
       "penalties": null
     },
     {
+      "id": 2294531,
+      "name": "Khaled Al Otaibi",
+      "team": "burgan",
+      "team_name": "Burgan SC",
+      "goals": 1,
+      "penalties": 1
+    },
+    {
       "id": 2294534,
       "name": "Ibrahim Zahwa",
       "team": "burgan",
@@ -580,14 +596,6 @@
       "name": "Ghazi Al Otaibi",
       "team": "sahel",
       "team_name": "Al Sahel SC",
-      "goals": 1,
-      "penalties": null
-    },
-    {
-      "id": 1629418,
-      "name": "Mohammad Al Rabie",
-      "team": "jazira",
-      "team_name": "Al Jazeera FC Kuwait",
       "goals": 1,
       "penalties": null
     },
@@ -630,14 +638,6 @@
       "team_name": "Yarmouk SC",
       "goals": 1,
       "penalties": null
-    },
-    {
-      "id": 2294531,
-      "name": "Khaled Al Otaibi",
-      "team": "burgan",
-      "team_name": "Burgan SC",
-      "goals": 1,
-      "penalties": 1
     },
     {
       "id": 2331810,
