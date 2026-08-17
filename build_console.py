@@ -100,15 +100,21 @@ def cached_match_pages() -> list[Path]:
     return sorted(CACHE_DIR.glob("fr-football-matches-*.html"))
 
 
-def fetch_many(urls: list[str], force: bool) -> list[dict]:
+def fetch_many(urls: list[str], force: bool, stale: set | None = None) -> list[dict]:
     """Récupère et parse une liste de pages match, en n'ouvrant Chrome que si
-    au moins une page manque au cache."""
+    au moins une page manque au cache.
+
+    `stale` : les pages à redemander bien qu'elles soient en cache. Voir
+    `stale_pages()` — une fiche prise avant le coup d'envoi ne contient ni le
+    score final, ni les statistiques, **ni le classement d'après la rencontre**.
+    """
+    stale = stale or set()
     matches = []
     browser = None
     try:
         for url in urls:
             cached = cache_path(url)
-            if cached.exists() and not force:
+            if cached.exists() and not force and url not in stale:
                 html = cached.read_text(encoding="utf-8", errors="replace")
             else:
                 if browser is None:
@@ -119,6 +125,43 @@ def fetch_many(urls: list[str], force: bool) -> list[dict]:
         if browser is not None:
             browser.close()
     return matches
+
+
+# Après le coup d'envoi, le délai au bout duquel la fiche d'une rencontre est
+# réputée définitive. Mêmes 150 minutes que `LIVE_AFTER` dans `serve.py`.
+PAGE_SETTLED = 150 * 60
+
+
+def stale_pages(fixtures: list[dict]) -> set:
+    """Les fiches en cache qui datent d'AVANT la fin de leur rencontre.
+
+    ⚠️ `fetch_many` ne regarde pas l'âge du cache : une page match récupérée une
+    fois ne l'est plus jamais, sauf `--force`. C'était sans conséquence tant
+    qu'on ne collectait qu'après coup ; ça ne l'est plus depuis que le
+    calendrier fait récupérer les fiches **avant** le coup d'envoi. Constaté le
+    17/08/2026 : les quatre fiches de la J20 dataient du 16 à 5 h, donc le site
+    a publié les résultats du soir avec le classement de la J19 — chaque page
+    match de Forebet embarque le classement à SA date, et `freshest_standings`
+    ne peut pas être plus fraîche que la plus fraîche des pages.
+
+    Une seule reprise par rencontre : une fois relue après coup, la page n'est
+    plus périmée, et le quotidien retrouve son coût habituel.
+    """
+    out = set()
+    for fixture in fixtures:
+        url = fixture.get("url")
+        if not url or not fixture.get("played"):
+            continue
+        path = cache_path(url)
+        if not path.exists():
+            continue
+        try:
+            kickoff = datetime.fromisoformat(fixture.get("kickoff_iso") or "")
+        except ValueError:
+            continue
+        if path.stat().st_mtime < kickoff.timestamp() + PAGE_SETTLED:
+            out.add(url)
+    return out
 
 
 def collect(urls: list[str], files: list[str], force: bool) -> list[dict]:
@@ -491,9 +534,12 @@ def assemble(args) -> tuple[list[dict], list[dict]]:
                   if args.scope == "all"
                   or (args.scope == "upcoming" and not f["played"])
                   or (args.scope == "played" and f["played"])]
+        stale = stale_pages(wanted)
         print(f"{len(fixtures)} rencontres sur la page ligue, "
-              f"{len(wanted)} fiche(s) à récupérer ({args.scope})…")
-        matches = fetch_many([f["url"] for f in wanted], args.force)
+              f"{len(wanted)} fiche(s) à récupérer ({args.scope})"
+              + (f", dont {len(stale)} à reprendre après match" if stale else "")
+              + "…")
+        matches = fetch_many([f["url"] for f in wanted], args.force, stale)
 
     else:
         matches = collect(args.urls, args.file, args.force)
