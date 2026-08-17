@@ -60,7 +60,9 @@ python build_site.py --fixtures --scope all  # régénère site.json + assets + 
 python serve.py                              # sert le site sur :8800, + /api/live
 python serve.py --public-port 8801           # + une façade exposable (voir plus bas)
 python fetch_players.py --club yarmouk       # fiches d'un club (hors daily.py)
+python fetch_clock.py --league               # la minute des matchs en cours
 python test_public.py                        # ce que la façade publique refuse
+python test_clock.py                         # l'horloge, et sa fusion au direct
 ```
 
 Auto-hébergement, côté Windows :
@@ -89,6 +91,7 @@ d'écraser — avant, une passe `--club` effaçait les sept autres clubs.
 | Qui reçoit | **Flashscore** (`hosts.py`) | tranché le 11/08/2026, ne pas re-débattre |
 | Classement des buteurs | **`fetch_scorers.py`** | jamais un classement dérivé des effectifs |
 | Statistiques de match | Forebet `get_evs_n.php` | ~la moitié des rencontres |
+| Minute de jeu, statut | Forebet `/gsv/` (`fetch_clock.py`) | relevé mondial, une requête pour tous |
 | Chronologies, effectifs | Sofascore | tournoi `20044`, saison 25/26 `75693` |
 | Compositions | les clubs, à la main | voir plus bas |
 
@@ -184,6 +187,24 @@ se tait. Rien de tout ça sur GitHub Pages.
 ⚠️ Chrome n'est lancé que si un match est en cours **et** que quelqu'un regarde
 (`LIVE_IDLE_STOP = 180.0`). Au repos, le serveur tient dans 43 Mo.
 
+Chaque cycle croise **deux** points d'entrée, et leurs couvertures ne se
+recouvrent pas :
+
+- **Ne pas rebrancher le SSE `/glvs/`.** Il a été sondé le 17/08 : il
+  s'établit mais n'émet qu'au changement, donc un collecteur qui démarre en
+  cours de match resterait muet, et il faudrait tenir ouverte la page Chrome
+  que `fetch_stats` fait naviguer à chaque relevé. `/gsv/` rend le **même
+  contenu** en instantané, 8 Ko pour toutes les rencontres du monde.
+- ⚠️ **Un bloc de direct peut n'avoir QUE `clock`**, sans `fields` : Forebet
+  suit le score de rencontres dont il ne relève pas les statistiques. Tout
+  consommateur trie sur `fields` — sans ça, `match.js` dessine un tableau vide
+  et la console écrase ses propres chiffres (les deux sont arrivés).
+- ⚠️ **La minute ne défile pas toute seule.** Elle date du dernier relevé. Ne
+  jamais ajouter un chronomètre côté page : il dériverait au premier arrêt de
+  jeu, et afficherait un chiffre que personne n'a relevé.
+- La Division 1 koweïtienne est la **ligue `417`** chez Forebet
+  (`fetch_clock.LEAGUE_ID`), lue dans le `#drlscrm` d'une page de match.
+
 ## Auto-hébergement (décidé le 13/08/2026)
 
 Le projet doit tourner en 24/7 sur un **Dell Pro Micro** sous Windows, qui
@@ -255,11 +276,9 @@ de conclure à une panne.
 ## Points ouverts
 
 1. Les **visuels de changements** — seul chemin vers les minutes jouées.
-2. Le flux **SSE `/glvs/`**, débranché : il apporterait la minute de jeu, absente
-   de `gmc=1`. À faire consommer par `serve.py`, pas par la page.
-3. Quatre **diffuseurs** manquants dans `data/broadcasts.json`.
-4. Les buteurs sans fiche joueur (`fetch_players.py --club` sur sulaibikhat,
+2. Quatre **diffuseurs** manquants dans `data/broadcasts.json`.
+3. Les buteurs sans fiche joueur (`fetch_players.py --club` sur sulaibikhat,
    burgan, sporty).
-5. **`shoot.py` n'est documenté nulle part** — trou de suivi connu.
-6. **Le tunnel nommé** : il faut un domaine sur Cloudflare. C'est ce qui manque
+4. **`shoot.py` n'est documenté nulle part** — trou de suivi connu.
+5. **Le tunnel nommé** : il faut un domaine sur Cloudflare. C'est ce qui manque
    pour une URL stable et un démarrage indépendant de la session ouverte.

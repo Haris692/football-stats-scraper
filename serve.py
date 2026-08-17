@@ -21,6 +21,12 @@ matchs en cours, une fois par minute, et s'arrête de lui-même dès que plus
 aucune page ne le demande. La page interroge ce fil, pas Forebet — le nombre
 d'onglets ouverts ne change donc rien à ce que la source encaisse.
 
+Chaque relevé croise **deux** points d'entrée : `get_evs_n.php` pour les
+statistiques, match par match, et `/gsv/` (`fetch_clock`) pour l'horloge, une
+seule requête pour tout le monde. Le second est arrivé le 17/08/2026 et apporte
+ce que le premier n'a jamais eu : la **minute de jeu**, le temps additionnel, et
+un statut franc — `FT` clôt la rencontre, `Postp.` la retire du suivi.
+
 Ce même dossier contient les deux façades, servies ensemble : la **console**
 interne (`console.html`, fichier unique, générateur de brief Instagram) et le
 **site** public (`index.html` et ses cinq pages). Depuis le 11/08/2026, le site
@@ -64,6 +70,7 @@ from urllib.parse import unquote
 
 from browser import CdpBrowser
 from build_console import assemble, build, data_file_for, make_payload
+from fetch_clock import fetch as fetch_clock
 from fetch_stats import fetch as fetch_stats
 
 ROOT = Path(__file__).resolve().parent
@@ -132,8 +139,11 @@ class LiveCollector(threading.Thread):
         self._last_ask = time.time()
         self._fixtures: list[dict] = []
         self._fixtures_mtime = None
-        # Un match dont `ft_score` est rempli ne sera plus sondé.
-        self._finished: set[int] = set()
+        # Les rencontres qu'on ne sonde plus, pour deux raisons distinctes :
+        # `ft_score` rempli (elle est finie) ou horloge à « Postp. » (elle ne
+        # se jouera pas ce soir). Sans la seconde, une rencontre reportée était
+        # sondée pendant les 150 minutes de `LIVE_AFTER`, pour rien.
+        self._closed: set[int] = set()
         self._snapshot = {"state": "démarrage", "live": {}, "collected": None,
                           "watching": []}
 
@@ -175,7 +185,7 @@ class LiveCollector(threading.Thread):
         out = []
         for fixture in self.fixtures():
             mid = fixture.get("match_id")
-            if not mid or int(mid) in self._finished:
+            if not mid or int(mid) in self._closed:
                 continue
             kickoff = _kickoff(fixture)
             if kickoff and kickoff - LIVE_BEFORE <= now <= kickoff + LIVE_AFTER:
@@ -212,6 +222,11 @@ class LiveCollector(threading.Thread):
         try:
             if browser is None:
                 browser = CdpBrowser(verbose=False)
+            # L'horloge d'abord, et une seule requête pour toutes les
+            # rencontres : elle est légère (~8 Ko), et la prendre avant les
+            # statistiques fait que la minute continue de tourner même si
+            # `get_evs_n` tousse. Elle ne lève rien — au pire elle rend {}.
+            clocks = fetch_clock(browser=browser)
             # `force` : un relevé en direct qu'on servirait depuis le cache
             # n'aurait aucun intérêt.
             stats = fetch_stats(ids, browser=browser, force=True)
@@ -223,9 +238,19 @@ class LiveCollector(threading.Thread):
             Handler.lock.release()
 
         live = {str(mid): block for mid, block in stats.items()}
+        # Une rencontre peut avoir une horloge sans avoir de statistiques :
+        # Forebet ne couvre les relevés que d'un match sur deux sur cette
+        # division. Elle mérite quand même sa minute, donc son propre bloc.
+        for mid in ids:
+            clock = clocks.get(mid)
+            if clock is None:
+                continue
+            live.setdefault(str(mid), {"source": "forebet/gsv"})["clock"] = clock
+            if clock["status"] == "reporte":
+                self._closed.add(mid)
         for mid, block in stats.items():
             if block.get("full_time"):
-                self._finished.add(int(mid))
+                self._closed.add(int(mid))
         self._publish(
             state="ok",
             live=self._flag_flips(live),

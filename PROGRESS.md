@@ -2121,6 +2121,117 @@ et `test_public.py` repasse — 47 cas, 0 erreur.
 de repos. C'est le seul indicateur qui trahissait quelque chose, et il ne
 ressemble pas à une alerte.
 
+## La minute de jeu, enfin (17/08/2026)
+
+Le direct affichait des chiffres sans dire à quel moment du match ils étaient
+pris. `get_evs_n.php` n'a ni `minute` ni `status` — vérifié le 10/08, son
+en-tête ne porte que les scores. Le point ouvert n° 5 visait le flux SSE
+`/glvs/` repéré dans `all.js`. Il est soldé, mais **pas par le SSE**.
+
+### Ce que `all.js` fait vraiment
+
+Rapatrié par le navigateur (403 en `curl`, comme le reste de Forebet), il
+dévoile la fonction `getLiveScore(e, t, n, s, a, r)` et surtout **deux chemins
+vers la même donnée** :
+
+- au chargement, un `EventSource` sur `https://www.forebet.com/glvs/{ligue}/{match}/` ;
+- **quand l'onglet redevient visible, un `XMLHttpRequest` sur
+  `https://www.forebet.com/gsv/`** — pour rattraper ce que le flux a poussé
+  pendant que personne ne regardait.
+
+Au passage, deux identifiants qui manquaient : une page de match porte
+`<div id="drlscrm">2487397,417</div>`, soit `<match_id>,<league_id>`. **La
+Division 1 koweïtienne est la ligue 417** chez Forebet.
+
+### Pourquoi le second, et pas le flux
+
+Les trois formes du SSE (`/glvs/`, `/glvs/417/`, `/glvs/417/2487403/`) ont été
+ouvertes : elles s'établissent sans erreur, et **ne poussent rien** hors match.
+C'est leur nature — un flux n'émet qu'au changement. Trois choses en découlent,
+et ensemble elles tranchent :
+
+1. **Un collecteur qui vient de démarrer resterait muet** jusqu'au fait de jeu
+   suivant. Or le nôtre démarre à la demande, au premier spectateur, quitte à
+   ce que ce soit à la 70ᵉ minute.
+2. **Il faudrait tenir la page Chrome ouverte en permanence** — celle-là même
+   que `fetch_stats` fait naviguer à chaque relevé (`_land_on_forebet`). Le
+   flux ne survivrait pas au premier cycle.
+3. **Le collecteur ne pousse rien de toute façon** : il prend un instantané par
+   minute et le publie, la page lit ce qui a déjà été pris. Un flux poussé
+   n'aurait rien à alimenter.
+
+`/gsv/` rend le même contenu, en **une requête de 8 Ko pour toutes les
+rencontres à la fois** — quatre matchs coûtent exactement ce qu'un seul coûte.
+Le SSE reste noté ici : il apporterait la latence, si un jour on en veut.
+
+### Ce que le relevé donne, mesuré
+
+Un dictionnaire indexé par `match_id` : `minute` (nombre, ou `FT`, `HT`,
+`Postp.`, `Pen.`…), `ad_tm` (temps additionnel), `running`, `host_sc` /
+`guest_sc`, `ht_home` / `ht_away`, et `lid`. Relevé du 17/08 à 7 h 30 : 34
+rencontres, 22 ligues, 8 450 octets.
+
+⚠️ **Le relevé est mondial et sans filtre.** Le point d'entrée ne prend aucun
+paramètre : on tire tout, et on y cherche les siens. C'est exactement ce que
+fait la page de Forebet.
+
+⚠️ **Un match absent du relevé n'est pas une anomalie.** Forebet n'y met que ce
+qu'il suit à cet instant. L'absence rend `None`, et l'affichage se passe
+d'horloge — il ne la fabrique pas.
+
+⚠️ **`ad_tm` traîne après le coup de sifflet.** `parseLiveJson` le retire
+lui-même dès qu'il retombe. `fetch_clock` ne le reprend donc que si `running`
+est vrai — sans quoi une rencontre finie afficherait « 90+4' » toute la nuit.
+
+⚠️ **`host_sc` vaut `"?"` sur une rencontre reportée.** Ce n'est pas zéro, et
+un `int()` naïf en aurait fait un 0-0 crédible.
+
+### Deux bénéfices qui n'étaient pas demandés
+
+- **Un statut franc.** `FT` clôt la rencontre, `Postp.` dit qu'elle ne se
+  jouera pas. Le collecteur devinait jusqu'ici avec une fenêtre de 150 minutes
+  autour du coup d'envoi (`LIVE_AFTER`) : une rencontre reportée était sondée
+  pendant deux heures et demie pour rien. `_finished` est devenu `_closed`, et
+  il se remplit des deux côtés.
+- **Une horloge sans statistiques.** Forebet ne relève les stats que d'un match
+  sur deux sur cette division, mais il en suit le score. Une rencontre non
+  couverte a donc désormais sa minute, là où elle n'avait rien.
+
+C'est ce dernier point qui a mordu ailleurs : le collecteur publie maintenant un
+bloc **sans `fields`**, et deux consommateurs le prenaient pour un relevé
+complet. `match.js` dessinait un tableau vide sous un badge « Direct », et la
+console **écrasait `m.match_stats`** avec une horloge, perdant les chiffres de
+la dernière collecte. Les deux trient désormais sur `fields`.
+
+### L'affichage
+
+La minute va **dans le marqueur `live`**, à la place du mot : même place, même
+rouge, et c'est l'information que l'œil venait y chercher. `37'`, `45+3'`,
+`MT`. Un statut inconnu de la table retombe sur « live » plutôt que d'afficher
+un mot brut de la source.
+
+⚠️ **La minute ne défile pas toute seule.** Elle date du dernier relevé, donc
+d'au plus une minute. Un chronomètre côté page donnerait un chiffre inventé, et
+qui déraperait au premier arrêt de jeu. La note de méthode le dit, et elle a
+maintenant **trois versions** — avec horloge, sans horloge, hors direct : dire
+« la source ne donne pas la minute » au-dessus d'un marqueur affichant 37'
+ferait mentir la page sur son propre contenu.
+
+### Éprouvé
+
+Pas de match avant 19 h 15, donc rien n'a pu être vu en vrai. À défaut :
+
+| Ce qui est éprouvé | Comment |
+|---|---|
+| la normalisation, cas par cas | `test_clock.py`, sur des entrées réellement observées |
+| la fusion horloge + stats dans le collecteur | `test_clock.py`, sources factices : les quatre combinaisons de couverture |
+| le câblage complet, réseau compris | un vrai cycle sur deux rencontres empruntées à la ligue 19, présentes dans `/gsv/` |
+| le rendu du marqueur | les six cas rendus dans le navigateur, sur les assets publiés |
+| la façade publique | `test_public.py`, 47 cas, 0 erreur |
+
+Reste à voir ce soir, et ce soir seulement : **une minute qui avance** sur une
+rencontre en cours.
+
 ## Reste à faire
 
 Les trois points de la session du 06/08 sont soldés : `build_json.py`,
@@ -2144,10 +2255,10 @@ Ce qui reste ouvert, par ordre d'intérêt :
    comblerait. Yarmouk a été fait le 13/08 (33 fiches, 142 en tout) : restent
    jazira, sahel, khaitan et shamiya déjà collectés, soit sulaibikhat, burgan
    et sporty à passer.
-5. **Le flux SSE `/glvs/`** reste débranché. Il apporterait ce que le mode
-   direct ne peut pas montrer : la **minute de jeu** et le temps additionnel,
-   absents de `gmc=1`. À faire consommer par `serve.py`, comme le collecteur —
-   pas par la page, qui n'a pas accès à Forebet.
+5. ~~Le flux SSE `/glvs/`~~ — **soldé le 17/08**, mais par `/gsv/`, le point
+   d'entrée en instantané qui rend le même contenu ; voir la section dédiée. Le
+   SSE reste débranché et n'apporterait plus que la latence : la minute publiée
+   date du dernier relevé, donc d'au plus une minute.
 6. **Diffuseurs** : `data/broadcasts.json` a quatre cases vides.
    Sofascore ne les a pas non plus (`odds` et `tv` : 404, vérifié le 11/08).
 7. **`shoot.py` n'est documenté nulle part ici.** L'outil (captures d'écran

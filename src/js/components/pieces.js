@@ -58,6 +58,31 @@ export function photoOf(p, size = "") {
 export const badge = (text, variant) =>
   el("span", { class: "badge" + (variant ? ` badge--${variant}` : ""), text });
 
+/* Ce que le marqueur écrit à la place de « live » selon le statut rendu par
+   `fetch_clock`. Les statuts qui n'ont pas de minute propre sont nommés ; les
+   autres passent par la minute elle-même. Un statut inconnu de cette table
+   retombe sur « live » : la source peut en inventer un, la page ne doit pas
+   afficher un mot brut qu'elle ne comprend pas. */
+const CLOCK_WORDS = {
+  mi_temps: "MT",
+  tirs_au_but: "t.a.b.",
+  suspendu: "susp.",
+  retarde: "retardé",
+};
+
+/** Ce qu'affiche le marqueur : la minute de jeu si on la tient, « live » sinon.
+ *
+ *  ⚠️ **La minute vient de la source, jamais d'un chronomètre de la page.** Elle
+ *  date du dernier relevé, donc d'au plus une minute — la faire avancer toute
+ *  seule entre deux relevés donnerait un chiffre inventé, et qui déraperait au
+ *  premier arrêt de jeu. */
+function clockWord(clock) {
+  if (!clock) return null;
+  if (CLOCK_WORDS[clock.status]) return t(CLOCK_WORDS[clock.status]);
+  if (clock.status !== "en_cours" || clock.minute == null) return null;
+  return `${clock.minute}${clock.added ? "+" + clock.added : ""}'`;
+}
+
 /** Le marqueur « en cours », posé juste au-dessus de l'heure de coup d'envoi.
  *
  *  ⚠️ Le même rouge clignotant recouvre deux situations très différentes, et
@@ -65,15 +90,21 @@ export const badge = (text, variant) =>
  *  qu'une rencontre **se joue en ce moment**, déduit de l'horloge, et rien de
  *  plus : promettre un rafraîchissement qui n'arrivera pas serait un mensonge.
  *  Avec `serve.py` derrière la page, le score EST suivi, et `tracked` le dit.
- *  Ne jamais laisser l'un porter la phrase de l'autre. */
-export function liveMark(tracked = false) {
+ *  Ne jamais laisser l'un porter la phrase de l'autre.
+ *
+ *  Depuis le 17/08/2026 le marqueur peut porter la **minute de jeu** : c'est la
+ *  même place, le même rouge, et l'information que l'œil venait y chercher. */
+export function liveMark(tracked = false, clock = null) {
+  const word = clockWord(clock);
   return el("span", {
     class: "live-mark",
-    title: tracked
+    title: word
+      ? t("Minute relevée à la source, au dernier relevé — pas un chronomètre.")
+      : tracked
       ? t("Rencontre en cours, relevée toutes les minutes.")
       : t("Rencontre en cours. Le score n'est pas suivi en direct sur cette page."),
   }, [
-    el("span", { text: "live" }),
+    el("span", { text: word || "live" }),
     el("span", { class: "live-mark__dot", "aria-hidden": "true" }),
   ]);
 }

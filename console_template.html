@@ -2777,6 +2777,17 @@ async function pollLive() {
   renderLiveNote();
 }
 
+/* Une rencontre est-elle encore en cours ?
+
+   ⚠️ Le score final restait le seul juge, et il ne se remplit que sur les
+   rencontres que Forebet relève — une sur deux ici. Depuis le 17/08/2026
+   l'horloge tranche aussi, et elle tranche plus tôt et plus souvent. Les deux
+   sont combinés dans le sens qui ne se dédit pas : dès que l'un des deux dit
+   « c'est fini », ça l'est. */
+const FINI = ["termine", "reporte", "annule", "abandonne"];
+const stillLive = block =>
+  !block.full_time && !FINI.includes((block.clock || {}).status || "");
+
 /* Recopie les relevés reçus dans la charge utile en place. Renvoie vrai si
    quelque chose a bougé — inutile de repeindre la page toutes les quinze
    secondes pour rien. */
@@ -2787,9 +2798,16 @@ function applyLive(snap) {
   (DATA.matches || []).forEach(m => {
     const block = live[String(m.match_id)];
     if (!block) return;
-    if (JSON.stringify(m.match_stats) !== JSON.stringify(block)) changed = true;
-    m.match_stats = block;
-    m.live = !block.full_time;
+    // ⚠️ Un bloc sans `fields` n'est QU'une horloge : le serveur en publie une
+    // dès qu'il connaît la minute, même là où il n'a aucune statistique. Le
+    // recopier tel quel effacerait les chiffres de la dernière collecte
+    // complète — on n'en garde alors que la minute.
+    const next = block.fields
+      ? block
+      : { ...(m.match_stats || {}), clock: block.clock };
+    if (JSON.stringify(m.match_stats) !== JSON.stringify(next)) changed = true;
+    m.match_stats = next;
+    m.live = stillLive(block);
   });
 
   /* Le score de la liste des rencontres suit les buts relevés : c'est la
@@ -2801,8 +2819,11 @@ function applyLive(snap) {
     if (!block) return;
     const h = (block.home || {}).goals, a = (block.away || {}).goals;
     const wasLive = f.live;
-    f.live = !block.full_time;
+    f.live = stillLive(block);
     f.unstable = !!block.unstable;
+    // La minute, quand la source la donne : c'est elle qui dit à quel moment du
+    // match on lit ces chiffres, ce que l'heure du relevé ne dit pas.
+    f.clock = block.clock || null;
     if (h === null || h === undefined || a === null || a === undefined) return;
     const score = h + " - " + a;
     if (f.score !== score || wasLive !== f.live) { f.score = score; changed = true; }

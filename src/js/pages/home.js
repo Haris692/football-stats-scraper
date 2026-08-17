@@ -54,10 +54,15 @@ const centrePiece = (f, cls) => {
       el("span", { class: "sep", text: "–" }),
       el("span", { text: score[1] }),
     ]);
-    return running ? el("div", { class: "kick-stack" }, [liveMark(true), box]) : box;
+    return running
+      ? el("div", { class: "kick-stack" }, [liveMark(true, live.clock), box])
+      : box;
   }
   return el("div", { class: "kick-stack" }, [
-    isLive(f) ? liveMark() : null,
+    // Une rencontre peut avoir sa minute sans avoir de score relevé : Forebet
+    // ne couvre les statistiques que d'un match sur deux ici. Le marqueur
+    // porte alors la minute au-dessus de l'heure de coup d'envoi.
+    isLive(f) ? liveMark(!!live?.clock, live?.clock) : null,
     el("div", { class: cls.kick, text: (f.kickoff || "").split(" ")[1] || "—" }),
   ]);
 };
