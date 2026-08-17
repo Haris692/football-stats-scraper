@@ -72,6 +72,27 @@ def _kickoff(timestamp: int | None) -> tuple[str | None, str | None]:
     return moment.strftime("%d/%m/%Y %H:%M"), moment.strftime("%Y-%m-%dT%H:%M")
 
 
+# Une rencontre finie ne bouge plus, mais son relevé a pu être mis en cache
+# **pendant** qu'elle se jouait : depuis le 17/08/2026, `fetch_live_events.py`
+# demande les mêmes incidents toutes les quelques minutes en cours de match, et
+# ce qu'il écrit dans le cache est une chronologie inachevée. Le rafraîchissement
+# du soir la relisait telle quelle et publiait un 2-0 avec un seul but daté.
+# Une rencontre du jour est donc redemandée ; les anciennes gardent leur cache
+# de trente jours, qui est ce qui rend le quotidien bon marché.
+RECENT_HOURS = 36
+
+
+def _just_played(event: dict) -> bool:
+    iso = event.get("kickoff_iso")
+    if not iso:
+        return False
+    try:
+        kickoff = datetime.fromisoformat(iso)
+    except ValueError:
+        return False
+    return (datetime.now() - kickoff).total_seconds() < RECENT_HOURS * 3600
+
+
 def current_round(browser: CdpBrowser, sid: int, force: bool) -> int | None:
     data = browser.get_json(
         f"{BASE}/api/v1/unique-tournament/{TOURNAMENT}/season/{sid}/rounds",
@@ -181,7 +202,7 @@ def collect(force: bool = False, only_round: int | None = None,
         done = [e for e in events if e["finished"]]
         print(f"{len(events)} rencontre(s), dont {len(done)} jouée(s)")
         for event in done:
-            age = AGE_FINISHED
+            age = AGE_FINISHED if not _just_played(event) else AGE_OPEN
             event["timeline"] = timeline(browser, event["sofascore_id"],
                                          force=False, max_age_hours=age)
             event["managers"] = managers(browser, event["sofascore_id"],
