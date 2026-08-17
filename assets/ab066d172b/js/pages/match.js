@@ -67,12 +67,15 @@ function board(m, fx, live) {
   ]);
   const centre = running
     // En direct, le marqueur reste au-dessus du score : c'est lui qui dit que
-    // le chiffre du dessous va encore bouger.
-    ? el("div", { class: "kick-stack" }, [liveMark(true), board__score])
+    // le chiffre du dessous va encore bouger, et depuis le 17/08/2026 il dit
+    // aussi à quelle minute on en est.
+    ? el("div", { class: "kick-stack" }, [liveMark(true, live?.clock), board__score])
     : score.length === 2
       ? board__score
       : el("div", { class: "kick-stack" }, [
-          fx && isLive(fx) ? liveMark() : null,
+          // Sans statistiques relevées il n'y a pas de score, mais il peut y
+          // avoir une horloge : elle vient d'un autre point d'entrée.
+          fx && isLive(fx) ? liveMark(!!live?.clock, live?.clock) : null,
           el("div", { class: "board__score",
                       text: (m.kickoff || "").split(" ")[1] || "—" }),
         ]);
@@ -209,9 +212,14 @@ function bars(rows, { hint } = {}) {
 const group = label => el("div", { class: "h2h__group", text: label });
 
 function matchStats(m, live, stamp) {
+  // ⚠️ Un bloc de direct peut n'être QU'une horloge : depuis le 17/08/2026 le
+  // serveur en publie un dès qu'il connaît la minute, or Forebet ne relève de
+  // statistiques que sur un match sur deux. Sans ce tri, une rencontre non
+  // couverte affichait un tableau vide sous un badge « Direct » — pire que rien.
+  const recorded = live && live.fields ? live : null;
   // Le relevé du serveur l'emporte sur celui figé dans les données : il est
   // forcément plus récent, et sur une rencontre en cours c'est le seul.
-  const s = live || m.match_stats;
+  const s = recorded || m.match_stats;
   if (!s) return null;
 
   const rows = [];
@@ -238,22 +246,31 @@ function matchStats(m, live, stamp) {
   return el("section", { class: "card" }, [
     el("div", { class: "card__head" }, [
       el("h2", { text: t("Statistiques du match") }),
-      live ? badge(stamp ? `${t("Direct")} · ${stamp}` : t("Direct"), "live") : null,
-      live && live.unstable ? badge(t("score incertain"), "flood") : null,
+      recorded ? badge(stamp ? `${t("Direct")} · ${stamp}` : t("Direct"), "live") : null,
+      recorded && recorded.unstable ? badge(t("score incertain"), "flood") : null,
       s.half_time ? badge(`${t("Mi-temps")} ${s.half_time}`) : null,
     ]),
     poss,
     el("div", { style: { marginTop: "var(--s-5)" } }, [bars(rows)]),
-    live
-      // Deux choses à dire, et la seconde est la plus importante : ce relevé
-      // n'a PAS de minute de jeu. La source n'en publie pas, et laisser croire
-      // qu'un « direct » sait où en est le match serait le tromper.
+    // ⚠️ La note suit le dessin, donc elle a trois versions. Dire « la source
+    // ne donne pas la minute » au-dessus d'un marqueur qui affiche 37' ferait
+    // mentir la page sur son propre contenu.
+    recorded && live?.clock
+      ? methodNote(t("Relevé pendant la rencontre, une fois par minute, par le " +
+          "serveur qui sert cette page — jamais par le navigateur. La minute " +
+          "affichée en haut vient d'un second point d'entrée de la même source, " +
+          "et date du dernier relevé : elle ne défile pas toute seule. Il arrive " +
+          "que la source réattribue un but d'un camp à l'autre en début de " +
+          "rencontre, et le relevé est alors marqué incertain."))
+      : recorded
+      // Sans horloge, l'ancienne réserve reste vraie mot pour mot : la source
+      // ne suit pas toutes ses rencontres, et celle-ci n'en est pas.
       ? methodNote(t("Relevé pendant la rencontre, une fois par minute, par le " +
           "serveur qui sert cette page — jamais par le navigateur. La source ne " +
-          "donne ni la minute de jeu ni le statut : ces chiffres disent où en " +
-          "est le match, pas depuis combien de temps. Il arrive aussi qu'elle " +
-          "réattribue un but d'un camp à l'autre en début de rencontre, et le " +
-          "relevé est alors marqué incertain."))
+          "donne pas la minute de jeu sur cette rencontre : ces chiffres disent " +
+          "où en est le match, pas depuis combien de temps. Il arrive aussi " +
+          "qu'elle réattribue un but d'un camp à l'autre en début de rencontre, " +
+          "et le relevé est alors marqué incertain."))
       : methodNote(t("Relevé de cette rencontre, pas de la saison. Source : Forebet " +
           "— la seule à publier possession et tirs sur cette division. Les " +
           "rubriques absentes ne sont pas à zéro : elles ne sont pas couvertes.")),

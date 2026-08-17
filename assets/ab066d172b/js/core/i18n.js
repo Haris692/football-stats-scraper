@@ -22,6 +22,11 @@ const EN = {
     "Match in progress. The score is not tracked live on this page.",
   "Rencontre en cours, relevée toutes les minutes.":
     "Match in progress, recorded every minute.",
+  "Minute relevée à la source, au dernier relevé — pas un chronomètre.":
+    "Minute as reported by the source at the last reading — not a running clock.",
+  // L'horloge du direct. Abrégés des deux côtés : ils tiennent dans le
+  // marqueur, à côté du point rouge.
+  "MT": "HT", "t.a.b.": "pens", "susp.": "susp.", "retardé": "delayed",
   "score incertain": "score uncertain",
   "Composition": "Line-up", "Titulaires": "Starting XI",
   "Remplaçants": "Substitutes", "Capitaine": "Captain", "Gardien": "Goalkeeper",
@@ -129,8 +134,10 @@ const EN = {
     "No individual statistics exist for this division: no ratings, no minutes played, no goalkeeper saves. A standout player therefore cannot be computed. “From the goals” marks a brace, the only case where the figures decide on their own; “watched” means someone saw the match. A judgement is never presented as a measurement.",
   "Relevé de cette rencontre, pas de la saison. Source : Forebet — la seule à publier possession et tirs sur cette division. Les rubriques absentes ne sont pas à zéro : elles ne sont pas couvertes.":
     "Recorded for this match, not the season. Source: Forebet, the only one publishing possession and shots for this division. Missing rows are not zero: they are simply not covered.",
-  "Relevé pendant la rencontre, une fois par minute, par le serveur qui sert cette page — jamais par le navigateur. La source ne donne ni la minute de jeu ni le statut : ces chiffres disent où en est le match, pas depuis combien de temps. Il arrive aussi qu'elle réattribue un but d'un camp à l'autre en début de rencontre, et le relevé est alors marqué incertain.":
-    "Recorded during the match, once a minute, by the server hosting this page — never by the browser. The source gives neither the clock nor the match status: these figures say where the match stands, not how long it has been going. It also sometimes moves a goal from one side to the other early on, and the reading is then flagged as uncertain.",
+  "Relevé pendant la rencontre, une fois par minute, par le serveur qui sert cette page — jamais par le navigateur. La minute affichée en haut vient d'un second point d'entrée de la même source, et date du dernier relevé : elle ne défile pas toute seule. Il arrive que la source réattribue un but d'un camp à l'autre en début de rencontre, et le relevé est alors marqué incertain.":
+    "Recorded during the match, once a minute, by the server hosting this page — never by the browser. The clock shown above comes from a second endpoint of the same source and dates from the last reading: it does not tick on its own. The source sometimes moves a goal from one side to the other early on, and the reading is then flagged as uncertain.",
+  "Relevé pendant la rencontre, une fois par minute, par le serveur qui sert cette page — jamais par le navigateur. La source ne donne pas la minute de jeu sur cette rencontre : ces chiffres disent où en est le match, pas depuis combien de temps. Il arrive aussi qu'elle réattribue un but d'un camp à l'autre en début de rencontre, et le relevé est alors marqué incertain.":
+    "Recorded during the match, once a minute, by the server hosting this page — never by the browser. The source does not give the clock for this match: these figures say where the match stands, not how long it has been going. It also sometimes moves a goal from one side to the other early on, and the reading is then flagged as uncertain.",
   "Chiffres de la saison entière, pas de cette rencontre. Chaque ligne est mise à l'échelle indépendamment : la longueur compare les deux équipes entre elles, pas une ligne à l'autre.":
     "Whole-season figures, not this match. Each row is scaled on its own: bar length compares the two teams with each other, never one row against another.",
   "Effectifs de la saison, pas les compositions du jour : aucune source ne publie de feuille de match pour ce championnat.":
