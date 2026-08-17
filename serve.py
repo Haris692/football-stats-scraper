@@ -72,6 +72,7 @@ from browser import CdpBrowser
 from build_console import assemble, build, data_file_for, make_payload
 from fetch_clock import fetch as fetch_clock
 from fetch_clock_sofa import fetch as fetch_clock_sofa
+from fetch_live_events import fetch as fetch_live_events
 from fetch_stats import fetch as fetch_stats
 
 ROOT = Path(__file__).resolve().parent
@@ -93,6 +94,10 @@ LIVE_INTERVAL = 60.0
 # l'onglet doit suffire à ne plus solliciter Forebet — sinon un `serve.py`
 # oublié le sonderait toute la soirée.
 LIVE_IDLE_STOP = 180.0
+# Entre deux relevés des faits de jeu d'une même rencontre, quand son score n'a
+# pas bougé. Un changement de score, lui, les redemande tout de suite : c'est
+# la seule chose qu'on ne veut pas faire attendre.
+LIVE_EVENTS_INTERVAL = 300.0
 
 
 def live_data_file() -> Path:
@@ -145,6 +150,11 @@ class LiveCollector(threading.Thread):
         # se jouera pas ce soir). Sans la seconde, une rencontre reportée était
         # sondée pendant les 150 minutes de `LIVE_AFTER`, pour rien.
         self._closed: set[int] = set()
+        # Le fil de chaque rencontre, et de quand il date : il ne se redemande
+        # qu'au changement de score, voir `_events()`.
+        self._lines: dict[int, list] = {}
+        self._lines_at: dict[int, float] = {}
+        self._scores: dict[int, tuple | None] = {}
         self._snapshot = {"state": "démarrage", "live": {}, "collected": None,
                           "watching": []}
 
@@ -250,12 +260,30 @@ class LiveCollector(threading.Thread):
             # `force` : un relevé en direct qu'on servirait depuis le cache
             # n'aurait aucun intérêt.
             stats = fetch_stats(ids, browser=browser, force=True)
+            events = self._events(ids, stats, clocks, browser)
         except Exception as exc:
             print(f"  direct : relevé impossible ({exc})", file=sys.stderr, flush=True)
             self._publish(state=f"indisponible : {exc}", watching=ids)
             return self._drop(browser)
         finally:
             Handler.lock.release()
+
+        # ⚠️ Ni horloge ni statistiques sur AUCUNE des rencontres suivies : ce
+        # n'est pas un trou de
+        # couverture, c'est notre Chrome. Chacune avale sa propre panne — à
+        # dessein, pour qu'une source muette n'emporte pas les autres — donc
+        # personne ne vient dire au collecteur que son navigateur est mort. Il
+        # resservait alors le même cadavre à chaque tour, indéfiniment (constaté
+        # le 17/08/2026 : « Target page, context or browser has been closed »,
+        # à toutes les lignes, sans fin). On le repose : le tour suivant en
+        # ouvrira un neuf.
+        # (`events` ne compte pas ici : il sert un cache, et une ligne gardée
+        # d'un tour précédent ferait passer un navigateur mort pour vivant.)
+        if ids and not clocks and not stats:
+            print("  direct : aucune source n'a répondu — on repose Chrome",
+                  file=sys.stderr, flush=True)
+            self._publish(state="indisponible : aucune source", watching=ids)
+            return self._drop(browser)
 
         live = {str(mid): block for mid, block in stats.items()}
         # Une rencontre peut avoir une horloge sans avoir de statistiques :
@@ -271,6 +299,15 @@ class LiveCollector(threading.Thread):
         for mid, block in stats.items():
             if block.get("full_time"):
                 self._closed.add(int(mid))
+        # Les faits de jeu remplacent ceux de Forebet, qui porte le champ mais
+        # le laisse presque toujours vide et ne nomme jamais le buteur (vérifié
+        # le 17/08 : un seul but sur cinq marqués, sans nom). `timeline_source`
+        # dit d'où ils viennent — un bloc ne doit pas mêler deux sources sans
+        # le déclarer.
+        for mid, line in events.items():
+            block = live.setdefault(str(mid), {"source": "forebet/gsv"})
+            block["timeline"] = line
+            block["timeline_source"] = "sofascore"
         self._publish(
             state="ok",
             live=self._flag_flips(live),
@@ -278,6 +315,59 @@ class LiveCollector(threading.Thread):
             collected=datetime.now().isoformat(timespec="seconds"),
         )
         return browser
+
+    @staticmethod
+    def _score_of(mid: int, goals: dict, clocks: dict):
+        """Le score courant d'une rencontre, d'où qu'il vienne.
+
+        Les statistiques d'abord — c'est le score que la page affiche ; à
+        défaut celui de l'horloge, qui existe même sans relevé.
+        """
+        if mid in goals:
+            return goals[mid]
+        score = (clocks.get(mid) or {}).get("score")
+        return tuple(score) if score else None
+
+    def _events(self, ids: list[int], stats: dict, clocks: dict, browser) -> dict:
+        """Les faits de jeu, rafraîchis avec parcimonie.
+
+        ⚠️ Une requête **par rencontre**, là où l'horloge en coûte une pour
+        toute la journée. On ne les redemande donc qu'au **changement de
+        score**, ou toutes les `LIVE_EVENTS_INTERVAL` secondes pour rattraper
+        un carton — un but est rare, et le fil du match ne bouge guère sans
+        lui. Quatre rencontres coûtent ainsi environ une requête par minute au
+        lieu de quatre.
+        """
+        goals = {}
+        for raw, block in (stats or {}).items():
+            home = (block.get("home") or {}).get("goals")
+            away = (block.get("away") or {}).get("goals")
+            if home is not None and away is not None:
+                goals[int(raw)] = (home, away)
+
+        now = time.time()
+        due = []
+        for mid in ids:
+            score = self._score_of(mid, goals, clocks)
+            if (mid not in self._lines or score != self._scores.get(mid)
+                    or now - self._lines_at.get(mid, 0.0) >= LIVE_EVENTS_INTERVAL):
+                due.append(mid)
+            self._scores[mid] = score
+
+        if due:
+            try:
+                fresh = fetch_live_events(self.watched(due), browser=browser)
+            except Exception as exc:
+                # Le fil du match est un complément : le score et la minute se
+                # passent de lui, et une panne ici ne doit pas les emporter.
+                print(f"  faits de jeu : indisponibles ({exc})",
+                      file=sys.stderr, flush=True)
+                fresh = {}
+            for mid, line in fresh.items():
+                self._lines[mid] = line
+                self._lines_at[mid] = now
+
+        return {mid: self._lines[mid] for mid in ids if mid in self._lines}
 
     def _flag_flips(self, live: dict) -> dict:
         """Marque les relevés dont le score a reculé d'un relevé à l'autre.

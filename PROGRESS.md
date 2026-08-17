@@ -2307,6 +2307,98 @@ de la sonde ferme le Chrome du collecteur (« Chrome est parti »). Attendre les
 | la minute qui avance en vrai | `/api/live` suivi sur plusieurs cycles, 27' → 29' → 31' |
 | la façade publique | `test_public.py`, 47 cas, 0 erreur |
 
+## Le soir de la J20 : trois pannes derrière un même symptôme (17/08/2026)
+
+« Je ne vois ni les minutes ni les faits de jeu. » Trois causes distinctes, dont
+deux qui ne se voyaient pas depuis le serveur — il servait la bonne donnée
+pendant que la page n'en montrait aucune.
+
+### 1. Le tunnel change d'adresse, et l'onglet ouvert meurt pour de bon
+
+`serve_247.ps1` relance le tunnel à chaque relance du serveur, et l'adresse
+change. Un onglet ouvert avant continue d'afficher sa page — le HTML est déjà
+chargé — mais ses demandes de direct échouent. Or `live.js` s'arrêtait
+**définitivement** après trois ratés. Résultat : marqueur « live » muet,
+l'heure du coup d'envoi à la place de la minute, et rien pour dire pourquoi.
+C'est exactement le symptôme décrit.
+
+Le 404 reste définitif — lui seul veut dire « pas de serveur derrière cette
+page », le mode normal du site publié. Un raté réseau, lui, fait passer au
+rythme lent (60 s) et la page **revient toute seule** quand le serveur revient.
+Éprouvé en vrai : `fetch` remplacé par un `fetch` qui échoue, trois ratés
+constatés, puis rétabli — la page est repartie sans rechargement.
+
+⚠️ Corollaire de méthode : **le collecteur qui s'arrête tout seul est un
+signal**. `LIVE_IDLE_STOP` ne le coupe que si plus personne ne demande. Le voir
+s'arrêter alors qu'on croit avoir la page ouverte, c'est que la page ne parle
+pas à ce serveur-là.
+
+### 2. Chrome resservait ses propres réponses, vieilles de dix minutes
+
+Le plus vicieux. `force=True` ne contourne que **notre** cache disque ; le
+navigateur a le sien, et `fetch()` s'en sert. Tant qu'une URL n'était demandée
+qu'une fois par collecte, personne ne pouvait s'en apercevoir. En direct, la
+même URL revient toutes les minutes — et Chrome rendait sa copie.
+
+Ce que ça donnait, à 20 h 30, sur des rencontres jouant leur 65e minute :
+l'horloge Sofascore annonçait « Halftime », et un match mené 0-4 n'avait qu'un
+seul but dans son fil. Aucune erreur, aucune trace : de la donnée cohérente,
+simplement périmée. `cache: "no-store"` dans le `fetch()` de `get_json`.
+
+### 3. Le collecteur ne voyait pas mourir son propre Chrome
+
+Chaque source avale sa panne — à dessein, pour qu'une source muette n'emporte
+pas les autres. Conséquence non voulue : quand c'est le **navigateur** qui
+meurt (processus tué, profil fermé), les trois se taisent en même temps et
+personne ne le dit au collecteur. Il resservait le même cadavre à chaque tour,
+indéfiniment : « Target page, context or browser has been closed », à toutes
+les lignes, sans fin.
+
+Ni horloge ni statistiques sur aucune des rencontres suivies : ce n'est pas un
+trou de couverture, c'est notre Chrome. Le collecteur le repose, et le tour
+suivant en ouvre un neuf. Le fil du match ne compte pas dans ce verdict — il
+vient d'un cache, et une ligne gardée d'un tour précédent ferait passer un
+navigateur mort pour vivant.
+
+### Les faits de jeu, enfin : `fetch_live_events.py`
+
+La chronologie affichée venait de `data/events.json`, collecté le matin : un but
+marqué le soir n'y était que le lendemain. Et le `timeline` du relevé Forebet
+était vide sur trois rencontres sur quatre, sans jamais nommer de buteur.
+
+On demande donc à Sofascore les mêmes incidents que chaque matin
+(`fetch_events.timeline`, même fonction, même format), mais **pendant** le
+match.
+
+- ⚠️ **Une requête par rencontre** — il n'y a pas de point d'entrée par
+  journée pour les incidents. D'où une règle de rafraîchissement : au
+  **changement de score**, tout de suite ; sinon toutes les cinq minutes, pour
+  rattraper un carton. Quatre rencontres coûtent ainsi environ une requête par
+  minute au lieu de quatre.
+- L'identifiant Sofascore et l'orientation sont lus dans `data/events.json` :
+  le rapprochement ne coûte aucune requête.
+- ⚠️ **Les camps sont permutés quand il le faut**, avec les scores
+  intermédiaires : Sofascore inverse l'hôte sur 61 des 70 rencontres.
+- Côté page, la chronologie devient un emplacement que le direct redessine —
+  elle était calculée une fois au chargement. La ligne des buteurs de la une
+  préfère elle aussi le fil du relevé à celui des données.
+
+### Éprouvé, pendant le match
+
+| Ce qui est éprouvé | Comment |
+|---|---|
+| le direct qui survit à une coupure | `fetch` cassé puis rétabli dans la page : trois ratés, puis reprise seule |
+| la fraîcheur après `no-store` | 0-4 à la 64e avec ses quatre buts (41', 46', 51', 56'), contre un seul avant |
+| le fil publié et daté | `/api/live` : buts, cartons, minute, buteur quand la source le nomme |
+| le rafraîchissement économe | `test_clock.py` : demandé une fois, puis seulement au but qui tombe |
+| le navigateur mort repris | `test_clock.py` : les trois sources muettes reposent le Chrome |
+| le rendu de la page match | Sporty - Khaitan à la 64e : marqueur, score 0–4, quatre pastilles, scores intermédiaires |
+
+⚠️ **Sofascore ne nomme pas tous les buteurs de cette division.** Sur les six
+buts de la soirée, aucun nom : la page retombe alors sur le nom du club, ce
+qu'elle faisait déjà pour les rencontres passées. Un but sans buteur nommé
+reste affiché — le passer sous silence ferait mentir le décompte.
+
 ## Reste à faire
 
 Les trois points de la session du 06/08 sont soldés : `build_json.py`,

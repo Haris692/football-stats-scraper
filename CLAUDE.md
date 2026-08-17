@@ -62,6 +62,7 @@ python serve.py --public-port 8801           # + une façade exposable (voir plu
 python fetch_players.py --club yarmouk       # fiches d'un club (hors daily.py)
 python fetch_clock.py --league               # la minute des matchs en cours
 python fetch_clock_sofa.py                   # la même, chez Sofascore (repli)
+python fetch_live_events.py                  # buts et cartons d'un match en cours
 python test_public.py                        # ce que la façade publique refuse
 python test_clock.py                         # l'horloge, et sa fusion au direct
 python test_clock_sofa.py                    # la minute calculée du repli
@@ -243,6 +244,16 @@ test. Le détail est dans `PROGRESS.md` ; ici, ce qui ne se devine pas :
   revenir à un journal unique qu'on vide avant de lancer : un `cloudflared`
   encore vivant le verrouille, et sous `ErrorActionPreference = "Stop"` cette
   ligne tue le superviseur.
+- ⚠️ **`force=True` ne contourne QUE notre cache disque.** Chrome garde le
+  sien, et `fetch()` s'en sert : en direct, la même URL revenant chaque minute,
+  il resservait des relevés vieux de dix minutes — de la donnée cohérente, mais
+  périmée, sans la moindre erreur (17/08 : « Halftime » sur des matchs à la 65e,
+  un 0-4 avec un seul but). `get_json` passe donc `cache: "no-store"`. Ne pas
+  le retirer en croyant économiser une requête.
+- ⚠️ **Un collecteur qui s'arrête tout seul est un signal, pas une panne.**
+  `LIVE_IDLE_STOP` ne le coupe que si plus personne ne demande `/api/live`.
+  S'il s'arrête alors qu'une page est censée être ouverte, c'est que cette page
+  ne parle pas à ce serveur — adresse de tunnel périmée, le plus souvent.
 - ⚠️ **Ne rien sonder pendant que le collecteur tourne** (constaté le 17/08 au
   soir). Une sonde et lui s'attachent au même Chrome sur le port CDP 9333 et se
   partagent l'onglet : chacun navigue sous les pieds de l'autre, dont le

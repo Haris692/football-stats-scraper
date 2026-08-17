@@ -96,8 +96,11 @@ function board(m, fx, live) {
 
 /* ------------------------------------------------------- le fil du match */
 
-function timeline(m) {
-  const line = m.timeline || [];
+/* `live` : le fil du relevé en cours. Il l'emporte sur celui des données,
+   collecté le matin — un but marqué ce soir n'y serait que demain. Même forme
+   des deux côtés, c'est la même source (Sofascore) demandée à deux moments. */
+function timeline(m, live = null) {
+  const line = (live?.timeline?.length ? live.timeline : m.timeline) || [];
   if (!line.length) return null;
   const end = Math.max(96, ...line.map(minuteOf));
 
@@ -561,6 +564,9 @@ boot(async host => {
   document.title = `${nameOf(m.home_key)} – ${nameOf(m.away_key)} · ${t("Division 1 koweïtienne")}`;
 
   const line = timeline(m);
+  // La chronologie est un emplacement à part : pendant une rencontre, elle se
+  // remplit but après but, et elle est vide au coup d'envoi.
+  const lineSlot = el("div", {}, [line].filter(Boolean));
   const nothing = () => el("div", { class: "empty" }, [
     el("h3", { text: t("Pas encore joué") }),
     el("p", { text: `${t("Journée")} ${m.round || "—"} · ${m.kickoff}` }),
@@ -578,7 +584,7 @@ boot(async host => {
     boardSlot,
     el("div", { class: "page section" },
       tabs({
-        match: [line, statsSlot, motm(m)],
+        match: [lineSlot, statsSlot, motm(m)],
         // La composition passe devant les effectifs de saison : quand elle
         // existe, c'est elle qu'on vient chercher.
         equipes: [lineups(m), compare(m), h2h(m), squads(m)],
@@ -593,5 +599,8 @@ boot(async host => {
     if (!live) return;
     boardSlot.replaceChildren(board(m, fx, live));
     statsSlot.replaceChildren(matchStats(m, live, liveStamp()));
+    // `filter` : un but peut arriver alors que la chronologie était vide, et
+    // `timeline()` rend `null` tant qu'il n'y a rien à dessiner.
+    lineSlot.replaceChildren(...[timeline(m, live)].filter(Boolean));
   }, { fixtures: fx ? [fx] : [] });
 }, { rows: 3 });

@@ -29,7 +29,11 @@ function heroSide(key) {
  *  « 2-2 » et une rencontre dont on a envie de lire le détail. */
 function scorerLine(f, cls) {
   const detail = f.match_id ? matchOf(f.match_id) : null;
-  const goals = (detail?.timeline || []).filter(e => e.type === "goal");
+  // Pendant la rencontre, le fil du relevé l'emporte : celui des données date
+  // de la collecte du matin, donc d'avant le coup d'envoi.
+  const live = liveBlock(f.match_id);
+  const line = live?.timeline?.length ? live.timeline : (detail?.timeline || []);
+  const goals = line.filter(e => e.type === "goal");
   if (!goals.length) return null;
   return el("div", { class: cls }, goals.map(g => el("span", {}, [
     el("b", { text: g.player || nameOf(g.side === "home" ? f.home_key : f.away_key) }),

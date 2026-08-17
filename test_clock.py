@@ -163,6 +163,20 @@ def repli(fixtures, browser=None):
 serve.fetch_stats = lambda ids, browser=None, force=False: copy.deepcopy(STATS)
 serve.fetch_clock = lambda browser=None: dict(CLOCKS)
 serve.fetch_clock_sofa = repli
+
+# Les faits de jeu : une requête par rencontre, donc un compteur des demandes.
+LIGNES = {2487402: [{"type": "goal", "class": "regular", "minute": 12,
+                     "added": None, "player": "Un tel", "side": "home",
+                     "score": "1-0"}]}
+demandes_faits = []
+
+
+def faits(fixtures, browser=None):
+    demandes_faits.append(sorted(f["match_id"] for f in fixtures))
+    return {f["match_id"]: LIGNES.get(f["match_id"], []) for f in fixtures}
+
+
+serve.fetch_live_events = faits
 serve.CdpBrowser = lambda **k: "faux-chrome"
 
 collecteur = serve.LiveCollector(fichier)
@@ -183,6 +197,12 @@ verifie("suivie sans relevé : un bloc quand même",
         live["2487404"]["clock"]["minute"], 12)
 verifie("et ce bloc n'a AUCUNE statistique — sans quoi la page dessinerait "
         "un tableau vide", live["2487404"].get("fields"), None)
+verifie("le fil du match est publié, et dit d'où il vient",
+        (live["2487402"]["timeline"], live["2487402"]["timeline_source"]),
+        (LIGNES[2487402], "sofascore"))
+verifie("il est demandé pour toutes les rencontres suivies, la première fois",
+        demandes_faits, [[2487402, 2487403, 2487404, 2487405]])
+
 verifie("la rencontre reportée sort du suivi",
         collecteur.live_ids(), [2487402, 2487403, 2487404])
 
@@ -195,10 +215,40 @@ verifie("la rencontre finie sort du suivi",
 # Ni l'une ni l'autre source ne la connaît : le bloc existe (il a des
 # statistiques) mais il n'a pas d'horloge. Une minute inventée serait pire que
 # pas de minute du tout.
+verifie("à score inchangé, le fil n'est pas redemandé — une requête PAR "
+        "rencontre, on ne la paie pas toutes les minutes",
+        len(demandes_faits), 1)
+
+# Un but tombe : celui-là, et lui seul, mérite qu'on redemande son fil.
+STATS[2487403]["home"]["goals"] = 1
+LIGNES[2487403] = [{"type": "goal", "class": "regular", "minute": 61,
+                    "added": None, "player": "Un autre", "side": "home",
+                    "score": "1-0"}]
+collecteur._cycle(collecteur.live_ids(), None)
+verifie("un but redemande le fil de cette rencontre-là", demandes_faits[-1],
+        [2487403])
+verifie("et le but arrive dans le relevé",
+        collecteur.snapshot()["live"]["2487403"]["timeline"], LIGNES[2487403])
+
 SOFA.clear()
 collecteur._cycle(collecteur.live_ids(), None)
 verifie("sans horloge nulle part, aucune n'est fabriquée",
         "clock" in collecteur.snapshot()["live"]["2487403"], False)
+
+print("— quand plus rien ne répond —")
+# Chrome mort sous le collecteur : les trois sources se taisent, chacune ayant
+# avalé sa panne. Le collecteur doit le comprendre tout seul et reposer son
+# navigateur, sinon il resservira le même cadavre jusqu'à la fin des temps.
+serve.fetch_stats = lambda ids, browser=None, force=False: {}
+serve.fetch_clock = lambda browser=None: {}
+serve.fetch_live_events = lambda fixtures, browser=None: {}
+repose = []
+collecteur._drop = lambda b: (repose.append(b), None)[1]
+verifie("le navigateur est reposé", collecteur._cycle(collecteur.live_ids(),
+                                                      "chrome-mort"), None)
+verifie("et c'est bien celui-là", repose, ["chrome-mort"])
+verifie("le relevé le dit plutôt que de se taire",
+        collecteur.snapshot()["state"], "indisponible : aucune source")
 
 print(f"\n{erreurs} erreur(s)")
 sys.exit(1 if erreurs else 0)

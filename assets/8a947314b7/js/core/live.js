@@ -30,13 +30,25 @@ const ENDPOINT = "api/live";
    au-delà il s'arrête, à raison : plus personne ne regarde). */
 const POLL = 15000;
 
+/* Le rythme de repli, quand les demandes échouent. On ralentit, on n'abandonne
+   pas : un onglet resté ouvert doit pouvoir revivre tout seul. */
+const POLL_SLOW = 60000;
+
 /* Un 404 est définitif, un `Failed to fetch` ne l'est pas : le serveur peut
    redémarrer sous la page. On tolère donc quelques ratés d'affilée. */
 const TOLERANCE = 3;
 
+/* ⚠️ Un raté réseau ne tue plus le direct. Il l'a tué une fois, le 17/08/2026 :
+   l'adresse du tunnel change à chaque relance du serveur, un onglet ouvert
+   avant la relance a vu ses demandes échouer trois fois, et le direct s'est
+   arrêté POUR DE BON. La page continuait d'afficher son marqueur « live » et
+   l'heure de coup d'envoi — aucune minute, aucun score, et rien pour dire
+   pourquoi. Seul le 404 reste définitif : lui seul signifie « il n'y a pas de
+   serveur derrière cette page », et c'est le mode normal du site publié. */
+
 let snapshot = null;
 const listeners = new Set();
-let timer = null, misses = 0, dead = false;
+let timer = null, misses = 0, dead = false, running = false;
 
 /** Le dernier relevé connu pour une rencontre, ou `null`. */
 export function liveBlock(matchId) {
@@ -49,8 +61,15 @@ export function liveStamp() {
   return iso ? iso.split("T")[1].slice(0, 5) : null;
 }
 
+/* Le prochain rendez-vous. Un `setTimeout` qui se replante plutôt qu'un
+   `setInterval` : le rythme dépend de ce que la demande précédente a donné. */
+function schedule() {
+  clearTimeout(timer);
+  timer = setTimeout(tick, misses >= TOLERANCE ? POLL_SLOW : POLL);
+}
+
 async function tick() {
-  if (dead) return;
+  if (dead || !running) return;
   try {
     const res = await fetch(ENDPOINT, { cache: "no-store" });
     // 404 : il n'y a pas de serveur derrière cette page. Ce n'est pas une
@@ -72,19 +91,24 @@ async function tick() {
       try { cb(next); } catch (err) { console.error("direct :", err); }
     });
   } catch (e) {
-    if (++misses >= TOLERANCE) stop(true);
+    misses++;
   }
+  if (running && !dead) schedule();
 }
 
 function stop(permanent = false) {
-  clearInterval(timer);
+  clearTimeout(timer);
   timer = null;
+  running = false;
   if (permanent) dead = true;
 }
 
 function start() {
-  if (dead || timer) return;
-  timer = setInterval(tick, POLL);
+  if (dead || running) return;
+  running = true;
+  // Revenir sur l'onglet vaut nouvelle chance : on repart au rythme normal,
+  // sans traîner les ratés d'une coupure passée.
+  misses = 0;
   tick();
 }
 
