@@ -1,5 +1,5 @@
 {
-  "generated": "2026-08-20T08:00:16",
+  "generated": "2026-08-21T08:02:17",
   "source": "sofascore",
   "season": 75693,
   "season_year": "25/26",
@@ -5628,9 +5628,96 @@
       "away": "Al Jazeera FC Kuwait",
       "home_key": "sulaibikhat",
       "away_key": "jazira",
-      "home_score": null,
-      "away_score": null,
-      "finished": false
+      "home_score": 1,
+      "away_score": 0,
+      "finished": true,
+      "timeline": [
+        {
+          "type": "goal",
+          "class": "regular",
+          "minute": 45,
+          "added": null,
+          "player": "Daniel Silva Santos",
+          "side": "home",
+          "score": "1-0"
+        },
+        {
+          "type": "card",
+          "class": "yellow",
+          "minute": 60,
+          "added": null,
+          "player": null,
+          "side": "away",
+          "score": null
+        },
+        {
+          "type": "card",
+          "class": "yellow",
+          "minute": 75,
+          "added": null,
+          "player": "Bruno Domingues",
+          "side": "home",
+          "score": null
+        },
+        {
+          "type": "card",
+          "class": "yellow",
+          "minute": 86,
+          "added": null,
+          "player": null,
+          "side": "home",
+          "score": null
+        },
+        {
+          "type": "card",
+          "class": "yellow",
+          "minute": 88,
+          "added": null,
+          "player": null,
+          "side": "home",
+          "score": null
+        },
+        {
+          "type": "card",
+          "class": "yellow",
+          "minute": 90,
+          "added": 11,
+          "player": null,
+          "side": "home",
+          "score": null
+        },
+        {
+          "type": "card",
+          "class": "red",
+          "minute": 90,
+          "added": 12,
+          "player": "Hadi Al-Ajmi",
+          "side": "away",
+          "score": null
+        },
+        {
+          "type": "card",
+          "class": "red",
+          "minute": 90,
+          "added": 13,
+          "player": "Saleh Khamees Al Enezi",
+          "side": "home",
+          "score": null
+        },
+        {
+          "type": "card",
+          "class": "yellow",
+          "minute": 90,
+          "added": 14,
+          "player": null,
+          "side": "away",
+          "score": null
+        }
+      ],
+      "managers": {
+        "home": "António Miranda",
+        "away": "Ibrahim Obaid"
+      }
     },
     {
       "sofascore_id": 16271576,
@@ -5641,9 +5728,69 @@
       "away": "Sporty FC",
       "home_key": "burgan",
       "away_key": "sporty",
-      "home_score": null,
-      "away_score": null,
-      "finished": false
+      "home_score": 4,
+      "away_score": 2,
+      "finished": true,
+      "timeline": [
+        {
+          "type": "goal",
+          "class": "regular",
+          "minute": 9,
+          "added": null,
+          "player": null,
+          "side": "away",
+          "score": "0-1"
+        },
+        {
+          "type": "goal",
+          "class": "regular",
+          "minute": 20,
+          "added": null,
+          "player": null,
+          "side": "home",
+          "score": "1-1"
+        },
+        {
+          "type": "goal",
+          "class": "regular",
+          "minute": 28,
+          "added": null,
+          "player": null,
+          "side": "home",
+          "score": "2-1"
+        },
+        {
+          "type": "goal",
+          "class": "regular",
+          "minute": 34,
+          "added": null,
+          "player": null,
+          "side": "away",
+          "score": "2-2"
+        },
+        {
+          "type": "goal",
+          "class": "regular",
+          "minute": 43,
+          "added": null,
+          "player": null,
+          "side": "home",
+          "score": "3-2"
+        },
+        {
+          "type": "goal",
+          "class": "regular",
+          "minute": 90,
+          "added": 2,
+          "player": null,
+          "side": "home",
+          "score": "4-2"
+        }
+      ],
+      "managers": {
+        "home": null,
+        "away": "Ibrahim Shehab"
+      }
     },
     {
       "sofascore_id": 16271575,
@@ -5654,9 +5801,24 @@
       "away": "Al-Shamiya FC",
       "home_key": "khaitan",
       "away_key": "shamiya",
-      "home_score": null,
-      "away_score": null,
-      "finished": false
+      "home_score": 1,
+      "away_score": 0,
+      "finished": true,
+      "timeline": [
+        {
+          "type": "goal",
+          "class": "regular",
+          "minute": 31,
+          "added": null,
+          "player": null,
+          "side": "home",
+          "score": "1-0"
+        }
+      ],
+      "managers": {
+        "home": "Cenk Ozcan",
+        "away": "Falah Anwar Al Sahli"
+      }
     },
     {
       "sofascore_id": 16271577,
@@ -5667,9 +5829,60 @@
       "away": "Al Sahel SC",
       "home_key": "yarmouk",
       "away_key": "sahel",
-      "home_score": null,
-      "away_score": null,
-      "finished": false
+      "home_score": 3,
+      "away_score": 2,
+      "finished": true,
+      "timeline": [
+        {
+          "type": "goal",
+          "class": "regular",
+          "minute": 7,
+          "added": null,
+          "player": null,
+          "side": "home",
+          "score": "1-0"
+        },
+        {
+          "type": "goal",
+          "class": "regular",
+          "minute": 22,
+          "added": null,
+          "player": "Cleiton Padilha",
+          "side": "away",
+          "score": "1-1"
+        },
+        {
+          "type": "goal",
+          "class": "regular",
+          "minute": 72,
+          "added": null,
+          "player": "Allan Paulista",
+          "side": "away",
+          "score": "1-2"
+        },
+        {
+          "type": "goal",
+          "class": "regular",
+          "minute": 82,
+          "added": null,
+          "player": null,
+          "side": "home",
+          "score": "2-2"
+        },
+        {
+          "type": "goal",
+          "class": "regular",
+          "minute": 87,
+          "added": null,
+          "player": "Ahmed Alaa Rasheed",
+          "side": "home",
+          "score": "3-2"
+        }
+      ],
+      "managers": {
+        "home": "João Mota",
+        "away": "Yousef Mudhaf"
+      }
     }
   ]
 }

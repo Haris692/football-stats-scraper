@@ -1,5 +1,5 @@
 {
-  "generated": "2026-08-20T08:00:03",
+  "generated": "2026-08-21T08:01:40",
   "source": "sofascore",
   "tournament": {
     "id": 20044,
@@ -12,7 +12,7 @@
       "name": "Allan Paulista",
       "team": "sahel",
       "team_name": "Al Sahel SC",
-      "goals": 12,
+      "goals": 13,
       "penalties": 2
     },
     {
@@ -112,6 +112,14 @@
       "penalties": null
     },
     {
+      "id": 1539316,
+      "name": "Cleiton Padilha",
+      "team": "sahel",
+      "team_name": "Al Sahel SC",
+      "goals": 4,
+      "penalties": null
+    },
+    {
       "id": 904049,
       "name": "Pablo Vinicius de Moraes Ferreira",
       "team": "khaitan",
@@ -148,14 +156,6 @@
       "name": "Yao Jean Charles Olivier",
       "team": "jazira",
       "team_name": "Al Jazeera FC Kuwait",
-      "goals": 3,
-      "penalties": null
-    },
-    {
-      "id": 1539316,
-      "name": "Cleiton Padilha",
-      "team": "sahel",
-      "team_name": "Al Sahel SC",
       "goals": 3,
       "penalties": null
     },
@@ -240,10 +240,10 @@
       "penalties": null
     },
     {
-      "id": 1013885,
-      "name": "Oussema Ben Ayed",
-      "team": "khaitan",
-      "team_name": "Khaitan SC",
+      "id": 2048429,
+      "name": "Ahmed Alaa Rasheed",
+      "team": "yarmouk",
+      "team_name": "Yarmouk SC",
       "goals": 2,
       "penalties": null
     },
@@ -256,10 +256,26 @@
       "penalties": null
     },
     {
+      "id": 1013885,
+      "name": "Oussema Ben Ayed",
+      "team": "khaitan",
+      "team_name": "Khaitan SC",
+      "goals": 2,
+      "penalties": null
+    },
+    {
       "id": 985082,
       "name": "Lucas Lucena",
       "team": "sahel",
       "team_name": "Al Sahel SC",
+      "goals": 2,
+      "penalties": null
+    },
+    {
+      "id": 1118330,
+      "name": "Daniel Silva Santos",
+      "team": "sulaibikhat",
+      "team_name": "Al Sulaibikhat FC",
       "goals": 2,
       "penalties": null
     },
@@ -352,14 +368,6 @@
       "penalties": null
     },
     {
-      "id": 2048429,
-      "name": "Ahmed Alaa Rasheed",
-      "team": "yarmouk",
-      "team_name": "Yarmouk SC",
-      "goals": 1,
-      "penalties": null
-    },
-    {
       "id": 992582,
       "name": "Welves",
       "team": "sulaibikhat",
@@ -372,14 +380,6 @@
       "name": "Matheus Vieira",
       "team": "jazira",
       "team_name": "Al Jazeera FC Kuwait",
-      "goals": 1,
-      "penalties": null
-    },
-    {
-      "id": 1118330,
-      "name": "Daniel Silva Santos",
-      "team": "sulaibikhat",
-      "team_name": "Al Sulaibikhat FC",
       "goals": 1,
       "penalties": null
     },
@@ -416,10 +416,10 @@
       "penalties": null
     },
     {
-      "id": 1006323,
-      "name": "Faisal Ajab Al Azemi",
-      "team": "sahel",
-      "team_name": "Al Sahel SC",
+      "id": 2473328,
+      "name": "Elielson Cardoso Bebê",
+      "team": "sulaibikhat",
+      "team_name": "Al Sulaibikhat FC",
       "goals": 1,
       "penalties": null
     },
@@ -440,6 +440,14 @@
       "penalties": null
     },
     {
+      "id": 2222525,
+      "name": "Abdulmajeed Al Enezi",
+      "team": "jazira",
+      "team_name": "Al Jazeera FC Kuwait",
+      "goals": 1,
+      "penalties": null
+    },
+    {
       "id": 2259235,
       "name": "Abdulrahman Al Enezi",
       "team": "sporty",
@@ -448,18 +456,18 @@
       "penalties": null
     },
     {
-      "id": 2473328,
-      "name": "Elielson Cardoso Bebê",
-      "team": "sulaibikhat",
-      "team_name": "Al Sulaibikhat FC",
-      "goals": 1,
-      "penalties": null
-    },
-    {
       "id": 799165,
       "name": "Otavio Silva",
       "team": "burgan",
       "team_name": "Burgan SC",
+      "goals": 1,
+      "penalties": null
+    },
+    {
+      "id": 1006323,
+      "name": "Faisal Ajab Al Azemi",
+      "team": "sahel",
+      "team_name": "Al Sahel SC",
       "goals": 1,
       "penalties": null
     },
@@ -482,14 +490,6 @@
     {
       "id": 2112521,
       "name": "Fahad Al Duajj",
-      "team": "jazira",
-      "team_name": "Al Jazeera FC Kuwait",
-      "goals": 1,
-      "penalties": null
-    },
-    {
-      "id": 2222525,
-      "name": "Abdulmajeed Al Enezi",
       "team": "jazira",
       "team_name": "Al Jazeera FC Kuwait",
       "goals": 1,

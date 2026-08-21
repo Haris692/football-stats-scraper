@@ -1,5 +1,5 @@
 {
-  "generated": "2026-08-20T08:00:03",
+  "generated": "2026-08-21T08:01:36",
   "source": "sofascore",
   "tournament": {
     "id": 20044,
@@ -14,12 +14,12 @@
       "declared_venue": "Kuwait Oil Company Stadium",
       "city": "Al Ahmadi",
       "season": {
-        "matches": 20,
+        "matches": 21,
         "goals_scored": 41,
-        "goals_conceded": 23,
+        "goals_conceded": 24,
         "clean_sheets": 9,
         "penalty_goals": 0,
-        "red_cards": 2
+        "red_cards": 3
       },
       "players": [
         {
@@ -351,24 +351,14 @@
       "declared_venue": "Abu Halifa City Stadium",
       "city": "Kuwait City",
       "season": {
-        "matches": 20,
-        "goals_scored": 33,
-        "goals_conceded": 13,
+        "matches": 21,
+        "goals_scored": 35,
+        "goals_conceded": 16,
         "clean_sheets": 12,
         "penalty_goals": 4,
         "red_cards": 2
       },
       "players": [
-        {
-          "id": 2064189,
-          "name": "Dhari Al Masri",
-          "position": "G",
-          "number": null,
-          "country": "Kuwait",
-          "country_code": "KW",
-          "goals": null,
-          "penalties": null
-        },
         {
           "id": 1637112,
           "name": "Fawaz Al Dosari",
@@ -596,7 +586,7 @@
           "number": "29",
           "country": "Brazil",
           "country_code": "BR",
-          "goals": 12,
+          "goals": 13,
           "penalties": null
         },
         {
@@ -616,7 +606,7 @@
           "number": "27",
           "country": "Brazil",
           "country_code": "BR",
-          "goals": 3,
+          "goals": 4,
           "penalties": null
         },
         {
@@ -678,12 +668,12 @@
       "declared_venue": "Al Sulaibikhat Stadium",
       "city": "Kuwait City",
       "season": {
-        "matches": 20,
-        "goals_scored": 37,
+        "matches": 21,
+        "goals_scored": 38,
         "goals_conceded": 16,
-        "clean_sheets": 7,
+        "clean_sheets": 8,
         "penalty_goals": 3,
-        "red_cards": 2
+        "red_cards": 3
       },
       "players": [
         {
@@ -753,16 +743,6 @@
           "number": "4",
           "country": "Kuwait",
           "country_code": "KW",
-          "goals": null,
-          "penalties": null
-        },
-        {
-          "id": 1109324,
-          "name": "Elielson",
-          "position": "D",
-          "number": null,
-          "country": "Brazil",
-          "country_code": "BR",
           "goals": null,
           "penalties": null
         },
@@ -907,22 +887,22 @@
           "penalties": null
         },
         {
-          "id": 218748,
-          "name": "Christian Irobiso",
-          "position": "F",
-          "number": "97",
-          "country": "Nigeria",
-          "country_code": "NG",
-          "goals": 1,
-          "penalties": null
-        },
-        {
           "id": 1118330,
           "name": "Daniel Silva Santos",
           "position": "F",
           "number": "21",
           "country": "Brazil",
           "country_code": "BR",
+          "goals": 2,
+          "penalties": null
+        },
+        {
+          "id": 218748,
+          "name": "Christian Irobiso",
+          "position": "F",
+          "number": "97",
+          "country": "Nigeria",
+          "country_code": "NG",
           "goals": 1,
           "penalties": null
         },
@@ -985,9 +965,9 @@
       "declared_venue": "Jaber Training Stadium 1",
       "city": "Ardiya",
       "season": {
-        "matches": 20,
+        "matches": 21,
         "goals_scored": 19,
-        "goals_conceded": 62,
+        "goals_conceded": 63,
         "clean_sheets": 1,
         "penalty_goals": 1,
         "red_cards": 2
@@ -1222,9 +1202,9 @@
       "declared_venue": "Ali Sabah Al-Salem Stadium",
       "city": "Al Farwaniyah",
       "season": {
-        "matches": 20,
-        "goals_scored": 22,
-        "goals_conceded": 28,
+        "matches": 21,
+        "goals_scored": 26,
+        "goals_conceded": 30,
         "clean_sheets": 5,
         "penalty_goals": 1,
         "red_cards": 1
@@ -1549,10 +1529,10 @@
       "declared_venue": "Khaitan Stadium",
       "city": "Kuwait City",
       "season": {
-        "matches": 20,
-        "goals_scored": 22,
+        "matches": 21,
+        "goals_scored": 23,
         "goals_conceded": 20,
-        "clean_sheets": 8,
+        "clean_sheets": 9,
         "penalty_goals": 1,
         "red_cards": 2
       },
@@ -1826,9 +1806,9 @@
       "declared_venue": null,
       "city": null,
       "season": {
-        "matches": 20,
-        "goals_scored": 12,
-        "goals_conceded": 45,
+        "matches": 21,
+        "goals_scored": 14,
+        "goals_conceded": 49,
         "clean_sheets": 1,
         "penalty_goals": 0,
         "red_cards": 2
@@ -2103,9 +2083,9 @@
       "declared_venue": "Mishref Stadium",
       "city": "Kuwait City",
       "season": {
-        "matches": 20,
-        "goals_scored": 39,
-        "goals_conceded": 18,
+        "matches": 21,
+        "goals_scored": 42,
+        "goals_conceded": 20,
         "clean_sheets": 8,
         "penalty_goals": 2,
         "red_cards": 3
@@ -2218,26 +2198,6 @@
           "number": "29",
           "country": "Kuwait",
           "country_code": "KW",
-          "goals": null,
-          "penalties": null
-        },
-        {
-          "id": 1539111,
-          "name": "Mohsen Falah",
-          "position": "D",
-          "number": "12",
-          "country": "Kuwait",
-          "country_code": "KW",
-          "goals": null,
-          "penalties": null
-        },
-        {
-          "id": 932285,
-          "name": "Reza Yazdandoost",
-          "position": "D",
-          "number": "17",
-          "country": "Iran",
-          "country_code": "IR",
           "goals": null,
           "penalties": null
         },
@@ -2392,13 +2352,13 @@
           "penalties": null
         },
         {
-          "id": 1218986,
-          "name": "Aqeel Al Hazeem",
+          "id": 2048429,
+          "name": "Ahmed Alaa Rasheed",
           "position": "F",
-          "number": "11",
-          "country": "Kuwait",
-          "country_code": "KW",
-          "goals": 5,
+          "number": null,
+          "country": "Egypt",
+          "country_code": "EG",
+          "goals": 2,
           "penalties": null
         },
         {
@@ -2409,16 +2369,6 @@
           "country": "Belgium",
           "country_code": "BE",
           "goals": 2,
-          "penalties": null
-        },
-        {
-          "id": 2048429,
-          "name": "Ahmed Alaa Rasheed",
-          "position": "F",
-          "number": null,
-          "country": "Egypt",
-          "country_code": "EG",
-          "goals": 1,
           "penalties": null
         },
         {
